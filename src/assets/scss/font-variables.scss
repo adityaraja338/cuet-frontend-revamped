@@ -1,0 +1,78 @@
+$font-sizes: 6, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 42, 48;
+$font-weights: 100, 200, 300, 400, 500, 600, 700, 800, 900;
+// Mixin to generate font size classes
+@mixin make-font-size-classes($sizes) {
+  @each $size in $sizes {
+    .font-#{$size} {
+      font-size: #{$size}px !important;
+    }
+  }
+}
+
+@mixin make-font-xs-size-classes($sizes) {
+  @each $size in $sizes {
+    .font-xs-#{$size} {
+      font-size: #{$size}px !important;
+    }
+  }
+}
+
+@mixin make-font-sm-size-classes($sizes) {
+  @each $size in $sizes {
+    .font-sm-#{$size} {
+      font-size: #{$size}px !important;
+    }
+  }
+}
+
+@mixin make-font-md-size-classes($sizes) {
+  @each $size in $sizes {
+    .font-md-#{$size} {
+      font-size: #{$size}px !important;
+    }
+  }
+}
+
+@mixin make-font-lg-size-classes($sizes) {
+  @each $size in $sizes {
+    .font-lg-#{$size} {
+      font-size: #{$size}px !important;
+    }
+  }
+}
+
+@mixin make-font-xl-size-classes($sizes) {
+  @each $size in $sizes {
+    .font-xl-#{$size} {
+      font-size: #{$size}px !important;
+    }
+  }
+}
+
+@mixin make-font-weight-classes($weights) {
+  @each $weight in $weights {
+    .font-#{$weight} {
+      font-weight: #{$weight} !important;
+    }
+  }
+}
+
+@include make-font-size-classes($font-sizes);
+
+@include make-font-weight-classes($font-weights);
+
+@media (min-width: 320px){
+  @include make-font-xs-size-classes($font-sizes);
+}
+@media (min-width: 425px){
+  @include make-font-sm-size-classes($font-sizes);
+}
+@media (min-width: 768px){
+  @include make-font-md-size-classes($font-sizes);
+}
+@media (min-width: 992px){
+  @include make-font-lg-size-classes($font-sizes);
+}
+@media (min-width: 1200px){
+  @include make-font-xl-size-classes($font-sizes);
+}

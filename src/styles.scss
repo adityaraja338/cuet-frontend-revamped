@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+// @import "~ng-zorro-antd/ng-zorro-antd.css";
+@import url("./assets/scss/font-face.scss");
+@import url("./assets/scss/font-variables.scss");
+@import url("./assets/scss/layouting.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lexend", sans-serif;
+  color: #3a3a3a;
+  line-height: normal;
+}
+
+h1,h2,h3,h4,h5,h6,p{
+  margin: 0;
+  padding: 0;
+}
+
+.diagonal-gradient {
+  background: linear-gradient(to top right, #561ABD, #8555FD); /* Customize the colors */
+  color: white; /* Optional: Change the text color for better visibility */
+  border: none; /* Optional: Remove borders */
+  // padding: 10px; /* Optional: Add padding */
+  // border-radius: 5px; /* Optional: Add rounded corners */
+  // display: inline-block; /* Optional: Ensures the container adjusts to content */
+}

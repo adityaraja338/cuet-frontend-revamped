@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { PerformancesComponent } from './performances.component';
+import { RouterModule, Routes } from '@angular/router';
 
-
+const routes: Routes = [
+  { path: '', component: PerformancesComponent },
+  { path: '**', redirectTo: '/student/performances' },
+];
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  declarations: [PerformancesComponent],
+  imports: [RouterModule.forChild(routes)],
+  exports: [PerformancesComponent],
 })
-export class PerformancesModule { }
+export class PerformancesModule {}

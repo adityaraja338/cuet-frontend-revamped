@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { AccountComponent } from './account.component';
 
-
+const routes: Routes = [
+  { path: '', component: AccountComponent },
+  { path: '**', redirectTo: '/student/account' },
+];
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  declarations: [AccountComponent],
+  imports: [RouterModule.forChild(routes)],
+  exports: [AccountComponent],
 })
-export class AccountModule { }
+export class AccountModule {}

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GlobalService } from './shared/services/global.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  isCollapsed = false;
+  // isCollapsed = false;
+  constructor(protected globalService: GlobalService){}
 }

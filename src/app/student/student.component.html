@@ -1,0 +1,94 @@
+<nz-layout class="app-layout">
+  <nz-header>
+    <div class="app-header">
+      <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+        <span
+          class="trigger"
+          nz-icon
+          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+        ></span>
+      </span>
+    </div>
+  </nz-header>
+  <nz-layout>
+    <nz-sider
+      class="menu-sidebar"
+      nzCollapsible
+      nzWidth="256px"
+      nzBreakpoint="lg"
+      [(nzCollapsed)]="isCollapsed"
+      [nzTrigger]="null"
+      [style]="isCollapsed ? 'max-width: 0px; width: 0px; min-width:0px;' : ''"
+    >
+      <div
+        id="side-info-box"
+        class="diagonal-gradient padding-lg"
+        [style]="isCollapsed ? 'display:none;' : ''"
+      >
+        <h1 class="font-24 font-600 mb-1 text-white">Aditya</h1>
+        <p class="font-10 font-300 text-white">Student ID: 1</p>
+        <p class="font-10 font-300 text-white">Batch ID: 1</p>
+        <p class="font-10 font-300 text-white">Subscription ID: 1</p>
+      </div>
+      <ul
+        nz-menu
+        nzTheme="light"
+        nzMode="inline"
+        [nzInlineCollapsed]="isCollapsed"
+      >
+        <li
+          nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipTitle]="isCollapsed ? 'Home' : ''"
+          nzSelected
+          nzMatchRouter="/student/home"
+          routerLink="/student/home"
+        >
+          <span nz-icon nzType="home"></span>
+          <span>Home</span>
+        </li>
+        <li
+          nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipTitle]="isCollapsed ? 'Resources' : ''"
+          nzSelected
+          nzMatchRouter="/student/resources"
+          routerLink="/student/resources"
+        >
+          <span nz-icon nzType="book"></span>
+          <span>Resources</span>
+        </li>
+        <li
+          nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipTitle]="isCollapsed ? 'My Performances' : ''"
+          nzSelected
+          nzMatchRouter="/student/performances"
+          routerLink="/student/performances"
+        >
+          <span nz-icon nzType="snippets"></span>
+          <span>My Performances</span>
+        </li>
+        <li
+          nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipTitle]="isCollapsed ? 'My Account' : ''"
+          nzSelected
+          nzMatchRouter="/student/account"
+          routerLink="/student/account"
+        >
+          <span nz-icon nzType="user"></span>
+          <span>My Account</span>
+        </li>
+      </ul>
+    </nz-sider>
+
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

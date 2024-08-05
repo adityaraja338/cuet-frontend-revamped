@@ -1,1 +1,336 @@
-<p>dashboard works!</p>
+<section id="test-cards">
+  <div nz-row [nzGutter]="[16, 12]">
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzXl]="12" [nzXXl]="12">
+      <div class="student-diagonal-gradient upcoming-test">
+        <h6 class="font-16 text-white">Upcoming Live Tests</h6>
+        <div nz-row nzJustify="space-between" nzAlign="middle">
+          <div nz-col [nzSpan]="15">
+            <p class="text-white font-12 font-400">
+              Subject: <span class="text-white">Mathematics</span>
+            </p>
+            <p class="text-white font-16 font-500">
+              {{ "2/07/2024" }} {{ "@ " }} {{ "7:30 PM" }}
+            </p>
+          </div>
+          <div nz-col [nzSpan]="9">
+            <button class="font-12 font-500 text-primary start-test">
+              Start Test
+            </button>
+          </div>
+        </div>
+        <button class="font-12 view-all">View All</button>
+      </div>
+    </div>
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzXl]="12" [nzXXl]="12" class="">
+      <div class="student-diagonal-gradient previous-test">
+        <h6 class="font-16 text-white">Previous Live Tests</h6>
+        <div class="overlap-tests">
+          @for (test of previous; track test; let index = $index) {
+            <div
+              class="test"
+              [style]="
+                'z-index:' +
+                (previous.length - index) +
+                '; left: -' +
+                18 * index +
+                'px;'
+              "
+            ></div>
+          } @empty {
+            <p class="font-16 text-white">No Tests found!</p>
+          }
+        </div>
+        <button class="font-12 view-all">View All</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="resources-divider" class="label-divider my-4">
+  <hr />
+  <p>Study Resources</p>
+</div>
+
+<section id="resources">
+  <div class="card">
+    <ngx-simplebar [options]="resourcesScrollbarOptions">
+      <div class="subjects-container ant-row">
+        <div
+          class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 mock-test student-diagonal-gradient"
+        >
+          <div class="subject-icon mb-1 text-dark">A</div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <!-- <div class="ant-col-xs-7 ant-col-md-4 ant-col-lg-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div>
+        <div class="ant-col-xs-7 ant-col-md-4 ant-col-lg-3 subject">
+          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
+            A
+          </div>
+          <span class="font-12 font-500">Mock Tests</span>
+        </div> -->
+        <div
+          class="ant-col-xs-24 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 view-all"
+        >
+          <button class="font-12 font-500 student-diagonal-gradient">
+            View All
+          </button>
+        </div>
+      </div>
+    </ngx-simplebar>
+  </div>
+</section>
+
+<div nz-row [nzGutter]="[16, 0]">
+  <div nz-col [nzXs]="24" [nzMd]="12">
+    <div id="performance-divider" class="label-divider my-4">
+      <hr />
+      <p>Performance Divider</p>
+    </div>
+    <section id="performance-overview">
+      <div class="card p-3">
+        <nz-tabset>
+          <nz-tab nzTitle="Overall">
+            <ng-template nz-tab>
+              <div class="ant-row">
+                <div
+                  *ngIf="isBrowser"
+                  class="chart-div ant-col-xs-24 ant-col-sm-10 d-flex justify-content-center"
+                >
+                  <canvas
+                    baseChart
+                    [labels]="doughnutChartLabels"
+                    [datasets]="doughnutChartDatasets"
+                    [options]="doughnutChartOptions"
+                    [legend]="false"
+                    [type]="'doughnut'"
+                    height="120"
+                    width="120"
+                  >
+                  </canvas>
+                  <div class="chart-center">A+</div>
+                </div>
+                <div
+                  class="ant-col-xs-24 ant-col-sm-14 d-flex align-items-center"
+                >
+                  <div class="ant-col-24 font-12 text-sm-center text-md-left">
+                    <p>
+                      % of Correct Answers :
+                      <span class="text-primary font-700">{{
+                        78.6 | number: ".2-2"
+                      }}</span>
+                      %
+                    </p>
+                    <p>
+                      % of Incorrect Answers :
+                      <span class="text-primary font-700">{{
+                        78.6 | number: ".2-2"
+                      }}</span>
+                      %
+                    </p>
+                    <p>
+                      % of Unattempted :
+                      <span class="text-primary font-700"
+                        >{{ 78.6 | number: ".2-2" }} %</span
+                      >
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      # of Total Test:
+                      <span class="text-primary font-700">16</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </nz-tab>
+          <nz-tab nzTitle="Previous Test's">
+            <ng-template nz-tab>
+              <div class="ant-row">
+                <div
+                  *ngIf="isBrowser"
+                  class="chart-div ant-col-xs-24 ant-col-sm-10 d-flex justify-content-center"
+                >
+                  <canvas
+                    baseChart
+                    [labels]="doughnutChartLabels"
+                    [datasets]="doughnutChartDatasets"
+                    [options]="doughnutChartOptions"
+                    [legend]="false"
+                    [type]="'doughnut'"
+                    height="120"
+                    width="120"
+                  >
+                  </canvas>
+                  <div class="chart-center">A+</div>
+                </div>
+                <div
+                  class="ant-col-xs-24 ant-col-sm-14 d-flex align-items-center"
+                >
+                  <div class="ant-col-24 font-12 text-sm-center text-md-left">
+                    <p>
+                      % of Correct Answers :
+                      <span class="text-primary font-700">{{
+                        78.6 | number: ".2-2"
+                      }}</span>
+                      %
+                    </p>
+                    <p>
+                      % of Incorrect Answers :
+                      <span class="text-primary font-700">{{
+                        78.6 | number: ".2-2"
+                      }}</span>
+                      %
+                    </p>
+                    <p>
+                      % of Unattempted :
+                      <span class="text-primary font-700"
+                        >{{ 78.6 | number: ".2-2" }} %</span
+                      >
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      # of Total Test:
+                      <span class="text-primary font-700">16</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </nz-tab>
+        </nz-tabset>
+      </div>
+    </section>
+  </div>
+  <div nz-col [nzXs]="24" [nzMd]="12">
+    <div id="leaderboard-divider" class="label-divider my-4">
+      <hr />
+      <p>Leaderboard</p>
+    </div>
+    <section id="leaderboard">
+      <div class="card p-3">
+        <!--        <p class="text-center text-gold font-12 font-600">LEADERBOARD - 08/08</p>-->
+        <ngx-simplebar
+          [options]="leaderboardScrollbarOptions"
+          class="scrollable-content"
+        >
+          <div
+            class="leaderboard-header student-diagonal-gradient ant-row align-items-center justify-content-between px-2"
+          >
+            <div class="ant-col-5 text-center">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_1380_471)">
+                  <path
+                    d="M8.16782 5.54177C8.16782 6.18518 7.64457 6.70843 7.00115 6.70843C6.35774 6.70843 5.83449 6.18518 5.83449 5.54177C5.83449 4.89835 6.35774 4.3751 7.00115 4.3751C7.64457 4.3751 8.16782 4.89835 8.16782 5.54177ZM12.3491 4.79335C12.2097 4.54193 12.0242 4.34943 11.8136 4.21293C11.438 3.97027 11.2379 3.52402 11.3371 3.08827C11.3937 2.83802 11.3902 2.56502 11.3091 2.28268C11.1656 1.7816 10.7572 1.37327 10.2562 1.22977C9.97382 1.14868 9.70082 1.14518 9.45115 1.20177C9.01482 1.30093 8.56857 1.10143 8.3259 0.725182C8.18998 0.514599 7.9969 0.329098 7.74607 0.189682C7.2899 -0.0629017 6.71299 -0.0629017 6.25682 0.189682C6.0054 0.329098 5.8129 0.514599 5.67699 0.725182C5.43432 1.10085 4.98807 1.30093 4.55174 1.20177C4.30207 1.14518 4.02907 1.14868 3.74674 1.22977C3.24565 1.37327 2.83732 1.7816 2.69382 2.28268C2.61274 2.56502 2.60924 2.8386 2.66582 3.08827C2.76499 3.5246 2.5649 3.97085 2.18924 4.21293C1.97807 4.34885 1.79315 4.54193 1.65374 4.79335C1.52599 5.02318 1.46415 5.28452 1.46532 5.54527C1.46415 5.80602 1.52657 6.06677 1.65374 6.29718C1.79315 6.5486 1.97865 6.7411 2.18924 6.8776C2.5649 7.12027 2.76499 7.56652 2.66582 8.00227C2.60924 8.25252 2.61274 8.52552 2.69382 8.80844C2.83732 9.30952 3.24565 9.71785 3.74674 9.86135C4.02907 9.94244 4.30207 9.94594 4.55174 9.88935C4.98807 9.79018 5.43432 9.98969 5.67699 10.3659C5.8129 10.5765 6.0054 10.762 6.25682 10.9014C6.71299 11.154 7.29049 11.154 7.74607 10.9014C7.99749 10.762 8.18998 10.5765 8.3259 10.3659C8.56857 9.99027 9.01482 9.79018 9.45115 9.88935C9.70082 9.94594 9.97382 9.94244 10.2562 9.86135C10.7572 9.71785 11.1656 9.30952 11.3091 8.80844C11.3902 8.5261 11.3937 8.25252 11.3371 8.00227C11.2379 7.56593 11.438 7.11968 11.8136 6.8776C12.0248 6.74168 12.2097 6.5486 12.3491 6.29718C12.4769 6.06735 12.5387 5.80602 12.5376 5.54527C12.5387 5.28452 12.4763 5.02377 12.3491 4.79335ZM6.99474 7.87627C5.7079 7.87627 4.6614 6.82977 4.6614 5.54293C4.6614 4.2561 5.7079 3.2096 6.99474 3.2096C8.28157 3.2096 9.32807 4.2561 9.32807 5.54293C9.32807 6.82977 8.28157 7.87627 6.99474 7.87627ZM4.72674 11.0438C4.30324 11.1266 3.85407 11.1056 3.42532 10.9825C2.59524 10.7445 1.9209 10.1093 1.62807 9.30252L0.207654 10.7229C0.0950707 10.8361 0.0233207 10.986 0.00582069 11.1459C-0.0367626 11.5349 0.244404 11.8861 0.633487 11.9287L1.92907 12.0722L2.07199 13.3625C2.08832 13.5282 2.1624 13.6787 2.27557 13.7919C2.34965 13.8659 2.44007 13.9237 2.54215 13.9593C2.80115 14.052 3.09107 13.9849 3.2789 13.7924L5.36199 11.7094C5.11232 11.5233 4.8994 11.301 4.72615 11.0444L4.72674 11.0438ZM13.9971 11.1453C13.9796 10.986 13.9078 10.8355 13.7952 10.7224L12.3748 9.30194C12.082 10.1087 11.4071 10.7445 10.5776 10.9819C10.1482 11.1044 9.70023 11.1254 9.27615 11.0432C9.10348 11.2999 8.88999 11.5221 8.64032 11.7082L10.7234 13.7913C10.9118 13.9838 11.2017 14.0509 11.4601 13.9581C11.5622 13.9225 11.6526 13.8648 11.7267 13.7907C11.8399 13.6775 11.914 13.5264 11.9303 13.3614L12.0732 12.071L13.3688 11.9275C13.7579 11.8844 14.0391 11.5338 13.9965 11.1447L13.9971 11.1453Z"
+                    fill="white"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_1380_471">
+                    <rect
+                      width="14"
+                      height="14"
+                      class="leaderboard-badge"
+                      transform="translate(0.000854492)"
+                    />
+                  </clipPath>
+                </defs>
+              </svg>
+              {{ "Rank" }}
+            </div>
+            <!-- Incremented index to start from 1 -->
+            <div class="ant-col-14 px-2">{{ "Name" }}</div>
+            <div class="ant-col-5 text-center">{{ "Score %" }}</div>
+          </div>
+          <div
+            *ngFor="let data of leaderboardData; let i = index"
+            class="ranks"
+            [class]="'rank-' + (i + 1)"
+          >
+            <div
+              class="ant-row align-items-center justify-content-between px-2"
+            >
+              <div class="ant-col-5 text-center">
+                <svg
+                  *ngIf="i < 3"
+                  class="leaderboard-icon mr-2"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clip-path="url(#clip0_1380_471)">
+                    <path
+                      d="M8.16782 5.54177C8.16782 6.18518 7.64457 6.70843 7.00115 6.70843C6.35774 6.70843 5.83449 6.18518 5.83449 5.54177C5.83449 4.89835 6.35774 4.3751 7.00115 4.3751C7.64457 4.3751 8.16782 4.89835 8.16782 5.54177ZM12.3491 4.79335C12.2097 4.54193 12.0242 4.34943 11.8136 4.21293C11.438 3.97027 11.2379 3.52402 11.3371 3.08827C11.3937 2.83802 11.3902 2.56502 11.3091 2.28268C11.1656 1.7816 10.7572 1.37327 10.2562 1.22977C9.97382 1.14868 9.70082 1.14518 9.45115 1.20177C9.01482 1.30093 8.56857 1.10143 8.3259 0.725182C8.18998 0.514599 7.9969 0.329098 7.74607 0.189682C7.2899 -0.0629017 6.71299 -0.0629017 6.25682 0.189682C6.0054 0.329098 5.8129 0.514599 5.67699 0.725182C5.43432 1.10085 4.98807 1.30093 4.55174 1.20177C4.30207 1.14518 4.02907 1.14868 3.74674 1.22977C3.24565 1.37327 2.83732 1.7816 2.69382 2.28268C2.61274 2.56502 2.60924 2.8386 2.66582 3.08827C2.76499 3.5246 2.5649 3.97085 2.18924 4.21293C1.97807 4.34885 1.79315 4.54193 1.65374 4.79335C1.52599 5.02318 1.46415 5.28452 1.46532 5.54527C1.46415 5.80602 1.52657 6.06677 1.65374 6.29718C1.79315 6.5486 1.97865 6.7411 2.18924 6.8776C2.5649 7.12027 2.76499 7.56652 2.66582 8.00227C2.60924 8.25252 2.61274 8.52552 2.69382 8.80844C2.83732 9.30952 3.24565 9.71785 3.74674 9.86135C4.02907 9.94244 4.30207 9.94594 4.55174 9.88935C4.98807 9.79018 5.43432 9.98969 5.67699 10.3659C5.8129 10.5765 6.0054 10.762 6.25682 10.9014C6.71299 11.154 7.29049 11.154 7.74607 10.9014C7.99749 10.762 8.18998 10.5765 8.3259 10.3659C8.56857 9.99027 9.01482 9.79018 9.45115 9.88935C9.70082 9.94594 9.97382 9.94244 10.2562 9.86135C10.7572 9.71785 11.1656 9.30952 11.3091 8.80844C11.3902 8.5261 11.3937 8.25252 11.3371 8.00227C11.2379 7.56593 11.438 7.11968 11.8136 6.8776C12.0248 6.74168 12.2097 6.5486 12.3491 6.29718C12.4769 6.06735 12.5387 5.80602 12.5376 5.54527C12.5387 5.28452 12.4763 5.02377 12.3491 4.79335ZM6.99474 7.87627C5.7079 7.87627 4.6614 6.82977 4.6614 5.54293C4.6614 4.2561 5.7079 3.2096 6.99474 3.2096C8.28157 3.2096 9.32807 4.2561 9.32807 5.54293C9.32807 6.82977 8.28157 7.87627 6.99474 7.87627ZM4.72674 11.0438C4.30324 11.1266 3.85407 11.1056 3.42532 10.9825C2.59524 10.7445 1.9209 10.1093 1.62807 9.30252L0.207654 10.7229C0.0950707 10.8361 0.0233207 10.986 0.00582069 11.1459C-0.0367626 11.5349 0.244404 11.8861 0.633487 11.9287L1.92907 12.0722L2.07199 13.3625C2.08832 13.5282 2.1624 13.6787 2.27557 13.7919C2.34965 13.8659 2.44007 13.9237 2.54215 13.9593C2.80115 14.052 3.09107 13.9849 3.2789 13.7924L5.36199 11.7094C5.11232 11.5233 4.8994 11.301 4.72615 11.0444L4.72674 11.0438ZM13.9971 11.1453C13.9796 10.986 13.9078 10.8355 13.7952 10.7224L12.3748 9.30194C12.082 10.1087 11.4071 10.7445 10.5776 10.9819C10.1482 11.1044 9.70023 11.1254 9.27615 11.0432C9.10348 11.2999 8.88999 11.5221 8.64032 11.7082L10.7234 13.7913C10.9118 13.9838 11.2017 14.0509 11.4601 13.9581C11.5622 13.9225 11.6526 13.8648 11.7267 13.7907C11.8399 13.6775 11.914 13.5264 11.9303 13.3614L12.0732 12.071L13.3688 11.9275C13.7579 11.8844 14.0391 11.5338 13.9965 11.1447L13.9971 11.1453Z"
+                      fill="white"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_1380_471">
+                      <rect
+                        width="14"
+                        height="14"
+                        class="leaderboard-badge"
+                        transform="translate(0.000854492)"
+                      />
+                    </clipPath>
+                  </defs>
+                </svg>
+                {{ i + 1 }}
+              </div>
+              <!-- Incremented index to start from 1 -->
+              <div class="ant-col-14 px-2">{{ data.studentName }}</div>
+              <div class="ant-col-5 text-center">
+                {{ data.scorePercentage }}
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="leaderboardData.length === 0">
+            <p class="text-center">No Data Found!</p>
+          </ng-container>
+        </ngx-simplebar>
+      </div>
+    </section>
+  </div>
+</div>

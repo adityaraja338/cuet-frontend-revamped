@@ -5,13 +5,7 @@ import { NgZorroAntdModule } from '../ng-zorro-antd.module';
 import { StudentRoutingModule } from './student-routing.module';
 
 @NgModule({
-  declarations: [
-    StudentComponent
-  ],
-  imports: [
-    CommonModule,
-    NgZorroAntdModule,
-    StudentRoutingModule
-  ]
+  declarations: [StudentComponent],
+  imports: [CommonModule, NgZorroAntdModule, StudentRoutingModule],
 })
-export class StudentModule { }
+export class StudentModule {}

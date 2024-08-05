@@ -1,0 +1,57 @@
+@mixin student-color($name, $value) {
+  .text-#{$name} {
+    color: $value !important;
+  }
+  .bg-#{$name} {
+    background-color: $value !important;
+  }
+  .br-#{$name} {
+    border-color: $value;
+  }
+  .br-top-#{$name} {
+    border-top-color: $value;
+  }
+  .br-bottom-#{$name} {
+    border-bottom-color: $value;
+  }
+  .br-left-#{$name} {
+    border-left-color: $value;
+  }
+  .br-right-#{$name} {
+    border-right-color: $value;
+  }
+}
+
+@mixin admin-color($name, $value) {
+  .text-a-#{$name} {
+    color: $value !important;
+  }
+  .bg-a-#{$name} {
+    background-color: $value !important;
+  }
+  .br-a-#{$name} {
+    border-color: $value !important;
+  }
+  .br-a-top-#{$name} {
+    border-top-color: $value !important;
+  }
+  .br-a-bottom-#{$name} {
+    border-bottom-color: $value !important;
+  }
+  .br-a-left-#{$name} {
+    border-left-color: $value !important;
+  }
+  .br-a-right-#{$name} {
+    border-right-color: $value !important;
+  }
+}
+
+@include student-color("primary", #8555FD);
+@include student-color("secondary", #C1B2FF);
+@include student-color("light", #E4E0FA);
+
+@include student-color("gold", #FFD700);
+
+@include admin-color("primary", #13AAFF);
+@include admin-color("secondary", #A6DFFF);
+@include admin-color("light", #DEF3FF);

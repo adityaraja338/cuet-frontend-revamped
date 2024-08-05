@@ -1,4 +1,4 @@
-<nz-layout class="app-layout">
+<nz-layout class="app-layout student">
   <nz-header>
     <div class="app-header">
       <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
@@ -22,7 +22,7 @@
     >
       <div
         id="side-info-box"
-        class="diagonal-gradient padding-lg"
+        class="student-diagonal-gradient padding-lg"
         [style]="isCollapsed ? 'display:none;' : ''"
       >
         <h1 class="font-24 font-600 mb-1 text-white">Aditya</h1>
@@ -87,8 +87,12 @@
       </ul>
     </nz-sider>
 
-    <nz-content>
-      <router-outlet></router-outlet>
+    <nz-content style="overflow-y: auto;">
+      <section class="ant-row ant-row-center">
+        <section class="ant-col-xs-24 ant-col-xl-20 ant-col-xxl-12">
+          <router-outlet></router-outlet>
+        </section>
+      </section>
     </nz-content>
   </nz-layout>
 </nz-layout>

@@ -3,13 +3,17 @@
 @import url("./assets/scss/font-face.scss");
 @import url("./assets/scss/font-variables.scss");
 @import url("./assets/scss/layouting.css");
+@import url("./assets/scss/colors.scss");
+
+$student-primary: #8555FD;
+$admin-primary: #00A3FF;
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Lexend", sans-serif;
-  color: #3a3a3a;
+  // color: #3a3a3a;
   line-height: normal;
 }
 
@@ -18,11 +22,131 @@ h1,h2,h3,h4,h5,h6,p{
   padding: 0;
 }
 
-.diagonal-gradient {
+.text-primary{
+  color: $student-primary !important;
+}
+
+.text-a-primary{
+  color: $admin-primary !important;
+}
+
+.row-gap-4{
+  row-gap: 4px;
+}
+.row-gap-8{
+  row-gap: 8px;
+}
+.row-gap-12{
+  row-gap: 12px;
+}
+.row-gap-16{
+  row-gap: 16px;
+}
+.row-gap-20{
+  row-gap: 20px;
+}
+.row-gap-24{
+  row-gap: 24px;
+}
+.col-gap-4{
+  column-gap: 4px;
+}
+.col-gap-8{
+  column-gap: 8px;
+}
+.col-gap-12{
+  column-gap: 12px;
+}
+.col-gap-16{
+  column-gap: 16px;
+}
+.col-gap-20{
+  column-gap: 20px;
+}
+.col-gap-24{
+  column-gap: 24px;
+}
+
+.ant-row{
+  // margin: 0 !important;
+}
+
+button{
+  border-radius: 8px;
+  padding: 8px 16px;
+  outline :none !important;
+  border: none;
+}
+
+// Custom Global Classes
+.label-divider{
+  position: relative;
+  hr{
+    size: 4px;
+  }
+  p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-56%);
+    line-height: normal;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 4px;
+  }
+}
+
+.student .label-divider p{
+  background-color: #EDE9FE !important;
+}
+
+@media (min-width: 576px) {
+  .label-divider{
+    p{
+      left: 12px;
+      transform: translateY(-56%);
+    }
+  }
+}
+
+.card{
+  // padding: 16px;
+  border-radius: 12px;
+  box-shadow: 4px 4px 20px 0 rgba(0,0,0,0.06);
+  border:none;
+}
+
+.student-diagonal-gradient {
   background: linear-gradient(to top right, #561ABD, #8555FD); /* Customize the colors */
   color: white; /* Optional: Change the text color for better visibility */
   border: none; /* Optional: Remove borders */
-  // padding: 10px; /* Optional: Add padding */
-  // border-radius: 5px; /* Optional: Add rounded corners */
-  // display: inline-block; /* Optional: Ensures the container adjusts to content */
+  box-shadow: 4px 4px 20px 0 rgba(0,0,0,0.06);
+}
+
+.admin-diagonal-gradient {
+  background: linear-gradient(to top right, #0063AB, #00A3FF); /* Customize the colors */
+  color: white; /* Optional: Change the text color for better visibility */
+  border: none; /* Optional: Remove borders */
+}
+
+.chart-div{
+  position :relative !important;
+  .chart-center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+}
+
+.student .chart-center{
+  background-color: #8555FD18;
 }

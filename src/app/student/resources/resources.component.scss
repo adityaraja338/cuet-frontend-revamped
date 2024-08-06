@@ -1,0 +1,22 @@
+.label-divider p{
+  background-color: #FFF !important;
+}
+#subjects-container, #domain-subjects-container{
+  .newspaper, .subject{
+    background-color: rgba(133, 85, 253, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    .subject-icon{
+      height: 44px;
+      aspect-ratio: 1;
+      border-radius: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img{
+        height: 52%;
+        width: auto;
+      }
+    }
+  }
+}

@@ -87,12 +87,17 @@
       </ul>
     </nz-sider>
 
-    <nz-content style="overflow-y: auto;">
-      <section class="ant-row ant-row-center">
-        <section class="ant-col-xs-24 ant-col-xl-20 ant-col-xxl-12">
-          <router-outlet></router-outlet>
+    <nz-content>
+      <ngx-simplebar
+        [options]="{}"
+        style="overflow-y: auto; max-height: calc(100vh - 64px); padding: 24px"
+      >
+        <section class="ant-row ant-row-center">
+          <section class="ant-col-xs-24 ant-col-xl-20 ant-col-xxl-12">
+            <router-outlet></router-outlet>
+          </section>
         </section>
-      </section>
+      </ngx-simplebar>
     </nz-content>
   </nz-layout>
 </nz-layout>

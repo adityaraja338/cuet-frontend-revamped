@@ -100,6 +100,17 @@
 }
 
 ::ng-deep #performance-overview {
+  height: 100%;
+  .card{
+    width: 100%;
+    min-height: 204px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    nz-tabset{
+      width: 100%;
+    }
+  }
   .ant-tabs-nav-wrap {
     justify-content: center;
   }
@@ -123,7 +134,7 @@
   .scrollable-content {
     flex: 1;
     overflow-y: auto; // Make the content scrollable
-    max-height: 161px; // Ensure it doesn't grow beyond the card
+    max-height: 172px; // Ensure it doesn't grow beyond the card
     //border: 1px solid black;
     width: 100%;
   }

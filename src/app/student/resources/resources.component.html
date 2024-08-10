@@ -92,14 +92,49 @@
           <tbody>
             <tr *ngFor="let video of videoLinks; let i = index">
               <td class="text-center">{{ i + 1 }}</td>
-              <td >{{ video.name }}</td>
+              <td>{{ video.name }}</td>
               <td class="text-center">{{ video.subject }}</td>
-              <td class="text-center">{{ Math.floor(video.length / 60) }} Hr {{ video.length % 60 }}</td>
-              <td class="text-center" [class.grey]="">{{ video.type }}</td>
-              <td class="text-center"><a [href]="'https://'+ video.link ">Click Here</a></td>
+              <td class="text-center">
+                {{ Math.floor(video.length / 60) }} Hr {{ video.length % 60 }}
+              </td>
+              <td
+                class="text-center font-600"
+                [class]="video.type === 'free' ? 'text-free' : 'text-paid'"
+              >
+                {{ video.type }}
+              </td>
+              <td class="text-center">
+                <a [href]="'https://' + video.link">Click Here</a>
+              </td>
             </tr>
           </tbody>
         </nz-table>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="PYQs">
+      <ng-template nz-tab>
+        <div id="pyq-container" class="ant-row mx-n1">
+          <div
+            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+            *ngFor="let subject of subjects"
+          >
+            <div
+              class="subject ant-row ant-row-middle"
+              (click)="onClickSubject(subject.name, subject.id)"
+            >
+              <div class="ant-col-5">
+                <div class="subject-icon student-diagonal-gradient">
+                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                </div>
+              </div>
+              <div class="ant-col-19">
+                <p class="text-primary font-16 font-600">
+                  {{ subject.name }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </ng-template>
     </nz-tab>
   </nz-tabset>

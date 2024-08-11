@@ -58,20 +58,8 @@ export class ResourcesComponent {
 
   constructor(private readonly router: Router) {}
 
-  onClickSubject(subjectName: string, subjectId: number) {
-    // console.log('test');
-    let route = subjectName.toLowerCase().replace(/\s+/g, '-');
-    route = route.replace(/[^a-zA-Z-]/g, '');
-
-    // Replace multiple consecutive hyphens with a single hyphen
-    route = route.replace(/-+/g, '-');
-
-    // Remove leading or trailing hyphens if any
-    route = route.replace(/^-|-$/g, '');
-
-    this.router.navigate(['/student/resources', route], {
-      state: { subjectId },
-    });
+  onClickSubject(subjectId: number) {
+    this.router.navigate(['/student/resources', subjectId]);
   }
 
   protected readonly Math = Math;

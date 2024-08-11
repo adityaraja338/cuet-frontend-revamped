@@ -1,4 +1,7 @@
-<div class="card p-3">
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item class="cursor-pointe">Resources</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzHoverable nzBorderless>
   <nz-tabset>
     <nz-tab nzTitle="Subjects">
       <ng-template nz-tab>
@@ -14,7 +17,7 @@
                 </div>
               </div>
               <div class="ant-col-19">
-                <p class="text-white font-16 font-600 mb-2">Newspapers</p>
+                <p class="text-white font-16 font-500 mb-1">Newspapers</p>
                 <p class="text-white font-10 font-500">Total: {{ 12 }}</p>
               </div>
             </div>
@@ -25,7 +28,7 @@
           >
             <div
               class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name, subject.id)"
+              (click)="onClickSubject(subject.id)"
             >
               <div class="ant-col-5">
                 <div class="subject-icon student-diagonal-gradient">
@@ -33,7 +36,7 @@
                 </div>
               </div>
               <div class="ant-col-19">
-                <p class="text-primary font-16 font-600 mb-2">
+                <p class="text-primary font-16 font-500 mb-1">
                   {{ subject.name }}
                 </p>
                 <p class="font-10 font-500">Topics: {{ 12 }}</p>
@@ -54,7 +57,7 @@
           >
             <div
               class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name, subject.id)"
+              (click)="onClickSubject(subject.name)"
             >
               <div class="ant-col-5">
                 <div class="subject-icon student-diagonal-gradient">
@@ -62,7 +65,7 @@
                 </div>
               </div>
               <div class="ant-col-19">
-                <p class="text-primary font-16 font-600 mb-2">
+                <p class="text-primary font-16 font-500 mb-1">
                   {{ subject.name }}
                 </p>
                 <p class="font-10 font-500">Topics: {{ 12 }}</p>
@@ -84,7 +87,7 @@
               <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
               <th [nzWidth]="'160px'">Video Name</th>
               <th class="text-center" [nzWidth]="'100px'">Subject</th>
-              <th class="text-center" [nzWidth]="'64px'">Length</th>
+              <th class="text-center" [nzWidth]="'100px'">Length</th>
               <th class="text-center" [nzWidth]="'64px'">Type</th>
               <th class="text-center" [nzWidth]="'80px'">Link</th>
             </tr>
@@ -95,7 +98,7 @@
               <td>{{ video.name }}</td>
               <td class="text-center">{{ video.subject }}</td>
               <td class="text-center">
-                {{ Math.floor(video.length / 60) }} Hr {{ video.length % 60 }}
+                {{ Math.floor(video.length / 60) }} hr {{ video.length % 60 }} min
               </td>
               <td
                 class="text-center font-600"
@@ -120,7 +123,7 @@
           >
             <div
               class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name, subject.id)"
+              (click)="onClickSubject(subject.name)"
             >
               <div class="ant-col-5">
                 <div class="subject-icon student-diagonal-gradient">
@@ -128,7 +131,7 @@
                 </div>
               </div>
               <div class="ant-col-19">
-                <p class="text-primary font-16 font-600">
+                <p class="text-primary font-16 font-400">
                   {{ subject.name }}
                 </p>
               </div>
@@ -138,4 +141,4 @@
       </ng-template>
     </nz-tab>
   </nz-tabset>
-</div>
+</nz-card>

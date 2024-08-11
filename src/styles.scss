@@ -30,6 +30,11 @@ p {
 
 .text-primary {
   color: $student-primary !important;
+  transition: color 0.6s;
+}
+
+.text-primary:hover {
+  color: #561abd !important;
 }
 
 .text-a-primary {
@@ -37,7 +42,7 @@ p {
 }
 
 .text-free {
-  color: #BEBEBE !important;
+  color: #bebebe !important;
 }
 
 .text-paid {
@@ -111,6 +116,15 @@ button {
 .ant-tabs-tab-btn {
   padding: 0 16px 8px !important;
 }
+.ant-card {
+  border-radius: 12px;
+  .ant-card-body {
+    padding: 16px;
+  }
+}
+.ant-card-hoverable:hover {
+  box-shadow: 0px 4px 8px 0px #22222217;
+}
 
 //Table
 .ant-table-thead
@@ -145,6 +159,30 @@ button {
   background: #561abd;
   color: #fff;
 }
+
+nz-breadcrumb {
+  margin-bottom: 0.75rem !important;
+}
+
+.ant-breadcrumb > nz-breadcrumb-item {
+  font-size: 16px;
+  color: #bebebe;
+  font-weight: 500;
+  transition: color 0.6s;
+}
+
+.ant-breadcrumb > nz-breadcrumb-item:hover{
+  cursor:pointer;
+}
+
+.student .ant-breadcrumb > nz-breadcrumb-item:last-child {
+  color: #8555fd;
+}
+
+.student .ant-breadcrumb > nz-breadcrumb-item:hover {
+  color: #561abd;
+}
+
 
 // Custom Global Classes
 .label-divider {
@@ -222,4 +260,8 @@ button {
 
 .student .chart-center {
   background-color: #8555fd18;
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
 }

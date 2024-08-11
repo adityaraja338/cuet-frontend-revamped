@@ -12,7 +12,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: ':subject',
+        path: ':subjectId',
         loadChildren: () =>
           import('./topics/topics.module').then((m) => m.TopicsModule),
       },

@@ -1,1 +1,75 @@
-<p>materials works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item [routerLink]="['/', 'student', 'resources']">Resources</nz-breadcrumb-item>
+  <nz-breadcrumb-item [routerLink]="['/','student', 'resources', 1 ]">{{ subjectName }}</nz-breadcrumb-item>
+  <nz-breadcrumb-item>{{ topicName }}</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzHoverable nzBorderless>
+  <nz-tabset>
+    <nz-tab nzTitle="Subjects">
+      <ng-template nz-tab>
+        <!-- Non Domain Subjects        -->
+        <div id="subjects-container" class="ant-row mx-n1">
+          <div
+            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+            *ngFor="let material of materials"
+          >
+            <div
+              class="subject ant-row ant-row-middle"
+            >
+              <div class="ant-col-5">
+                <div class="subject-icon student-diagonal-gradient">
+                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                </div>
+              </div>
+              <div class="ant-col-19">
+                <p class="text-primary font-16 font-500 mb-1">
+                  {{ material.name }}
+                </p>
+                <p class="font-10 font-500">Topics: {{ 12 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Tests" id="topic-test">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Test Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Questions</th>
+            <th class="text-center" [nzWidth]="'64px'">Type</th>
+            <th class="text-center" [nzWidth]="'84px'">Duration</th>
+            <th class="text-center" [nzWidth]="'84px'"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center">{{ test.questions }}</td>
+            <td
+              class="text-center font-500"
+              [class]="test.type === 'free' ? 'text-free' : 'text-paid'"
+            >
+              {{ test.type }}
+            </td>
+            <td class="text-center">
+              {{ Math.floor(test.duration / 60) }} hr {{ test.duration % 60 }} min
+            </td>
+            <td class="text-center">
+              <button nz-button class="start-test-btn">Start Test</button>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

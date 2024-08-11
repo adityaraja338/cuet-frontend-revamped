@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { MaterialsComponent } from './materials/materials.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TopicsComponent } from './topics.component';
+import {NgZorroAntdModule} from "../../../ng-zorro-antd.module";
+import {NgForOf} from "@angular/common";
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: TopicsComponent },
@@ -18,13 +20,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    TopicsComponent,
-    MaterialsComponent
-  ],
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  exports: [TopicsComponent, MaterialsComponent]
+  declarations: [TopicsComponent, MaterialsComponent],
+  imports: [RouterModule.forChild(routes), NgZorroAntdModule, NgForOf],
+  exports: [TopicsComponent, MaterialsComponent],
 })
-export class TopicsModule { }
+export class TopicsModule {}

@@ -19,10 +19,15 @@ const routes: Routes = [
           import('./resources/resources.module').then((m) => m.ResourcesModule),
       },
       {
+        path: 'tests',
+        loadChildren: () =>
+          import('./tests/tests.module').then((m) => m.TestsModule),
+      },
+      {
         path: 'performances',
         loadChildren: () =>
           import('./performances/performances.module').then(
-            (m) => m.PerformancesModule
+            (m) => m.PerformancesModule,
           ),
       },
       {

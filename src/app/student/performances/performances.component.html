@@ -1,1 +1,159 @@
-<p>performances works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item>My Performances</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzBorderless nzHoverable>
+  <nz-tabset>
+    <nz-tab nzTitle="Live Tests">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Attempted</th>
+            <th class="text-center" [nzWidth]="'64px'">Date</th>
+            <th class="text-center" [nzWidth]="'64px'">Score</th>
+            <th class="text-center" [nzWidth]="'64px'">Accuracy</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center">{{ test.attempted }} / {{ test.total }}</td>
+            <td
+              class="text-center font-500"
+            >
+              {{ test.date | date: 'dd MMM yy' }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained }} / {{ test.totalScore }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained / test.totalScore * 100 | number: '.0-2' }} %
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Recorded Tests">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Attempted</th>
+            <th class="text-center" [nzWidth]="'64px'">Date</th>
+            <th class="text-center" [nzWidth]="'64px'">Score</th>
+            <th class="text-center" [nzWidth]="'64px'">Accuracy</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center">{{ test.attempted }} / {{ test.total }}</td>
+            <td
+              class="text-center font-500"
+            >
+              {{ test.date | date: 'dd MMM yy' }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained }} / {{ test.totalScore }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained / test.totalScore * 100 | number: '.0-2' }} %
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Mock Tests">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Attempted</th>
+            <th class="text-center" [nzWidth]="'64px'">Date</th>
+            <th class="text-center" [nzWidth]="'64px'">Score</th>
+            <th class="text-center" [nzWidth]="'64px'">Accuracy</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center">{{ test.attempted }} / {{ test.total }}</td>
+            <td
+              class="text-center font-500"
+            >
+              {{ test.date | date: 'dd MMM yy' }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained }} / {{ test.totalScore }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained / test.totalScore * 100 | number: '.0-2' }} %
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Topic Tests">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Attempted</th>
+            <th class="text-center" [nzWidth]="'64px'">Date</th>
+            <th class="text-center" [nzWidth]="'64px'">Score</th>
+            <th class="text-center" [nzWidth]="'64px'">Accuracy</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center">{{ test.attempted }} / {{ test.total }}</td>
+            <td
+              class="text-center font-500"
+            >
+              {{ test.date | date: 'dd MMM yy' }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained }} / {{ test.totalScore }}
+            </td>
+            <td class="text-center">
+              {{ test.scoreObtained / test.totalScore * 100 | number: '.0-2' }} %
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

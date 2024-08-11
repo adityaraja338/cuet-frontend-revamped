@@ -1,0 +1,83 @@
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item>Tests</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzBorderless nzHoverable>
+  <nz-tabset>
+    <nz-tab nzTitle="Recorded Tests">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+            <tr>
+              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'64px'">Questions</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'84px'">Duration</th>
+              <th class="text-center" [nzWidth]="'84px'"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let test of topicTests; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ test.name }}</td>
+              <td class="text-center font-500">
+                {{ test.questions }}
+              </td>
+              <td class="text-center" [class]="test?.isFree ? 'text-free' :'text-paid'">
+                {{ test.isFree ? 'Free' : 'Paid' }}
+              </td>
+              <td class="text-center">
+                {{ Math.floor(test?.duration / 60) }} hr {{ test?.duration % 60 }} min
+              </td>
+              <td>
+                <button nz-button class="start-test-btn">Start Test</button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Mock Tests">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Questions</th>
+            <th class="text-center" [nzWidth]="'64px'">Type</th>
+            <th class="text-center" [nzWidth]="'84px'">Duration</th>
+            <th class="text-center" [nzWidth]="'84px'"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center font-500">
+              {{ test.questions }}
+            </td>
+            <td class="text-center" [class]="test?.isFree ? 'text-free' :'text-paid'">
+              {{ test.isFree ? 'Free' : 'Paid' }}
+            </td>
+            <td class="text-center">
+              {{ Math.floor(test?.duration / 60) }} hr {{ test?.duration % 60 }} min
+            </td>
+            <td>
+              <button nz-button class="start-test-btn">Start Test</button>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

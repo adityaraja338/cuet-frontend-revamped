@@ -1,29 +1,31 @@
 <section id="test-cards">
   <div nz-row [nzGutter]="[16, 12]">
     <div nz-col [nzXs]="24" [nzSm]="12" [nzXl]="12" [nzXXl]="12">
-      <div class="student-diagonal-gradient upcoming-test">
-        <h6 class="font-16 text-white">Upcoming Live Tests</h6>
-        <div nz-row nzJustify="space-between" nzAlign="middle">
-          <div nz-col [nzSpan]="15">
-            <p class="text-white font-12 font-400">
-              Subject: <span class="text-white">Mathematics</span>
+      <div class="upcoming-test">
+        <h6 class="font-16 font-500 text-dark-primary mb-md-0 mb-2">Upcoming Live Tests</h6>
+        <div class="row">
+          <div class="col-sm-12 col-md-9 order-0">
+            <p class="text-primary font-12 font-400">
+              Subject: <span class="text-primary">Mathematics</span>
             </p>
-            <p class="text-white font-16 font-500">
+            <p class="text-primary font-16 font-500">
               {{ "2/07/2024" }} {{ "@ " }} {{ "7:30 PM" }}
             </p>
           </div>
-          <div nz-col [nzSpan]="9">
-            <button class="font-12 font-500 text-primary start-test">
+          <div class="col-sm-6 col-md-3 order-md-1 order-2 d-flex ant-row-end mt-md-0 mt-2">
+            <button nz-button class="font-12 font-500 start-test">
               Start Test
             </button>
           </div>
+          <div class="col-sm-6 col-md-4 order-md-2 order-1 col-xl-3 mt-2 d-flex justify-content-md-start justify-content-center">
+            <button nz-button class="font-12 view-all mt-md-0">View All</button>
+          </div>
         </div>
-        <button class="font-12 view-all">View All</button>
       </div>
     </div>
     <div nz-col [nzXs]="24" [nzSm]="12" [nzXl]="12" [nzXXl]="12" class="">
-      <div class="student-diagonal-gradient previous-test">
-        <h6 class="font-16 text-white">Previous Live Tests</h6>
+      <div class="previous-test">
+        <h6 class="font-16 font-500 text-dark-primary">Previous Live Tests</h6>
         <div class="overlap-tests">
           @for (test of previous; track test; let index = $index) {
             <div
@@ -40,7 +42,11 @@
             <p class="font-16 text-white">No Tests found!</p>
           }
         </div>
-        <button class="font-12 view-all">View All</button>
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-xl-3">
+            <button nz-button class="font-12 view-all">View All</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

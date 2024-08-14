@@ -1,1 +1,151 @@
-<p>resources works!</p>
+<nz-breadcrumb nzSeparator=">" class="mb-md-4 mb-2">
+  <nz-breadcrumb-item class="cursor-pointe">Resources</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="breadcrumb-button row mx-0 justify-content-end">
+  <button nz-button ngSkipHydration class="btn-primary mb-2 font-400">
+    <span nz-icon nzType="plus"></span>
+    Add Subject
+  </button>
+</div>
+<nz-card nzHoverable nzBorderless>
+  <nz-tabset>
+    <nz-tab nzTitle="Subjects">
+      <ng-template nz-tab>
+        <!-- Non Domain Subjects        -->
+        <div id="subjects-container" class="ant-row mx-n1">
+          <div class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1">
+            <div
+              class="newspaper admin-diagonal-gradient ant-row ant-row-middle"
+            >
+              <div class="ant-col-5">
+                <div class="subject-icon bg-white">
+                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                </div>
+              </div>
+              <div class="ant-col-19">
+                <p class="text-white font-16 font-400 mb-1">Newspapers</p>
+                <p class="text-white font-10 font-400">Total: {{ 12 }}</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+            *ngFor="let subject of subjects"
+          >
+            <div
+              class="subject ant-row ant-row-middle"
+              (click)="onClickSubject(subject.id)"
+            >
+              <div class="ant-col-5">
+                <div class="subject-icon admin-diagonal-gradient">
+                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                </div>
+              </div>
+              <div class="ant-col-19">
+                <p class="text-a-primary font-16 font-400 mb-1">
+                  {{ subject.name }}
+                </p>
+                <p class="font-10 font-400">Topics: {{ 12 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Domain Subjects       -->
+        <div class="label-divider mt-4 my-3">
+          <hr />
+          <p>Domain Subjects</p>
+        </div>
+        <div id="domain-subjects-container" class="ant-row mx-n1">
+          <div
+            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+            *ngFor="let subject of subjects"
+          >
+            <div
+              class="subject ant-row ant-row-middle"
+              (click)="onClickSubject(subject.name)"
+            >
+              <div class="ant-col-5">
+                <div class="subject-icon admin-diagonal-gradient">
+                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                </div>
+              </div>
+              <div class="ant-col-19">
+                <p class="text-a-primary font-16 font-500 mb-1">
+                  {{ subject.name }}
+                </p>
+                <p class="font-10 font-500">Topics: {{ 12 }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Video Links">
+      <ng-template nz-tab>
+        <nz-table
+          [nzData]="videoLinks"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+            <tr>
+              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Video Name</th>
+              <th class="text-center" [nzWidth]="'100px'">Subject</th>
+              <th class="text-center" [nzWidth]="'100px'">Length</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'80px'">Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let video of videoLinks; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ video.name }}</td>
+              <td class="text-center">{{ video.subject }}</td>
+              <td class="text-center">
+                {{ Math.floor(video.length / 60) }} hr
+                {{ video.length % 60 }} min
+              </td>
+              <td
+                class="text-center font-600"
+                [class]="video.type === 'free' ? 'text-free' : 'text-paid'"
+              >
+                {{ video.type }}
+              </td>
+              <td class="text-center">
+                <a [href]="'https://' + video.link">Click Here</a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="PYQs">
+      <ng-template nz-tab>
+        <div id="pyq-container" class="ant-row mx-n1">
+          <div
+            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+            *ngFor="let subject of subjects"
+          >
+            <div
+              class="subject ant-row ant-row-middle"
+              (click)="onClickSubject(subject.name)"
+            >
+              <div class="ant-col-5">
+                <div class="subject-icon admin-diagonal-gradient">
+                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                </div>
+              </div>
+              <div class="ant-col-19">
+                <p class="text-a-primary font-16 font-400">
+                  {{ subject.name }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

@@ -1,4 +1,4 @@
-<nz-layout class="app-layout">
+<nz-layout class="app-layout admin">
   <nz-header>
     <div class="app-header">
       <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
@@ -10,7 +10,7 @@
       </span>
     </div>
   </nz-header>
-  <nz-layout class="admin-layout">
+  <nz-layout>
     <nz-sider
       class="menu-sidebar"
       nzCollapsible
@@ -57,7 +57,7 @@
           nzMatchRouter="/admin/resources"
           routerLink="/admin/resources"
         >
-          <span nz-icon nzType="book"></span>
+          <span nz-icon nzType="read"></span>
           <span>Resources</span>
         </li>
         <li
@@ -69,7 +69,7 @@
           nzMatchRouter="/admin/tests"
           routerLink="/admin/tests"
         >
-          <span nz-icon nzType="snippets"></span>
+          <span nz-icon nzType="project"></span>
           <span>Tests</span>
         </li>
         <li
@@ -100,7 +100,16 @@
     </nz-sider>
 
     <nz-content>
-      <router-outlet></router-outlet>
+      <ngx-simplebar
+        [options]="{}"
+        style="overflow-y: auto; max-height: calc(100vh - 64px); padding: 24px"
+      >
+        <section class="ant-row ant-row-center">
+          <section style="position: relative" class="ant-col-xs-24 ant-col-xl-20 ant-col-xxl-12">
+            <router-outlet></router-outlet>
+          </section>
+        </section>
+      </ngx-simplebar>
     </nz-content>
   </nz-layout>
 </nz-layout>

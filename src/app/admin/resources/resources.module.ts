@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResourcesComponent } from './resources.component';
 import { RouterModule, Routes } from '@angular/router';
+import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ResourcesComponent },
@@ -9,7 +10,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: ':subject',
+        path: ':subjectId',
         loadChildren: () =>
           import('./topics/topics.module').then((m) => m.TopicsModule),
       },
@@ -18,12 +19,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    ResourcesComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  declarations: [ResourcesComponent],
+  imports: [CommonModule, RouterModule.forChild(routes), NgZorroAntdModule],
 })
-export class ResourcesModule { }
+export class ResourcesModule {}

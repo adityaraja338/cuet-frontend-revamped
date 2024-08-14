@@ -1,25 +1,62 @@
 .upcoming-test,
 .previous-test {
   // width: 90%;
+  background-color: rgba(133, 85, 253, 0.12);
+  border: 1px solid #8555FD;
   min-height: 140px;
   border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: all 0.6s;
   button.view-all {
-    border: 2px solid white;
-    color: white;
-    background-color: transparent;
-    width: max-content;
-    padding: 4px 16px;
+    //border: 1px solid #8555FD;
+    color: #8555fd;
+    background: #FFF;
+    padding: 0px 16px;
+    justify-content: center;
+    width: 100%;
+    font-weight: 300;
+    border-radius: 8px;
+  }
+  &:hover{
+    background-color: rgba(133, 85, 253, 0.16);;
+    box-shadow: 4px 4px 8px 0 rgba(0,0,0,0.06);
+  }
+}
+
+@media (min-width: 768px) {
+  .upcoming-test,
+  .previous-test{
+    button.view-all{
+      height: 30px;
+    }
   }
 }
 
 .upcoming-test {
   button.start-test {
-    width: 100%;
+    //width: 100%;
+    background-color: #8555fd;
+    color: #FFF !important;
+    padding: 0 24px;
+    border-radius: 8px;
+    transition: all 0.6s;
+    font-weight: 400;
+    &:hover{
+      background-color: #6F2DBD;
+    }
   }
+}
+
+@media (max-width: 575px) {
+  .upcoming-test button.start-test {
+    width: 100% !important;
+    justify-content: center;
+    margin-top: 8ng s px;
+  }
+
 }
 
 .previous-test {
@@ -29,7 +66,7 @@
       position: relative;
       height: 36px;
       aspect-ratio: 1;
-      border: 2px solid #8555fd;
+      border: 1px solid #8555fd;
       background-color: white;
       border-radius: 50%;
       transition: all 0.6s;

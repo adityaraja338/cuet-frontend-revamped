@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account.component';
+import { CommonModule } from '@angular/common';
+import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 
 const routes: Routes = [
   { path: '', component: AccountComponent },
@@ -9,7 +11,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [AccountComponent],
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), CommonModule, NgZorroAntdModule],
   exports: [AccountComponent],
 })
 export class AccountModule {}

@@ -1,1 +1,172 @@
-<p>account works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item>My Account</nz-breadcrumb-item>
+</nz-breadcrumb>
+<div class="ant-row">
+  <div class="ant-col-md-14">
+    <nz-card nzHoverable nzBorderless>
+      <div class="ant-row">
+        <div class="ant-col-24 mb-2">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Name</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="Student Name"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="ant-col-24 mb-2">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Student ID</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="Student ID"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="ant-col-24 mb-2">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Batch ID</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="Batch ID"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="ant-col-24 mb-2">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Phone</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="Phone Number"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="ant-col-24 mb-2">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Email</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="Email Address"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="ant-col-24 mb-2">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Age</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="Age"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="ant-col-24">
+          <nz-form-label [nzNoColon]="true">
+            <h4 class="common-label font-500 font-10 mb-1">Cuet Attempts</h4>
+          </nz-form-label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError" class="">
+              <input
+                nz-input
+                placeholder="No Attempts"
+                class=""
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Field cannot be empty
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Name cannot have more than 40 characters
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div class="ant-col-md-10 px-md-4 px-0 mt-md-0 mt-4">
+    <p class="enroll-text mb-4">Haven’t<br><span>Enrolled</span><br>Yet?</p>
+    <button nz-button ngSkipHydration class="enroll-btn">
+      <span nz-icon nzType="form"></span>
+      Enroll Now
+    </button>
+  </div>
+</div>

@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { NgZorroAntdModule } from '../ng-zorro-antd.module';
+import {SimplebarAngularModule} from "simplebar-angular";
 
 
 
 @NgModule({
-  declarations: [
-    AdminComponent
-  ],
+  declarations: [AdminComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
-    NgZorroAntdModule
-  ]
+    NgZorroAntdModule,
+    SimplebarAngularModule,
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

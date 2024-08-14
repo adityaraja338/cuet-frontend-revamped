@@ -1,1 +1,93 @@
-<p>batches works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item>Batches</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzBorderless nzHoverable>
+  <div class="row justify-content-between mb-2">
+    <div class="col-md-8 col-xl-6">
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <input nz-input type="text" placeholder="Enter Test Name or ID" />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-xl-3 mb-2 d-flex justify-content-end">
+      <button nz-button class="btn-primary filter-btn">
+        <span nz-icon nzType="plus"></span>
+        Add Batch
+      </button>
+    </div>
+  </div>
+  <nz-table
+    [nzData]="batches"
+    [nzFrontPagination]="false"
+    [nzShowSizeChanger]="true"
+    [nzShowPagination]="true"
+    [nzTotal]="totalBatchCount"
+    [nzPageIndex]="pageIndex"
+    [nzPageSize]="pageSize"
+    [nzShowTotal]="printBatchCount"
+    [nzScroll]="{ x: '640px' }"
+  >
+    <thead>
+    <tr>
+      <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+      <th [nzWidth]="'160px'">Name</th>
+      <th class="text-center" [nzWidth]="'72px'">Batch ID</th>
+      <th class="text-center" [nzWidth]="'84px'">Start Date</th>
+      <th class="text-center" [nzWidth]="'84px'">Students</th>
+      <th class="text-center" [nzWidth]="'64px'">Tests</th>
+      <th class="text-center" [nzWidth]="'48px'"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let batch of batches; let i = index">
+      <td class="text-center">{{ i + 1 }}</td>
+      <td>{{ batch.name }}</td>
+      <td
+        class="text-center"
+      >
+        {{ batch.id }}
+      </td>
+      <td class="text-center">
+        {{ '12/06/2024' | date: 'dd/MM/yy' }}
+      </td>
+      <td class="text-center">
+        {{ batch.studentCount }}
+      </td>
+      <td class="text-center">
+        {{ batch.testCount }}
+      </td>
+      <td class="text-center">
+        <a
+          class="text-dark font-size-20"
+          nz-dropdown
+          [nzClickHide]="false"
+          [nzTrigger]="'click'"
+          [nzPlacement]="'bottomRight'"
+          [nzDropdownMenu]="batchDropdown"
+        >
+          <i nz-icon nzType="ellipsis" theme="outline"></i>
+        </a>
+        <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+          <ul class="table-menu rounded" nz-menu>
+            <li class="tiny-li" nz-menu-item>
+              <span class="m-l-5">Edit</span>
+            </li>
+            <li class="tiny-li" nz-menu-item>
+              <span class="m-l-5" style="color: red">Delete</span>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <ng-template #printBatchCount>
+    <div *ngIf="!totalBatchCount" class="font-weight-normal">
+      No Results Found
+    </div>
+    <div *ngIf="totalBatchCount" class="font-weight-normal">
+      <b>{{ totalBatchCount }}</b> Results Found
+    </div>
+  </ng-template>
+</nz-card>

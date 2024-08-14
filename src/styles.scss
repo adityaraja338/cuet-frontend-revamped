@@ -124,6 +124,16 @@ button.ant-btn {
   }
 }
 
+.admin .filter-btn{
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .admin .filter-btn{
+    width: auto;
+  }
+}
+
 //.admin button.ant-btn:hover{
 //  background-color: $admin-primary;
 //}
@@ -271,6 +281,14 @@ nz-breadcrumb {
 
 .student .ant-breadcrumb > nz-breadcrumb-item:hover {
   color: #561abd;
+}
+
+.admin .ant-breadcrumb > nz-breadcrumb-item:last-child {
+  color: $admin-primary;
+}
+
+.admin .ant-breadcrumb > nz-breadcrumb-item:hover {
+  color: #008cff;
 }
 
 .breadcrumb-button {

@@ -1,0 +1,545 @@
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item routerLink="/admin/tests" class="cursor-pointer"
+    >Tests</nz-breadcrumb-item
+  >
+  <nz-breadcrumb-item class="cursor-pointer">
+    {{ "Add" ?? "Edit" }} Test
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzBorderless nzHoverable>
+  <p class="font-16 font-400 mb-3">{{ "Create New" ?? "Edit" }} Test</p>
+  <form [formGroup]="testForm">
+    <div class="row">
+      <!--   Test Type  -->
+      <div class="col-12 mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-3 col-xl-3">
+            <nz-form-label nzNoColon class="mb-md-0 mb-2">
+              <p class="font-14 font-300">
+                Test Type <span class="text-red">*</span>
+              </p>
+            </nz-form-label>
+          </div>
+          <div class="col-md-9 col-xl-9">
+            <nz-form-item class="font-300">
+              <nz-form-control>
+                <nz-radio-group formControlName="testType">
+                  <label nz-radio nzValue="live">Live Test</label>
+                  <label nz-radio nzValue="mock">Mock Test</label>
+                  <label nz-radio nzValue="topic">Topic Test</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      <!--  Test Name   -->
+      <div class="col-12 mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-3 col-xl-3">
+            <nz-form-label nzNoColon class="mb-md-0 mb-2">
+              <p class="font-14 font-300">
+                Test Name <span class="text-red">*</span>
+              </p>
+            </nz-form-label>
+          </div>
+          <div class="col-md-6 col-xl-6">
+            <nz-form-item class="">
+              <nz-form-control>
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Name"
+                  formControlName="testName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      @if (
+        testForm?.get("testType")?.value === "live" ||
+        testForm?.get("testType")?.value === "mock"
+      ) {
+        <!--   Subject Name   -->
+        <div class="col-12 mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                <p class="font-14 font-300">
+                  Subject Name <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <nz-form-item class="">
+                <nz-form-control>
+                  <input
+                    nz-input
+                    type="text"
+                    placeholder="Subject"
+                    formControlName="subjectName"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+
+        <!--   Topics   -->
+        <div class="col-12 mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                <p class="font-14 font-300">
+                  Topics <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <nz-form-item class="">
+                <nz-form-control>
+                  <nz-select
+                    nzMode="tags"
+                    nzPlaceHolder="Topics"
+                    formControlName="topics"
+                  >
+                    <ng-container
+                      *ngFor="let tag of testForm?.get('topics')?.value"
+                    >
+                      <nz-option
+                        class="admin-option"
+                        [nzLabel]="tag"
+                        [nzValue]="tag"
+                      ></nz-option>
+                    </ng-container>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (testForm?.get("testType")?.value === "topic") {
+        <!--   Topic ID   -->
+        <div class="col-12 mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                <p class="font-14 font-300">
+                  Topic <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <nz-form-item class="">
+                <nz-form-control>
+                  <nz-select
+                    nzPlaceHolder="Topic ID"
+                    formControlName="topicId"
+                    [nzShowArrow]="true"
+                  >
+                    <ng-container *ngFor="let tag of hoursList">
+                      <nz-option [nzLabel]="tag" [nzValue]="tag"></nz-option>
+                    </ng-container>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!--   Duration   -->
+      <div class="col-12 mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-3 col-xl-3">
+            <nz-form-label nzNoColon class="mb-md-0 mb-2">
+              <p class="font-14 font-300">
+                Duration <span class="text-red">*</span>
+              </p>
+            </nz-form-label>
+          </div>
+          <div class="col-md-6 col-xl-6">
+            <div class="row mx-n2">
+              <div class="col-6 px-2">
+                <nz-form-item class="">
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder="Hour(s)"
+                      formControlName="durationHour"
+                    >
+                      <ng-container *ngFor="let hour of hoursList">
+                        <nz-option
+                          [nzLabel]="hour + ' Hr'"
+                          [nzValue]="hour"
+                        ></nz-option>
+                      </ng-container>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div class="col-6 px-2">
+                <nz-form-item class="">
+                  <nz-form-control>
+                    <nz-select
+                      nzPlaceHolder="Minutes"
+                      formControlName="durationMinutes"
+                    >
+                      <ng-container *ngFor="let minute of minutesList">
+                        <nz-option
+                          [nzLabel]="minute + ' Min'"
+                          [nzValue]="minute"
+                        ></nz-option>
+                      </ng-container>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      @if (testForm?.get("testType")?.value === "live") {
+        <!--   Start Time   -->
+        <div class="col-12 mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                <p class="font-14 font-300">
+                  Start Time <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <div class="row mx-n2">
+                <div class="col-7 px-2">
+                  <nz-form-item class="">
+                    <nz-form-control>
+                      <nz-date-picker
+                        nzFormat="dd MMM yyyy"
+                        [nzDropdownClassName]="'admin-date-pick'"
+                      ></nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="col-5 px-2">
+                  <nz-time-picker
+                    nzFormat="HH:mm"
+                    [nzPopupClassName]="'admin-time-pick'"
+                  ></nz-time-picker>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--   End Time   -->
+        <div class="col-12 mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                <p class="font-14 font-300">
+                  End Time <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <div class="row mx-n2">
+                <div class="col-7 px-2">
+                  <nz-form-item class="">
+                    <nz-form-control>
+                      <nz-date-picker
+                        nzFormat="dd MMM yyyy"
+                        [nzDropdownClassName]="'admin-date-pick'"
+                      ></nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div class="col-5 px-2">
+                  <nz-time-picker
+                    nzFormat="HH:mm"
+                    [nzPopupClassName]="'admin-time-pick'"
+                  ></nz-time-picker>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!--   Is Free   -->
+      <div class="col-12 mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-3 col-4">
+            <nz-form-label nzNoColon class="mb-md-0 mb-2">
+              <p class="font-14 font-300">
+                Is Free <span class="text-red">*</span>
+              </p>
+            </nz-form-label>
+          </div>
+          <div class="col-md-6 col-8">
+            <nz-form-item class="">
+              <nz-form-control>
+                <label
+                  nz-checkbox
+                  formControlName="isFree"
+                  (nzCheckedChange)="onIsFreeChange($event)"
+                ></label>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      @if (
+        testForm?.get("testType")?.value === "live" &&
+        !testForm?.get("isFree")?.value
+      ) {
+        <!--   Batch ID   -->
+        <div class="col-12">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-3">
+                <p class="font-14 font-300">
+                  Batch <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <nz-form-item class="mb-3">
+                <nz-form-control>
+                  <nz-select
+                    nzMode="multiple"
+                    nzPlaceHolder="Batch ID"
+                    formControlName="batchIds"
+                    [nzShowArrow]="true"
+                  >
+                    <ng-container *ngFor="let tag of hoursList">
+                      <nz-option [nzLabel]="tag" [nzValue]="tag"></nz-option>
+                    </ng-container>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="col-md-9 my-3">
+        <div
+          class="d-flex flex-md-row flex-column justify-content-between align-items-start"
+        >
+          <p class="font-16 font-400 text-a-primary mb-md-0 mb-2">Questions</p>
+          <nz-upload
+            nzName="file"
+            nzListType="text"
+            [nzShowUploadList]="false"
+            [nzBeforeUpload]="beforeUpload"
+            [nzCustomRequest]="handleFileSelect"
+            [nzAccept]="'text/csv'"
+          >
+            <button nz-button class="btn-primary">
+              <span nz-icon nzType="upload"></span> Click to Select File
+            </button>
+          </nz-upload>
+        </div>
+      </div>
+
+      <div class="col-12 mb-4" formArrayName="questions">
+        <nz-collapse nzGhost>
+          <nz-collapse-panel
+            [nzHeader]="(viewQuestions ? 'Hide' : 'View') + ' Questions'"
+            [(nzActive)]="viewQuestions"
+          >
+            <div
+              *ngFor="let question of questions.controls; let i = index"
+              class="mt-2"
+            >
+              @if (i !== 0) {
+                <div class="col-md-9 px-0">
+                  <nz-divider></nz-divider>
+                </div>
+              }
+              <div
+                class="col-md-9 px-0 d-flex justify-content-between align-items-center mb-3"
+              >
+                <p class="font-14 font-400 mb-md-0 mb-2">
+                  Question {{ i + 1 }}
+                </p>
+                <div class="d-flex align-items-center">
+                  <p
+                    *ngIf="true"
+                    class="font-12 font-400 text-a-primary mb-md-0 mb-2 cursor-pointer"
+                    (click)="saveQuestion(i)"
+                  >
+                    <span nz-icon nzType="save"></span> Save Question
+                  </p>
+                  <p
+                    *ngIf="questions.controls?.length !== 1"
+                    class="ml-3 font-12 font-400 text-red cursor-pointer"
+                    (click)="removeQuestion(i)"
+                  >
+                    <span nz-icon nzType="delete"></span> Remove Question
+                  </p>
+                  <p
+                    *ngIf="questions.controls?.length !== 1"
+                    class="ml-3 font-12 font-400 text-red cursor-pointer"
+                    (click)="removeQuestion(i)"
+                  >
+                    <span nz-icon nzType="delete"></span> Delete Question
+                  </p>
+                </div>
+              </div>
+              <div class="row" [formGroupName]="i">
+                <div class="col-md-9">
+                  <nz-form-item class="mb-3">
+                    <nz-form-control [nzErrorTip]="'Field is Mandatory!'">
+                      <textarea
+                        nz-input
+                        rows="3"
+                        type="text"
+                        placeholder="Question"
+                        formControlName="question"
+                      ></textarea>
+                    </nz-form-control>
+                  </nz-form-item>
+
+                  <!--   Correct Option   -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-md-4">
+                      <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                        <p class="font-14 font-300">
+                          Correct Answer <span class="text-red">*</span>
+                        </p>
+                      </nz-form-label>
+                    </div>
+                    <div class="col-md-8">
+                      <nz-form-item class="">
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            placeholder="Correct Option"
+                            formControlName="correctOption"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+
+                  <!--   Incorrect Option 1   -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-md-4">
+                      <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                        <p class="font-14 font-300">
+                          Incorrect Answer 1 <span class="text-red">*</span>
+                        </p>
+                      </nz-form-label>
+                    </div>
+                    <div class="col-md-8">
+                      <nz-form-item class="">
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            placeholder="Incorrect Option 1"
+                            formControlName="incorrectOption1"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+
+                  <!--   Incorrect Option 2   -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-md-4">
+                      <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                        <p class="font-14 font-300">
+                          Incorrect Answer 2 <span class="text-red">*</span>
+                        </p>
+                      </nz-form-label>
+                    </div>
+                    <div class="col-md-8">
+                      <nz-form-item class="">
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            placeholder="Incorrect Option 2"
+                            formControlName="incorrectOption2"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+
+                  <!--   Incorrect Option 3   -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-md-4">
+                      <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                        <p class="font-14 font-300">
+                          Incorrect Answer 3 <span class="text-red">*</span>
+                        </p>
+                      </nz-form-label>
+                    </div>
+                    <div class="col-md-8">
+                      <nz-form-item class="">
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            placeholder="Incorrect Option 3"
+                            formControlName="incorrectOption3"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+
+                  <!--   Incorrect Option 4   -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-md-4">
+                      <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                        <p class="font-14 font-300">Incorrect Answer 4</p>
+                      </nz-form-label>
+                    </div>
+                    <div class="col-md-8">
+                      <nz-form-item class="">
+                        <nz-form-control>
+                          <input
+                            nz-input
+                            type="text"
+                            placeholder="Incorrect Option 4"
+                            formControlName="incorrectOption4"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button nz-button class="btn-secondary" (click)="addQuestion()">
+              <span nz-icon nzType="plus"></span>
+              Add Question
+            </button>
+            <p class="font-12 font-300 mt-3" (click)="viewQuestions = false">
+              <span nz-icon nzType="close"></span>
+              Close Questions View
+            </p>
+          </nz-collapse-panel>
+        </nz-collapse>
+      </div>
+
+      <div class="col-12 d-flex justify-content-start">
+        <button nz-button class="btn-danger">Cancel</button>
+        <button nz-button class="ml-2 btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+</nz-card>

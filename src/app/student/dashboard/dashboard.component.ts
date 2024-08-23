@@ -17,9 +17,9 @@ export class DashboardComponent {
     direction: 'rtl',
   };
 
-  leaderboardScrollbarOptions: any = {
-    // direction: 'ttb',
-  };
+  // leaderboardScrollbarOptions: any = {
+  //   // direction: 'ttb',
+  // };
 
   // Doughnut
   public doughnutChartLabels: string[] = [

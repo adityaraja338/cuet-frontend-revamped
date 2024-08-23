@@ -1,1 +1,123 @@
-<p>students works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item>Students</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzHoverable nzBorderless>
+  <div class="row justify-content-between align-items-start mb-3">
+    <div class="col-md-8 col-xl-6">
+      <nz-collapse nzGhost>
+        <nz-collapse-panel
+          [nzHeader]="'Filters'"
+          [nzActive]="collapseFilter"
+          [nzDisabled]="false"
+        >
+          <div class="row">
+            <div class="col-md-6 mb-md-0 mb-2">
+              <input
+                nz-input
+                type="text"
+                placeholder="Search Student Name or ID"
+                [(ngModel)]="filterNameOrId"
+              />
+            </div>
+            <div class="col-md-6">
+              <nz-select
+                nzPlaceHolder="Select Batch"
+                nzAllowClear
+                [(ngModel)]="filterBatchId"
+              >
+                <nz-option
+                  [nzLabel]="'Option 1'"
+                  [nzValue]="'option1'"
+                ></nz-option>
+                <nz-option
+                  [nzLabel]="'Option 2'"
+                  [nzValue]="'option2'"
+                ></nz-option>
+                <nz-option
+                  [nzLabel]="'Option 3'"
+                  [nzValue]="'option3'"
+                ></nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </div>
+  </div>
+
+  <nz-table
+    [nzData]="students"
+    [nzFrontPagination]="false"
+    [nzShowSizeChanger]="true"
+    [nzShowPagination]="true"
+    [nzTotal]="totalCount"
+    [nzPageIndex]="pageIndex"
+    [nzPageSize]="pageSize"
+    [nzShowTotal]="printStudentCount"
+    [nzScroll]="{ x: '640px' }"
+  >
+    <thead>
+      <tr>
+        <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+        <th [nzWidth]="'160px'">Name</th>
+        <th class="text-center" [nzWidth]="'84px'">Student ID</th>
+        <th class="text-center" [nzWidth]="'84px'">Batch ID</th>
+        <th class="text-center" [nzWidth]="'72px'">Accuracy</th>
+        <th class="text-center" [nzWidth]="'64px'">Plan</th>
+        <th class="text-center" [nzWidth]="'48px'"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students; let i = index">
+        <td class="text-center">{{ i + 1 }}</td>
+        <td>{{ student.name }}</td>
+        <td class="text-center">
+          {{ student.id }}
+        </td>
+        <td class="text-center">
+          {{ student.batchId }}
+        </td>
+        <td class="text-center">
+          {{ "76.8 %" }}
+        </td>
+        <td
+          class="text-center font-400"
+          [class]="student?.isFree ? 'text-free' : 'text-paid'"
+        >
+          {{ student.isFree ? "Free" : "Paid" }}
+        </td>
+        <td class="text-center">
+          <a
+            class="text-dark font-size-20"
+            nz-dropdown
+            [nzClickHide]="false"
+            [nzTrigger]="'click'"
+            [nzPlacement]="'bottomRight'"
+            [nzDropdownMenu]="latestUploadDropDown"
+          >
+            <i nz-icon nzType="ellipsis" theme="outline"></i>
+          </a>
+          <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
+            <ul class="table-menu rounded" nz-menu>
+              <li class="tiny-li" nz-menu-item>
+                <span class="m-l-5">Change Batch</span>
+              </li>
+              <li class="tiny-li" nz-menu-item>
+                <span class="m-l-5">Edit</span>
+              </li>
+              <li class="tiny-li" nz-menu-item>
+                <span class="m-l-5" style="color: red">Delete</span>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <ng-template #printStudentCount>
+    <div *ngIf="!totalCount" class="font-weight-normal">No Results Found</div>
+    <div *ngIf="totalCount" class="font-weight-normal">
+      <b>{{ totalCount }}</b> Results Found
+    </div>
+  </ng-template>
+</nz-card>

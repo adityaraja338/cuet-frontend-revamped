@@ -4,28 +4,26 @@ import { TestsComponent } from './tests.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { IconsProviderModule } from '../../icons-provider.module';
+import { AddEditTestComponent } from './add-edit-test/add-edit-test.component';
+import { TestDetailComponent } from './test-detail/test-detail.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: TestsComponent },
-  // {
-  //   path: '',
-  //   children: [
-  //     {
-  //       path: ':subject',
-  //       loadChildren: () =>
-  //         import('./topics/topics.module').then((m) => m.TopicsModule),
-  //     },
-  //   ],
-  // },
+  { path: 'create', pathMatch: 'full', component: AddEditTestComponent },
+  { path: 'edit/:testId', pathMatch: 'full', component: AddEditTestComponent },
+  { path: ':testId', pathMatch: 'full', component: TestDetailComponent },
 ];
 
 @NgModule({
-  declarations: [TestsComponent],
+  declarations: [TestsComponent, AddEditTestComponent, TestDetailComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     NgZorroAntdModule,
     IconsProviderModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class TestsModule {}

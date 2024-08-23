@@ -5,34 +5,46 @@
   <nz-tabset>
     <nz-tab nzTitle="Live/Recorded Tests">
       <ng-template nz-tab>
-        <div class="row justify-content-between mb-2">
+        <div class="row justify-content-between align-items-start mb-3">
           <div class="col-md-8 col-xl-6">
-            <div class="row">
-              <div class="col-md-6 mb-2">
-                <input nz-input type="text" placeholder="Enter Test Name or ID" />
-              </div>
-              <div class="col-md-6 mb-2">
-                <nz-select nzPlaceHolder="Select Batch" nzAllowClear>
-                  <nz-option
-                    [nzLabel]="'Option 1'"
-                    [nzValue]="'option1'"
-                  ></nz-option>
-                  <nz-option
-                    [nzLabel]="'Option 2'"
-                    [nzValue]="'option2'"
-                  ></nz-option>
-                  <nz-option
-                    [nzLabel]="'Option 3'"
-                    [nzValue]="'option3'"
-                  ></nz-option>
-                </nz-select>
-              </div>
-            </div>
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row">
+                  <div class="col-md-6 mb-md-0 mb-2">
+                    <input nz-input type="text" placeholder="Enter Test Name or ID" />
+                  </div>
+                  <div class="col-md-6">
+                    <nz-select nzPlaceHolder="Select Batch" nzAllowClear>
+                      <nz-option
+                        [nzLabel]="'Option 1'"
+                        [nzValue]="'option1'"
+                      ></nz-option>
+                      <nz-option
+                        [nzLabel]="'Option 2'"
+                        [nzValue]="'option2'"
+                      ></nz-option>
+                      <nz-option
+                        [nzLabel]="'Option 3'"
+                        [nzValue]="'option3'"
+                      ></nz-option>
+                    </nz-select>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
           </div>
-          <div class="col-md-4 col-xl-3 mb-2 d-flex justify-content-end">
-            <button nz-button class="btn-primary">
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button
+              nz-button
+              class="btn-primary filter-btn"
+              [routerLink]="['create']"
+            >
               <span nz-icon nzType="plus"></span>
-              Add Live Test
+              Add Test
             </button>
           </div>
         </div>
@@ -119,18 +131,156 @@
     </nz-tab>
     <nz-tab nzTitle="Mock Tests">
       <ng-template nz-tab>
-        <div class="row justify-content-between mb-2">
+        <div class="row justify-content-between align-items-start mb-3">
           <div class="col-md-8 col-xl-6">
-            <div class="row">
-              <div class="col-md-6 mb-2">
-                <input nz-input type="text" placeholder="Enter Test Name or ID" />
-              </div>
-            </div>
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row">
+                  <div class="col-md-6">
+                    <input nz-input type="text" placeholder="Search Test Name or ID" />
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
           </div>
-          <div class="col-md-4 col-xl-3 mb-2 d-flex justify-content-end">
-            <button nz-button class="btn-primary">
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button
+              nz-button
+              class="btn-primary filter-btn"
+              [routerLink]="['create']"
+            >
               <span nz-icon nzType="plus"></span>
-              Add Mock Test
+              Add Test
+            </button>
+          </div>
+        </div>
+        <nz-table
+          [nzData]="topicTests"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzShowPagination]="true"
+          [nzTotal]="totalLiveTestCount"
+          [nzPageIndex]="livePageIndex"
+          [nzPageSize]="pageSize"
+          [nzShowTotal]="printMockCount"
+          [nzScroll]="{ x: '840px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'84px'">Questions</th>
+            <th class="text-center" [nzWidth]="'136px'">Start Time</th>
+            <th class="text-center" [nzWidth]="'136px'">End Time</th>
+            <th class="text-center" [nzWidth]="'64px'">Type</th>
+            <th class="text-center" [nzWidth]="'84px'">Duration</th>
+            <th class="text-center" [nzWidth]="'48px'"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test.name }}</td>
+            <td class="text-center">
+              {{ test.questions }}
+            </td>
+            <td class="text-center">
+              {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
+            </td>
+            <td class="text-center">
+              {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
+            </td>
+            <td
+              class="text-center font-400"
+              [class]="test?.isFree ? 'text-free' : 'text-paid'"
+            >
+              {{ test.isFree ? "Free" : "Paid" }}
+            </td>
+            <td class="text-center">
+              {{ Math.floor(test?.duration / 60) }} hr
+              {{ test?.duration % 60 }} min
+            </td>
+            <td class="text-center">
+              <a
+                class="text-dark font-size-20"
+                nz-dropdown
+                [nzClickHide]="false"
+                [nzTrigger]="'click'"
+                [nzPlacement]="'bottomRight'"
+                [nzDropdownMenu]="latestUploadDropDown"
+              >
+                <i nz-icon nzType="ellipsis" theme="outline"></i>
+              </a>
+              <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
+                <ul class="table-menu rounded" nz-menu>
+                  <li class="tiny-li" nz-menu-item>
+                    <span class="m-l-5">Edit</span>
+                  </li>
+                  <li class="tiny-li" nz-menu-item>
+                    <span class="m-l-5" style="color: red">Delete</span>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+        <ng-template #printMockCount>
+          <div *ngIf="!totalLiveTestCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="totalLiveTestCount" class="font-weight-normal">
+            <b>{{ totalLiveTestCount }}</b> Results Found
+          </div>
+        </ng-template>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Topic Wise Tests">
+      <ng-template nz-tab>
+        <div class="row justify-content-between align-items-start mb-3">
+          <div class="col-md-8 col-xl-6">
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row">
+                  <div class="col-md-6 mb-md-0 mb-2">
+                    <input nz-input type="text" placeholder="Search Test Name" />
+                  </div>
+                  <div class="col-md-6">
+                    <nz-select nzPlaceHolder="Select Subject" nzAllowClear>
+                      <nz-option
+                        [nzLabel]="'Option 1'"
+                        [nzValue]="'option1'"
+                      ></nz-option>
+                      <nz-option
+                        [nzLabel]="'Option 2'"
+                        [nzValue]="'option2'"
+                      ></nz-option>
+                      <nz-option
+                        [nzLabel]="'Option 3'"
+                        [nzValue]="'option3'"
+                      ></nz-option>
+                    </nz-select>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </div>
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button
+              nz-button
+              class="btn-primary filter-btn"
+              [routerLink]="['create']"
+            >
+              <span nz-icon nzType="plus"></span>
+              Add Test
             </button>
           </div>
         </div>

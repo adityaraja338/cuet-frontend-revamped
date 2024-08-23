@@ -2,6 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
+import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
+import {
+  BaseChartDirective,
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -9,13 +15,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    DashboardComponent
-  ],
+  declarations: [DashboardComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    NgZorroAntdModule,
+    BaseChartDirective,
   ],
-  exports: [DashboardComponent]
+  providers: [provideCharts(withDefaultRegisterables())],
+  exports: [DashboardComponent],
 })
-export class DashboardModule { }
+export class DashboardModule {}

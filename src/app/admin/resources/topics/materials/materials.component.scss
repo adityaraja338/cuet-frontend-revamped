@@ -1,0 +1,39 @@
+#materials-container {
+  .material {
+    background-color: rgba(0, 163, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    transition: all 0.6s;
+    .material-icon {
+      height: 44px;
+      aspect-ratio: 1;
+      border-radius: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        height: 52%;
+        width: auto;
+      }
+    }
+    &:hover{
+      background-color: rgba(0, 163, 255, 0.12);
+      box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.06);
+    }
+  }
+}
+
+.start-test-btn.ant-btn {
+  font-size: 12px;
+  padding: 0px 12px;
+  height: 28px;
+  border-radius: 6px;
+  background-color: #8555fd;
+  color: #fff;
+  font-weight: 400;
+  transition: all 0.6s;
+}
+
+.start-test-btn.ant-btn:hover {
+  background-color: #561abd;
+}

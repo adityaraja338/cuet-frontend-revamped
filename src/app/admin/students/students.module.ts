@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudentsComponent } from './students.component';
 import { RouterModule, Routes } from '@angular/router';
+import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
+import { FormsModule } from '@angular/forms';
+import { StudentDetailComponent } from './student-detail/student-detail.component';
 
 const routes: Routes = [
   { path: '', component: StudentsComponent },
@@ -9,12 +12,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    StudentsComponent
-  ],
+  declarations: [StudentsComponent, StudentDetailComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
-  ]
+    RouterModule.forChild(routes),
+    FormsModule,
+    NgZorroAntdModule,
+  ],
 })
-export class StudentsModule { }
+export class StudentsModule {}

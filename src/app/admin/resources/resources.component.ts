@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-resources',
   templateUrl: './resources.component.html',
   styleUrl: './resources.component.scss',
 })
-export class ResourcesComponent {
+export class ResourcesComponent implements OnInit {
   subjects: any[] = [
     { name: 'Reasoning', id: 0 },
     { name: 'G.K. & G.S.', id: 1 },
@@ -56,10 +56,80 @@ export class ResourcesComponent {
     },
   ];
 
-  constructor(private readonly router: Router) {}
+  newspapers: any = [
+    {
+      id: 0,
+      name: 'The Hindu',
+      date: '12/06/2024',
+      isFree: false,
+      url: 'https://google.com',
+    },
+    {
+      id: 1,
+      name: 'TOI',
+      date: '12/06/2024',
+      isFree: false,
+      url: 'https://google.com',
+    },
+    {
+      id: 2,
+      name: 'Times Now',
+      date: '12/06/2024',
+      isFree: true,
+      url: 'https://google.com',
+    },
+    {
+      id: 3,
+      name: 'Gazette',
+      date: '12/06/2024',
+      isFree: false,
+      url: 'https://google.com',
+    },
+    {
+      id: 4,
+      name: 'The Hindu',
+      date: '12/06/2024',
+      isFree: true,
+      url: 'https://google.com',
+    },
+    {
+      id: 5,
+      name: 'The Hindu',
+      date: '12/06/2024',
+      isFree: false,
+      url: 'https://google.com',
+    },
+  ];
 
-  onClickSubject(subjectId: number) {
-    this.router.navigate(['/student/resources', subjectId]);
+  collapseFilter: boolean = false;
+
+  selectedTabIndex: number = 0;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const tabIndex = params['tabIndex'];
+      if (tabIndex) {
+        this.selectedTabIndex = +tabIndex;
+      }
+    });
+  }
+
+  onClickSubject(event: any, subjectId: number) {
+    const excludedSection = (event.target as HTMLElement).closest(
+      '.dropdown-div',
+    );
+
+    if (excludedSection) {
+      // Do nothing if the click was on the excluded section
+      return;
+    }
+
+    this.router.navigate([this.router.url, subjectId]);
   }
 
   protected readonly Math = Math;

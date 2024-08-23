@@ -1,0 +1,54 @@
+.metric-cards{
+  .card{
+    padding: 0.75rem;
+    border-radius: 8px;
+    &.test-card{
+      border: 1px solid rgba(255, 184, 0, 0.25);
+      background: linear-gradient(89deg, rgba(255, 210, 95, 0.20) 0%, rgba(255, 210, 95, 0.50) 100%);
+      box-shadow: 4px 4px 20px 0px rgba(255, 183, 0, 0.20);
+      .main-text, .button{
+        color: rgba(255, 184, 0, 1);
+      }
+    }
+    &.best-student-card{
+      border: 1px solid rgba(0, 163, 255, 0.25);
+      background: linear-gradient(89deg, rgba(0, 163, 255, 0.20) 0%, rgba(0, 163, 255, 0.50) 100%);
+      box-shadow: 4px 4px 20px 0px rgba(0, 163, 255, 0.20);
+      .main-text, .button{
+        color: rgba(0, 163, 255, 1);
+      }
+    }
+    &.worst-student-card{
+      border: 1px solid rgba(255, 97, 97, 0.25);
+      background: linear-gradient(89deg, rgba(255, 97, 97, 0.20) 0%, rgba(255, 97, 97, 0.50) 100%);
+      box-shadow: 4px 4px 20px 0px rgba(255, 97, 97, 0.20);
+      .main-text, .button{
+        color: rgba(255, 97, 97, 1);
+      }
+    }
+  }
+}
+
+.overall-performance-card{
+  .best-batch{
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 163, 255, 0.25);
+    background: linear-gradient(89deg, rgba(0, 125, 212, 0.16) 0%, rgba(0, 163, 255, 0.40) 100%);
+  }
+
+  .worst-batch{
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 97, 97, 0.25);
+    background: linear-gradient(89deg, rgba(255, 97, 97, 0.25) 0%, rgba(255, 97, 97, 0.50) 100%);
+  }
+}
+
+.manage-resources, .manage-tests, .manage-entities{
+  button{
+    width: 100%;
+  }
+}

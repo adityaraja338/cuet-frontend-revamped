@@ -45,6 +45,7 @@ export class BatchesComponent {
     },
   ];
 
+  collapseFilter: boolean = false;
   totalBatchCount = 6;
   pageIndex = 1;
   pageSize = 30;

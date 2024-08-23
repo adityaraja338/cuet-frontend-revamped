@@ -57,6 +57,7 @@ export class TestsComponent {
     },
   ];
 
+  collapseFilter: boolean = false;
   totalLiveTestCount = 6;
   livePageIndex = 1;
   pageSize = 30;

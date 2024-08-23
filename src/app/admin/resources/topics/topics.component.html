@@ -1,1 +1,75 @@
-<p>topics works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item routerLink="/admin/resources" class="cursor-pointer">Resources</nz-breadcrumb-item>
+  <nz-breadcrumb-item class="cursor-pointer">{{ subjectName }}</nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzBorderless nzHoverable>
+  <p class="font-16 font-400 mb-2">List of Topics</p>
+  <div class="row justify-content-between align-items-start mt-2 mb-3">
+    <div class="col-md-8 col-xl-6">
+      <nz-collapse nzGhost>
+        <nz-collapse-panel
+          [nzHeader]="'Filters'"
+          [nzActive]="collapseFilter"
+          [nzDisabled]="false"
+        >
+          <div class="row justify-content-between">
+            <div class="col-md-6">
+              <input nz-input type="text" placeholder="Search Topic Name" />
+            </div>
+          </div>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </div>
+    <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+      <button nz-button class="btn-primary filter-btn">
+        <span nz-icon nzType="plus"></span>
+        Add Topic
+      </button>
+    </div>
+  </div>
+  <div id="topics-container" class="ant-row mx-n1">
+    <div
+      class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+      *ngFor="let topic of topics"
+      (click)="onClickTopic($event, topic.id)"
+    >
+      <div
+        class="topic ant-row ant-row-middle"
+      >
+        <div class="ant-col-5">
+          <div class="topic-icon admin-diagonal-gradient">
+            <img src="assets/icon/leaderboard-badge.svg" alt="" />
+          </div>
+        </div>
+        <div class="ant-col-17">
+          <p class="text-a-primary font-16 font-400 mb-1">
+            {{ topic.name }}
+          </p>
+          <p class="font-10 font-400">Materials: {{ 12 }}</p>
+        </div>
+        <div class="ant-col-2 dropdown-div">
+          <a
+            class="text-dark font-size-20"
+            nz-dropdown
+            [nzClickHide]="false"
+            [nzTrigger]="'click'"
+            [nzPlacement]="'bottomRight'"
+            [nzDropdownMenu]="batchDropdown"
+          >
+            <i nz-icon nzType="ellipsis" theme="outline"></i>
+          </a>
+          <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+            <ul class="table-menu rounded" nz-menu>
+              <li class="tiny-li" nz-menu-item>
+                <span class="m-l-5">Edit</span>
+              </li>
+              <li class="tiny-li" nz-menu-item>
+                <span class="m-l-5" style="color: red">Delete</span>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-card>

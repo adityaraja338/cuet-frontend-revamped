@@ -1,51 +1,75 @@
-<nz-breadcrumb nzSeparator=">" class="mb-md-4 mb-2">
+<nz-breadcrumb nzSeparator=">" class="">
   <nz-breadcrumb-item class="cursor-pointe">Resources</nz-breadcrumb-item>
 </nz-breadcrumb>
-<div class="breadcrumb-button row mx-0 justify-content-end">
-  <button nz-button ngSkipHydration class="btn-primary mb-2 font-400">
-    <span nz-icon nzType="plus"></span>
-    Add Subject
-  </button>
-</div>
 <nz-card nzHoverable nzBorderless>
-  <nz-tabset>
+  <nz-tabset [(nzSelectedIndex)]="selectedTabIndex">
     <nz-tab nzTitle="Subjects">
       <ng-template nz-tab>
+        <div class="row justify-content-between align-items-start mb-3">
+          <div class="col-md-8 col-xl-6">
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row justify-content-between">
+                  <div class="col-md-6">
+                    <input nz-input type="text" placeholder="Search Subject Name" />
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </div>
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button nz-button class="btn-primary filter-btn">
+              <span nz-icon nzType="plus"></span>
+              Add Subject
+            </button>
+          </div>
+        </div>
         <!-- Non Domain Subjects        -->
         <div id="subjects-container" class="ant-row mx-n1">
-          <div class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1">
-            <div
-              class="newspaper admin-diagonal-gradient ant-row ant-row-middle"
-            >
-              <div class="ant-col-5">
-                <div class="subject-icon bg-white">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
-                </div>
-              </div>
-              <div class="ant-col-19">
-                <p class="text-white font-16 font-400 mb-1">Newspapers</p>
-                <p class="text-white font-10 font-400">Total: {{ 12 }}</p>
-              </div>
-            </div>
-          </div>
           <div
             class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
             *ngFor="let subject of subjects"
           >
             <div
               class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.id)"
+              (click)="onClickSubject($event, subject.id)"
             >
               <div class="ant-col-5">
                 <div class="subject-icon admin-diagonal-gradient">
                   <img src="assets/icon/leaderboard-badge.svg" alt="" />
                 </div>
               </div>
-              <div class="ant-col-19">
+              <div class="ant-col-17">
                 <p class="text-a-primary font-16 font-400 mb-1">
                   {{ subject.name }}
                 </p>
                 <p class="font-10 font-400">Topics: {{ 12 }}</p>
+              </div>
+              <div class="ant-col-2 dropdown-div">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="batchDropdown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5" style="color: red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
               </div>
             </div>
           </div>
@@ -63,18 +87,40 @@
           >
             <div
               class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name)"
+              (click)="onClickSubject($event, subject.id)"
             >
               <div class="ant-col-5">
                 <div class="subject-icon admin-diagonal-gradient">
                   <img src="assets/icon/leaderboard-badge.svg" alt="" />
                 </div>
               </div>
-              <div class="ant-col-19">
+              <div class="ant-col-17">
                 <p class="text-a-primary font-16 font-500 mb-1">
                   {{ subject.name }}
                 </p>
                 <p class="font-10 font-500">Topics: {{ 12 }}</p>
+              </div>
+              <div class="ant-col-2 dropdown-div">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="batchDropdown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5" style="color: red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
               </div>
             </div>
           </div>
@@ -83,6 +129,29 @@
     </nz-tab>
     <nz-tab nzTitle="Video Links">
       <ng-template nz-tab>
+        <div class="row justify-content-between align-items-start mb-3">
+          <div class="col-md-8 col-xl-6">
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row justify-content-between">
+                  <div class="col-md-6">
+                    <input nz-input type="text" placeholder="Search Video or Subject Name" />
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </div>
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button nz-button class="btn-primary filter-btn">
+              <span nz-icon nzType="plus"></span>
+              Add Video Link
+            </button>
+          </div>
+        </div>
         <nz-table
           [nzData]="videoLinks"
           [nzShowPagination]="false"
@@ -123,6 +192,29 @@
     </nz-tab>
     <nz-tab nzTitle="PYQs">
       <ng-template nz-tab>
+        <div class="row justify-content-between align-items-start mb-3">
+          <div class="col-md-8 col-xl-6">
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row justify-content-between">
+                  <div class="col-md-6">
+                    <input nz-input type="text" placeholder="Search PYQ" />
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </div>
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button nz-button class="btn-primary filter-btn">
+              <span nz-icon nzType="plus"></span>
+              Add PYQ
+            </button>
+          </div>
+        </div>
         <div id="pyq-container" class="ant-row mx-n1">
           <div
             class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
@@ -130,21 +222,122 @@
           >
             <div
               class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name)"
             >
               <div class="ant-col-5">
                 <div class="subject-icon admin-diagonal-gradient">
                   <img src="assets/icon/leaderboard-badge.svg" alt="" />
                 </div>
               </div>
-              <div class="ant-col-19">
+              <div class="ant-col-17">
                 <p class="text-a-primary font-16 font-400">
                   {{ subject.name }}
                 </p>
               </div>
+              <div class="ant-col-2">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="batchDropdown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5" style="color: red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </div>
             </div>
           </div>
         </div>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Newspapers">
+      <ng-template nz-tab>
+        <div class="row justify-content-between align-items-start mb-3">
+          <div class="col-md-8 col-xl-6">
+            <nz-collapse nzGhost>
+              <nz-collapse-panel
+                [nzHeader]="'Filters'"
+                [nzActive]="collapseFilter"
+                [nzDisabled]="false"
+              >
+                <div class="row justify-content-between">
+                  <div class="col-md-6 mb-md-0 mb-2">
+                    <input nz-input type="text" placeholder="Search Newspaper" />
+                  </div>
+                  <div class="col-md-6">
+                    <nz-date-picker></nz-date-picker>
+                  </div>
+                </div>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </div>
+          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+            <button nz-button class="btn-primary filter-btn">
+              <span nz-icon nzType="plus"></span>
+              Add Newspaper
+            </button>
+          </div>
+        </div>
+        <nz-table
+          [nzData]="newspapers"
+          [nzShowPagination]="false"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Date</th>
+            <th class="text-center" [nzWidth]="'64px'">Type</th>
+            <th class="text-center" [nzWidth]="'56px'"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let newspaper of newspapers; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ newspaper.name }}</td>
+            <td class="text-center">{{ newspaper.date | date:'dd/MM/yy' }}</td>
+            <td
+              class="text-center font-600"
+              [class]="newspaper.isFree ? 'text-free' : 'text-paid'"
+            >
+              {{ newspaper.isFree ? 'Free' : 'Paid' }}
+            </td>
+            <td class="text-center">
+              <a
+                class="text-dark font-size-20"
+                nz-dropdown
+                [nzClickHide]="false"
+                [nzTrigger]="'click'"
+                [nzPlacement]="'bottomRight'"
+                [nzDropdownMenu]="batchDropdown"
+              >
+                <i nz-icon nzType="ellipsis" theme="outline"></i>
+              </a>
+              <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                <ul class="table-menu rounded" nz-menu>
+                  <li class="tiny-li" nz-menu-item>
+                    <span class="m-l-5">Edit</span>
+                  </li>
+                  <li class="tiny-li" nz-menu-item>
+                    <span class="m-l-5" style="color: red">Delete</span>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
       </ng-template>
     </nz-tab>
   </nz-tabset>

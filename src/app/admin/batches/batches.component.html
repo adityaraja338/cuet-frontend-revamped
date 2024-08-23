@@ -2,21 +2,30 @@
   <nz-breadcrumb-item>Batches</nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
-  <div class="row justify-content-between mb-2">
+  <div class="row justify-content-between align-items-start mb-3">
     <div class="col-md-8 col-xl-6">
-      <div class="row">
-        <div class="col-md-6 mb-2">
-          <input nz-input type="text" placeholder="Enter Test Name or ID" />
-        </div>
-      </div>
+      <nz-collapse nzGhost>
+        <nz-collapse-panel
+          [nzHeader]="'Filters'"
+          [nzActive]="collapseFilter"
+          [nzDisabled]="false"
+        >
+          <div class="row justify-content-between">
+            <div class="col-md-6">
+              <input nz-input type="text" placeholder="Search Batch Name or ID" />
+            </div>
+          </div>
+        </nz-collapse-panel>
+      </nz-collapse>
     </div>
-    <div class="col-md-4 col-xl-3 mb-2 d-flex justify-content-end">
+    <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
       <button nz-button class="btn-primary filter-btn">
         <span nz-icon nzType="plus"></span>
         Add Batch
       </button>
     </div>
   </div>
+
   <nz-table
     [nzData]="batches"
     [nzFrontPagination]="false"

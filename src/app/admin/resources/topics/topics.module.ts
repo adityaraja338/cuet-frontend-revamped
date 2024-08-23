@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TopicsComponent } from './topics.component';
 import { MaterialsComponent } from './materials/materials.component';
 import { RouterModule, Routes } from '@angular/router';
+import { NzBreadCrumbComponent } from 'ng-zorro-antd/breadcrumb';
+import { NgZorroAntdModule } from '../../../ng-zorro-antd.module';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: TopicsComponent },
@@ -11,20 +13,14 @@ const routes: Routes = [
     children: [
       {
         path: ':topic',
-        component: MaterialsComponent
+        component: MaterialsComponent,
       },
     ],
   },
 ];
 
 @NgModule({
-  declarations: [
-    TopicsComponent,
-    MaterialsComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  declarations: [TopicsComponent, MaterialsComponent],
+  imports: [CommonModule, RouterModule.forChild(routes), NgZorroAntdModule],
 })
-export class TopicsModule { }
+export class TopicsModule {}

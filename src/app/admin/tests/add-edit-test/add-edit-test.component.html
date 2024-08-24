@@ -3,11 +3,13 @@
     >Tests</nz-breadcrumb-item
   >
   <nz-breadcrumb-item class="cursor-pointer">
-    {{ "Add" ?? "Edit" }} Test
+    {{ !isEditMode ? "Add" : "Edit" }} Test
   </nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
-  <p class="font-16 font-400 mb-3">{{ "Create New" ?? "Edit" }} Test</p>
+  <p class="font-16 font-400 mb-3">
+    {{ !isEditMode ? "Create New" : "Edit" }} Test
+  </p>
   <form [formGroup]="testForm">
     <div class="row">
       <!--   Test Type  -->
@@ -222,6 +224,7 @@
                     <nz-form-control>
                       <nz-date-picker
                         nzFormat="dd MMM yyyy"
+                        formControlName="startDate"
                         [nzDropdownClassName]="'admin-date-pick'"
                       ></nz-date-picker>
                     </nz-form-control>
@@ -230,6 +233,7 @@
                 <div class="col-5 px-2">
                   <nz-time-picker
                     nzFormat="HH:mm"
+                    formControlName="startTime"
                     [nzPopupClassName]="'admin-time-pick'"
                   ></nz-time-picker>
                 </div>
@@ -255,6 +259,7 @@
                     <nz-form-control>
                       <nz-date-picker
                         nzFormat="dd MMM yyyy"
+                        formControlName="endDate"
                         [nzDropdownClassName]="'admin-date-pick'"
                       ></nz-date-picker>
                     </nz-form-control>
@@ -263,6 +268,7 @@
                 <div class="col-5 px-2">
                   <nz-time-picker
                     nzFormat="HH:mm"
+                    formControlName="endTime"
                     [nzPopupClassName]="'admin-time-pick'"
                   ></nz-time-picker>
                 </div>
@@ -330,6 +336,7 @@
         </div>
       }
 
+      <!--   Upload Question   -->
       <div class="col-md-9 my-3">
         <div
           class="d-flex flex-md-row flex-column justify-content-between align-items-start"
@@ -373,25 +380,25 @@
                 </p>
                 <div class="d-flex align-items-center">
                   <p
-                    *ngIf="true"
+                    *ngIf="isEditMode"
                     class="font-12 font-400 text-a-primary mb-md-0 mb-2 cursor-pointer"
                     (click)="saveQuestion(i)"
                   >
                     <span nz-icon nzType="save"></span> Save Question
                   </p>
                   <p
-                    *ngIf="questions.controls?.length !== 1"
-                    class="ml-3 font-12 font-400 text-red cursor-pointer"
-                    (click)="removeQuestion(i)"
-                  >
-                    <span nz-icon nzType="delete"></span> Remove Question
-                  </p>
-                  <p
-                    *ngIf="questions.controls?.length !== 1"
+                    *ngIf="isEditMode"
                     class="ml-3 font-12 font-400 text-red cursor-pointer"
                     (click)="removeQuestion(i)"
                   >
                     <span nz-icon nzType="delete"></span> Delete Question
+                  </p>
+                  <p
+                    *ngIf="!isEditMode && questions.controls?.length !== 1"
+                    class="ml-3 font-12 font-400 text-red cursor-pointer"
+                    (click)="removeQuestion(i)"
+                  >
+                    <span nz-icon nzType="delete"></span> Remove Question
                   </p>
                 </div>
               </div>

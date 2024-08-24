@@ -5,6 +5,9 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 import * as Papa from 'papaparse';
+import { ActivatedRoute, Router } from '@angular/router';
+import _default from 'chart.js/dist/plugins/plugin.tooltip';
+import duration = _default.defaults.animation.duration;
 
 @Component({
   selector: 'app-add-edit-test',
@@ -14,6 +17,8 @@ import * as Papa from 'papaparse';
 export class AddEditTestComponent implements OnInit {
   testForm: FormGroup;
 
+  isEditMode: boolean = false;
+
   hoursList: number[] = Array.from({ length: 24 }, (_, i) => i);
   minutesList: number[] = Array.from({ length: 60 }, (_, i) => i);
 
@@ -22,6 +27,8 @@ export class AddEditTestComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly message: NzMessageService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) {
     this.testForm = this.formBuilder.group({
       testType: ['live', Validators.required],
@@ -48,10 +55,108 @@ export class AddEditTestComponent implements OnInit {
     this.addQuestion();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const urlFragments = this.router.url
+      .split('/')
+      .filter((fragment) => fragment);
+    // console.log(urlFragments);
+    if (urlFragments[urlFragments.length - 2] === 'edit') {
+      this.isEditMode = true;
+      this.patchValue(+urlFragments[urlFragments.length - 1]);
+    }
+  }
 
   get questions() {
     return this.testForm?.get('questions') as FormArray;
+  }
+
+  private patchValue(testId: number) {
+    if (testId === 0 || testId === 1) {
+      this.testForm.get('testType')?.patchValue('live');
+      this.testForm.get('testName')?.patchValue('Live Test Patch');
+      this.testForm.get('subjectName')?.patchValue('Live Test Subject');
+      this.testForm.get('topics')?.patchValue(['Topic 1', 'Topic 2']);
+      const duration = 125;
+      this.testForm.get('durationHour')?.patchValue(Math.floor(duration / 60));
+      this.testForm.get('durationMinutes')?.patchValue(duration % 60);
+      this.testForm.get('startDate')?.patchValue(new Date('12-06-2024'));
+      this.testForm
+        .get('startTime')
+        ?.patchValue(new Date('12-06-2024').getTime());
+      this.testForm.get('endDate')?.patchValue(new Date('12-07-2024'));
+      this.testForm
+        .get('endTime')
+        ?.patchValue(new Date('12-07-2024').getTime());
+      if (testId === 0) {
+        this.testForm.get('isFree')?.patchValue(true);
+        this.testForm.get('batchIds')?.patchValue([]);
+      } else {
+        this.testForm.get('isFree')?.patchValue(false);
+        this.testForm.get('batchIds')?.patchValue([2, 5, 8]);
+      }
+    } else if (testId === 2 || testId === 3) {
+      this.testForm.get('testType')?.patchValue('mock');
+      this.testForm.get('testName')?.patchValue('Mock Test Patch');
+      this.testForm.get('subjectName')?.patchValue('Mock Test Subject');
+      this.testForm.get('topics')?.patchValue(['Topic 1', 'Topic 2']);
+      const duration = 125;
+      this.testForm.get('durationHour')?.patchValue(Math.floor(duration / 60));
+      this.testForm.get('durationMinutes')?.patchValue(duration % 60);
+      if (testId === 2) {
+        this.testForm.get('isFree')?.patchValue(true);
+      } else {
+        this.testForm.get('isFree')?.patchValue(false);
+      }
+    } else {
+      this.testForm.get('testType')?.patchValue('topic');
+      this.testForm.get('testName')?.patchValue('Topic Test Patch');
+      this.testForm.get('topicId')?.patchValue(15);
+      const duration = 125;
+      this.testForm.get('durationHour')?.patchValue(Math.floor(duration / 60));
+      this.testForm.get('durationMinutes')?.patchValue(duration % 60);
+      if (testId > 3 && testId < 10) {
+        this.testForm.get('isFree')?.patchValue(true);
+      } else {
+        this.testForm.get('isFree')?.patchValue(false);
+      }
+    }
+
+    const questions = [
+      {
+        question: 'Q1',
+        correctOption: 'Correct 1',
+        option2: 'Incorrect 1',
+        option3: 'Incorrect 2',
+        option4: 'Incorrect 3',
+        option5: 'Incorrect 4',
+      },
+      {
+        question: 'Q2',
+        correctOption: 'Correct 2',
+        option2: 'Incorrect 1',
+        option3: 'Incorrect 2',
+        option4: 'Incorrect 3',
+        option5: 'Incorrect 4',
+      },
+      {
+        question: 'Q3',
+        correctOption: 'Correct 3',
+        option2: 'Incorrect 1',
+        option3: 'Incorrect 2',
+        option4: 'Incorrect 3',
+        option5: 'Incorrect 4',
+      },
+      {
+        question: 'Q4',
+        correctOption: 'Correct 4',
+        option2: 'Incorrect 1',
+        option3: 'Incorrect 2',
+        option4: 'Incorrect 3',
+        option5: 'Incorrect 4',
+      },
+    ];
+
+    this.addCSVQuestions(questions);
   }
 
   addQuestion(question?: {
@@ -82,11 +187,13 @@ export class AddEditTestComponent implements OnInit {
 
   saveQuestion(index: number) {}
 
+  deleteQuestion(index: number) {}
+
   removeQuestion(index: number) {
     this.questions.removeAt(index);
   }
 
-  beforeUpload = (file: NzUploadFile, fileList: NzUploadFile[]): boolean => {
+  beforeUpload = (file: NzUploadFile): boolean => {
     // this.readFileContent(file);
     // console.log('file', file);
     // console.log('fileList', fileList);
@@ -198,4 +305,6 @@ export class AddEditTestComponent implements OnInit {
       }
     }
   }
+
+  protected readonly console = console;
 }

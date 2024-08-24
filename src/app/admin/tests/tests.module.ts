@@ -11,8 +11,25 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: TestsComponent },
   { path: 'create', pathMatch: 'full', component: AddEditTestComponent },
-  { path: 'edit/:testId', pathMatch: 'full', component: AddEditTestComponent },
-  { path: ':testId', pathMatch: 'full', component: TestDetailComponent },
+  {
+    path: 'edit-live/:testId',
+    pathMatch: 'full',
+    component: AddEditTestComponent,
+  },
+  {
+    path: 'edit-mock/:testId',
+    pathMatch: 'full',
+    component: AddEditTestComponent,
+  },
+  {
+    path: 'edit-topic/:testId',
+    pathMatch: 'full',
+    component: AddEditTestComponent,
+  },
+  { path: 'live/:testId', pathMatch: 'full', component: TestDetailComponent },
+  { path: 'mock/:testId', pathMatch: 'full', component: TestDetailComponent },
+  { path: 'topic/:testId', pathMatch: 'full', component: TestDetailComponent },
+  { path: '**', redirectTo: '/admin/tests' },
 ];
 
 @NgModule({

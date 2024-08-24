@@ -60,9 +60,16 @@ export class AddEditTestComponent implements OnInit {
       .split('/')
       .filter((fragment) => fragment);
     // console.log(urlFragments);
-    if (urlFragments[urlFragments.length - 2] === 'edit') {
+    if (
+      urlFragments[urlFragments.length - 2] === 'edit-live' ||
+      urlFragments[urlFragments.length - 2] === 'edit-mock' ||
+      urlFragments[urlFragments.length - 2] === 'edit-topic'
+    ) {
       this.isEditMode = true;
-      this.patchValue(+urlFragments[urlFragments.length - 1]);
+      this.patchValue(
+        urlFragments[urlFragments.length - 2],
+        +urlFragments[urlFragments.length - 1],
+      );
     }
   }
 
@@ -70,8 +77,8 @@ export class AddEditTestComponent implements OnInit {
     return this.testForm?.get('questions') as FormArray;
   }
 
-  private patchValue(testId: number) {
-    if (testId === 0 || testId === 1) {
+  private patchValue(testType: string, testId: number) {
+    if (testType === 'edit-live') {
       this.testForm.get('testType')?.patchValue('live');
       this.testForm.get('testName')?.patchValue('Live Test Patch');
       this.testForm.get('subjectName')?.patchValue('Live Test Subject');
@@ -94,7 +101,7 @@ export class AddEditTestComponent implements OnInit {
         this.testForm.get('isFree')?.patchValue(false);
         this.testForm.get('batchIds')?.patchValue([2, 5, 8]);
       }
-    } else if (testId === 2 || testId === 3) {
+    } else if (testType === 'edit-mock') {
       this.testForm.get('testType')?.patchValue('mock');
       this.testForm.get('testName')?.patchValue('Mock Test Patch');
       this.testForm.get('subjectName')?.patchValue('Mock Test Subject');

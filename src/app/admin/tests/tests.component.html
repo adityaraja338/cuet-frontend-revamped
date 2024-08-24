@@ -1,5 +1,5 @@
 <nz-breadcrumb nzSeparator=">">
-  <nz-breadcrumb-item>Tests</nz-breadcrumb-item>
+  <nz-breadcrumb-item class="cursor-pointer">Tests</nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
   <nz-tabset>
@@ -15,7 +15,11 @@
               >
                 <div class="row">
                   <div class="col-md-6 mb-md-0 mb-2">
-                    <input nz-input type="text" placeholder="Enter Test Name or ID" />
+                    <input
+                      nz-input
+                      type="text"
+                      placeholder="Enter Test Name or ID"
+                    />
                   </div>
                   <div class="col-md-6">
                     <nz-select nzPlaceHolder="Select Batch" nzAllowClear>
@@ -37,7 +41,9 @@
               </nz-collapse-panel>
             </nz-collapse>
           </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+          <div
+            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
             <button
               nz-button
               class="btn-primary filter-btn"
@@ -72,7 +78,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let test of topicTests; let i = index">
+            <tr
+              *ngFor="let test of topicTests; let i = index"
+              (click)="onClickTest($event, 'live', test?.id)"
+            >
               <td class="text-center">{{ i + 1 }}</td>
               <td>{{ test.name }}</td>
               <td class="text-center">
@@ -94,7 +103,7 @@
                 {{ Math.floor(test?.duration / 60) }} hr
                 {{ test?.duration % 60 }} min
               </td>
-              <td class="text-center">
+              <td class="text-center dropdown-container">
                 <a
                   class="text-dark font-size-20"
                   nz-dropdown
@@ -107,7 +116,17 @@
                 </a>
                 <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
                   <ul class="table-menu rounded" nz-menu>
-                    <li class="tiny-li" nz-menu-item>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [routerLink]="[
+                        '/',
+                        'admin',
+                        'tests',
+                        'edit-live',
+                        test?.id,
+                      ]"
+                    >
                       <span class="m-l-5">Edit</span>
                     </li>
                     <li class="tiny-li" nz-menu-item>
@@ -141,13 +160,19 @@
               >
                 <div class="row">
                   <div class="col-md-6">
-                    <input nz-input type="text" placeholder="Search Test Name or ID" />
+                    <input
+                      nz-input
+                      type="text"
+                      placeholder="Search Test Name or ID"
+                    />
                   </div>
                 </div>
               </nz-collapse-panel>
             </nz-collapse>
           </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+          <div
+            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
             <button
               nz-button
               class="btn-primary filter-btn"
@@ -170,63 +195,76 @@
           [nzScroll]="{ x: '840px' }"
         >
           <thead>
-          <tr>
-            <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
-            <th [nzWidth]="'160px'">Name</th>
-            <th class="text-center" [nzWidth]="'84px'">Questions</th>
-            <th class="text-center" [nzWidth]="'136px'">Start Time</th>
-            <th class="text-center" [nzWidth]="'136px'">End Time</th>
-            <th class="text-center" [nzWidth]="'64px'">Type</th>
-            <th class="text-center" [nzWidth]="'84px'">Duration</th>
-            <th class="text-center" [nzWidth]="'48px'"></th>
-          </tr>
+            <tr>
+              <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'84px'">Questions</th>
+              <th class="text-center" [nzWidth]="'136px'">Start Time</th>
+              <th class="text-center" [nzWidth]="'136px'">End Time</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'84px'">Duration</th>
+              <th class="text-center" [nzWidth]="'48px'"></th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let test of topicTests; let i = index">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ test.name }}</td>
-            <td class="text-center">
-              {{ test.questions }}
-            </td>
-            <td class="text-center">
-              {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
-            </td>
-            <td class="text-center">
-              {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
-            </td>
-            <td
-              class="text-center font-400"
-              [class]="test?.isFree ? 'text-free' : 'text-paid'"
+            <tr
+              *ngFor="let test of topicTests; let i = index"
+              (click)="onClickTest($event, 'mock', test?.id)"
             >
-              {{ test.isFree ? "Free" : "Paid" }}
-            </td>
-            <td class="text-center">
-              {{ Math.floor(test?.duration / 60) }} hr
-              {{ test?.duration % 60 }} min
-            </td>
-            <td class="text-center">
-              <a
-                class="text-dark font-size-20"
-                nz-dropdown
-                [nzClickHide]="false"
-                [nzTrigger]="'click'"
-                [nzPlacement]="'bottomRight'"
-                [nzDropdownMenu]="latestUploadDropDown"
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ test.name }}</td>
+              <td class="text-center">
+                {{ test.questions }}
+              </td>
+              <td class="text-center">
+                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
+              </td>
+              <td class="text-center">
+                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
+              </td>
+              <td
+                class="text-center font-400"
+                [class]="test?.isFree ? 'text-free' : 'text-paid'"
               >
-                <i nz-icon nzType="ellipsis" theme="outline"></i>
-              </a>
-              <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
-                <ul class="table-menu rounded" nz-menu>
-                  <li class="tiny-li" nz-menu-item>
-                    <span class="m-l-5">Edit</span>
-                  </li>
-                  <li class="tiny-li" nz-menu-item>
-                    <span class="m-l-5" style="color: red">Delete</span>
-                  </li>
-                </ul>
-              </nz-dropdown-menu>
-            </td>
-          </tr>
+                {{ test.isFree ? "Free" : "Paid" }}
+              </td>
+              <td class="text-center">
+                {{ Math.floor(test?.duration / 60) }} hr
+                {{ test?.duration % 60 }} min
+              </td>
+              <td class="text-center dropdown-container">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="latestUploadDropDown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [routerLink]="[
+                        '/',
+                        'admin',
+                        'tests',
+                        'edit-mock',
+                        test?.id,
+                      ]"
+                    >
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5" style="color: red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </td>
+            </tr>
           </tbody>
         </nz-table>
         <ng-template #printMockCount>
@@ -251,7 +289,11 @@
               >
                 <div class="row">
                   <div class="col-md-6 mb-md-0 mb-2">
-                    <input nz-input type="text" placeholder="Search Test Name" />
+                    <input
+                      nz-input
+                      type="text"
+                      placeholder="Search Test Name"
+                    />
                   </div>
                   <div class="col-md-6">
                     <nz-select nzPlaceHolder="Select Subject" nzAllowClear>
@@ -273,7 +315,9 @@
               </nz-collapse-panel>
             </nz-collapse>
           </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+          <div
+            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
             <button
               nz-button
               class="btn-primary filter-btn"
@@ -296,63 +340,76 @@
           [nzScroll]="{ x: '840px' }"
         >
           <thead>
-          <tr>
-            <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
-            <th [nzWidth]="'160px'">Name</th>
-            <th class="text-center" [nzWidth]="'84px'">Questions</th>
-            <th class="text-center" [nzWidth]="'136px'">Start Time</th>
-            <th class="text-center" [nzWidth]="'136px'">End Time</th>
-            <th class="text-center" [nzWidth]="'64px'">Type</th>
-            <th class="text-center" [nzWidth]="'84px'">Duration</th>
-            <th class="text-center" [nzWidth]="'48px'"></th>
-          </tr>
+            <tr>
+              <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'84px'">Questions</th>
+              <th class="text-center" [nzWidth]="'136px'">Start Time</th>
+              <th class="text-center" [nzWidth]="'136px'">End Time</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'84px'">Duration</th>
+              <th class="text-center" [nzWidth]="'48px'"></th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let test of topicTests; let i = index">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ test.name }}</td>
-            <td class="text-center">
-              {{ test.questions }}
-            </td>
-            <td class="text-center">
-              {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
-            </td>
-            <td class="text-center">
-              {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
-            </td>
-            <td
-              class="text-center font-400"
-              [class]="test?.isFree ? 'text-free' : 'text-paid'"
+            <tr
+              *ngFor="let test of topicTests; let i = index"
+              (click)="onClickTest($event, 'topic', test?.id)"
             >
-              {{ test.isFree ? "Free" : "Paid" }}
-            </td>
-            <td class="text-center">
-              {{ Math.floor(test?.duration / 60) }} hr
-              {{ test?.duration % 60 }} min
-            </td>
-            <td class="text-center">
-              <a
-                class="text-dark font-size-20"
-                nz-dropdown
-                [nzClickHide]="false"
-                [nzTrigger]="'click'"
-                [nzPlacement]="'bottomRight'"
-                [nzDropdownMenu]="latestUploadDropDown"
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ test.name }}</td>
+              <td class="text-center">
+                {{ test.questions }}
+              </td>
+              <td class="text-center">
+                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
+              </td>
+              <td class="text-center">
+                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
+              </td>
+              <td
+                class="text-center font-400"
+                [class]="test?.isFree ? 'text-free' : 'text-paid'"
               >
-                <i nz-icon nzType="ellipsis" theme="outline"></i>
-              </a>
-              <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
-                <ul class="table-menu rounded" nz-menu>
-                  <li class="tiny-li" nz-menu-item>
-                    <span class="m-l-5">Edit</span>
-                  </li>
-                  <li class="tiny-li" nz-menu-item>
-                    <span class="m-l-5" style="color: red">Delete</span>
-                  </li>
-                </ul>
-              </nz-dropdown-menu>
-            </td>
-          </tr>
+                {{ test.isFree ? "Free" : "Paid" }}
+              </td>
+              <td class="text-center">
+                {{ Math.floor(test?.duration / 60) }} hr
+                {{ test?.duration % 60 }} min
+              </td>
+              <td class="text-center dropdown-container">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="latestUploadDropDown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [routerLink]="[
+                        '/',
+                        'admin',
+                        'tests',
+                        'edit-topic',
+                        test?.id,
+                      ]"
+                    >
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5" style="color: red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </td>
+            </tr>
           </tbody>
         </nz-table>
         <ng-template #printMockCount>

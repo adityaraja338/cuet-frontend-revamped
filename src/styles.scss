@@ -538,6 +538,14 @@ nz-breadcrumb {
   border:none;
 }
 
+// Switch
+nz-switch:has(.ant-switch-small){
+  height: 20px;
+}
+.admin .ant-switch.ant-switch-checked{
+  background-color: $admin-primary;
+}
+
 // dropdown menu
 .ant-dropdown-menu.table-menu {
   min-width: 77px;
@@ -707,4 +715,8 @@ nz-breadcrumb {
 
 .cursor-pointer:hover {
   cursor: pointer;
+}
+
+.underline{
+  text-decoration: underline;
 }

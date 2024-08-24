@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tests',
@@ -61,6 +62,21 @@ export class TestsComponent {
   totalLiveTestCount = 6;
   livePageIndex = 1;
   pageSize = 30;
+
+  constructor(private readonly router: Router) {}
+
+  onClickTest(event: any, testType: string, testId: number) {
+    const excludedSection = (event.target as HTMLElement).closest(
+      '.dropdown-container',
+    );
+
+    if (excludedSection) {
+      // Do nothing if the click was on the excluded section
+      return;
+    }
+
+    this.router.navigate([this.router.url, testType, testId]);
+  }
 
   protected readonly Math = Math;
 }

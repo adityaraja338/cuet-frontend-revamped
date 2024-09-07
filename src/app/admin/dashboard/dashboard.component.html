@@ -7,7 +7,9 @@
       <div class="ant-row align-items-center">
         <div class="ant-col-18">
           <p class="font-10 font-400 text-dark">Last Test Date</p>
-          <p class="font-20 font-600 main-text mb-1">{{ "12/06/24" }}</p>
+          <p class="font-20 font-600 main-text mb-1">
+            {{ (lastTestDate | date: "dd MMM yyyy") || "-" }}
+          </p>
           <p class="font-8 font-500 button cursor-pointer">See All Tests</p>
         </div>
         <div class="ant-col-6 d-flex justify-content-end">
@@ -57,8 +59,10 @@
       <div class="ant-row align-items-center">
         <div class="ant-col-18">
           <p class="font-10 font-400 text-dark">Best Performing Student</p>
-          <p class="font-20 font-600 main-text mb-1">{{ "Aditya" }}</p>
-          <p class="font-8 font-500 button cursor-pointer">View Top 10</p>
+          <p class="font-20 font-600 main-text mb-1">
+            {{ bestStudents[0]?.student?.name?.split(" ")[0] || "-" }}
+          </p>
+          <p class="font-8 font-500 button cursor-pointer" (click)="showModal('best-students')">View Top 10</p>
         </div>
         <div class="ant-col-6 d-flex justify-content-end">
           <svg
@@ -83,7 +87,9 @@
       <div class="ant-row align-items-center">
         <div class="ant-col-18">
           <p class="font-10 font-400 text-dark">Worst Performing Student</p>
-          <p class="font-20 font-600 main-text mb-1">{{ "Kumar" }}</p>
+          <p class="font-20 font-600 main-text mb-1">
+            {{ worstStudents[0]?.student?.name?.split(" ")[0] || "-" }}
+          </p>
           <p class="font-8 font-500 button cursor-pointer">View Bottom 10</p>
         </div>
         <div class="ant-col-6 d-flex justify-content-end">
@@ -116,10 +122,7 @@
     <nz-card nzBorderless nzHoverable>
       <p class="font-14 font-400 mb-3">Overall Performance</p>
       <div class="ant-row align-items-center">
-        <div
-          *ngIf="isBrowser"
-          class="ant-col-8 d-flex justify-content-start"
-        >
+        <div *ngIf="isBrowser" class="ant-col-8 d-flex justify-content-start">
           <div class="chart-div">
             <canvas
               baseChart
@@ -137,22 +140,40 @@
         </div>
         <div class="ant-col-16 pl-3 py-1 pb-2">
           <p class="font-12 font-300 d-flex align-items-center">
-            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="8" height="9" viewBox="0 0 8 9" fill="none">
-              <circle cx="4" cy="4.5" r="4" fill="#13AAFF"/>
+            <svg
+              class="mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              width="8"
+              height="9"
+              viewBox="0 0 8 9"
+              fill="none"
+            >
+              <circle cx="4" cy="4.5" r="4" fill="#13AAFF" />
             </svg>
-            Good Performing: <span class="font-500 text-a-primary ml-2">{{ '76' }} %</span>
+            Good Performing:
+            <span class="font-500 text-a-primary ml-2">{{ "76" }} %</span>
           </p>
           <p class="font-12 font-300 d-flex align-items-center mb-2">
-            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="8" height="9" viewBox="0 0 8 9" fill="none">
-              <circle cx="4" cy="4.5" r="4" fill="rgba(200, 221, 255, 1)"/>
+            <svg
+              class="mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              width="8"
+              height="9"
+              viewBox="0 0 8 9"
+              fill="none"
+            >
+              <circle cx="4" cy="4.5" r="4" fill="rgba(200, 221, 255, 1)" />
             </svg>
-            Bad Performing: <span class="font-500 text-red ml-2">{{ '24' }} %</span>
+            Bad Performing:
+            <span class="font-500 text-red ml-2">{{ "24" }} %</span>
           </p>
           <div class="best-batch text-a-primary font-12 font-400 mb-1">
-            Best Batch: <span class="font-300 text-dark">{{ 'Batch Nov \'21' }}</span>
+            Best Batch:
+            <span class="font-300 text-dark">{{ "Batch Nov '21" }}</span>
           </div>
           <div class="worst-batch text-red font-12 font-400">
-            Worst Batch: <span class="font-300 text-dark">{{ 'Batch Nov \'21' }}</span>
+            Worst Batch:
+            <span class="font-300 text-dark">{{ "Batch Nov '21" }}</span>
           </div>
         </div>
       </div>
@@ -183,7 +204,9 @@
         <div class="ant-col-md-12 ant-col-24 pl-md-2 pl-0">
           <div class="ant-row">
             <div class="ant-col-19 text-free d-md-block d-none">Name</div>
-            <div class="ant-col-5 text-center text-free d-md-block d-none">Value</div>
+            <div class="ant-col-5 text-center text-free d-md-block d-none">
+              Value
+            </div>
             <nz-divider class="my-1"></nz-divider>
             <div class="ant-col-19 font-300"># of Batches</div>
             <div class="ant-col-5 text-center text-a-primary">Value</div>
@@ -213,7 +236,7 @@
         nz-button
         class="btn-primary mb-2"
         [routerLink]="['/', 'admin', 'resources']"
-        [queryParams]="{tabIndex: 0}"
+        [queryParams]="{ tabIndex: 0 }"
       >
         <span nz-icon nzType="export"></span>
         Manage Subject
@@ -222,7 +245,7 @@
         nz-button
         class="btn-primary mb-2"
         [routerLink]="['/', 'admin', 'resources']"
-        [queryParams]="{tabIndex: 1}"
+        [queryParams]="{ tabIndex: 1 }"
       >
         <span nz-icon nzType="export"></span>
         Manage Video Links
@@ -231,7 +254,7 @@
         nz-button
         class="btn-primary mb-2"
         [routerLink]="['/', 'admin', 'resources']"
-        [queryParams]="{tabIndex: 2}"
+        [queryParams]="{ tabIndex: 2 }"
       >
         <span nz-icon nzType="export"></span>
         Manage PYQs
@@ -240,7 +263,7 @@
         nz-button
         class="btn-primary"
         [routerLink]="['/', 'admin', 'resources']"
-        [queryParams]="{tabIndex: 3}"
+        [queryParams]="{ tabIndex: 3 }"
       >
         <span nz-icon nzType="export"></span>
         Manage Newspapers
@@ -266,10 +289,7 @@
         <span nz-icon nzType="export"></span>
         Manage All Tests
       </button>
-      <button
-        nz-button
-        class="btn-primary"
-      >
+      <button nz-button class="btn-primary">
         <span nz-icon nzType="undo"></span>
         Refresh Leaderboards
       </button>
@@ -294,13 +314,49 @@
         <span nz-icon nzType="export"></span>
         Manage Batches
       </button>
-      <button
-        nz-button
-        class="btn-primary"
-      >
+      <button nz-button class="btn-primary">
         <span nz-icon nzType="plus"></span>
         Create New Batch
       </button>
     </nz-card>
   </div>
 </div>
+
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  nzWidth="500px"
+  [nzFooter]="null"
+  nzClosable="true"
+  [nzMaskClosable]="true"
+  (nzOnCancel)="handleCloseModal()"
+>
+  <ng-container *nzModalContent>
+    <section id="best-students-modal" *ngIf="modalName == 'best-students'">
+      <p class="font-16 font-400 mb-3">Top 10 Performing Students</p>
+      <nz-table
+        [nzData]="bestStudents"
+        [nzShowPagination]="false"
+        [nzScroll]="{x: '452px'}"
+      >
+        <thead>
+        <tr>
+          <th class="text-center" nzWidth="56px">Sl. No.</th>
+          <th nzWidth="120px">Name</th>
+          <th class="text-center" nzWidth="84px">Student ID</th>
+          <th class="text-center" nzWidth="72px">Batch ID</th>
+          <th class="text-center" nzWidth="64px">Score %</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of bestStudents; let i = index">
+          <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ data?.student?.name || '-' }}</td>
+          <td class="text-center">{{ data?.student?.id || '-' }}</td>
+          <td class="text-center">{{ data?.student?.batchId[0] || '-' }}</td>
+          <td class="text-center">{{ (data?.averagePercentageScore | number: ".2-2") || '-' }} %</td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </section>
+  </ng-container>
+</nz-modal>

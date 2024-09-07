@@ -126,7 +126,35 @@
       }
 
       @if (testForm?.get("testType")?.value === "topic") {
-        <!--   Topic ID   -->
+        <!--   Subject   -->
+        <div class="col-12 mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-3 col-xl-3">
+              <nz-form-label nzNoColon class="mb-md-0 mb-2">
+                <p class="font-14 font-300">
+                  Subject <span class="text-red">*</span>
+                </p>
+              </nz-form-label>
+            </div>
+            <div class="col-md-6 col-xl-6">
+              <nz-form-item class="">
+                <nz-form-control>
+                  <nz-select
+                    nzPlaceHolder="Select Subject"
+                    formControlName="subjectId"
+                    [nzShowArrow]="true"
+                  >
+                    <ng-container *ngFor="let tag of hoursList">
+                      <nz-option [nzLabel]="tag" [nzValue]="tag"></nz-option>
+                    </ng-container>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+
+        <!--   Topic   -->
         <div class="col-12 mb-3">
           <div class="row align-items-center">
             <div class="col-md-3 col-xl-3">
@@ -140,7 +168,7 @@
               <nz-form-item class="">
                 <nz-form-control>
                   <nz-select
-                    nzPlaceHolder="Topic ID"
+                    nzPlaceHolder="Select Topic"
                     formControlName="topicId"
                     [nzShowArrow]="true"
                   >

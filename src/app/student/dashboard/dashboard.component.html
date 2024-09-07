@@ -52,13 +52,10 @@
   </div>
 </section>
 
-<div id="resources-divider" class="label-divider my-4">
-  <hr />
-  <p>Study Resources</p>
-</div>
+<nz-divider nzOrientation="left" nzText="Study Resources"></nz-divider>
 
 <section id="resources">
-  <div class="card">
+  <nz-card nzHoverable nzBorderless class="card">
     <ngx-simplebar [options]="resourcesScrollbarOptions">
       <div class="subjects-container ant-row">
         <div
@@ -118,17 +115,14 @@
         </div>
       </div>
     </ngx-simplebar>
-  </div>
+  </nz-card>
 </section>
 
 <div nz-row [nzGutter]="[16, 0]">
   <div nz-col [nzXs]="24" [nzMd]="12">
-    <div id="performance-divider" class="label-divider my-4">
-      <hr />
-      <p>Performance Divider</p>
-    </div>
+    <nz-divider nzOrientation="left" nzText="Performance Divider"></nz-divider>
     <section id="performance-overview">
-      <div class="card p-3">
+      <nz-card nzHoverable nzBorderless class="card">
         <nz-tabset>
           <nz-tab nzTitle="Overall">
             <ng-template nz-tab>
@@ -157,21 +151,21 @@
                     <p>
                       % of Correct Answers :
                       <span class="text-primary font-700">{{
-                        78.6 | number: ".2-2"
-                      }}</span>
+                          78.6 | number: ".2-2"
+                        }}</span>
                       %
                     </p>
                     <p>
                       % of Incorrect Answers :
                       <span class="text-primary font-700">{{
-                        78.6 | number: ".2-2"
-                      }}</span>
+                          78.6 | number: ".2-2"
+                        }}</span>
                       %
                     </p>
                     <p>
                       % of Unattempted :
                       <span class="text-primary font-700"
-                        >{{ 78.6 | number: ".2-2" }} %</span
+                      >{{ 78.6 | number: ".2-2" }} %</span
                       >
                     </p>
                     <p>&nbsp;</p>
@@ -211,21 +205,21 @@
                     <p>
                       % of Correct Answers :
                       <span class="text-primary font-700">{{
-                        78.6 | number: ".2-2"
-                      }}</span>
+                          78.6 | number: ".2-2"
+                        }}</span>
                       %
                     </p>
                     <p>
                       % of Incorrect Answers :
                       <span class="text-primary font-700">{{
-                        78.6 | number: ".2-2"
-                      }}</span>
+                          78.6 | number: ".2-2"
+                        }}</span>
                       %
                     </p>
                     <p>
                       % of Unattempted :
                       <span class="text-primary font-700"
-                        >{{ 78.6 | number: ".2-2" }} %</span
+                      >{{ 78.6 | number: ".2-2" }} %</span
                       >
                     </p>
                     <p>&nbsp;</p>
@@ -239,17 +233,13 @@
             </ng-template>
           </nz-tab>
         </nz-tabset>
-      </div>
+      </nz-card>
     </section>
   </div>
   <div nz-col [nzXs]="24" [nzMd]="12">
-    <div id="leaderboard-divider" class="label-divider my-4">
-      <hr />
-      <p>Leaderboard</p>
-    </div>
+    <nz-divider nzOrientation="left" nzText="Leaderboard"></nz-divider>
     <section id="leaderboard">
-      <div class="card p-3">
-        <!--        <p class="text-center text-gold font-12 font-600">LEADERBOARD - 08/08</p>-->
+      <nz-card nzHoverable nzBorderless class="card">
         <ngx-simplebar
           class="scrollable-content"
         >
@@ -335,7 +325,7 @@
             <p class="text-center">No Data Found!</p>
           </ng-container>
         </ngx-simplebar>
-      </div>
+      </nz-card>
     </section>
   </div>
 </div>

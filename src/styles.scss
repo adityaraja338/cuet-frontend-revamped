@@ -623,45 +623,27 @@ nz-switch:has(.ant-switch-small){
 }
 
 .ant-divider-horizontal.ant-divider-with-text-left::before{
-  width: 1%
+  width: 10px
 }
 
 .ant-divider-horizontal.ant-divider-with-text-left::after{
-  width: 99%
+  width: calc(100% - 10px);
+}
+
+// Modal
+.ant-modal-content{
+  border-radius: 12px;
+}
+
+.ant-modal-close-x{
+  width: 36px;
 }
 
 // Custom Global Classes
-.label-divider {
-  position: relative;
-  p {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -56%);
-    line-height: normal;
-    font-size: 12px;
-    font-weight: 300;
-    padding: 0 4px;
-  }
-}
-
-.student .label-divider p {
-  background-color: #ede9fe !important;
-}
-
-@media (min-width: 576px) {
-  .label-divider {
-    p {
-      left: 12px;
-      transform: translateY(-56%);
-    }
-  }
-}
-
 .card {
   // padding: 16px;
-  border-radius: 12px;
-  box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.06);
+  //border-radius: 12px;
+  //box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.06);
   border: none;
 }
 
@@ -689,6 +671,9 @@ nz-switch:has(.ant-switch-small){
 
 .chart-div {
   position: relative !important;
+  canvas{
+    display: block;
+  }
   .chart-center {
     position: absolute;
     top: 50%;

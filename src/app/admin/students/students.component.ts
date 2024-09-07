@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-students',
@@ -60,6 +61,21 @@ export class StudentsComponent {
   totalCount: number = 6;
   pageIndex: number = 1;
   pageSize: number = 30;
+
+  constructor(private readonly router: Router) {}
+
+  onClickStudent(event: any, studentId: number) {
+    const excludedSection = (event.target as HTMLElement).closest(
+      '.dropdown-container',
+    );
+
+    if (excludedSection) {
+      // Do nothing if the click was on the excluded section
+      return;
+    }
+
+    this.router.navigate([this.router.url, studentId]);
+  }
 
   protected readonly Math = Math;
 }

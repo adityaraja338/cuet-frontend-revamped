@@ -1,1 +1,302 @@
-<p>student-detail works!</p>
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item routerLink="/admin/tests" class="cursor-pointer"
+    >Students</nz-breadcrumb-item
+  >
+  <nz-breadcrumb-item class="cursor-pointer">
+    Student Details
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card nzHoverable nzBorderless>
+  <div class="ant-row justify-content-between mb-2">
+    <p class="font-16 font-400 mb-md-0 mb-2">Student Details</p>
+    <button nz-button class="btn-secondary">
+      <span nz-icon nzType="edit"></span>
+      Edit Student
+    </button>
+  </div>
+
+  <div class="ant-row">
+    <div class="ant-col-md-12">
+      <div class="ant-row">
+        <div class="ant-col-24">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Name</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Email</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Phone</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Student ID</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Batch ID</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              25
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ant-col-md-12">
+      <div class="ant-row">
+        <div class="ant-col-24 mt-md-0 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Age</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Batch Plan</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">Cuet Attempts</div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+
+        <div class="ant-col-24 mt-2">
+          <div class="ant-row">
+            <div class="ant-col-9 pr-1 font-12 font-300">
+              # of Live Test Attempted
+            </div>
+            <div class="ant-col-1 px-1 font-12 font-300">:</div>
+            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
+              Test ID
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-card>
+
+<nz-divider nzText="Test Performances" nzOrientation="left"></nz-divider>
+
+<nz-card nzBorderless nzHoverable>
+  <nz-tabset>
+    <nz-tab nzTitle="Live Tests">
+      <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
+        Average Accuracy:
+        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+      </p>
+      <nz-table
+        [nzData]="studentPerformanceData"
+        [nzFrontPagination]="false"
+        [nzShowPagination]="false"
+        [nzScroll]="{ x: '640px' }"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="56px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Student Name</th>
+            <th nzWidth="84px" class="text-center">Date</th>
+            <th nzWidth="84px" class="text-center">Score</th>
+            <th nzWidth="84px" class="text-center">Accuracy</th>
+            <th nzWidth="84px" class="text-center">Test ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            performance of studentPerformanceData;
+            let i = $index;
+            track performance.id
+          ) {
+            <tr>
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ performance?.name || "-" }}</td>
+              <td class="text-center">
+                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
+              </td>
+              <td class="text-center font-400 text-a-primary">
+                {{ performance?.score || "-" }}
+              </td>
+              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+
+              <td class="text-center">{{ performance?.id || "-" }}</td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </nz-tab>
+    <nz-tab nzTitle="Recorded Tests">
+      <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
+        Average Accuracy:
+        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+      </p>
+      <nz-table
+        [nzData]="studentPerformanceData"
+        [nzFrontPagination]="false"
+        [nzShowPagination]="false"
+        [nzScroll]="{ x: '640px' }"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="56px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Student Name</th>
+            <th nzWidth="84px" class="text-center">Date</th>
+            <th nzWidth="84px" class="text-center">Score</th>
+            <th nzWidth="84px" class="text-center">Accuracy</th>
+            <th nzWidth="84px" class="text-center">Test ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            performance of studentPerformanceData;
+            let i = $index;
+            track performance.id
+          ) {
+            <tr>
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ performance?.name || "-" }}</td>
+              <td class="text-center">
+                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
+              </td>
+              <td class="text-center font-400 text-a-primary">
+                {{ performance?.score || "-" }}
+              </td>
+              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+
+              <td class="text-center">{{ performance?.id || "-" }}</td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </nz-tab>
+    <nz-tab nzTitle="Mock Tests">
+      <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
+        Average Accuracy:
+        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+      </p>
+      <nz-table
+        [nzData]="studentPerformanceData"
+        [nzFrontPagination]="false"
+        [nzShowPagination]="false"
+        [nzScroll]="{ x: '640px' }"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="56px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Student Name</th>
+            <th nzWidth="84px" class="text-center">Date</th>
+            <th nzWidth="84px" class="text-center">Score</th>
+            <th nzWidth="84px" class="text-center">Accuracy</th>
+            <th nzWidth="84px" class="text-center">Test ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            performance of studentPerformanceData;
+            let i = $index;
+            track performance.id
+          ) {
+            <tr>
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ performance?.name || "-" }}</td>
+              <td class="text-center">
+                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
+              </td>
+              <td class="text-center font-400 text-a-primary">
+                {{ performance?.score || "-" }}
+              </td>
+              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+
+              <td class="text-center">{{ performance?.id || "-" }}</td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </nz-tab>
+    <nz-tab nzTitle="Topic Tests">
+      <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
+        Average Accuracy:
+        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+      </p>
+      <nz-table
+        [nzData]="studentPerformanceData"
+        [nzFrontPagination]="false"
+        [nzShowPagination]="false"
+        [nzScroll]="{ x: '640px' }"
+      >
+        <thead>
+          <tr>
+            <th nzWidth="56px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Test Name</th>
+            <th nzWidth="84px" class="text-center">Date</th>
+            <th nzWidth="84px" class="text-center">Score</th>
+            <th nzWidth="84px" class="text-center">Accuracy</th>
+            <th nzWidth="84px" class="text-center">Test ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            performance of studentPerformanceData;
+            let i = $index;
+            track performance.id
+          ) {
+            <tr>
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ performance?.name || "-" }}</td>
+              <td class="text-center">
+                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
+              </td>
+              <td class="text-center font-400 text-a-primary">
+                {{ performance?.score || "-" }}
+              </td>
+              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+
+              <td class="text-center">{{ performance?.id || "-" }}</td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

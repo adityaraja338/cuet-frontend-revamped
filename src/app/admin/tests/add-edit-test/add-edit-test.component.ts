@@ -43,6 +43,7 @@ export class AddEditTestComponent implements OnInit {
       endTime: [null],
       isFree: [false, Validators.required],
       batchIds: [null],
+      subjectId: [null],
       topicId: [null],
       questions: this.formBuilder.array([]),
     });

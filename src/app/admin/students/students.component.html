@@ -68,7 +68,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let student of students; let i = index">
+      <tr
+        *ngFor="let student of students; let i = index"
+        (click)="onClickStudent($event, student?.id)"
+      >
         <td class="text-center">{{ i + 1 }}</td>
         <td>{{ student.name }}</td>
         <td class="text-center">
@@ -86,7 +89,7 @@
         >
           {{ student.isFree ? "Free" : "Paid" }}
         </td>
-        <td class="text-center">
+        <td class="text-center dropdown-container">
           <a
             class="text-dark font-size-20"
             nz-dropdown

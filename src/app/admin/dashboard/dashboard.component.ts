@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpService } from '../../shared/services/http.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +11,8 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class DashboardComponent implements OnInit {
   isBrowser: boolean;
+  isModalVisible = false;
+  modalName: string = '';
 
   public doughnutChartLabels: string[] = [
     '# of Good Performing Students',
@@ -32,9 +36,56 @@ export class DashboardComponent implements OnInit {
     // borderColor: 'violet'
   };
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private readonly http: HttpService,
+    private message: NzMessageService,
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getLastTestDate();
+    this.getBestAndWorstStudents();
+  }
+
+  lastTestDate?: Date;
+  getLastTestDate() {
+    this.http.getLastTestDate().subscribe({
+      next: (res: any) => {
+        // console.log(res);
+        this.lastTestDate = new Date(res?.data.date);
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  bestStudents: any = [];
+  worstStudents: any = [];
+  getBestAndWorstStudents() {
+    this.http.getBestAndWorstStudents().subscribe({
+      next: (res: any) => {
+        this.bestStudents = res?.data?.topStudents;
+        this.worstStudents = res?.data?.worstStudents;
+        console.log(this.bestStudents);
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  showModal(modalName: string) {
+    this.modalName = modalName;
+    this.isModalVisible = true;
+  }
+
+  handleCloseModal() {
+    this.isModalVisible = false;
+    this.modalName = '';
+  }
 }

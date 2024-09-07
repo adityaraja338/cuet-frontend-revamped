@@ -121,6 +121,10 @@
   }
 }
 
+::ng-deep #resources nz-card .ant-card-body{
+  padding: 0.25rem;
+}
+
 @media (min-width: 576px) {
   .subjects-container {
     // overflow-x: auto;

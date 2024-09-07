@@ -21,9 +21,7 @@ const routes: Routes = [
       {
         path: 'students',
         loadChildren: () =>
-          import('./students/students.module').then(
-            (m) => m.StudentsModule
-          ),
+          import('./students/students.module').then((m) => m.StudentsModule),
       },
       {
         path: 'batches',
@@ -34,6 +32,11 @@ const routes: Routes = [
         path: 'tests',
         loadChildren: () =>
           import('./tests/tests.module').then((m) => m.TestsModule),
+      },
+      {
+        path: 'admins',
+        loadChildren: () =>
+          import('./admins/admins.module').then((m) => m.AdminsModule),
       },
       {
         path: '**',

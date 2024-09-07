@@ -52,3 +52,10 @@
     width: 100%;
   }
 }
+
+::ng-deep #best-students-modal{
+  .ant-table-thead > tr > th{
+    background-color: #008cff;
+    color: #FFF;
+  }
+}

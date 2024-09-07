@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-batches',
@@ -49,6 +50,21 @@ export class BatchesComponent {
   totalBatchCount = 6;
   pageIndex = 1;
   pageSize = 30;
+
+  constructor(private readonly router: Router) {}
+
+  onClickBatch(event: any, batchId: number) {
+    const excludedSection = (event.target as HTMLElement).closest(
+      '.dropdown-container',
+    );
+
+    if (excludedSection) {
+      // Do nothing if the click was on the excluded section
+      return;
+    }
+
+    this.router.navigate([this.router.url, batchId]);
+  }
 
   protected readonly Math = Math;
 }

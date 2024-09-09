@@ -43,6 +43,6 @@ export class AdminAuthService {
     localStorage.removeItem('cuet_role');
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
-    this.message.success('User logged out!');
+    // this.message.success('User logged out!');
   }
 }

@@ -1,15 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { GoogleAuthService } from './shared/auth/google-auth.service';
+import { AdminAuthService } from './shared/auth/admin-auth.service';
+import { StudentAuthService } from './shared/auth/student-auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  constructor(
+    private googleAuthService: GoogleAuthService,
+    private adminAuthService: AdminAuthService,
+    private studentAuthService: StudentAuthService,
+    private router: Router,
+  ) {
+    this.googleAuthService.configureOAuth();
+  }
   // isCollapsed = false;
   ngOnInit(): void {
-      
+    if (this.studentAuthService.isUserLoggedIn()) {
+      this.router.navigate(['/', 'student', 'home']);
+    } else if (this.adminAuthService.isUserLoggedIn()) {
+      this.router.navigate(['/', 'admin', 'home']);
+    } else {
+      this.googleAuthService.handleLogin();
+    }
   }
 }

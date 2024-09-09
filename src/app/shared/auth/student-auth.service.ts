@@ -28,12 +28,14 @@ export class StudentAuthService {
       return true;
     }
     this.isAuthenticatedSubject.next(false);
+    this.logout();
     return false;
   }
 
   login() {
     const isAuthenticated = true;
     this.isAuthenticatedSubject.next(isAuthenticated);
+    sessionStorage.clear();
     this.router.navigate(['/', 'student', 'home']);
   }
 
@@ -43,6 +45,6 @@ export class StudentAuthService {
     localStorage.removeItem('cuet_role');
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
-    this.message.success('User logged out!');
+    // this.message.success('User logged out!');
   }
 }

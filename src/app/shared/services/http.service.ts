@@ -20,6 +20,10 @@ export class HttpService {
     }
   }
 
+  postStudentGoogleLogin(data: any) {
+    return this.http.post(`${this.url}/student/auth`, data);
+  }
+
   getLastTestDate() {
     return this.http.get(`${this.url}/admin/get-last-live-test`);
   }

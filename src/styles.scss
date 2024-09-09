@@ -68,6 +68,18 @@ p {
   }
 }
 
+.text-8a{
+  color: #8a8a8a !important;
+}
+
+.text-ca{
+  color: #cacaca !important;
+}
+
+.text-aa{
+  color: #aaaaaa !important;
+}
+
 .row-gap-4 {
   row-gap: 4px;
 }
@@ -121,6 +133,14 @@ button.ant-btn {
   padding: 0 24px;
   transition: all 0.6s;
   outline: none !important;
+}
+
+button.dark-btn, button.ant-button.dark-btn{
+  background-color: #4A4A4A !important;
+  color: #FFF !important;
+  border-radius: 6px;
+  font-size: 14px;
+  height: 36px;
 }
 
 .admin {
@@ -388,7 +408,7 @@ nz-breadcrumb {
 }
 
 .ant-input {
-  height: 32px;
+  height: 36px;
   font-size: 12px;
   font-weight: 300;
   border-radius: 6px;
@@ -397,12 +417,19 @@ nz-breadcrumb {
 
 .admin .ant-input:focus,
 .ant-input-focused {
-  border-color: #008cff;
+  border: 1px solid #008cff !important;
   box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.2);
 }
 
 .admin .ant-input:hover {
   border-color: #008cff;
+}
+
+nz-input-group .ant-input{
+  background-color: transparent !important;
+}
+nz-input-group:has(.ant-input:focus){
+  border-color: #561ABD !important;
 }
 
 .ant-btn {
@@ -704,4 +731,36 @@ nz-switch:has(.ant-switch-small){
 
 .underline{
   text-decoration: underline;
+}
+
+.br-2{
+  border-radius: 2px !important;
+}
+
+.br-4{
+  border-radius: 4px !important;
+}
+
+.br-6{
+  border-radius: 6px !important;
+}
+
+.br-8{
+  border-radius: 8px !important;
+}
+
+.br-12{
+  border-radius: 12px !important;
+}
+
+.br-16{
+  border-radius: 16px !important;
+}
+
+.br-20{
+  border-radius: 20px !important;
+}
+
+.br-24{
+  border-radius: 24px !important;
 }

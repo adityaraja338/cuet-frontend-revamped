@@ -13,15 +13,18 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { NgZorroAntdModule } from './ng-zorro-antd.module';
+import { AuthComponent } from './shared/components/auth/auth.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AuthComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -30,6 +33,9 @@ registerLocaleData(en);
     NzMenuModule,
     FormsModule,
     NgZorroAntdModule,
+    OAuthModule.forRoot(),
+    SimplebarAngularModule,
+    ReactiveFormsModule,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

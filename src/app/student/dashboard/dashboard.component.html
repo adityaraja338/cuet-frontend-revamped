@@ -2,34 +2,65 @@
   <div nz-row [nzGutter]="[16, 12]">
     <div nz-col [nzXs]="24" [nzSm]="12" [nzXl]="12" [nzXXl]="12">
       <div class="upcoming-test">
-        <h6 class="font-16 font-500 text-dark-primary mb-md-0 mb-2">Upcoming Live Tests</h6>
-        <div class="row">
-          <div class="col-sm-12 col-md-9 order-0">
-            <p class="text-primary font-12 font-400">
-              Subject: <span class="text-primary">Mathematics</span>
-            </p>
-            <p class="text-primary font-16 font-500">
-              {{ "2/07/2024" }} {{ "@ " }} {{ "7:30 PM" }}
-            </p>
+        <h6 class="font-16 font-500 text-dark-primary mb-md-0 mb-2">
+          Upcoming Live Tests
+        </h6>
+        @if (upcomingTestOverviewData?.length > 0) {
+          <div class="row">
+            <div class="col-md-9 order-0">
+              <p class="text-primary font-12 font-400">
+                Subject:
+                <span class="text-primary">{{
+                  upcomingTestOverviewData[0]?.name
+                }}</span>
+              </p>
+              <p class="text-primary font-16 font-500">
+                {{ "2/07/2024" }} {{ "@ " }} {{ "7:30 PM" }}
+              </p>
+            </div>
+            <div
+              class="col-sm-6 col-md-3 order-md-1 order-2 d-flex ant-row-end mt-md-0 mt-2"
+            >
+              <button nz-button class="font-12 font-500 start-test">
+                Start Test
+              </button>
+            </div>
+            <div
+              class="col-sm-6 col-md-4 order-md-2 order-1 col-xl-3 mt-2 d-flex justify-content-md-start justify-content-center"
+            >
+              <button nz-button class="font-12 view-all mt-md-0">
+                View All
+              </button>
+            </div>
           </div>
-          <div class="col-sm-6 col-md-3 order-md-1 order-2 d-flex ant-row-end mt-md-0 mt-2">
-            <button nz-button class="font-12 font-500 start-test">
-              Start Test
-            </button>
+        } @else {
+          <div class="row align-items-center">
+            <div class="col-md-3 col-4">
+              <img
+                src="assets/images/not-found-2.svg"
+                height="84"
+                alt=""
+                style="mix-blend-mode: color"
+              />
+            </div>
+            <div class="col-md-9 col-8 font-400 text-primary">
+              No test scheduled! Please stay tuned!
+            </div>
           </div>
-          <div class="col-sm-6 col-md-4 order-md-2 order-1 col-xl-3 mt-2 d-flex justify-content-md-start justify-content-center">
-            <button nz-button class="font-12 view-all mt-md-0">View All</button>
-          </div>
-        </div>
+        }
       </div>
     </div>
     <div nz-col [nzXs]="24" [nzSm]="12" [nzXl]="12" [nzXXl]="12" class="">
       <div class="previous-test">
         <h6 class="font-16 font-500 text-dark-primary">Previous Live Tests</h6>
         <div class="overlap-tests">
-          @for (test of previous; track test; let index = $index) {
+          @for (
+            test of previousTestOverviewData;
+            track test;
+            let index = $index
+          ) {
             <div
-              class="test"
+              class="test font-12 font-600 d-flex justify-content-center align-items-center"
               [style]="
                 'z-index:' +
                 (previous.length - index) +
@@ -37,7 +68,9 @@
                 18 * index +
                 'px;'
               "
-            ></div>
+            >
+              {{ test?.name?.toUpperCase()[0] }}
+            </div>
           } @empty {
             <p class="font-16 text-white">No Tests found!</p>
           }
@@ -59,40 +92,22 @@
     <ngx-simplebar [options]="resourcesScrollbarOptions">
       <div class="subjects-container ant-row">
         <div
-          class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 mock-test student-diagonal-gradient"
+          class="ant-col-xs-11 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 mock-test student-diagonal-gradient"
         >
           <div class="subject-icon mb-1 text-dark">A</div>
           <span class="font-12 font-500">Mock Tests</span>
         </div>
-        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
+        <div
+          *ngFor="let subject of subjects"
+          class="ant-col-xs-11 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 subject"
+        >
           <div class="subject-icon student-diagonal-gradient mb-1 text-white">
-            A
+            <img
+              [src]="subject?.iconUrl"
+              [alt]="subject?.name?.toString().toUpperCase()[0]"
+            />
           </div>
-          <span class="font-12 font-500">Mock Tests</span>
-        </div>
-        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
-          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
-            A
-          </div>
-          <span class="font-12 font-500">Mock Tests</span>
-        </div>
-        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
-          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
-            A
-          </div>
-          <span class="font-12 font-500">Mock Tests</span>
-        </div>
-        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
-          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
-            A
-          </div>
-          <span class="font-12 font-500">Mock Tests</span>
-        </div>
-        <div class="ant-col-xs-7 ant-col-md-4 ant-col-xl-3 subject">
-          <div class="subject-icon student-diagonal-gradient mb-1 text-white">
-            A
-          </div>
-          <span class="font-12 font-500">Mock Tests</span>
+          <span class="font-12 font-500">{{ subject?.name }}</span>
         </div>
         <!-- <div class="ant-col-xs-7 ant-col-md-4 ant-col-lg-3 subject">
           <div class="subject-icon student-diagonal-gradient mb-1 text-white">
@@ -122,19 +137,19 @@
   <div nz-col [nzXs]="24" [nzMd]="12">
     <nz-divider nzOrientation="left" nzText="Performance Divider"></nz-divider>
     <section id="performance-overview">
-      <nz-card nzHoverable nzBorderless class="card">
-        <nz-tabset>
+      <nz-card nzHoverable nzBorderless>
+        <nz-tabset class="w-100">
           <nz-tab nzTitle="Overall">
             <ng-template nz-tab>
               <div class="ant-row">
                 <div
-                  *ngIf="isBrowser"
                   class="chart-div ant-col-xs-24 ant-col-sm-10 d-flex justify-content-center"
                 >
                   <canvas
+                    #overallChart
                     baseChart
                     [labels]="doughnutChartLabels"
-                    [datasets]="doughnutChartDatasets"
+                    [datasets]="overallChartDatasets"
                     [options]="doughnutChartOptions"
                     [legend]="false"
                     [type]="'doughnut'"
@@ -151,27 +166,46 @@
                     <p>
                       % of Correct Answers :
                       <span class="text-primary font-700">{{
-                          78.6 | number: ".2-2"
-                        }}</span>
+                        (overallPerformanceData?.correct /
+                          (overallPerformanceData?.correct +
+                            overallPerformanceData?.incorrect +
+                            overallPerformanceData?.unattempted)) *
+                          100 | number: ".2-2"
+                      }}</span>
                       %
                     </p>
                     <p>
                       % of Incorrect Answers :
                       <span class="text-primary font-700">{{
-                          78.6 | number: ".2-2"
-                        }}</span>
+                        (overallPerformanceData?.incorrect /
+                          (overallPerformanceData?.correct +
+                            overallPerformanceData?.incorrect +
+                            overallPerformanceData?.unattempted)) *
+                          100 | number: ".2-2"
+                      }}</span>
                       %
                     </p>
                     <p>
                       % of Unattempted :
                       <span class="text-primary font-700"
-                      >{{ 78.6 | number: ".2-2" }} %</span
+                        >{{
+                          (overallPerformanceData?.unattempted /
+                            (overallPerformanceData?.correct +
+                              overallPerformanceData?.incorrect +
+                              overallPerformanceData?.unattempted)) *
+                            100 | number: ".2-2"
+                        }}
+                        %</span
                       >
                     </p>
                     <p>&nbsp;</p>
                     <p>
                       # of Total Test:
-                      <span class="text-primary font-700">16</span>
+                      <span class="text-primary font-700">{{
+                        overallPerformanceData?.totalTest
+                          ? overallPerformanceData?.totalTest
+                          : "-"
+                      }}</span>
                     </p>
                   </div>
                 </div>
@@ -182,13 +216,13 @@
             <ng-template nz-tab>
               <div class="ant-row">
                 <div
-                  *ngIf="isBrowser"
                   class="chart-div ant-col-xs-24 ant-col-sm-10 d-flex justify-content-center"
                 >
                   <canvas
+                    #previousChart
                     baseChart
                     [labels]="doughnutChartLabels"
-                    [datasets]="doughnutChartDatasets"
+                    [datasets]="previousChartDatasets"
                     [options]="doughnutChartOptions"
                     [legend]="false"
                     [type]="'doughnut'"
@@ -205,27 +239,44 @@
                     <p>
                       % of Correct Answers :
                       <span class="text-primary font-700">{{
-                          78.6 | number: ".2-2"
-                        }}</span>
+                        (previousPerformanceData?.correct /
+                          (previousPerformanceData?.correct +
+                            previousPerformanceData?.incorrect +
+                            previousPerformanceData?.unattempted)) *
+                          100 | number: ".2-2"
+                      }}</span>
                       %
                     </p>
                     <p>
                       % of Incorrect Answers :
                       <span class="text-primary font-700">{{
-                          78.6 | number: ".2-2"
-                        }}</span>
+                        (previousPerformanceData?.incorrect /
+                          (previousPerformanceData?.correct +
+                            previousPerformanceData?.incorrect +
+                            previousPerformanceData?.unattempted)) *
+                          100 | number: ".2-2"
+                      }}</span>
                       %
                     </p>
                     <p>
                       % of Unattempted :
                       <span class="text-primary font-700"
-                      >{{ 78.6 | number: ".2-2" }} %</span
+                        >{{
+                          (previousPerformanceData?.unattempted /
+                            (previousPerformanceData?.correct +
+                              previousPerformanceData?.incorrect +
+                              previousPerformanceData?.unattempted)) *
+                            100 | number: ".2-2"
+                        }}
+                        %</span
                       >
                     </p>
                     <p>&nbsp;</p>
                     <p>
-                      # of Total Test:
-                      <span class="text-primary font-700">16</span>
+                      Test Type:
+                      <span class="text-primary font-700">{{
+                        previousPerformanceData?.testType | titlecase
+                      }}</span>
                     </p>
                   </div>
                 </div>
@@ -240,9 +291,7 @@
     <nz-divider nzOrientation="left" nzText="Leaderboard"></nz-divider>
     <section id="leaderboard">
       <nz-card nzHoverable nzBorderless class="card">
-        <ngx-simplebar
-          class="scrollable-content"
-        >
+        <ngx-simplebar class="scrollable-content">
           <div
             class="leaderboard-header student-diagonal-gradient ant-row align-items-center justify-content-between px-2"
           >
@@ -278,7 +327,7 @@
             <div class="ant-col-5 text-center">{{ "Score %" }}</div>
           </div>
           <div
-            *ngFor="let data of leaderboardData; let i = index"
+            *ngFor="let data of leaderboardData?.leaderboard; let i = index"
             class="ranks"
             [class]="'rank-' + (i + 1)"
           >
@@ -315,13 +364,17 @@
                 {{ i + 1 }}
               </div>
               <!-- Incremented index to start from 1 -->
-              <div class="ant-col-14 px-2">{{ data.studentName }}</div>
+              <div class="ant-col-14 px-2">{{ data?.studentName }}</div>
               <div class="ant-col-5 text-center">
-                {{ data.scorePercentage }}
+                {{
+                  (data?.scoreObtained / data?.totalScore) * 100
+                    | number: ".2-2"
+                }}
+                %
               </div>
             </div>
           </div>
-          <ng-container *ngIf="leaderboardData.length === 0">
+          <ng-container *ngIf="leaderboardData?.length === 0">
             <p class="text-center">No Data Found!</p>
           </ng-container>
         </ngx-simplebar>

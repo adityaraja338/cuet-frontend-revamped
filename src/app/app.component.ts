@@ -20,11 +20,10 @@ export class AppComponent implements OnInit {
   }
   // isCollapsed = false;
   ngOnInit(): void {
-    if (this.studentAuthService.isUserLoggedIn()) {
-      this.router.navigate(['/', 'student', 'home']);
-    } else if (this.adminAuthService.isUserLoggedIn()) {
-      this.router.navigate(['/', 'admin', 'home']);
-    } else {
+    if (
+      !this.studentAuthService.isUserLoggedIn() &&
+      !this.adminAuthService.isUserLoggedIn()
+    ) {
       this.googleAuthService.handleLogin();
     }
   }

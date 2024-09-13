@@ -5,6 +5,7 @@ import { HttpService } from '../services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StudentAuthService } from './student-auth.service';
 import { googleAuthConfig } from '../config/google-auth.config';
+import { GlobalService } from '../services/global.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class GoogleAuthService {
     private http: HttpService,
     private message: NzMessageService,
     private studentAuthService: StudentAuthService,
+    private globalService: GlobalService,
   ) {}
 
   configureOAuth() {
@@ -37,10 +39,10 @@ export class GoogleAuthService {
         accessToken: this.oauthService.getAccessToken(),
         user: claims,
       };
-      console.log('userData', userData);
+      // console.log('userData', userData);
       this.http.postStudentGoogleLogin(userData).subscribe({
         next: (res: any) => {
-          console.log(res?.data);
+          // console.log(res?.data);
           if (res?.data?.userExists === true) {
             localStorage.setItem('cuet_access_token', res.data.accessToken);
             localStorage.setItem('cuet_refresh_token', res.data.refreshToken);
@@ -48,7 +50,8 @@ export class GoogleAuthService {
             this.studentAuthService.login();
           } else {
             // User does not exist, return the response to display a registration form
-            return res?.data;
+            this.globalService.setData(res?.data);
+            this.globalService.toggleRegistrationPage();
           }
         },
         error: (error: any) => {
@@ -63,8 +66,9 @@ export class GoogleAuthService {
     this.oauthService.tryLogin().then(() => {
       if (this.oauthService.hasValidAccessToken()) {
         return this.getUserData();
+      } else {
+        this.studentAuthService.logout();
       }
     });
-    return null;
   }
 }

@@ -13,10 +13,42 @@
   }
 }
 
+.upgrade-text{
+  color: #3A3A3A;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 64px */
+  span{
+    color: #8555FD;
+    font-size: 56px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%;
+  }
+}
+
+.thank-you-text{
+  color: #3A3A3A;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 64px */
+  span{
+    color: #8555FD;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%;
+  }
+}
+
 .enroll-btn{
-  padding: 8px 24px;
+  padding: 0px 24px;
+  height: 42px;
   font-size: 16px;
-  border-radius: 12px;
+  font-weight: 300;
+  border-radius: 8px;
   background: linear-gradient(88deg, #561ABD 0%, #8555FD 100%);
   color: #FFF;
   display: flex;

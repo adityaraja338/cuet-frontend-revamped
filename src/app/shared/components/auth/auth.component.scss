@@ -110,11 +110,15 @@ form label {
   margin-bottom: 10px;
 }
 
+form nz-form-item{
+  margin-bottom: 16px;
+}
+
 form input {
   display: block;
   width: 100%;
   padding: 10px;
-  margin-bottom: 16px;
+  //margin-bottom: 16px;
   //border: 1px solid #ddd;
 }
 

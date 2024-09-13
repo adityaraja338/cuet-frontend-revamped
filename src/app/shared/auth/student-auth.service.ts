@@ -22,13 +22,14 @@ export class StudentAuthService {
   isUserLoggedIn() {
     if (
       localStorage.getItem('cuet_access_token') &&
-      localStorage.getItem('cuet_refresh_token')
+      localStorage.getItem('cuet_refresh_token') &&
+      localStorage.getItem('cuet_role') === 'student'
     ) {
       this.isAuthenticatedSubject.next(true);
       return true;
     }
     this.isAuthenticatedSubject.next(false);
-    this.logout();
+    // this.logout();
     return false;
   }
 

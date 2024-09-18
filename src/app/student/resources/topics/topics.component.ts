@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpService } from '../../../shared/services/http.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-topics',
@@ -9,24 +11,40 @@ import { Router } from '@angular/router';
 export class TopicsComponent implements OnInit {
   subjectName: string | undefined = 'Topic';
 
-  topics: any[] = [
-    { name: 'Reasoning', id: 0 },
-    { name: 'G.K. & G.S.', id: 1 },
-    { name: 'Mathematics', id: 2 },
-    { name: 'Current Affairs', id: 3 },
-    { name: 'English', id: 4 },
-    { name: 'Physics', id: 5 },
-    { name: 'Chemistry', id: 6 },
-    { name: 'Biology', id: 7 },
-  ];
+  topics: any;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpService,
+    private message: NzMessageService,
+  ) {}
 
   ngOnInit() {
-    // console.log(this.router.url);
+    const id = this.route.snapshot.paramMap.get('subjectId');
+    this.getTopics(id);
+  }
+
+  getTopics(id: any) {
+    const data: any = {
+      subjectId: +id,
+    };
+
+    this.http.getTopics(data).subscribe({
+      next: (res: any) => {
+        this.topics = res?.data?.topics;
+        this.subjectName = res?.data?.subjectName;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
   }
 
   onClickTopic(topicId: number) {
     this.router.navigate([this.router.url, topicId]);
   }
+
+  protected readonly length = length;
 }

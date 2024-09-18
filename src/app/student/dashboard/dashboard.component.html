@@ -77,7 +77,11 @@
         </div>
         <div class="row">
           <div class="col-sm-6 col-md-4 col-xl-3">
-            <button nz-button class="font-12 view-all">View All</button>
+            <button
+              nz-button
+              class="font-12 view-all"
+              [routerLink]="['/', 'student', 'tests']"
+            >View All</button>
           </div>
         </div>
       </div>
@@ -88,18 +92,21 @@
 <nz-divider nzOrientation="left" nzText="Study Resources"></nz-divider>
 
 <section id="resources">
-  <nz-card nzHoverable nzBorderless class="card">
+  <nz-card nzHoverable nzBorderless>
     <ngx-simplebar [options]="resourcesScrollbarOptions">
       <div class="subjects-container ant-row">
         <div
-          class="ant-col-xs-11 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 mock-test student-diagonal-gradient"
+          class="ant-col-xs-11 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 mock-test student-diagonal-gradient cursor-pointer"
+          [routerLink]="['/', 'student', 'tests']"
+          [queryParams]="{tab : 1}"
         >
           <div class="subject-icon mb-1 text-dark">A</div>
           <span class="font-12 font-500">Mock Tests</span>
         </div>
         <div
           *ngFor="let subject of subjects"
-          class="ant-col-xs-11 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 subject"
+          class="ant-col-xs-11 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 subject cursor-pointer"
+          [routerLink]="['/', 'student', 'resources', subject?.id]"
         >
           <div class="subject-icon student-diagonal-gradient mb-1 text-white">
             <img
@@ -124,7 +131,11 @@
         <div
           class="ant-col-xs-24 ant-col-sm-7 ant-col-md-4 ant-col-xl-3 view-all"
         >
-          <button class="font-12 font-500 student-diagonal-gradient">
+          <button
+            nz-button
+            class="font-12 font-500 student-diagonal-gradient"
+            [routerLink]="['/', 'student', 'resources']"
+          >
             View All
           </button>
         </div>
@@ -326,8 +337,8 @@
             <div class="ant-col-14 px-2">{{ "Name" }}</div>
             <div class="ant-col-5 text-center">{{ "Score %" }}</div>
           </div>
-          <div
-            *ngFor="let data of leaderboardData?.leaderboard; let i = index"
+          @for(data of leaderboardData?.leaderboard; let i = $index; track i){
+            <div
             class="ranks"
             [class]="'rank-' + (i + 1)"
           >
@@ -374,6 +385,12 @@
               </div>
             </div>
           </div>
+          } @empty {
+            <nz-empty
+              class="mt-3"
+              [nzNotFoundImage]="'https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'"
+            ></nz-empty>
+          }
           <ng-container *ngIf="leaderboardData?.length === 0">
             <p class="text-center">No Data Found!</p>
           </ng-container>

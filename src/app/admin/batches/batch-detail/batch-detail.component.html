@@ -6,10 +6,14 @@
     Batch Details
   </nz-breadcrumb-item>
 </nz-breadcrumb>
-<nz-card nzHoverable nzBorderless>
+<nz-card nzHoverable nzBorderless [nzLoading]="">
   <div class="ant-row justify-content-between mb-2">
     <p class="font-16 font-400">Batch Details</p>
-    <button nz-button class="btn-secondary">
+    <button
+      nz-button
+      class="btn-a-secondary"
+      (click)="onClickEditBatch()"
+    >
       <span nz-icon nzType="edit"></span>
       Edit Batch
     </button>
@@ -23,7 +27,7 @@
             <div class="ant-col-8 pr-1 font-12 font-300">Batch Name</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              Batch Name
+              {{ editModalDetails?.batchName || '-' }}
             </div>
           </div>
         </div>
@@ -33,7 +37,7 @@
             <div class="ant-col-8 pr-1 font-12 font-300">Start Date</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ editModalDetails?.startDate ? (editModalDetails?.startDate | date: 'dd MMM yyyy') : '-' }}
             </div>
           </div>
         </div>
@@ -43,7 +47,7 @@
             <div class="ant-col-8 pr-1 font-12 font-300">Total Students</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              Start Date
+              {{ studentList?.length }}
             </div>
           </div>
         </div>
@@ -53,7 +57,7 @@
             <div class="ant-col-8 pr-1 font-12 font-300">Batch Features</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              25
+              {{ batchFeatures?.length > 0 ? batchFeatures?.join(', ') : '-' }}
             </div>
           </div>
         </div>
@@ -67,17 +71,17 @@
             <div class="ant-col-8 pr-1 font-12 font-300">Batch ID</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ editModalDetails?.batchId || '-' }}
             </div>
           </div>
         </div>
 
         <div class="ant-col-24 mt-2">
           <div class="ant-row">
-            <div class="ant-col-8 pr-1 font-12 font-300">Total Tests</div>
+            <div class="ant-col-8 pr-1 font-12 font-300">Total Live Tests</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ editModalDetails?.totalLiveTest }}
             </div>
           </div>
         </div>
@@ -87,7 +91,7 @@
             <div class="ant-col-8 pr-1 font-12 font-300">Overall Accuracy</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-15 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ editModalDetails?.batchAccuracy ? (editModalDetails?.batchAccuracy | number: '.2-2'): '-' }} %
             </div>
           </div>
         </div>
@@ -115,7 +119,7 @@
         <div
           class="ant-col-md-19 ant-col-15 pl-xl-2 pl-md-2 pl-1 font-12 font-400 text-a-primary"
         >
-          Test ID
+          {{ editModalDetails?.description || '-' }}
         </div>
       </div>
     </div>
@@ -123,45 +127,45 @@
 </nz-card>
 
 <div class="row">
-  <div class="col-xl-9 col-md-8">
+  <div class="col-xl-9 col-md-8 order-md-0 order-1">
     <nz-divider nzText="Student List" nzOrientation="left"></nz-divider>
-    <nz-card nzBorderless nzHoverable>
+    <nz-card nzBorderless nzHoverable [nzLoading]="isLoading">
       <nz-table
-        [nzData]="[{}]"
+        [nzData]="studentList"
         [nzFrontPagination]="false"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '640px' }"
+        [nzScroll]="{ x: '420px' }"
+        [nzNoResult]="customNoData"
       >
         <thead>
           <tr>
             <th nzWidth="56px" class="text-center">Sl. No.</th>
-            <th nzWidth="260px">Student Name</th>
-            <th nzWidth="84px" class="text-center">Score</th>
-            <th nzWidth="84px" class="text-center">Accuracy</th>
-
-            <th nzWidth="84px" class="text-center">Student ID</th>
+            <th nzWidth="120px">Student Name</th>
+            <th nzWidth="84px" class="text-center">Avg. Score %</th>
+            <th nzWidth="72px" class="text-center">Student ID</th>
           </tr>
         </thead>
         <tbody>
-          @for (student of studentData; let i = $index; track student.id) {
+          @for (student of studentList; let i = $index; track i) {
             <tr>
               <td class="text-center">{{ i + 1 }}</td>
               <td>{{ student?.name || "-" }}</td>
-              <td class="text-center font-400 text-a-primary">
-                {{ student?.score || "-" }}
-              </td>
-              <td class="text-center">{{ student?.accuracy || "-" }}</td>
+              <td class="text-center">{{ student?.averagePercentage ? (student?.averagePercentage | number: '.2-2') : "-" }} %</td>
               <td class="text-center">{{ student?.id || "-" }}</td>
             </tr>
           }
         </tbody>
       </nz-table>
+      <ng-template #customNoData>
+        <img class="mt-3" src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" alt="">
+        <p class="font-16 font-300 mt-3">No Students Found!</p>
+      </ng-template>
     </nz-card>
   </div>
-  <div class="col-xl-3 col-md-4">
+  <div class="col-xl-3 col-md-4 order-md-1 order-0">
     <nz-divider nzText="Batch Performance" nzOrientation="left"></nz-divider>
 
-    <nz-card nzBorderless nzHoverable>
+    <nz-card nzBorderless nzHoverable [nzLoading]="isLoading">
       <div
         class="chart-div d-flex justify-content-center"
         style="width: 100%; height: 156px"
@@ -189,7 +193,7 @@
         >
           <circle cx="4.09033" cy="4.5" r="4" fill="rgba(0, 163, 255, 1)" />
         </svg>
-        > 50%: {{ 46 }}
+        > 50%: <span class="font-600 mx-1 text-a-primary">{{ editModalDetails?.studentOver50 }}</span> Student@if(editModalDetails?.studentOver50 > 1){s}
       </div>
       <div class="font-12 font-400 d-flex align-items-center justify-content-center">
         <svg
@@ -202,8 +206,233 @@
         >
           <circle cx="4.09033" cy="4.5" r="4" fill="rgba(200, 221, 255, 1)" />
         </svg>
-        <= 50%: {{ 46 }}
+        <= 50%: <span class="font-600 mx-1 text-red">{{ editModalDetails?.studentBelow50 }}</span> Student@if(editModalDetails?.studentBelow50 > 1){s}
       </div>
     </nz-card>
   </div>
 </div>
+
+<nz-modal
+  [(nzVisible)]="isEditModal"
+  [nzMaskClosable]="false"
+  [nzFooter]="null"
+  (nzOnCancel)="onCloseEditModal();"
+>
+  <ng-container *nzModalContent>
+    <p class="font-16 font-400">{{ !editModalDetails ? 'Create New Batch' : 'Edit Batch' }}</p>
+
+    <form [formGroup]="editBatchForm" class="admin-form">
+      <div class="row mt-4">
+        <div class="col-12">
+          <label class="font-12 font-400">Batch ID</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="batchIdError">
+              <input
+                nz-input
+                type="text"
+                formControlName="batchId"
+                placeholder="Name"
+                class="admin-input"
+              >
+            </nz-form-control>
+            <ng-template #batchIdError let-control>
+              <ng-container *ngIf="control?.hasError('pattern')">
+                Invalid ID! Can only be a number!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Batch Name</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError">
+              <input
+                nz-input
+                type="text"
+                formControlName="name"
+                placeholder="Name"
+                class="admin-input"
+              >
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control?.hasError('required')">
+                Name is required!
+              </ng-container>
+              <ng-container *ngIf="control?.hasError('maxlength')">
+                Max 40 characters allowed!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Description</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="descriptionError">
+              <input
+                nz-input
+                type="text"
+                formControlName="description"
+                placeholder="Description"
+                class="admin-input"
+              >
+            </nz-form-control>
+            <ng-template #descriptionError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Description is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">
+                Max. 120 characters allowed!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Start Date</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="startDateError">
+              <nz-date-picker
+                nzAllowClear
+                nzFormat="dd MMM yyyy"
+                formControlName="startDate"
+              ></nz-date-picker>
+            </nz-form-control>
+            <ng-template #startDateError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Start Date is required!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label
+            nz-checkbox
+            formControlName="entryAllowed"
+            class="font-300"
+          > Is entry allowed!</label>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Features</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="featuresError">
+              <nz-select
+                formControlName="features"
+                nzPlaceHolder="Select Features"
+                nzAllowClear
+                [nzShowArrow]="true"
+                nzShowSearch
+                nzMode="multiple"
+                [nzMaxTagCount]="2"
+              >
+                <nz-option *ngFor="let feature of features" [nzValue]="feature?.id" [nzLabel]="feature?.name + ' (₹ '+ feature?.price +')'"></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <ng-template #featuresError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                At least 1 feature is required!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Base Price</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="basePriceError">
+              <nz-input-group [nzPrefix]="priceSuffixIcon">
+                <input
+                  nz-input
+                  type="text"
+                  formControlName="basePrice"
+                  placeholder="Price"
+                  class="admin-input"
+                >
+              </nz-input-group>
+              <ng-template #priceSuffixIcon>
+                <span nz-icon>₹</span>
+              </ng-template>
+            </nz-form-control>
+            <ng-template #basePriceError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Base Price is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">
+                Invalid Price!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Premium Price</label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="premiumPriceError">
+              <nz-input-group [nzPrefix]="priceSuffixIcon">
+                <input
+                  nz-input
+                  type="text"
+                  formControlName="premiumPrice"
+                  placeholder="Price"
+                  class="admin-input"
+                >
+              </nz-input-group>
+              <ng-template #priceSuffixIcon>
+                <span nz-icon>₹</span>
+              </ng-template>
+            </nz-form-control>
+            <ng-template #premiumPriceError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Premium Price is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">
+                Invalid Price!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Basic <span nz-icon nzType="arrow-right" nzTheme="outline"></span> Premium Upgrade Price<span class="text-red">*</span></label>
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="upgradePriceError">
+              <nz-input-group [nzPrefix]="priceSuffixIcon">
+                <input
+                  nz-input
+                  type="text"
+                  formControlName="upgradePrice"
+                  placeholder="Price"
+                  class="admin-input"
+                >
+              </nz-input-group>
+              <ng-template #priceSuffixIcon>
+                <span nz-icon>₹</span>
+              </ng-template>
+            </nz-form-control>
+            <ng-template #upgradePriceError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Upgrade Price is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">
+                Invalid Price!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="btn-a-secondary mr-4 mb-1"
+        (click)="onCloseEditModal()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="btn-a-primary mb-1 mr-2"
+        (click)="onEditBatch()"
+      >
+        Save
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

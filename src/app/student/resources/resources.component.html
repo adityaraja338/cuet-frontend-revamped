@@ -7,76 +7,104 @@
       <ng-template nz-tab>
         <!-- Non Domain Subjects        -->
         <div id="subjects-container" class="ant-row mx-n1">
-          <div class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1">
-            <div
-              class="newspaper student-diagonal-gradient ant-row ant-row-middle"
-            >
-              <div class="ant-col-5">
-                <div class="subject-icon bg-white">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
-                </div>
-              </div>
-              <div class="ant-col-19">
-                <p class="text-white font-16 font-500 mb-1">Newspapers</p>
-                <p class="text-white font-10 font-500">Total: {{ 12 }}</p>
-              </div>
-            </div>
-          </div>
+          <!--          <div class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1">-->
+          <!--            <div-->
+          <!--              class="newspaper student-diagonal-gradient ant-row ant-row-middle"-->
+          <!--            >-->
+          <!--              <div class="ant-col-5">-->
+          <!--                <div class="subject-icon bg-white">-->
+          <!--                  <img src="assets/icon/leaderboard-badge.svg" alt="" />-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <div class="ant-col-19">-->
+          <!--                <p class="text-white font-16 font-500 mb-1">Newspapers</p>-->
+          <!--                <p class="text-white font-10 font-500">Total: {{ 12 }}</p>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
           <div
             class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of subjects"
+            *ngFor="let subject of nonDomainSubjects"
           >
             <div
               class="subject ant-row ant-row-middle"
               (click)="onClickSubject(subject.id)"
             >
-              <div class="ant-col-5">
+              <div class="ant-col-xl-6 ant-col-5">
                 <div class="subject-icon student-diagonal-gradient">
                   <img src="assets/icon/leaderboard-badge.svg" alt="" />
                 </div>
               </div>
-              <div class="ant-col-19">
+              <div class="ant-col-xl-18 ant-col-19">
                 <p class="text-primary font-16 font-500 mb-1">
                   {{ subject.name }}
                 </p>
-                <p class="font-10 font-500">Topics: {{ 12 }}</p>
+                <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Domain Subjects       -->
-        <nz-divider nzOrientation="left" nzText="Domain Subjects"></nz-divider>
-        <div id="domain-subjects-container" class="ant-row mx-n1">
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of subjects"
-          >
+        @if (domainSubjects?.length > 0) {
+          <!-- Domain Subjects       -->
+          <nz-divider
+            nzOrientation="left"
+            nzText="Domain Subjects"
+          ></nz-divider>
+          <div id="domain-subjects-container" class="ant-row mx-n1">
             <div
-              class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name)"
+              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+              *ngFor="let subject of domainSubjects"
             >
-              <div class="ant-col-5">
-                <div class="subject-icon student-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+              <div
+                class="subject ant-row ant-row-middle"
+                (click)="onClickSubject(subject.name)"
+              >
+                <div class="ant-col-xl-6 ant-col-5">
+                  <div class="subject-icon student-diagonal-gradient">
+                    <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                  </div>
                 </div>
-              </div>
-              <div class="ant-col-19">
-                <p class="text-primary font-16 font-500 mb-1">
-                  {{ subject.name }}
-                </p>
-                <p class="font-10 font-500">Topics: {{ 12 }}</p>
+                <div class="ant-col-xl-18 ant-col-19">
+                  <p class="text-primary font-16 font-500 mb-1">
+                    {{ subject.name }}
+                  </p>
+                  <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        }
       </ng-template>
     </nz-tab>
-    <nz-tab nzTitle="Video Links">
+    <nz-tab nzTitle="Videos">
       <ng-template nz-tab>
+        <div class="col-md-5 px-0 mb-3">
+          <p class="font-12 font-500 mb-2">Search Video</p>
+          <div class="d-flex align-items-center">
+            <input
+              nz-input
+              type="text"
+              class="mr-3"
+              placeholder="Search"
+              [(ngModel)]="searchVideo"
+            />
+            <button nz-button class="btn-primary" (click)="getVideoLinks()">
+              Filter
+              <span nz-icon nzType="search"></span>
+            </button>
+          </div>
+        </div>
         <nz-table
           [nzData]="videoLinks"
-          [nzShowPagination]="false"
+          [nzShowPagination]="true"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzTotal]="totalVideos"
+          [nzPageIndex]="videosPageIndex"
+          [nzPageSize]="videosPageSize"
+          [nzShowTotal]="printVideoTotalCount"
+          (nzQueryParams)="videoLinks[0] ? getVideoLinks($event) : ''"
           [nzScroll]="{ x: '640px' }"
         >
           <thead>
@@ -95,20 +123,146 @@
               <td>{{ video.name }}</td>
               <td class="text-center">{{ video.subject }}</td>
               <td class="text-center">
-                {{ Math.floor(video.length / 60) }} hr {{ video.length % 60 }} min
+                {{ Math.floor(video.length / 60) }} hr
+                {{ video.length % 60 }} min
               </td>
               <td
                 class="text-center font-600"
-                [class]="video.type === 'free' ? 'text-free' : 'text-paid'"
+                [class]="video?.isFree ? 'text-free' : 'text-paid'"
               >
-                {{ video.type }}
+                {{ video?.isFree ? "Free" : "Paid" }}
               </td>
               <td class="text-center">
-                <a [href]="'https://' + video.link">Click Here</a>
+                <a
+                  *ngIf="video?.url !== null"
+                  target="_blank"
+                  [href]="
+                    video?.url?.startsWith('https://') ||
+                    video?.url?.startsWith('http://')
+                      ? video?.url
+                      : 'https://' + video?.url
+                  "
+                  >Click Here</a
+                >
+                <a *ngIf="video?.url === null" (click)="isInvalidModal = true">
+                  Click Here
+                </a>
               </td>
             </tr>
           </tbody>
         </nz-table>
+        <ng-template #printVideoTotalCount>
+          <div
+            *ngIf="totalVideos === 0"
+            class="result-not-found font-weight-normal"
+          >
+            No Results Found
+          </div>
+          <div
+            *ngIf="totalVideos !== 0"
+            class="result-not-found font-weight-normal"
+          >
+            <b>{{ totalVideos }}</b> Results Found
+          </div>
+        </ng-template>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Newspapers">
+      <ng-template nz-tab>
+        <p class="font-12 font-500 mb-2">Search Newspaper</p>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <input
+              nz-input
+              type="text"
+              class="mr-3"
+              placeholder="Search"
+              [(ngModel)]="searchNewspaper"
+            />
+          </div>
+          <div class="col-md-4">
+            <nz-date-picker
+              [(ngModel)]="searchNewspaperDate"
+              nzFormat="dd MMM yyyy"
+            ></nz-date-picker>
+          </div>
+          <div class="col-md-4">
+            <button nz-button class="btn-primary" (click)="getNewspapers()">
+              Filter
+              <span nz-icon nzType="search"></span>
+            </button>
+          </div>
+        </div>
+        <nz-table
+          [nzData]="newspapers"
+          [nzShowPagination]="true"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzTotal]="totalNewspaper"
+          [nzPageIndex]="newspaperPageIndex"
+          [nzPageSize]="newspaperPageSize"
+          [nzShowTotal]="printNewspaperTotalCount"
+          (nzQueryParams)="newspapers[0] ? getNewspapers($event) : ''"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+            <tr>
+              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Newspaper Name</th>
+              <th class="text-center" [nzWidth]="'100px'">Date</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'80px'">Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let newspaper of newspapers; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ newspaper?.name }}</td>
+              <td class="text-center">
+                {{ newspaper?.date | date: "dd MMM yyyy" }}
+              </td>
+              <td
+                class="text-center font-600"
+                [class]="newspaper?.isFree ? 'text-free' : 'text-paid'"
+              >
+                {{ newspaper?.isFree ? "Free" : "Paid" }}
+              </td>
+              <td class="text-center">
+                <a
+                  *ngIf="newspaper?.url !== null"
+                  target="_blank"
+                  [href]="
+                    newspaper?.url?.startsWith('https://') ||
+                    newspaper?.url?.startsWith('http://')
+                      ? newspaper?.url
+                      : 'https://' + newspaper?.url
+                  "
+                  >Click Here</a
+                >
+                <a
+                  *ngIf="newspaper?.url === null"
+                  (click)="isInvalidModal = true"
+                >
+                  Click Here
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <ng-template #printNewspaperTotalCount>
+          <div
+            *ngIf="totalNewspaper === 0"
+            class="result-not-found font-weight-normal"
+          >
+            No Results Found
+          </div>
+          <div
+            *ngIf="totalNewspaper !== 0"
+            class="result-not-found font-weight-normal"
+          >
+            <b>{{ totalNewspaper }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="PYQs">
@@ -116,26 +270,138 @@
         <div id="pyq-container" class="ant-row mx-n1">
           <div
             class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of subjects"
+            *ngFor="let pyq of pyqs"
           >
-            <div
-              class="subject ant-row ant-row-middle"
-              (click)="onClickSubject(subject.name)"
+            <a
+              *ngIf="pyq?.url"
+              target="_blank"
+              [href]="
+                pyq?.url?.startsWith('https://') ||
+                pyq?.url?.startsWith('http://')
+                  ? pyq?.url
+                  : 'https://' + pyq?.url
+              "
+              class="text-decoration-none"
             >
-              <div class="ant-col-5">
-                <div class="subject-icon student-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+              <div class="subject ant-row ant-row-middle">
+                <div class="ant-col-xl-6 ant-col-5">
+                  <div class="subject-icon student-diagonal-gradient">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <g clip-path="url(#clip0_1305_208)">
+                        <path
+                          d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
+                          fill="white"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_1305_208">
+                          <rect width="24" height="24" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
+                </div>
+                <div class="ant-col-xl-18 ant-col-19">
+                  <p class="text-primary font-16 font-400">
+                    {{ pyq.name }}
+                  </p>
                 </div>
               </div>
-              <div class="ant-col-19">
-                <p class="text-primary font-16 font-400">
-                  {{ subject.name }}
-                </p>
+            </a>
+            <a
+              *ngIf="!pyq?.url"
+              (click)="isInvalidModal = true"
+              class="text-decoration-none"
+            >
+              <div class="subject ant-row ant-row-middle">
+                <div class="ant-col-xl-6 ant-col-5">
+                  <div class="subject-icon student-diagonal-gradient">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <g clip-path="url(#clip0_1305_208)">
+                        <path
+                          d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
+                          fill="white"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_1305_208">
+                          <rect width="24" height="24" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
+                </div>
+                <div class="ant-col-xl-18 ant-col-19">
+                  <p class="text-primary font-16 font-400">
+                    {{ pyq.name }}
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </ng-template>
     </nz-tab>
   </nz-tabset>
 </nz-card>
+
+<nz-modal
+  [(nzVisible)]="isInvalidModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="isInvalidModal = false"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">
+      <svg
+        class="mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+      >
+        <path
+          d="M16 22.6665C16.3778 22.6665 16.6945 22.5387 16.95 22.2832C17.2056 22.0276 17.3333 21.7109 17.3333 21.3332C17.3333 20.9554 17.2056 20.6387 16.95 20.3832C16.6945 20.1276 16.3778 19.9998 16 19.9998C15.6222 19.9998 15.3056 20.1276 15.05 20.3832C14.7945 20.6387 14.6667 20.9554 14.6667 21.3332C14.6667 21.7109 14.7945 22.0276 15.05 22.2832C15.3056 22.5387 15.6222 22.6665 16 22.6665ZM14.6667 17.3332H17.3333V9.33317H14.6667V17.3332ZM16 29.3332C14.1556 29.3332 12.4222 28.9832 10.8 28.2832C9.17778 27.5832 7.76667 26.6332 6.56667 25.4332C5.36667 24.2332 4.41667 22.8221 3.71667 21.1998C3.01667 19.5776 2.66667 17.8443 2.66667 15.9998C2.66667 14.1554 3.01667 12.4221 3.71667 10.7998C4.41667 9.17762 5.36667 7.7665 6.56667 6.5665C7.76667 5.3665 9.17778 4.4165 10.8 3.7165C12.4222 3.0165 14.1556 2.6665 16 2.6665C17.8444 2.6665 19.5778 3.0165 21.2 3.7165C22.8222 4.4165 24.2333 5.3665 25.4333 6.5665C26.6333 7.7665 27.5833 9.17762 28.2833 10.7998C28.9833 12.4221 29.3333 14.1554 29.3333 15.9998C29.3333 17.8443 28.9833 19.5776 28.2833 21.1998C27.5833 22.8221 26.6333 24.2332 25.4333 25.4332C24.2333 26.6332 22.8222 27.5832 21.2 28.2832C19.5778 28.9832 17.8444 29.3332 16 29.3332Z"
+          fill="#8555FD"
+        />
+      </svg>
+      Error!
+    </div>
+    <p class="mt-3 font-16 font-400">Invalid Access</p>
+    <p class="mt-1 font-12 font-300">
+      You do not have access to this video/newspaper. Please ensure you have a
+      valid subscription to proceed.
+    </p>
+    <p class="mt-3 font-16 font-400">Would you like to subscribe now?</p>
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="bg-transparent border-primary text-primary mr-4 mb-1"
+        (click)="isInvalidModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="btn-primary mb-1 mr-2"
+        [routerLink]="['/', 'student', 'account']"
+      >
+        Subscribe
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

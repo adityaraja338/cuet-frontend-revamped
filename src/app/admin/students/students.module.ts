@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { StudentsComponent } from './students.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StudentDetailComponent } from './student-detail/student-detail.component';
 import {
   BaseChartDirective,
@@ -25,6 +25,7 @@ const routes: Routes = [
     FormsModule,
     NgZorroAntdModule,
     BaseChartDirective,
+    ReactiveFormsModule,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
 })

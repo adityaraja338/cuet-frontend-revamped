@@ -4,7 +4,7 @@ import { BatchesComponent } from './batches.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BatchDetailComponent } from './batch-detail/batch-detail.component';
 import {
   BaseChartDirective,
@@ -27,6 +27,7 @@ const routes: Routes = [
     NzIconModule,
     FormsModule,
     BaseChartDirective,
+    ReactiveFormsModule,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
 })

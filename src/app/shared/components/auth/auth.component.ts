@@ -9,6 +9,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { GlobalService } from '../../services/global.service';
 import { Subscription } from 'rxjs';
 import { HttpService } from '../../services/http.service';
+import { AdminHttpService } from '../../services/admin-http.service';
 
 @Component({
   selector: 'app-auth',
@@ -41,7 +42,9 @@ export class AuthComponent implements OnInit {
     private message: NzMessageService,
     protected globalService: GlobalService,
     private http: HttpService,
+    private adminHttp: AdminHttpService,
     private adminAuthService: AdminAuthService,
+    private studentAuthService: StudentAuthService,
   ) {
     this.registrationForm = this.formBuilder.group({
       googleUserId: [null, [Validators.required]],
@@ -68,6 +71,12 @@ export class AuthComponent implements OnInit {
   userData: any;
   dataSubscription!: Subscription;
   ngOnInit(): any {
+    if (this.studentAuthService.isUserLoggedIn()) {
+      this.router.navigate(['/', 'student', 'home']);
+    }
+    if (this.adminAuthService.isUserLoggedIn()) {
+      this.router.navigate(['/', 'admin', 'home']);
+    }
     this.getYearsFrom2022();
     // console.log('student data', this.globalService.studentTempData);
     this.dataSubscription = this.globalService.data$.subscribe(
@@ -136,7 +145,7 @@ export class AuthComponent implements OnInit {
       email: this.adminEmail,
       password: this.adminPassword,
     };
-    this.http.postAdminLogin(data).subscribe({
+    this.adminHttp.postAdminLogin(data).subscribe({
       next: (res: any) => {
         localStorage.setItem('cuet_access_token', res.data.accessToken);
         localStorage.setItem('cuet_refresh_token', res.data.refreshToken);

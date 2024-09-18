@@ -33,7 +33,7 @@
   .best-batch{
     padding: 0.25rem 0.5rem;
     width: 100%;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid rgba(0, 163, 255, 0.25);
     background: linear-gradient(89deg, rgba(0, 125, 212, 0.16) 0%, rgba(0, 163, 255, 0.40) 100%);
   }
@@ -41,7 +41,7 @@
   .worst-batch{
     padding: 0.25rem 0.5rem;
     width: 100%;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid rgba(255, 97, 97, 0.25);
     background: linear-gradient(89deg, rgba(255, 97, 97, 0.25) 0%, rgba(255, 97, 97, 0.50) 100%);
   }

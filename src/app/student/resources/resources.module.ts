@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ResourcesComponent } from './resources.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ResourcesComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
     BaseChartDirective,
     CommonModule,
     NgZorroAntdModule,
+    FormsModule,
   ],
   exports: [ResourcesComponent],
 })

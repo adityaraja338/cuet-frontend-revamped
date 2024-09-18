@@ -1,0 +1,312 @@
+<nz-breadcrumb nzSeparator=">">
+  <nz-breadcrumb-item>Tests</nz-breadcrumb-item>
+  <nz-breadcrumb-item
+    >{{ testItemDetails?.testType | titlecase }} Test</nz-breadcrumb-item
+  >
+</nz-breadcrumb>
+
+<div class="d-md-block d-none">
+  <div nz-row [nzGutter]="[16, 16]">
+    <div nz-col [nzXXl]="18" [nzXl]="17" [nzMd]="16" [nzSpan]="24">
+      <!--    <nz-water-mark nzContent="Cuet Corner">-->
+      <nz-carousel #questionCarousel [nzDots]="false" class="mx-n1">
+        @for (question of questions; let i = $index; track i) {
+          <div nz-carousel-content class="px-1">
+            <nz-card nzBorderless nzHoverable class="text-left">
+              <p>
+                Question
+                <span class="text-primary font-600">{{ i + 1 }}</span> of
+                {{ questions.length }}
+              </p>
+              <pre
+                class="font-16 font-300 mt-3"
+                style="white-space: pre-wrap"
+                >{{ question?.question || "Question" }}</pre
+              >
+              <div class="d-flex flex-column checkbox-options">
+                <label
+                  class="mx-0 my-1"
+                  *ngFor="let option of question?.options"
+                  nz-checkbox
+                  [nzChecked]="question.submittedAnswer === option"
+                  (nzCheckedChange)="onCheckboxClick(question?.id, option, i)"
+                >
+                  {{ option }}
+                </label>
+              </div>
+
+              <div class="d-flex mt-4">
+                <button
+                  nz-button
+                  class="w-25 mr-2"
+                  (click)="questionCarousel?.pre()"
+                >
+                  <span nz-icon nzType="left"></span>
+                  Previous
+                </button>
+                <button
+                  nz-button
+                  class="w-25 mr-2"
+                  (click)="questionCarousel?.next()"
+                >
+                  Next
+                  <span nz-icon nzType="right"></span>
+                </button>
+                <button
+                  nz-button
+                  [class]="
+                    question?.markForReview ? 'btn-secondary' : 'btn-primary'
+                  "
+                  (click)="onMarkForReview(i)"
+                >
+                  {{ question?.markForReview ? "Marked" : "Mark" }} for review
+                </button>
+              </div>
+            </nz-card>
+          </div>
+        }
+      </nz-carousel>
+      <!--    </nz-water-mark>-->
+    </div>
+    <div nz-col [nzXXl]="6" [nzXl]="7" [nzMd]="8" [nzSpan]="24">
+      <!--      <nz-card nzBorderless nzHoverable>-->
+      <p class="font-12 font-500 text-4a mb-n1">Time Left</p>
+      <nz-countdown
+        class="text-4a font-600"
+        [nzValue]="countdownTime"
+        (nzCountdownFinish)="postSubmitTest()"
+      ></nz-countdown>
+      <nz-divider
+        nzText="Tracking"
+        nzOrientation="left"
+        class="mb-2"
+      ></nz-divider>
+      <div class="track-container d-flex mx-n1">
+        <div
+          *ngFor="let question of questions; index as i"
+          class="track-box px-1"
+        >
+          <div
+            class="track-circle"
+            [class.attempted]="question?.submittedAnswer"
+            [class.marked-for-review]="question?.markForReview"
+            (click)="questionCarousel?.goTo(i)"
+          >
+            {{ i + 1 }}
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center mt-4 font-12 text-4a font-400">
+        <div class="track-circle small mr-2"></div>
+        Un-attempted
+      </div>
+      <div class="d-flex align-items-center mt-1 font-12 text-4a font-400">
+        <div class="track-circle attempted small mr-2"></div>
+        Attempted
+      </div>
+      <div class="d-flex align-items-center mt-1 font-12 text-4a font-400">
+        <div class="track-circle marked-for-review small mr-2"></div>
+        Marked for review
+      </div>
+      <div class="d-flex align-items-center mt-1 font-12 text-4a font-400">
+        <div class="track-circle attempted marked-for-review small mr-2"></div>
+        Attempted & Marked for review
+      </div>
+
+      <button
+        nz-button
+        class="btn-primary w-100 mt-4"
+        (click)="isSubmitModal = true"
+      >
+        Submit Test
+      </button>
+      <!--      </nz-card>-->
+    </div>
+  </div>
+</div>
+
+<div class="d-md-none d-block h-auto">
+  <p class="font-12 font-500 text-4a mb-n1">Time Left</p>
+  <nz-countdown
+    class="text-4a font-600"
+    [nzValue]="countdownTime"
+    (nzCountdownFinish)="postSubmitTest()"
+  ></nz-countdown>
+  <nz-carousel
+    #mobileQuestionCarousel
+    class="mx-n1 mt-3"
+    [nzDots]="false"
+  >
+    @for (question of questions; let i = $index; track i) {
+      <div nz-carousel-content class="px-1">
+        <div nz-row [nzGutter]="[16, 16]">
+          <div nz-col [nzXXl]="18" [nzXl]="17" [nzMd]="16" [nzSpan]="24">
+            <!--    <nz-water-mark nzContent="Cuet Corner">-->
+            <nz-card nzBorderless nzHoverable class="text-left">
+              <p>
+                Question
+                <span class="text-primary font-600">{{ i + 1 }}</span> of
+                {{ questions.length }}
+              </p>
+              <pre
+                class="font-16 font-300 mt-3"
+                style="white-space: pre-wrap"
+              >{{ question?.question || "Question" }}</pre
+              >
+              <div class="d-flex flex-column checkbox-options">
+                <label
+                  class="mx-0 my-1"
+                  *ngFor="let option of question?.options"
+                  nz-checkbox
+                  [nzChecked]="question.submittedAnswer === option"
+                  (nzCheckedChange)="onCheckboxClick(question?.id, option, i)"
+                >
+                  {{ option }}
+                </label>
+              </div>
+
+              <div class="d-flex mt-4">
+                <button
+                  nz-button
+                  class="w-50 mr-1"
+                  (click)="mobileQuestionCarousel?.pre()"
+                >
+                  <span nz-icon nzType="left"></span>
+                  Previous
+                </button>
+                <button
+                  nz-button
+                  class="w-50 ml-1"
+                  (click)="mobileQuestionCarousel?.next()"
+                >
+                  Next
+                  <span nz-icon nzType="right"></span>
+                </button>
+              </div>
+                <button
+                  nz-button
+                  class="w-100 mt-2"
+                  [class]="
+                    question?.markForReview ? 'btn-secondary' : 'btn-primary'
+                  "
+                  (click)="onMarkForReview(i)"
+                >
+                  {{ question?.markForReview ? "Marked" : "Mark" }} for review
+                </button>
+            </nz-card>
+            <!--    </nz-water-mark>-->
+          </div>
+          <div nz-col [nzXXl]="6" [nzXl]="7" [nzMd]="8" [nzSpan]="24">
+            <nz-divider
+              nzText="Tracking"
+              nzOrientation="left"
+              class="mb-2"
+            ></nz-divider>
+            <div class="track-container d-flex mx-n1">
+              <div
+                *ngFor="let question of questions; index as i"
+                class="track-box px-1"
+              >
+                <div
+                  class="track-circle"
+                  [class.attempted]="question?.submittedAnswer"
+                  [class.marked-for-review]="question?.markForReview"
+                  (click)="mobileQuestionCarousel?.goTo(i)"
+                >
+                  {{ i + 1 }}
+                </div>
+              </div>
+            </div>
+            <div
+              class="d-flex align-items-center mt-4 font-12 text-4a font-400"
+            >
+              <div class="track-circle small mr-2"></div>
+              Un-attempted
+            </div>
+            <div
+              class="d-flex align-items-center mt-1 font-12 text-4a font-400"
+            >
+              <div class="track-circle attempted small mr-2"></div>
+              Attempted
+            </div>
+            <div
+              class="d-flex align-items-center mt-1 font-12 text-4a font-400"
+            >
+              <div class="track-circle marked-for-review small mr-2"></div>
+              Marked for review
+            </div>
+            <div
+              class="d-flex align-items-center mt-1 font-12 text-4a font-400"
+            >
+              <div
+                class="track-circle attempted marked-for-review small mr-2"
+              ></div>
+              Attempted & Marked for review
+            </div>
+
+            <button
+              nz-button
+              class="btn-primary w-100 mt-4"
+              (click)="isSubmitModal = true"
+            >
+              Submit Test
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </nz-carousel>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isSubmitModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="isSubmitModal = false"
+  [nzWidth]="400"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">
+      <svg
+        class="mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+          stroke="#8555FD"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Confirmation!
+    </div>
+    <p class="mt-3 font-16 font-400">
+      Are you sure you want to submit the test?
+    </p>
+    <p class="mt-1 font-12 font-300">
+      Note: You won’t be able to make changes after submission!
+    </p>
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        (click)="isSubmitModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="modal-btn btn-primary mb-1 mr-2"
+        (click)="postSubmitTest()"
+      >
+        Confirm
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

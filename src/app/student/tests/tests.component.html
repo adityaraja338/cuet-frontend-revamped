@@ -2,11 +2,14 @@
   <nz-breadcrumb-item>Tests</nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
-  <nz-tabset>
+  <nz-tabset
+    [(nzSelectedIndex)]="currentTabIndex"
+    (nzSelectedIndexChange)="onTabChange($event)"
+  >
     <nz-tab nzTitle="Recorded Tests">
       <ng-template nz-tab>
         <nz-table
-          [nzData]="topicTests"
+          [nzData]="recordedTests"
           [nzShowPagination]="false"
           [nzScroll]="{ x: '640px' }"
         >
@@ -21,20 +24,30 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let test of topicTests; let i = index">
+            <tr *ngFor="let test of recordedTests; let i = index">
               <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test.name }}</td>
-              <td class="text-center font-500">
-                {{ test.questions }}
+              <td>{{ test?.name }}</td>
+              <td class="text-center">
+                {{ test?.totalQuestions }}
               </td>
-              <td class="text-center" [class]="test?.isFree ? 'text-free' :'text-paid'">
-                {{ test.isFree ? 'Free' : 'Paid' }}
+              <td
+                class="text-center font-600"
+                [class]="test?.isFree ? 'text-free' : 'text-paid'"
+              >
+                {{ test?.isFree ? "Free" : "Paid" }}
               </td>
               <td class="text-center">
-                {{ Math.floor(test?.duration / 60) }} hr {{ test?.duration % 60 }} min
+                {{ Math.floor(test?.duration / 60) }} hr
+                {{ test?.duration % 60 }} min
               </td>
               <td class="text-center">
-                <button nz-button class="start-test-btn">Start Test</button>
+                <button
+                  nz-button
+                  class="start-test-btn"
+                  (click)="onClickStartTest(test, 'recorded')"
+                >
+                  Start Test
+                </button>
               </td>
             </tr>
           </tbody>
@@ -44,40 +57,197 @@
     <nz-tab nzTitle="Mock Tests">
       <ng-template nz-tab>
         <nz-table
-          [nzData]="topicTests"
+          [nzData]="mockTests"
           [nzShowPagination]="false"
           [nzScroll]="{ x: '640px' }"
         >
           <thead>
-          <tr>
-            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-            <th [nzWidth]="'160px'">Name</th>
-            <th class="text-center" [nzWidth]="'64px'">Questions</th>
-            <th class="text-center" [nzWidth]="'64px'">Type</th>
-            <th class="text-center" [nzWidth]="'84px'">Duration</th>
-            <th class="text-center" [nzWidth]="'84px'"></th>
-          </tr>
+            <tr>
+              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'64px'">Questions</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'84px'">Duration</th>
+              <th class="text-center" [nzWidth]="'84px'"></th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let test of topicTests; let i = index">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ test.name }}</td>
-            <td class="text-center font-500">
-              {{ test.questions }}
-            </td>
-            <td class="text-center" [class]="test?.isFree ? 'text-free' :'text-paid'">
-              {{ test.isFree ? 'Free' : 'Paid' }}
-            </td>
-            <td class="text-center">
-              {{ Math.floor(test?.duration / 60) }} hr {{ test?.duration % 60 }} min
-            </td>
-            <td class="text-center">
-              <button nz-button class="start-test-btn">Start Test</button>
-            </td>
-          </tr>
+            <tr *ngFor="let test of mockTests; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ test?.name }}</td>
+              <td class="text-center">
+                {{ test?.totalQuestions }}
+              </td>
+              <td
+                class="text-center font-600"
+                [class]="test?.isFree ? 'text-free' : 'text-paid'"
+              >
+                {{ test?.isFree ? "Free" : "Paid" }}
+              </td>
+              <td class="text-center">
+                {{ Math.floor(test?.duration / 60) }} hr
+                {{ test?.duration % 60 }} min
+              </td>
+              <td class="text-center">
+                <button
+                  nz-button
+                  class="start-test-btn"
+                  (click)="onClickStartTest(test, 'mock')"
+                >
+                  Start Test
+                </button>
+              </td>
+            </tr>
           </tbody>
         </nz-table>
       </ng-template>
     </nz-tab>
   </nz-tabset>
 </nz-card>
+
+<nz-modal
+  [(nzVisible)]="isInvalidModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="isInvalidModal = false"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">
+      <svg
+        class="mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+      >
+        <path
+          d="M16 22.6665C16.3778 22.6665 16.6945 22.5387 16.95 22.2832C17.2056 22.0276 17.3333 21.7109 17.3333 21.3332C17.3333 20.9554 17.2056 20.6387 16.95 20.3832C16.6945 20.1276 16.3778 19.9998 16 19.9998C15.6222 19.9998 15.3056 20.1276 15.05 20.3832C14.7945 20.6387 14.6667 20.9554 14.6667 21.3332C14.6667 21.7109 14.7945 22.0276 15.05 22.2832C15.3056 22.5387 15.6222 22.6665 16 22.6665ZM14.6667 17.3332H17.3333V9.33317H14.6667V17.3332ZM16 29.3332C14.1556 29.3332 12.4222 28.9832 10.8 28.2832C9.17778 27.5832 7.76667 26.6332 6.56667 25.4332C5.36667 24.2332 4.41667 22.8221 3.71667 21.1998C3.01667 19.5776 2.66667 17.8443 2.66667 15.9998C2.66667 14.1554 3.01667 12.4221 3.71667 10.7998C4.41667 9.17762 5.36667 7.7665 6.56667 6.5665C7.76667 5.3665 9.17778 4.4165 10.8 3.7165C12.4222 3.0165 14.1556 2.6665 16 2.6665C17.8444 2.6665 19.5778 3.0165 21.2 3.7165C22.8222 4.4165 24.2333 5.3665 25.4333 6.5665C26.6333 7.7665 27.5833 9.17762 28.2833 10.7998C28.9833 12.4221 29.3333 14.1554 29.3333 15.9998C29.3333 17.8443 28.9833 19.5776 28.2833 21.1998C27.5833 22.8221 26.6333 24.2332 25.4333 25.4332C24.2333 26.6332 22.8222 27.5832 21.2 28.2832C19.5778 28.9832 17.8444 29.3332 16 29.3332Z"
+          fill="#8555FD"
+        />
+      </svg>
+      Error!
+    </div>
+    <p class="mt-3 font-16 font-400">Invalid Access</p>
+    <p class="mt-1 font-12 font-300">
+      You do not have access to this test. Please ensure you have a valid
+      subscription to proceed.
+    </p>
+    <p class="mt-3 font-16 font-400">Would you like to subscribe now?</p>
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        (click)="isInvalidModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="modal-btn btn-primary mb-1 mr-2"
+        [routerLink]="['/', 'student', 'account']"
+      >
+        Subscribe
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isStartTestModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="isStartTestModal = false"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">
+      <svg
+        class="mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+          stroke="#8555FD"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Start Test!
+    </div>
+    <p class="mt-3 font-16 font-400 mb-3">Test Details</p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <p class="font-12 text-2a">Time Alloted</p>
+        <p class="font-16 text-primary">
+          {{ Math.floor(selectedTest?.duration / 60) }} hr
+          {{ selectedTest?.duration % 60 }} min
+        </p>
+      </div>
+
+      <div class="col-md-6 mt-md-0 mt-2">
+        <p class="font-12 text-2a">Subject</p>
+        <p class="font-16 text-primary">
+          {{ selectedTest?.subject }}
+        </p>
+      </div>
+
+      <div class="col-md-6 mt-2">
+        <p class="font-12 text-2a">Total Questions</p>
+        <p class="font-16 text-primary">
+          {{ selectedTest?.totalQuestions }}
+        </p>
+      </div>
+
+      <div class="col-md-6 mt-2">
+        <p class="font-12 text-2a">Type</p>
+        <p class="font-16 text-primary">
+          {{ selectedTestType | titlecase }}
+        </p>
+      </div>
+
+      <div class="col-12 mt-2">
+        <p class="font-12 text-2a">Topics</p>
+        <p class="font-16 text-primary">
+          {{ selectedTest?.topic?.join(', ') }}
+        </p>
+      </div>
+    </div>
+
+    <p class="mt-3 font-16 font-500">
+      Attention! Once you click "Start Test" you will have:
+    </p>
+    <ul class="mt-1">
+      <li class="ml-3 font-12 font-300">{{ selectedTest?.duration }} minutes to complete the test.</li>
+      <li class="ml-3 font-12 font-300">
+        No answer submissions allowed after the time limit expires.
+      </li>
+      <li class="ml-3 font-12 font-300">
+        No pausing or resuming the test once started.
+      </li>
+    </ul>
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        (click)="isStartTestModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="modal-btn btn-primary mb-1 mr-2"
+        [routerLink]="['/', 'student', 'tests', 'attempt', selectedTestType, selectedTest?.id]"
+      >
+        Start Test
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

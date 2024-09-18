@@ -90,7 +90,7 @@
           <p class="font-20 font-600 main-text mb-1">
             {{ worstStudents[0]?.student?.name?.split(" ")[0] || "-" }}
           </p>
-          <p class="font-8 font-500 button cursor-pointer">View Bottom 10</p>
+          <p class="font-8 font-500 button cursor-pointer" (click)="showModal('worst-students')">View Bottom 10</p>
         </div>
         <div class="ant-col-6 d-flex justify-content-end">
           <svg
@@ -122,7 +122,7 @@
     <nz-card nzBorderless nzHoverable>
       <p class="font-14 font-400 mb-3">Overall Performance</p>
       <div class="ant-row align-items-center">
-        <div *ngIf="isBrowser" class="ant-col-8 d-flex justify-content-start">
+        <div class="ant-col-8 d-flex justify-content-start">
           <div class="chart-div">
             <canvas
               baseChart
@@ -151,7 +151,7 @@
               <circle cx="4" cy="4.5" r="4" fill="#13AAFF" />
             </svg>
             Good Performing:
-            <span class="font-500 text-a-primary ml-2">{{ "76" }} %</span>
+            <span class="font-500 text-a-primary ml-2">{{ overallPerformance?.goodPercentage }} %</span>
           </p>
           <p class="font-12 font-300 d-flex align-items-center mb-2">
             <svg
@@ -165,15 +165,21 @@
               <circle cx="4" cy="4.5" r="4" fill="rgba(200, 221, 255, 1)" />
             </svg>
             Bad Performing:
-            <span class="font-500 text-red ml-2">{{ "24" }} %</span>
+            <span class="font-500 text-red ml-2">{{ overallPerformance?.badPercentage }} %</span>
           </p>
-          <div class="best-batch text-a-primary font-12 font-400 mb-1">
+          <div
+            class="best-batch text-a-primary font-12 font-400 mb-1 cursor-pointer"
+            [routerLink]="['/', 'admin', 'batches', bestBatch?.batchId]"
+          >
             Best Batch:
-            <span class="font-300 text-dark">{{ "Batch Nov '21" }}</span>
+            <span class="font-300 text-dark">{{ bestBatch?.batchName || '-' }}</span>
           </div>
-          <div class="worst-batch text-red font-12 font-400">
+          <div
+            class="worst-batch text-red font-12 font-400 cursor-pointer"
+            [routerLink]="['/', 'admin', 'batches', worstBatch?.batchId]"
+          >
             Worst Batch:
-            <span class="font-300 text-dark">{{ "Batch Nov '21" }}</span>
+            <span class="font-300 text-dark">{{ worstBatch?.batchName || '-' }}</span>
           </div>
         </div>
       </div>
@@ -188,17 +194,17 @@
             <div class="ant-col-19 text-free">Name</div>
             <div class="ant-col-5 text-center text-free">Value</div>
             <nz-divider class="my-1"></nz-divider>
-            <div class="ant-col-19 font-300"># of Live Test</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-19 font-300">Enrolled Students</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.enrolledStudents || '-' }}</div>
             <nz-divider class="my-1"></nz-divider>
-            <div class="ant-col-19 font-300"># of Students</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-19 font-300">Unenrolled Students</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.unenrolledStudents || '-' }}</div>
             <nz-divider class="my-1"></nz-divider>
             <div class="ant-col-19 font-300"># of Video Links</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.videoLinks || '-' }}</div>
             <nz-divider class="my-1"></nz-divider>
             <div class="ant-col-19 font-300"># of Newspapers</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.newspapers || '-' }}</div>
           </div>
         </div>
         <div class="ant-col-md-12 ant-col-24 pl-md-2 pl-0">
@@ -209,16 +215,16 @@
             </div>
             <nz-divider class="my-1"></nz-divider>
             <div class="ant-col-19 font-300"># of Batches</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.batches || '-' }}</div>
             <nz-divider class="my-1"></nz-divider>
             <div class="ant-col-19 font-300"># of Materials</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.materials || '-' }}</div>
             <nz-divider class="my-1"></nz-divider>
-            <div class="ant-col-19 font-300"># of Topic Test</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-19 font-300"># of Live Tests</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.liveTests || '-' }}</div>
             <nz-divider class="my-1"></nz-divider>
-            <div class="ant-col-19 font-300"># of Mock Test</div>
-            <div class="ant-col-5 text-center text-a-primary">Value</div>
+            <div class="ant-col-19 font-300"># of Mock Tests</div>
+            <div class="ant-col-5 text-center text-a-primary">{{ overallMetricDetails?.mockTests || '-' }}</div>
           </div>
         </div>
       </div>
@@ -234,7 +240,7 @@
       <p class="font-14 font-400 mb-3">Manage Resources</p>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'resources']"
         [queryParams]="{ tabIndex: 0 }"
       >
@@ -243,7 +249,7 @@
       </button>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'resources']"
         [queryParams]="{ tabIndex: 1 }"
       >
@@ -252,7 +258,7 @@
       </button>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'resources']"
         [queryParams]="{ tabIndex: 2 }"
       >
@@ -261,7 +267,7 @@
       </button>
       <button
         nz-button
-        class="btn-primary"
+        class="btn-a-primary"
         [routerLink]="['/', 'admin', 'resources']"
         [queryParams]="{ tabIndex: 3 }"
       >
@@ -275,7 +281,7 @@
       <p class="font-14 font-400 mb-3">Manage Tests</p>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'tests', 'create']"
       >
         <span nz-icon nzType="plus"></span>
@@ -283,13 +289,17 @@
       </button>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'tests']"
       >
         <span nz-icon nzType="export"></span>
         Manage All Tests
       </button>
-      <button nz-button class="btn-primary">
+      <button
+        nz-button
+        class="btn-a-primary"
+        (click)="showModal('confirm-refresh')"
+      >
         <span nz-icon nzType="undo"></span>
         Refresh Leaderboards
       </button>
@@ -300,7 +310,7 @@
       <p class="font-14 font-400 mb-3">Manage Tests</p>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'students']"
       >
         <span nz-icon nzType="export"></span>
@@ -308,13 +318,18 @@
       </button>
       <button
         nz-button
-        class="btn-primary mb-2"
+        class="btn-a-primary mb-2"
         [routerLink]="['/', 'admin', 'tests']"
       >
         <span nz-icon nzType="export"></span>
         Manage Batches
       </button>
-      <button nz-button class="btn-primary">
+      <button
+        nz-button
+        class="btn-a-primary"
+        [routerLink]="['/', 'admin', 'batches']"
+        [queryParams]="{createBatch: true}"
+      >
         <span nz-icon nzType="plus"></span>
         Create New Batch
       </button>
@@ -357,6 +372,63 @@
         </tr>
         </tbody>
       </nz-table>
+    </section>
+    <section id="worst-students-modal" *ngIf="modalName == 'worst-students'">
+      <p class="font-16 font-400 mb-3">Bottom 10 Performing Students</p>
+      <nz-table
+        [nzData]="worstStudents"
+        [nzShowPagination]="false"
+        [nzScroll]="{x: '452px'}"
+      >
+        <thead>
+        <tr>
+          <th class="bg-danger text-white text-center" nzWidth="56px">Sl. No.</th>
+          <th class="bg-danger text-white" nzWidth="120px">Name</th>
+          <th class="bg-danger text-white text-center" nzWidth="84px">Student ID</th>
+          <th class="bg-danger text-white text-center" nzWidth="72px">Batch ID</th>
+          <th class="bg-danger text-white text-center" nzWidth="64px">Score %</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of bestStudents; let i = index">
+          <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ data?.student?.name || '-' }}</td>
+          <td class="text-center">{{ data?.student?.id || '-' }}</td>
+          <td class="text-center">{{ data?.student?.batchId[0] || '-' }}</td>
+          <td class="text-center">{{ (data?.averagePercentageScore | number: ".2-2") || '-' }} %</td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </section>
+    <section *ngIf="modalName == 'confirm-refresh'">
+      <div class="d-flex align-items-center font-24 font-500">
+        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#00A3FFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Confirmation!
+      </div>
+      <p class="mt-3 font-16 font-400">Refresh All Leaderboards!</p>
+      <p class="mt-1 font-12 font-300">
+        Note: Refreshing leaderboard will delete all leaderboard performances for all students.
+      </p>
+      <p class="mt-3 font-16 font-400">Are you sure you want to refresh all leaderboards?</p>
+      <div class="d-flex justify-content-start mt-2 pt-2">
+        <button
+          nz-button
+          type="button"
+          class="modal-btn btn-a-secondary mr-4 mb-1"
+          (click)="isModalVisible = false"
+        >
+          Cancel
+        </button>
+        <button
+          nz-button
+          class="modal-btn btn-a-primary mb-1 mr-2"
+          (click)="getRefreshLeaderboard()"
+        >
+          Refresh
+        </button>
+      </div>
     </section>
   </ng-container>
 </nz-modal>

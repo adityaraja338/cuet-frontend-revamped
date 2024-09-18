@@ -3,7 +3,15 @@
   <nz-breadcrumb-item class="cursor-pointer">{{ subjectName }}</nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
-    <p class="font-16 font-500 mb-2">List of Topics</p>
+  <p class="font-16 font-500 mb-2">List of Topics</p>
+  <div *ngIf="!topics || topics?.length === 0" class="mt-2 d-flex align-items-center">
+    <img
+      src="assets/images/not-found-2.svg"
+      height="160"
+      alt=""
+    />
+    <p class="ml-4 font-20 font-300 text-8a">O! Oh! No topics found!</p>
+  </div>
   <div id="topics-container" class="ant-row mx-n1">
     <div
       class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
@@ -13,16 +21,16 @@
       <div
         class="topic ant-row ant-row-middle"
       >
-        <div class="ant-col-5">
+        <div class="ant-col-xl-6 ant-col-5">
           <div class="topic-icon student-diagonal-gradient">
             <img src="assets/icon/leaderboard-badge.svg" alt="" />
           </div>
         </div>
-        <div class="ant-col-19">
+        <div class="ant-col-xl-18 ant-col-19">
           <p class="text-primary font-16 font-500 mb-1">
             {{ topic.name }}
           </p>
-          <p class="font-10 font-500">Materials: {{ 12 }}</p>
+          <p class="font-10 font-500">Materials: {{ topic?.material }}</p>
         </div>
       </div>
     </div>

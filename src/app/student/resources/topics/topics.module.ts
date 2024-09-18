@@ -3,8 +3,9 @@ import { NgModule } from '@angular/core';
 import { MaterialsComponent } from './materials/materials.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TopicsComponent } from './topics.component';
-import {NgZorroAntdModule} from "../../../ng-zorro-antd.module";
-import {NgForOf} from "@angular/common";
+import { NgZorroAntdModule } from '../../../ng-zorro-antd.module';
+import { CommonModule, NgForOf } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: TopicsComponent },
@@ -12,8 +13,8 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: ':topic',
-        component: MaterialsComponent
+        path: ':topicId',
+        component: MaterialsComponent,
       },
     ],
   },
@@ -21,7 +22,14 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [TopicsComponent, MaterialsComponent],
-  imports: [RouterModule.forChild(routes), NgZorroAntdModule, NgForOf],
+  imports: [
+    RouterModule.forChild(routes),
+    NgZorroAntdModule,
+    NgForOf,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   exports: [TopicsComponent, MaterialsComponent],
 })
 export class TopicsModule {}

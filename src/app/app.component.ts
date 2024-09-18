@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { GoogleAuthService } from './shared/auth/google-auth.service';
 import { AdminAuthService } from './shared/auth/admin-auth.service';
 import { StudentAuthService } from './shared/auth/student-auth.service';
+import { filter } from 'rxjs/operators';
+import { GlobalService } from './shared/services/global.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,7 @@ export class AppComponent implements OnInit {
     private googleAuthService: GoogleAuthService,
     private adminAuthService: AdminAuthService,
     private studentAuthService: StudentAuthService,
+    private globalService: GlobalService,
     private router: Router,
   ) {
     this.googleAuthService.configureOAuth();
@@ -26,5 +29,11 @@ export class AppComponent implements OnInit {
     ) {
       this.googleAuthService.handleLogin();
     }
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.globalService.getMe();
+      });
   }
 }

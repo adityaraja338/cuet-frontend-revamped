@@ -59,6 +59,7 @@
     [nzShowTotal]="printStudentCount"
     (nzQueryParams)="batches ? getStudents($event) : ''"
     [nzScroll]="{ x: '680px' }"
+    [nzNoResult]="customNoData"
   >
     <thead>
       <tr>
@@ -140,6 +141,10 @@
       </tr>
     </tbody>
   </nz-table>
+  <ng-template #customNoData>
+    <img class="mt-3" src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" alt="">
+    <p class="font-16 font-300 mt-3">No Students Found!</p>
+  </ng-template>
   <ng-template #printStudentCount>
     <div *ngIf="!totalCount" class="font-weight-normal">No Results Found</div>
     <div *ngIf="totalCount" class="font-weight-normal">

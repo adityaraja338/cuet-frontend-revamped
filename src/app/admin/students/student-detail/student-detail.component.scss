@@ -1,0 +1,66 @@
+::ng-deep #admin-test-leaderboard {
+  max-height: calc(100% - 48.8px);
+
+  .card {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scrollable-content {
+    flex: 1;
+    overflow-y: auto; // Make the content scrollable
+    max-height: 172px; // Ensure it doesn't grow beyond the card
+    //border: 1px solid black;
+    width: 100%;
+  }
+
+  .leaderboard-header {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 0;
+    border-radius: 8px;
+    .leaderboard-badge {
+      fill: #fff;
+    }
+  }
+
+  .rank-1 .leaderboard-icon path {
+    fill: #ffd700;
+  }
+  .rank-2 .leaderboard-icon path {
+    fill: #c0c0c0;
+  }
+  .rank-3 .leaderboard-icon path {
+    fill: #cd7f32;
+  }
+
+  .ranks {
+    //background-color: #0f6674 ;
+    padding: 6px 0;
+    margin: 4px 0;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+  .ranks.rank-1 {
+    background: linear-gradient(
+        to right,
+        rgba(255, 215, 0, 0.0576),
+        rgba(255, 215, 0, 0.24)
+    );
+  }
+  .ranks.rank-2 {
+    background: linear-gradient(
+        to right,
+        rgba(192, 192, 192, 0.0576),
+        rgba(192, 192, 192, 0.24)
+    );
+  }
+  .ranks.rank-3 {
+    background: linear-gradient(
+        to right,
+        rgba(205, 127, 50, 0.0576),
+        rgba(205, 127, 50, 0.24)
+    );
+  }
+}

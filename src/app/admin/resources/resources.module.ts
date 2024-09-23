@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ResourcesComponent } from './resources.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ResourcesComponent },
@@ -20,6 +21,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [ResourcesComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), NgZorroAntdModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgZorroAntdModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class ResourcesModule {}

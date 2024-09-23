@@ -933,8 +933,9 @@ nz-switch:has(.ant-switch-small) {
   color: #8555fd;
 }
 
-.admin .chart-center {
+.admin .chart-center, .admin-chart.chart-center {
   background-color: rgba(0, 140, 238, 0.08);
+  color: #008cff;
 }
 
 .cursor-pointer:hover {

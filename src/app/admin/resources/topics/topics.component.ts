@@ -1,31 +1,124 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AdminHttpService } from '../../../shared/services/admin-http.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-topics',
   templateUrl: './topics.component.html',
   styleUrl: './topics.component.scss',
 })
-export class TopicsComponent {
+export class TopicsComponent implements OnInit {
   subjectName: string | undefined = 'Topic';
 
-  topics: any[] = [
-    { name: 'Reasoning', id: 0 },
-    { name: 'G.K. & G.S.', id: 1 },
-    { name: 'Mathematics', id: 2 },
-    { name: 'Current Affairs', id: 3 },
-    { name: 'English', id: 4 },
-    { name: 'Physics', id: 5 },
-    { name: 'Chemistry', id: 6 },
-    { name: 'Biology', id: 7 },
-  ];
+  topics: any;
+  subjectId: any;
+  searchTopic: string = '';
+
+  topicAddEditName: string = '';
+  currentTopic: any;
+  isAddEditModal = false;
+  isDeleteModal = false;
+  isEditMode = false;
 
   collapseFilter: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly http: AdminHttpService,
+    private readonly message: NzMessageService,
+  ) {}
 
   ngOnInit() {
     // console.log(this.router.url);
+    this.subjectId = +this.route.snapshot.params['subjectId'];
+
+    if (isNaN(this.subjectId)) {
+      this.message.error('Error! Invalid subject selected!');
+      this.router.navigate(['/', 'admin', 'resources']);
+      return;
+    }
+
+    this.getTopics();
+  }
+
+  getTopics() {
+    const data: any = {};
+
+    data.subjectId = this.subjectId;
+    if (this.searchTopic) data.search = this.searchTopic;
+
+    this.http.getTopics(data).subscribe({
+      next: (res: any) => {
+        this.topics = res?.data?.topics;
+        this.subjectName = res?.data?.subjectName;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  onAddEditTopic() {
+    const payload: any = {};
+    payload.name = this.topicAddEditName;
+    payload.subjectId = this.subjectId;
+
+    if (this.currentTopic) {
+      payload.topicId = this.currentTopic?.id;
+
+      this.http.putEditTopic(payload).subscribe({
+        next: (res: any) => {
+          this.message.success('Successful! Topic updated!');
+          this.getTopics();
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    } else {
+      this.http.postCreateTopic(payload).subscribe({
+        next: (res: any) => {
+          this.message.success('Successful! Topic created!');
+          this.getTopics();
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    }
+  }
+
+  onModalClose() {
+    this.currentTopic = undefined;
+    this.isAddEditModal = false;
+    this.isDeleteModal = false;
+    this.isEditMode = false;
+    this.topicAddEditName = '';
+  }
+
+  onDeleteTopic() {
+    const data: any = {
+      topicId: this.currentTopic?.id,
+    };
+
+    this.http.deleteTopic(data).subscribe({
+      next: (res: any) => {
+        this.message.success('Successful! Topic deleted!');
+        this.getTopics();
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
   }
 
   onClickTopic(event: any, topicId: number) {

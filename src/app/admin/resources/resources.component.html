@@ -6,144 +6,198 @@
     <nz-tab nzTitle="Subjects">
       <ng-template nz-tab>
         <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row justify-content-between">
-                  <div class="col-md-6">
-                    <input nz-input type="text" placeholder="Search Subject Name" />
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-5 col-xl-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Subject"
+                  [(ngModel)]="searchSubject"
+                />
+              </div>
+              <div class="col-md-4 col-xl-3 px-2 mt-md-0 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getSubjects()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
-            <button nz-button class="btn-primary filter-btn">
+          <div
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
+            <button
+              nz-button
+              class="btn-a-primary w-100"
+              (click)="onOpenSubjectModal()"
+            >
               <span nz-icon nzType="plus"></span>
               Add Subject
             </button>
           </div>
         </div>
         <!-- Non Domain Subjects        -->
-        <div id="subjects-container" class="ant-row mx-n1">
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of subjects"
-          >
-            <div
-              class="subject ant-row ant-row-middle"
-              (click)="onClickSubject($event, subject.id)"
-            >
-              <div class="ant-col-5">
-                <div class="subject-icon admin-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
-                </div>
-              </div>
-              <div class="ant-col-17">
-                <p class="text-a-primary font-16 font-400 mb-1">
-                  {{ subject.name }}
-                </p>
-                <p class="font-10 font-400">Topics: {{ 12 }}</p>
-              </div>
-              <div class="ant-col-2 dropdown-div">
-                <a
-                  class="text-dark font-size-20"
-                  nz-dropdown
-                  [nzClickHide]="false"
-                  [nzTrigger]="'click'"
-                  [nzPlacement]="'bottomRight'"
-                  [nzDropdownMenu]="batchDropdown"
-                >
-                  <i nz-icon nzType="ellipsis" theme="outline"></i>
-                </a>
-                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
-                  <ul class="table-menu rounded" nz-menu>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5">Edit</span>
-                    </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
-                    </li>
-                  </ul>
-                </nz-dropdown-menu>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Domain Subjects       -->
-        <nz-divider nzOrientation="left" nzText="Domain Subjects"></nz-divider>
-        <div id="domain-subjects-container" class="ant-row mx-n1">
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of subjects"
-          >
+        @if (coreSubjects?.length > 0 || domainSubjects?.length > 0) {
+          <div id="subjects-container" class="ant-row mx-n1">
             <div
-              class="subject ant-row ant-row-middle"
-              (click)="onClickSubject($event, subject.id)"
+              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+              *ngFor="let subject of coreSubjects"
             >
-              <div class="ant-col-5">
-                <div class="subject-icon admin-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+              <div
+                class="subject ant-row ant-row-middle"
+                (click)="onClickSubject($event, subject.id)"
+              >
+                <div class="ant-col-5">
+                  <div class="subject-icon admin-diagonal-gradient">
+                    <!--                  <img [src]="subject?.iconUrl" alt="" />-->
+                    <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                  </div>
                 </div>
-              </div>
-              <div class="ant-col-17">
-                <p class="text-a-primary font-16 font-500 mb-1">
-                  {{ subject.name }}
-                </p>
-                <p class="font-10 font-500">Topics: {{ 12 }}</p>
-              </div>
-              <div class="ant-col-2 dropdown-div">
-                <a
-                  class="text-dark font-size-20"
-                  nz-dropdown
-                  [nzClickHide]="false"
-                  [nzTrigger]="'click'"
-                  [nzPlacement]="'bottomRight'"
-                  [nzDropdownMenu]="batchDropdown"
-                >
-                  <i nz-icon nzType="ellipsis" theme="outline"></i>
-                </a>
-                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
-                  <ul class="table-menu rounded" nz-menu>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5">Edit</span>
-                    </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
-                    </li>
-                  </ul>
-                </nz-dropdown-menu>
+                <div class="ant-col-17">
+                  <p class="text-a-primary font-16 font-400 mb-1">
+                    {{ subject?.name || "-" }}
+                  </p>
+                  <p class="font-10 font-400">
+                    Topics: {{ subject?.topic || "-" }}
+                  </p>
+                </div>
+                <div class="ant-col-2 dropdown-div">
+                  <a
+                    class="text-dark font-size-20"
+                    nz-dropdown
+                    [nzClickHide]="false"
+                    [nzTrigger]="'click'"
+                    [nzPlacement]="'bottomRight'"
+                    [nzDropdownMenu]="batchDropdown"
+                  >
+                    <i nz-icon nzType="ellipsis" theme="outline"></i>
+                  </a>
+                  <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                    <ul class="table-menu rounded" nz-menu>
+                      <li
+                        class="tiny-li"
+                        nz-menu-item
+                        (click)="onOpenSubjectModal(subject)"
+                      >
+                        <span class="m-l-5">Edit</span>
+                      </li>
+                      <li class="tiny-li" nz-menu-item>
+                        <span class="m-l-5 text-red">Delete</span>
+                      </li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <!-- Domain Subjects       -->
+          @if (domainSubjects?.length > 0) {
+            <nz-divider
+              nzOrientation="left"
+              nzText="Domain Subjects"
+            ></nz-divider>
+            <div id="domain-subjects-container" class="ant-row mx-n1">
+              <div
+                class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+                *ngFor="let subject of domainSubjects"
+              >
+                <div
+                  class="subject ant-row ant-row-middle"
+                  (click)="onClickSubject($event, subject.id)"
+                >
+                  <div class="ant-col-5">
+                    <div class="subject-icon admin-diagonal-gradient">
+                      <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                    </div>
+                  </div>
+                  <div class="ant-col-17">
+                    <p class="text-a-primary font-16 font-500 mb-1">
+                      {{ subject?.name || "-" }}
+                    </p>
+                    <p class="font-10 font-500">
+                      Topics: {{ subject?.topic || "-" }}
+                    </p>
+                  </div>
+                  <div class="ant-col-2 dropdown-div">
+                    <a
+                      class="text-dark font-size-20"
+                      nz-dropdown
+                      [nzClickHide]="false"
+                      [nzTrigger]="'click'"
+                      [nzPlacement]="'bottomRight'"
+                      [nzDropdownMenu]="batchDropdown"
+                    >
+                      <i nz-icon nzType="ellipsis" theme="outline"></i>
+                    </a>
+                    <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                      <ul class="table-menu rounded" nz-menu>
+                        <li
+                          class="tiny-li"
+                          nz-menu-item
+                          (click)="onOpenSubjectModal(subject)"
+                        >
+                          <span class="m-l-5">Edit</span>
+                        </li>
+                        <li class="tiny-li" nz-menu-item>
+                          <span class="m-l-5 text-red">Delete</span>
+                        </li>
+                      </ul>
+                    </nz-dropdown-menu>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="mt-2 d-flex align-items-center">
+            <img src="assets/images/not-found-2.svg" height="160" alt="" />
+            <p class="ml-4 font-20 font-300 text-8a">
+              O! Oh! No Subjects found!
+            </p>
+          </div>
+        }
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Video Links">
       <ng-template nz-tab>
         <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row justify-content-between">
-                  <div class="col-md-6">
-                    <input nz-input type="text" placeholder="Search Video or Subject Name" />
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-5 col-xl-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Video or Subject"
+                  [(ngModel)]="searchVideo"
+                />
+              </div>
+              <div class="col-md-4 col-xl-3 px-2 mt-md-0 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getVideoLinks()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
-            <button nz-button class="btn-primary filter-btn">
+          <div
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
+            <button
+              nz-button
+              class="btn-a-primary w-100"
+              (click)="onOpenVideoModal()"
+            >
               <span nz-icon nzType="plus"></span>
               Add Video Link
             </button>
@@ -151,86 +205,56 @@
         </div>
         <nz-table
           [nzData]="videoLinks"
-          [nzShowPagination]="false"
-          [nzScroll]="{ x: '640px' }"
+          [nzFrontPagination]="false"
+          [nzShowPagination]="true"
+          [nzShowSizeChanger]="true"
+          [nzTotal]="videoTotalCount"
+          [nzShowTotal]="printVideosCount"
+          [nzPageIndex]="videoPageIndex"
+          [nzPageSize]="videoPageSize"
+          (nzQueryParams)="videoLinks[0] ? getVideoLinks($event) : null"
+          [nzScroll]="{ x: '680px' }"
         >
           <thead>
             <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Video Name</th>
-              <th class="text-center" [nzWidth]="'100px'">Subject</th>
-              <th class="text-center" [nzWidth]="'100px'">Length</th>
+              <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+              <th [nzWidth]="'152px'">Video Name</th>
+              <th class="text-center" [nzWidth]="'120px'">Subject</th>
+              <th class="text-center" [nzWidth]="'84px'">Length</th>
               <th class="text-center" [nzWidth]="'64px'">Type</th>
               <th class="text-center" [nzWidth]="'80px'">Link</th>
+              <th class="text-center" [nzWidth]="'56px'"></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let video of videoLinks; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ video.name }}</td>
-              <td class="text-center">{{ video.subject }}</td>
               <td class="text-center">
-                {{ Math.floor(video.length / 60) }} hr
-                {{ video.length % 60 }} min
+                {{ (videoPageIndex - 1) * videoPageSize + i + 1 }}
+              </td>
+              <td>{{ video?.name }}</td>
+              <td class="text-center">{{ video?.subject }}</td>
+              <td class="text-center">
+                {{ Math.floor(video?.length / 60) }} hr
+                {{ video?.length % 60 }} min
               </td>
               <td
                 class="text-center font-600"
-                [class]="video.type === 'free' ? 'text-free' : 'text-paid'"
+                [class]="video?.isFree ? 'text-free' : 'text-a-primary'"
               >
-                {{ video.type }}
+                {{ video.isFree ? "Free" : "Paid" }}
               </td>
               <td class="text-center">
-                <a [href]="'https://' + video.link">Click Here</a>
+                <a
+                  [href]="
+                    video?.url?.startsWith('http://') ||
+                    video?.url?.startsWith('https://')
+                      ? video?.url
+                      : 'https://' + video?.url
+                  "
+                  >Click Here</a
+                >
               </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </ng-template>
-    </nz-tab>
-    <nz-tab nzTitle="PYQs">
-      <ng-template nz-tab>
-        <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row justify-content-between">
-                  <div class="col-md-6">
-                    <input nz-input type="text" placeholder="Search PYQ" />
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
-          </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
-            <button nz-button class="btn-primary filter-btn">
-              <span nz-icon nzType="plus"></span>
-              Add PYQ
-            </button>
-          </div>
-        </div>
-        <div id="pyq-container" class="ant-row mx-n1">
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of subjects"
-          >
-            <div
-              class="subject ant-row ant-row-middle"
-            >
-              <div class="ant-col-5">
-                <div class="subject-icon admin-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
-                </div>
-              </div>
-              <div class="ant-col-17">
-                <p class="text-a-primary font-16 font-400">
-                  {{ subject.name }}
-                </p>
-              </div>
-              <div class="ant-col-2">
+              <td class="text-center">
                 <a
                   class="text-dark font-size-20"
                   nz-dropdown
@@ -243,43 +267,68 @@
                 </a>
                 <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
                   <ul class="table-menu rounded" nz-menu>
-                    <li class="tiny-li" nz-menu-item>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      (click)="onOpenVideoModal(video)"
+                    >
                       <span class="m-l-5">Edit</span>
                     </li>
                     <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
+                      <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>
                 </nz-dropdown-menu>
-              </div>
-            </div>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <ng-template #printVideosCount>
+          <div *ngIf="!videoTotalCount" class="font-weight-normal">
+            No Results Found
           </div>
-        </div>
+          <div *ngIf="videoTotalCount" class="font-weight-normal">
+            <b>{{ videoTotalCount }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Newspapers">
       <ng-template nz-tab>
         <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row justify-content-between">
-                  <div class="col-md-6 mb-md-0 mb-2">
-                    <input nz-input type="text" placeholder="Search Newspaper" />
-                  </div>
-                  <div class="col-md-6">
-                    <nz-date-picker></nz-date-picker>
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-4 col-xl-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Newspaper"
+                  [(ngModel)]="searchNewspaper"
+                />
+              </div>
+              <div class="col-md-4 col-xl-4 px-2">
+                <nz-date-picker
+                  [(ngModel)]="searchNewspaperDate"
+                  [nzFormat]="'dd MMM yyyy'"
+                >
+                </nz-date-picker>
+              </div>
+              <div class="col-md-4 col-xl-3 px-2 mt-md-0 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getNewspapers()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
-            <button nz-button class="btn-primary filter-btn">
+          <div
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
+            <button nz-button class="btn-a-primary w-100" (click)="onOpenNewspaperModal()">
               <span nz-icon nzType="plus"></span>
               Add Newspaper
             </button>
@@ -287,55 +336,615 @@
         </div>
         <nz-table
           [nzData]="newspapers"
-          [nzShowPagination]="false"
-          [nzScroll]="{ x: '640px' }"
+          [nzFrontPagination]="false"
+          [nzShowPagination]="true"
+          [nzShowSizeChanger]="true"
+          [nzTotal]="newspaperTotalCount"
+          [nzShowTotal]="printNewspaperCount"
+          [nzPageIndex]="newspaperPageIndex"
+          [nzPageSize]="newspaperPageSize"
+          (nzQueryParams)="newspapers[0] ? getNewspapers($event) : null"
+          [nzScroll]="{ x: '680px' }"
         >
           <thead>
-          <tr>
-            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-            <th [nzWidth]="'160px'">Name</th>
-            <th class="text-center" [nzWidth]="'64px'">Date</th>
-            <th class="text-center" [nzWidth]="'64px'">Type</th>
-            <th class="text-center" [nzWidth]="'56px'"></th>
-          </tr>
+            <tr>
+              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'64px'">Date</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'64px'">Link</th>
+              <th class="text-center" [nzWidth]="'56px'"></th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let newspaper of newspapers; let i = index">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ newspaper.name }}</td>
-            <td class="text-center">{{ newspaper.date | date:'dd/MM/yy' }}</td>
-            <td
-              class="text-center font-600"
-              [class]="newspaper.isFree ? 'text-free' : 'text-paid'"
-            >
-              {{ newspaper.isFree ? 'Free' : 'Paid' }}
-            </td>
-            <td class="text-center">
-              <a
-                class="text-dark font-size-20"
-                nz-dropdown
-                [nzClickHide]="false"
-                [nzTrigger]="'click'"
-                [nzPlacement]="'bottomRight'"
-                [nzDropdownMenu]="batchDropdown"
+            <tr *ngFor="let newspaper of newspapers; let i = index">
+              <td class="text-center">
+                {{ (newspaperPageIndex - 1) * newspaperPageSize + i + 1 }}
+              </td>
+              <td>{{ newspaper?.name || "-" }}</td>
+              <td class="text-center">
+                {{
+                  newspaper?.date
+                    ? (newspaper?.date | date: "dd MMM yyyy")
+                    : "-"
+                }}
+              </td>
+              <td
+                class="text-center font-600"
+                [class]="newspaper?.isFree ? 'text-free' : 'text-a-primary'"
               >
-                <i nz-icon nzType="ellipsis" theme="outline"></i>
-              </a>
-              <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
-                <ul class="table-menu rounded" nz-menu>
-                  <li class="tiny-li" nz-menu-item>
-                    <span class="m-l-5">Edit</span>
-                  </li>
-                  <li class="tiny-li" nz-menu-item>
-                    <span class="m-l-5" style="color: red">Delete</span>
-                  </li>
-                </ul>
-              </nz-dropdown-menu>
-            </td>
-          </tr>
+                {{ newspaper?.isFree ? "Free" : "Paid" }}
+              </td>
+              <td class="text-center">
+                @if (newspaper?.url) {
+                  <a
+                    [href]="
+                      newspaper?.url?.startsWith('http://') ||
+                      newspaper?.url?.startsWith('https://')
+                        ? newspaper?.url
+                        : 'https://' + newspaper?.url
+                    "
+                    >Click Here</a
+                  >
+                } @else {
+                  <span class="text-danger">No URL</span>
+                }
+              </td>
+              <td class="text-center">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="batchDropdown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li class="tiny-li" nz-menu-item (click)="onOpenNewspaperModal(newspaper)">
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item>
+                      <span class="m-l-5 text-red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </td>
+            </tr>
           </tbody>
         </nz-table>
+        <ng-template #printNewspaperCount>
+          <div *ngIf="!newspaperTotalCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="newspaperTotalCount" class="font-weight-normal">
+            <b>{{ newspaperTotalCount }}</b> Results Found
+          </div>
+        </ng-template>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="PYQs">
+      <ng-template nz-tab>
+        <div class="row justify-content-between align-items-start mb-3">
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-4 col-xl-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search PYQs"
+                  [(ngModel)]="searchPYQ"
+                />
+              </div>
+              <div class="col-md-4 col-xl-3 px-2 mt-md-0 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getPYQs()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+          >
+            <button nz-button class="btn-a-primary w-100" (click)="onOpenPyqModal()">
+              <span nz-icon nzType="plus"></span>
+              Add PYQ
+            </button>
+          </div>
+        </div>
+        @if (pyqs?.length > 0) {
+          <div id="pyq-container" class="ant-row mx-n1">
+            <div
+              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+              *ngFor="let pyq of pyqs"
+            >
+              <div class="subject ant-row ant-row-middle">
+                <div class="ant-col-5">
+                  <div class="subject-icon admin-diagonal-gradient">
+                    <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                  </div>
+                </div>
+                <div class="ant-col-17">
+                  <p class="text-a-primary font-16 font-400">
+                    @if (pyq?.url) {
+                      <a
+                        [href]="
+                          pyq?.url?.startsWith('http://') ||
+                          pyq?.url?.startsWith('https://')
+                            ? pyq?.url
+                            : 'https://' + pyq?.url
+                        "
+                      >
+                        {{ pyq?.name }}
+                      </a>
+                    } @else {
+                      <p>
+                        {{ pyq?.name }} (<span class="font-10 text-red"
+                          >No URL</span
+                        >)
+                      </p>
+                    }
+                  </p>
+                </div>
+                <div class="ant-col-2">
+                  <a
+                    class="text-dark font-size-20"
+                    nz-dropdown
+                    [nzClickHide]="false"
+                    [nzTrigger]="'click'"
+                    [nzPlacement]="'bottomRight'"
+                    [nzDropdownMenu]="batchDropdown"
+                  >
+                    <i nz-icon nzType="ellipsis" theme="outline"></i>
+                  </a>
+                  <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                    <ul class="table-menu rounded" nz-menu>
+                      <li class="tiny-li" nz-menu-item (click)="onOpenPyqModal(pyq)">
+                        <span class="m-l-5">Edit</span>
+                      </li>
+                      <li class="tiny-li" nz-menu-item>
+                        <span class="m-l-5 text-red">Delete</span>
+                      </li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="mt-2 d-flex align-items-center">
+            <img src="assets/images/not-found-2.svg" height="160" alt="" />
+            <p class="ml-4 font-20 font-300 text-8a">O! Oh! No PYQs found!</p>
+          </div>
+        }
       </ng-template>
     </nz-tab>
   </nz-tabset>
 </nz-card>
+
+<nz-modal
+  [(nzVisible)]="isAddEditSubjectModal"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="450"
+  nzMaskClosable
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400 mb-3">
+      {{ isEditSubjectMode ? "Edit " : "Create New " }} Subject
+    </p>
+
+    <form class="admin-form" [formGroup]="addEditSubjectForm">
+      @if (isEditSubjectMode) {
+        <p class="mb-2 font-12 font-400">Subject ID</p>
+        <nz-form-item class="mb-3">
+          <nz-form-control [nzErrorTip]="idError">
+            <input nz-input type="text" formControlName="subjectId" />
+          </nz-form-control>
+          <ng-template #idError let-control>
+            <ng-container *ngIf="control?.hasError('required')">
+              ID is required!
+            </ng-container>
+          </ng-template>
+        </nz-form-item>
+      }
+
+      <p class="mb-2 font-12 font-400">Subject Name</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="nameError">
+          <input nz-input type="text" placeholder="Name" formControlName="name" />
+        </nz-form-control>
+        <ng-template #nameError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Name is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="domainError">
+          <label nz-checkbox formControlName="isDomain">Is Domain</label>
+        </nz-form-control>
+        <ng-template #domainError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Type is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="homescreenError">
+          <label nz-checkbox formControlName="isHomescreen"
+            >Is Homescreen</label
+          >
+        </nz-form-control>
+        <ng-template #homescreenError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Type is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">Icon URL</p>
+      <nz-form-item class="">
+        <nz-form-control [nzErrorTip]="urlError">
+          <input nz-input type="text" placeholder="Link" formControlName="iconUrl" />
+        </nz-form-control>
+        <ng-template #urlError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            URL is required!
+          </ng-container>
+          <ng-container *ngIf="control?.hasError('pattern')">
+            Invalid URL!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+    </form>
+
+    <div class="col-md-8 col-12 d-flex px-0 mt-3">
+      <button
+        nz-button
+        class="mr-1 w-50 btn-a-secondary"
+        (click)="onModalClose()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="ml-1 w-50 btn-a-primary"
+        (click)="onAddEditSubject()"
+      >
+        {{ isEditSubjectMode ? "Save" : "Create" }}
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isAddEditVideoModal"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="450"
+  nzMaskClosable
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400 mb-3">
+      {{ isEditSubjectMode ? "Edit " : "Create New " }} Video
+    </p>
+
+    <form class="admin-form" [formGroup]="addEditVideoForm">
+      @if (isEditVideoMode) {
+        <p class="mb-2 font-12 font-400">Video ID</p>
+        <nz-form-item class="mb-3">
+          <nz-form-control [nzErrorTip]="idError">
+            <input nz-input type="text" formControlName="videoId" />
+          </nz-form-control>
+          <ng-template #idError let-control>
+            <ng-container *ngIf="control?.hasError('required')">
+              ID is required!
+            </ng-container>
+          </ng-template>
+        </nz-form-item>
+      }
+
+      <p class="mb-2 font-12 font-400">Video Name</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="nameError">
+          <input nz-input type="text" placeholder="Name" formControlName="name" />
+        </nz-form-control>
+        <ng-template #nameError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Name is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">Subject</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="subjectError">
+          <input nz-input type="text" placeholder="Subject" formControlName="subject" />
+        </nz-form-control>
+        <ng-template #subjectError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Subject is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">Video Length</p>
+      <div class="row">
+        <div class="col-6">
+          <nz-form-item class="mb-3">
+            <nz-form-control [nzErrorTip]="hrError">
+              <nz-select
+                formControlName="lengthHr"
+                nzPlaceHolder="Select Hour(s)"
+              >
+                <nz-option
+                  *ngFor="let hour of hoursList"
+                  [nzLabel]="hour + (hour > 1 ? ' hours' : ' hour')"
+                  [nzValue]="hour"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <ng-template #hrError let-control>
+              <ng-container *ngIf="control?.hasError('required')">
+                Hour is required!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+
+        <div class="col-6">
+          <nz-form-item class="mb-3">
+            <nz-form-control [nzErrorTip]="minError">
+              <nz-select
+                formControlName="lengthMin"
+                nzPlaceHolder="Select Minutes"
+              >
+                <nz-option
+                  *ngFor="let minute of minutesList"
+                  [nzLabel]="minute + (minute > 1 ? ' minutes' : ' minute')"
+                  [nzValue]="minute"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <ng-template #minError let-control>
+              <ng-container *ngIf="control?.hasError('required')">
+                Minute is required!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="isFreeError">
+          <label nz-checkbox formControlName="isFree">Is Free</label>
+        </nz-form-control>
+        <ng-template #isFreeError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Type is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">Video URL</p>
+      <nz-form-item class="">
+        <nz-form-control [nzErrorTip]="urlError">
+          <input nz-input type="text" placeholder="Link" formControlName="url" />
+        </nz-form-control>
+        <ng-template #urlError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            URL is required!
+          </ng-container>
+          <ng-container *ngIf="control?.hasError('pattern')">
+            Invalid URL!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+    </form>
+
+    <div class="col-md-8 col-12 d-flex px-0 mt-3">
+      <button
+        nz-button
+        class="mr-1 w-50 btn-a-secondary"
+        (click)="onModalClose()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="ml-1 w-50 btn-a-primary"
+        (click)="onAddEditVideo()"
+      >
+        {{ isEditSubjectMode ? "Save" : "Create" }}
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isAddEditNewspaperModal"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="450"
+  nzMaskClosable
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400 mb-3">
+      {{ isEditNewspaperMode ? "Edit " : "Create New " }} Newspaper
+    </p>
+
+    <form class="admin-form" [formGroup]="addEditNewspaperForm">
+      @if (isEditNewspaperMode) {
+        <p class="mb-2 font-12 font-400">Subject ID</p>
+        <nz-form-item class="mb-3">
+          <nz-form-control [nzErrorTip]="idError">
+            <input nz-input type="text" formControlName="newspaperId" />
+          </nz-form-control>
+          <ng-template #idError let-control>
+            <ng-container *ngIf="control?.hasError('required')">
+              ID is required!
+            </ng-container>
+          </ng-template>
+        </nz-form-item>
+      }
+
+      <p class="mb-2 font-12 font-400">Newspaper Name</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="nameError">
+          <input nz-input type="text" placeholder="Name" formControlName="name" />
+        </nz-form-control>
+        <ng-template #nameError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Name is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">Newspaper Date</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="dateError">
+          <nz-date-picker
+            nzFormat="dd MMM yyyy"
+            formControlName="date"
+          ></nz-date-picker>
+        </nz-form-control>
+        <ng-template #dateError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Date is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="isFreeError">
+          <label nz-checkbox formControlName="isFree">Is Free</label>
+        </nz-form-control>
+        <ng-template #isFreeError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Type is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">Newspaper URL</p>
+      <nz-form-item class="">
+        <nz-form-control [nzErrorTip]="urlError">
+          <input nz-input type="text" placeholder="Link" formControlName="url" />
+        </nz-form-control>
+        <ng-template #urlError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            URL is required!
+          </ng-container>
+          <ng-container *ngIf="control?.hasError('pattern')">
+            Invalid URL!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+    </form>
+
+    <div class="col-md-8 col-12 d-flex px-0 mt-3">
+      <button
+        nz-button
+        class="mr-1 w-50 btn-a-secondary"
+        (click)="onModalClose()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="ml-1 w-50 btn-a-primary"
+        (click)="onAddEditNewspaper()"
+      >
+        {{ isEditNewspaperMode ? "Save" : "Create" }}
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isAddEditPyqModal"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="450"
+  nzMaskClosable
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400 mb-3">
+      {{ isEditPyqMode ? "Edit" : "Create New " }} PYQ
+    </p>
+
+    <form class="admin-form" [formGroup]="addEditPyqForm">
+      @if (isEditPyqMode) {
+        <p class="mb-2 font-12 font-400">PYQ ID</p>
+        <nz-form-item class="mb-3">
+          <nz-form-control [nzErrorTip]="idError">
+            <input nz-input type="text" formControlName="pyqId" />
+          </nz-form-control>
+          <ng-template #idError let-control>
+            <ng-container *ngIf="control?.hasError('required')">
+              ID is required!
+            </ng-container>
+          </ng-template>
+        </nz-form-item>
+      }
+
+      <p class="mb-2 font-12 font-400">PYQ Name</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="nameError">
+          <input nz-input type="text" placeholder="Name" formControlName="name" />
+        </nz-form-control>
+        <ng-template #nameError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Name is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">PYQ URL</p>
+      <nz-form-item class="">
+        <nz-form-control [nzErrorTip]="urlError">
+          <input nz-input type="text" placeholder="Link" formControlName="url" />
+        </nz-form-control>
+        <ng-template #urlError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            URL is required!
+          </ng-container>
+          <ng-container *ngIf="control?.hasError('pattern')">
+            Invalid URL!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+    </form>
+
+    <div class="col-md-8 col-12 d-flex px-0 mt-3">
+      <button
+        nz-button
+        class="mr-1 w-50 btn-a-secondary"
+        (click)="onModalClose()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="ml-1 w-50 btn-a-primary"
+        (click)="onAddEditPyq()"
+      >
+        {{ isEditPyqMode ? "Save" : "Create" }}
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

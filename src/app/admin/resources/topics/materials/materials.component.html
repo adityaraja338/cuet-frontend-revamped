@@ -11,165 +11,338 @@
   <nz-tabset>
     <nz-tab nzTitle="Materials">
       <ng-template nz-tab>
+        <p class="font-12 font-400 mb-1">Search Material</p>
         <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row justify-content-between">
-                  <div class="col-md-6 mb-md-0 mb-2">
-                    <input nz-input type="text" placeholder="Search Material" />
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-5 col-xl-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Material"
+                  [(ngModel)]="searchMaterial"
+                />
+              </div>
+              <div class="col-md-4 col-xl-3 px-2 mt-md-0 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getMaterials()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
           <div
-            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
           >
-            <button nz-button class="btn-primary filter-btn">
+            <button
+              nz-button
+              class="btn-a-primary w-100"
+              (click)="onOpenMaterialForm()"
+            >
               <span nz-icon nzType="plus"></span>
               Add Material
             </button>
           </div>
         </div>
-        <!-- Non Domain Subjects        -->
-        <div id="materials-container" class="ant-row mx-n1">
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let material of materials"
-          >
-            <div class="material ant-row ant-row-middle">
-              <div class="ant-col-5">
-                <div class="material-icon admin-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+        @if (materials?.length > 0) {
+          <div id="materials-container" class="ant-row mx-n1">
+            <div
+              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+              *ngFor="let material of materials"
+            >
+              <div class="material ant-row ant-row-middle">
+                <div class="ant-col-5">
+                  <div class="material-icon admin-diagonal-gradient">
+                    <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                  </div>
                 </div>
-              </div>
-              <div class="ant-col-17">
-                <p class="text-a-primary font-16 font-400 mb-1">
-                  {{ material.name }}
-                </p>
-                <p
-                  class="font-12 font-400 text-free"
-                >
-                  <span [class]="material.isFree ? 'text-free' : 'text-paid'">
+                <div class="ant-col-17">
+                  <p class="text-a-primary font-16 font-400 mb-1">
+                    {{ material.name }}
+                  </p>
+                  <p
+                    class="font-12 font-600 text-free"
+                  >
+                  <span [class]="material.isFree ? 'text-free' : 'text-primary'">
                     {{ material.isFree ? "Free" : "Paid" }}
                   </span>
-                </p>
-              </div>
-              <div class="ant-col-2">
-                <a
-                  class="text-dark font-size-20"
-                  nz-dropdown
-                  [nzClickHide]="false"
-                  [nzTrigger]="'click'"
-                  [nzPlacement]="'bottomRight'"
-                  [nzDropdownMenu]="batchDropdown"
-                >
-                  <i nz-icon nzType="ellipsis" theme="outline"></i>
-                </a>
-                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
-                  <ul class="table-menu rounded" nz-menu>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5">Edit</span>
-                    </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
-                    </li>
-                  </ul>
-                </nz-dropdown-menu>
+                  </p>
+                </div>
+                <div class="ant-col-2">
+                  <a
+                    class="text-dark font-size-20"
+                    nz-dropdown
+                    [nzClickHide]="false"
+                    [nzTrigger]="'click'"
+                    [nzPlacement]="'bottomRight'"
+                    [nzDropdownMenu]="batchDropdown"
+                  >
+                    <i nz-icon nzType="ellipsis" theme="outline"></i>
+                  </a>
+                  <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
+                    <ul class="table-menu rounded" nz-menu>
+                      <li
+                        class="tiny-li"
+                        nz-menu-item
+                        (click)="onOpenMaterialForm(material)"
+                      >
+                        <span class="m-l-5">Edit</span>
+                      </li>
+                      <li
+                        class="tiny-li"
+                        nz-menu-item
+                        (click)="isDeleteModal = true; modalType = 'material'; deleteMaterialId = material?.id"
+                      >
+                        <span class="m-l-5 text-red">Delete</span>
+                      </li>
+                    </ul>
+                  </nz-dropdown-menu>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        } @else {
+          <div class="mt-2 d-flex align-items-center">
+            <img src="assets/images/not-found-2.svg" height="160" alt="" />
+            <p class="ml-4 font-20 font-300 text-8a">O! Oh! No Materials found!</p>
+          </div>
+        }
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Topic Tests" id="topic-test">
       <ng-template nz-tab>
+        <p class="font-12 font-400 mb-1">Search Test</p>
         <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row justify-content-between">
-                  <div class="col-md-6 mb-md-0 mb-2">
-                    <input nz-input type="text" placeholder="Search Test" />
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-5 col-xl-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Test"
+                  [(ngModel)]="searchTest"
+                />
+              </div>
+              <div class="col-md-4 col-xl-3 px-2 mt-md-0 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getTopicTests()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
           <div
-            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
           >
-            <button nz-button class="btn-primary filter-btn">
+            <button
+              nz-button
+              class="btn-a-primary w-100"
+              [routerLink]="['/', 'admin', 'tests', 'create']"
+            >
               <span nz-icon nzType="plus"></span>
-              Add Topic Test
+              Add Test
             </button>
           </div>
         </div>
         <nz-table
+          [nzLoading]="isTopicLoading"
           [nzData]="topicTests"
-          [nzShowPagination]="false"
-          [nzScroll]="{ x: '640px' }"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzShowPagination]="true"
+          [nzTotal]="totalTopicTestCount"
+          [nzPageIndex]="topicPageIndex"
+          [nzPageSize]="topicPageSize"
+          [nzShowTotal]="printTopicCount"
+          [nzScroll]="{ x: '680px' }"
+          (nzQueryParams)="topicTests ? getTopicTests($event) : ''"
         >
           <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Test Name</th>
-              <th class="text-center" [nzWidth]="'72px'">Questions</th>
-              <th class="text-center" [nzWidth]="'64px'">Type</th>
-              <th class="text-center" [nzWidth]="'84px'">Duration</th>
-              <th class="text-center" [nzWidth]="'56px'"></th>
-            </tr>
+          <tr>
+            <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'84px'">Topic</th>
+            <th class="text-center" [nzWidth]="'84px'">Questions</th>
+            <th class="text-center" [nzWidth]="'64px'">Type</th>
+            <th class="text-center" [nzWidth]="'84px'">Duration</th>
+            <th class="text-center" [nzWidth]="'48px'"></th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let test of topicTests; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test.name }}</td>
-              <td class="text-center">{{ test.questions }}</td>
-              <td
-                class="text-center font-500"
-                [class]="test.type === 'free' ? 'text-free' : 'text-paid'"
+          <tr
+            *ngFor="let test of topicTests; let i = index"
+            (click)="onClickTest($event, 'topic', test?.id)"
+          >
+            <td class="text-center">{{ ((topicPageIndex - 1) * topicPageSize) + (i + 1) }}</td>
+            <td>{{ test?.name || '-' }}</td>
+            <td class="text-center">
+              {{ test?.topic?.name || '-' }}
+            </td>
+            <td class="text-center">
+              {{ test?.totalQuestions || '-' }}
+            </td>
+            <td
+              class="text-center font-600"
+              [class]="test?.isFree ? 'text-free' : 'text-a-primary'"
+            >
+              {{ test.isFree ? "Free" : "Paid" }}
+            </td>
+            <td class="text-center">
+              {{ Math.floor(test?.duration / 60) }} hr
+              {{ test?.duration % 60 }} min
+            </td>
+            <td class="text-center dropdown-container">
+              <a
+                class="text-dark font-size-20"
+                nz-dropdown
+                [nzClickHide]="false"
+                [nzTrigger]="'click'"
+                [nzPlacement]="'bottomRight'"
+                [nzDropdownMenu]="latestUploadDropDown"
               >
-                {{ test.type }}
-              </td>
-              <td class="text-center">
-                {{ Math.floor(test.duration / 60) }} hr
-                {{ test.duration % 60 }} min
-              </td>
-              <td class="text-center">
-                <a
-                  class="text-dark font-size-20"
-                  nz-dropdown
-                  [nzClickHide]="false"
-                  [nzTrigger]="'click'"
-                  [nzPlacement]="'bottomRight'"
-                  [nzDropdownMenu]="batchDropdown"
-                >
-                  <i nz-icon nzType="ellipsis" theme="outline"></i>
-                </a>
-                <nz-dropdown-menu #batchDropdown="nzDropdownMenu">
-                  <ul class="table-menu rounded" nz-menu>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5">Edit</span>
-                    </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
-                    </li>
-                  </ul>
-                </nz-dropdown-menu>
-              </td>
-            </tr>
+                <i nz-icon nzType="ellipsis" theme="outline"></i>
+              </a>
+              <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
+                <ul class="table-menu rounded" nz-menu>
+                  <li
+                    class="tiny-li"
+                    nz-menu-item
+                    [routerLink]="[
+                        '/',
+                        'admin',
+                        'tests',
+                        'edit-topic',
+                        test?.id,
+                      ]"
+                  >
+                    <span class="m-l-5">Edit</span>
+                  </li>
+                  <li
+                    class="tiny-li"
+                    nz-menu-item
+                    (click)="onChangeType(test?.id, 'topic')"
+                  >
+                    <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
+                  </li>
+                  <li class="tiny-li" nz-menu-item (click)="deleteTestId = test?.id; modalType = 'test'; isDeleteModal = true;">
+                    <span class="m-l-5 text-red">Delete</span>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
           </tbody>
         </nz-table>
+        <ng-template #printTopicCount>
+          <div *ngIf="!totalTopicTestCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="totalTopicTestCount" class="font-weight-normal">
+            <b>{{ totalTopicTestCount }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
   </nz-tabset>
 </nz-card>
+
+<nz-modal
+  [(nzVisible)]="isCreateEditMaterialModal"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="450"
+  nzMaskClosable
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400 mb-3">
+      {{ isEditModal ? 'Edit' : 'Add' }} Material
+    </p>
+    <form class="admin-form" [formGroup]="addEditMaterialForm">
+      @if(isEditModal){
+        <p class="mb-2 font-12 font-400">Material ID</p>
+        <nz-form-item class="mb-3">
+          <nz-form-control [nzErrorTip]="idError">
+            <input nz-input type="text" formControlName="id">
+          </nz-form-control>
+          <ng-template #idError let-control>
+            <ng-container *ngIf="control?.hasError('required')">
+              ID is required!
+            </ng-container>
+          </ng-template>
+        </nz-form-item>
+      }
+
+      <p class="mb-2 font-12 font-400">Material Name</p>
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="nameError">
+          <input nz-input type="text" formControlName="name">
+        </nz-form-control>
+        <ng-template #nameError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Name is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item class="mb-3">
+        <nz-form-control [nzErrorTip]="nameError">
+          <label nz-checkbox formControlName="isFree">Is Free</label>
+        </nz-form-control>
+        <ng-template #nameError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            Type is required!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+
+      <p class="mb-2 font-12 font-400">URL</p>
+      <nz-form-item class="">
+        <nz-form-control [nzErrorTip]="urlError">
+          <input nz-input type="text" formControlName="url">
+        </nz-form-control>
+        <ng-template #urlError let-control>
+          <ng-container *ngIf="control?.hasError('required')">
+            URL is required!
+          </ng-container>
+          <ng-container *ngIf="control?.hasError('pattern')">
+            Invalid URL!
+          </ng-container>
+        </ng-template>
+      </nz-form-item>
+    </form>
+    <div class="col-md-8 col-12 px-0 mt-3 d-flex">
+      <button nz-button class="btn-a-secondary mr-1 w-50" (click)="onModalClose()">Cancel</button>
+      <button nz-button class="btn-a-primary ml-1 w-50" (click)="onCreateSaveMaterial()">{{ isEditModal ? 'Save' : 'Create' }}</button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isDeleteModal"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="'auto'"
+  nzMaskClosable
+  nzCentered
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400">
+      <span class="text-red" nz-icon nzType="info-circle"></span>
+      Confirmation
+    </p>
+    <p class="font-14 mt-3"> Are you sure you want to delete this {{ modalType }}? </p>
+    <div class="col-md-8 col-12 d-flex px-0 mt-2">
+      <button nz-button class="mr-1 w-50 btn-danger" (click)="onModalClose()">Cancel</button>
+      <button nz-button class="ml-1 w-50 btn-danger-secondary" (click)="modalType === 'test' ? onDeleteTest(): onDeleteMaterial()">Delete</button>
+    </div>
+  </ng-container>
+</nz-modal>

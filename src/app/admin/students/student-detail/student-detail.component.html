@@ -1,15 +1,19 @@
 <nz-breadcrumb nzSeparator=">">
-  <nz-breadcrumb-item routerLink="/admin/tests" class="cursor-pointer"
+  <nz-breadcrumb-item routerLink="/admin/students" class="cursor-pointer"
     >Students</nz-breadcrumb-item
   >
   <nz-breadcrumb-item class="cursor-pointer">
     Student Details
   </nz-breadcrumb-item>
 </nz-breadcrumb>
-<nz-card nzHoverable nzBorderless>
+<nz-card nzHoverable nzBorderless [nzLoading]="isLoading">
   <div class="ant-row justify-content-between mb-2">
     <p class="font-16 font-400 mb-md-0 mb-2">Student Details</p>
-    <button nz-button class="btn-secondary">
+    <button
+      nz-button
+      class="btn-a-secondary"
+      (click)="isEditModal = true; patchForm()"
+    >
       <span nz-icon nzType="edit"></span>
       Edit Student
     </button>
@@ -23,7 +27,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Name</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentDetails?.name || "-" }}
             </div>
           </div>
         </div>
@@ -33,7 +37,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Email</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentDetails?.email || "-" }}
             </div>
           </div>
         </div>
@@ -43,7 +47,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Phone</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentDetails?.phone || "-" }}
             </div>
           </div>
         </div>
@@ -53,7 +57,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Student ID</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentDetails?.id }}
             </div>
           </div>
         </div>
@@ -63,7 +67,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Batch ID</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              25
+              {{ studentDetails?.batchId || "-" }}
             </div>
           </div>
         </div>
@@ -77,7 +81,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Age</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentDetails?.age }}
             </div>
           </div>
         </div>
@@ -86,8 +90,17 @@
           <div class="ant-row">
             <div class="ant-col-9 pr-1 font-12 font-300">Batch Plan</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
-            <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+            <div
+              class="ant-col-14 pl-1 font-12 font-600"
+              [class]="
+                studentDetails?.plan === 'Premium'
+                  ? 'text-primary'
+                  : studentDetails?.plan === 'Free'
+                    ? 'text-free'
+                    : 'text-a-primary'
+              "
+            >
+              {{ studentDetails?.plan }}
             </div>
           </div>
         </div>
@@ -97,7 +110,7 @@
             <div class="ant-col-9 pr-1 font-12 font-300">Cuet Attempts</div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentDetails?.cuetAttempts?.join(", ") }}
             </div>
           </div>
         </div>
@@ -109,7 +122,7 @@
             </div>
             <div class="ant-col-1 px-1 font-12 font-300">:</div>
             <div class="ant-col-14 pl-1 font-12 font-400 text-a-primary">
-              Test ID
+              {{ studentPerformances?.live?.length || 0 }}
             </div>
           </div>
         </div>
@@ -120,23 +133,27 @@
 
 <nz-divider nzText="Test Performances" nzOrientation="left"></nz-divider>
 
-<nz-card nzBorderless nzHoverable>
+<nz-card nzBorderless nzHoverable [nzLoading]="isLoading">
   <nz-tabset>
     <nz-tab nzTitle="Live Tests">
       <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
         Average Accuracy:
-        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+        <span class="font-400 text-a-primary"
+          >{{ studentDetails?.liveAverage || "-" }} %</span
+        >
       </p>
       <nz-table
-        [nzData]="studentPerformanceData"
+        [nzData]="studentPerformances?.live"
         [nzFrontPagination]="false"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '640px' }"
+        [nzScroll]="{ x: '680px' }"
+        [nzNoResult]="customNoData"
       >
         <thead>
           <tr>
-            <th nzWidth="56px" class="text-center">Sl. No.</th>
-            <th nzWidth="200px">Student Name</th>
+            <th nzWidth="64px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Test Name</th>
+            <th nzWidth="84px" class="text-center">Subject</th>
             <th nzWidth="84px" class="text-center">Date</th>
             <th nzWidth="84px" class="text-center">Score</th>
             <th nzWidth="84px" class="text-center">Accuracy</th>
@@ -144,43 +161,59 @@
           </tr>
         </thead>
         <tbody>
-          @for (
-            performance of studentPerformanceData;
-            let i = $index;
-            track performance.id
-          ) {
-            <tr>
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.name || "-" }}</td>
-              <td class="text-center">
-                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
-              </td>
-              <td class="text-center font-400 text-a-primary">
-                {{ performance?.score || "-" }}
-              </td>
-              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+          <tr
+            *ngFor="let performance of studentPerformances?.live; let i = index"
+            (click)="onClickPerformance(performance)"
+          >
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ performance?.testDetails?.name || "-" }}</td>
+            <td class="text-center">
+              {{ performance?.testDetails?.subject || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.testItem?.startTime
+                  ? (performance?.testItem?.startTime | date: "dd MMM yy")
+                  : "-"
+              }}
+            </td>
+            <td class="text-center font-400 text-a-primary">
+              {{ performance?.scoreObtained || "-" }} /
+              {{ performance?.totalScore || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.scoreObtained && performance?.totalScore
+                  ? ((performance?.scoreObtained / performance?.totalScore) *
+                      100 | number: ".2-2")
+                  : "-"
+              }}
+            </td>
 
-              <td class="text-center">{{ performance?.id || "-" }}</td>
-            </tr>
-          }
+            <td class="text-center">{{ performance?.testId || "-" }}</td>
+          </tr>
         </tbody>
       </nz-table>
     </nz-tab>
     <nz-tab nzTitle="Recorded Tests">
       <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
         Average Accuracy:
-        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+        <span class="font-400 text-a-primary"
+          >{{ studentDetails?.recordedAverage || "-" }} %</span
+        >
       </p>
       <nz-table
-        [nzData]="studentPerformanceData"
+        [nzData]="studentPerformances?.recorded"
         [nzFrontPagination]="false"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '640px' }"
+        [nzScroll]="{ x: '680px' }"
+        [nzNoResult]="customNoData"
       >
         <thead>
           <tr>
-            <th nzWidth="56px" class="text-center">Sl. No.</th>
-            <th nzWidth="200px">Student Name</th>
+            <th nzWidth="64px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Test Name</th>
+            <th nzWidth="84px" class="text-center">Subject</th>
             <th nzWidth="84px" class="text-center">Date</th>
             <th nzWidth="84px" class="text-center">Score</th>
             <th nzWidth="84px" class="text-center">Accuracy</th>
@@ -188,43 +221,62 @@
           </tr>
         </thead>
         <tbody>
-          @for (
-            performance of studentPerformanceData;
-            let i = $index;
-            track performance.id
-          ) {
-            <tr>
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.name || "-" }}</td>
-              <td class="text-center">
-                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
-              </td>
-              <td class="text-center font-400 text-a-primary">
-                {{ performance?.score || "-" }}
-              </td>
-              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+          <tr
+            *ngFor="
+              let performance of studentPerformances?.recorded;
+              let i = index
+            "
+            (click)="onClickPerformance(performance)"
+          >
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ performance?.testDetails?.name || "-" }}</td>
+            <td class="text-center">
+              {{ performance?.testDetails?.subject || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.testItem?.startTime
+                  ? (performance?.testItem?.startTime | date: "dd MMM yy")
+                  : "-"
+              }}
+            </td>
+            <td class="text-center font-400 text-a-primary">
+              {{ performance?.scoreObtained || "-" }} /
+              {{ performance?.totalScore || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.scoreObtained && performance?.totalScore
+                  ? ((performance?.scoreObtained / performance?.totalScore) *
+                      100 | number: ".2-2")
+                  : "-"
+              }}
+            </td>
 
-              <td class="text-center">{{ performance?.id || "-" }}</td>
-            </tr>
-          }
+            <td class="text-center">{{ performance?.testId || "-" }}</td>
+          </tr>
         </tbody>
       </nz-table>
     </nz-tab>
     <nz-tab nzTitle="Mock Tests">
       <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
         Average Accuracy:
-        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+        <span class="font-400 text-a-primary"
+          >{{ studentDetails?.mockAverage || "-" }} %</span
+        >
       </p>
       <nz-table
-        [nzData]="studentPerformanceData"
+        [nzData]="studentPerformances?.mock"
         [nzFrontPagination]="false"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '640px' }"
+        [nzScroll]="{ x: '680px' }"
+        [nzNoResult]="customNoData"
       >
         <thead>
           <tr>
-            <th nzWidth="56px" class="text-center">Sl. No.</th>
-            <th nzWidth="200px">Student Name</th>
+            <th nzWidth="64px" class="text-center">Sl. No.</th>
+            <th nzWidth="200px">Test Name</th>
+            <th nzWidth="84px" class="text-center">Subject</th>
             <th nzWidth="84px" class="text-center">Date</th>
             <th nzWidth="84px" class="text-center">Score</th>
             <th nzWidth="84px" class="text-center">Accuracy</th>
@@ -232,43 +284,59 @@
           </tr>
         </thead>
         <tbody>
-          @for (
-            performance of studentPerformanceData;
-            let i = $index;
-            track performance.id
-          ) {
-            <tr>
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.name || "-" }}</td>
-              <td class="text-center">
-                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
-              </td>
-              <td class="text-center font-400 text-a-primary">
-                {{ performance?.score || "-" }}
-              </td>
-              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
+          <tr
+            *ngFor="let performance of studentPerformances?.mock; let i = index"
+            (click)="onClickPerformance(performance)"
+          >
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ performance?.testDetails?.name || "-" }}</td>
+            <td class="text-center">
+              {{ performance?.testDetails?.subject || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.testItem?.startTime
+                  ? (performance?.testItem?.startTime | date: "dd MMM yy")
+                  : "-"
+              }}
+            </td>
+            <td class="text-center font-400 text-a-primary">
+              {{ performance?.scoreObtained || "-" }} /
+              {{ performance?.totalScore || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.scoreObtained && performance?.totalScore
+                  ? ((performance?.scoreObtained / performance?.totalScore) *
+                      100 | number: ".2-2")
+                  : "-"
+              }}
+            </td>
 
-              <td class="text-center">{{ performance?.id || "-" }}</td>
-            </tr>
-          }
+            <td class="text-center">{{ performance?.testId || "-" }}</td>
+          </tr>
         </tbody>
       </nz-table>
     </nz-tab>
     <nz-tab nzTitle="Topic Tests">
       <p class="font-12 font-300 mt-n1 mb-2 pb-1 pl-1">
         Average Accuracy:
-        <span class="font-400 text-a-primary">{{ 76.8 }}</span>
+        <span class="font-400 text-a-primary"
+          >{{ studentDetails?.topicAverage || "-" }} %</span
+        >
       </p>
       <nz-table
-        [nzData]="studentPerformanceData"
+        [nzData]="studentPerformances?.topic"
         [nzFrontPagination]="false"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '640px' }"
+        [nzScroll]="{ x: '680px' }"
+        [nzNoResult]="customNoData"
       >
         <thead>
           <tr>
-            <th nzWidth="56px" class="text-center">Sl. No.</th>
-            <th nzWidth="200px">Test Name</th>
+            <th nzWidth="64px" class="text-center">Sl. No.</th>
+            <th nzWidth="120px">Test Name</th>
+            <th nzWidth="84px" class="text-center">Topic Name</th>
             <th nzWidth="84px" class="text-center">Date</th>
             <th nzWidth="84px" class="text-center">Score</th>
             <th nzWidth="84px" class="text-center">Accuracy</th>
@@ -276,27 +344,575 @@
           </tr>
         </thead>
         <tbody>
-          @for (
-            performance of studentPerformanceData;
-            let i = $index;
-            track performance.id
-          ) {
-            <tr>
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.name || "-" }}</td>
-              <td class="text-center">
-                {{ ("12-06-24" | date: "dd MMM yy") || "-" }}
-              </td>
-              <td class="text-center font-400 text-a-primary">
-                {{ performance?.score || "-" }}
-              </td>
-              <td class="text-center">{{ performance?.accuracy || "-" }}</td>
-
-              <td class="text-center">{{ performance?.id || "-" }}</td>
-            </tr>
-          }
+          <tr
+            *ngFor="
+              let performance of studentPerformances?.topic;
+              let i = index
+            "
+            (click)="onClickPerformance(performance)"
+          >
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ performance?.testDetails?.name || "-" }}</td>
+            <td class="text-center">
+              {{ performance?.testDetails?.topicName || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.testItem?.startTime
+                  ? (performance?.testItem?.startTime | date: "dd MMM yy")
+                  : "-"
+              }}
+            </td>
+            <td class="text-center font-400 text-a-primary">
+              {{ performance?.scoreObtained || "-" }} /
+              {{ performance?.totalScore || "-" }}
+            </td>
+            <td class="text-center">
+              {{
+                performance?.scoreObtained && performance?.totalScore
+                  ? ((performance?.scoreObtained / performance?.totalScore) *
+                      100 | number: ".2-2")
+                  : "-"
+              }}
+            </td>
+            <td class="text-center">{{ performance?.testId || "-" }}</td>
+          </tr>
         </tbody>
       </nz-table>
     </nz-tab>
+    <ng-template #customNoData>
+      <img
+        class="mt-3"
+        src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+        alt=""
+      />
+      <p class="font-16 font-300 mt-3">No Results Found!</p>
+    </ng-template>
   </nz-tabset>
 </nz-card>
+
+<nz-modal
+  [(nzVisible)]="isEditModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">Edit Student</div>
+
+    <form [formGroup]="editForm" class="admin-form">
+      <div class="row mt-4">
+        <div class="col-12">
+          <label class="font-12 font-400"
+            >Student ID<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="studentIdError">
+              <input
+                nz-input
+                type="text"
+                formControlName="studentId"
+                placeholder="Student ID"
+                class="admin-input"
+              />
+            </nz-form-control>
+            <ng-template #studentIdError let-control>
+              <ng-container *ngIf="control?.hasError('pattern')">
+                Invalid ID! Can only be a number!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Student Name<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="nameError">
+              <input
+                nz-input
+                type="text"
+                formControlName="name"
+                placeholder="Name"
+                class="admin-input"
+              />
+            </nz-form-control>
+            <ng-template #nameError let-control>
+              <ng-container *ngIf="control?.hasError('required')">
+                Name is required!
+              </ng-container>
+              <ng-container *ngIf="control?.hasError('maxlength')">
+                Max 60 characters allowed!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400">Batch</label>
+          <nz-form-item>
+            <nz-form-control>
+              <nz-select
+                formControlName="batchId"
+                nzPlaceHolder="Select Batch"
+                nzAllowClear
+                nzShowSearch
+              >
+                <nz-option
+                  *ngFor="let batch of batches"
+                  [nzValue]="batch?.id"
+                  [nzLabel]="batch?.name"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Email<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="emailError">
+              <input
+                nz-input
+                type="text"
+                formControlName="email"
+                placeholder="Name"
+                class="admin-input"
+              />
+            </nz-form-control>
+            <ng-template #emailError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Email is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('email')">
+                Invalid Email!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Phone<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="phoneError">
+              <input
+                nz-input
+                type="text"
+                formControlName="phone"
+                placeholder="Name"
+                class="admin-input"
+              />
+            </nz-form-control>
+            <ng-template #phoneError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Phone number is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">
+                Invalid Phone Number! (e.g.:- +91-9999999999)
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Image URL<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="imageUrlError">
+              <input
+                nz-input
+                type="text"
+                formControlName="imageUrl"
+                placeholder="URL"
+                class="admin-input"
+              />
+            </nz-form-control>
+            <ng-template #imageUrlError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Image URL is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">
+                Invalid URL!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Age<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="ageError">
+              <input
+                nz-input
+                type="text"
+                formControlName="age"
+                placeholder="Age"
+                class="admin-input"
+              />
+            </nz-form-control>
+            <ng-template #ageError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Age is required!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('min')">
+                Minimum age is 12
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Cuet Attempts<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control>
+              <nz-select
+                formControlName="cuetAttempts"
+                nzPlaceHolder="Select Attempts"
+                nzAllowClear
+                [nzShowArrow]="true"
+                nzShowSearch
+                nzMode="multiple"
+                [nzMaxTagCount]="2"
+              >
+                <nz-option
+                  *ngFor="let year of yearsOptions"
+                  [nzValue]="year + ''"
+                  [nzLabel]="year"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-12 mt-3">
+          <label class="font-12 font-400"
+            >Features<span class="text-red">*</span></label
+          >
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="featuresError">
+              <nz-select
+                formControlName="features"
+                nzPlaceHolder="Select Features"
+                nzAllowClear
+                [nzShowArrow]="true"
+                nzShowSearch
+                nzMode="multiple"
+                [nzMaxTagCount]="2"
+              >
+                <nz-option
+                  *ngFor="let feature of features"
+                  [nzValue]="feature?.id"
+                  [nzLabel]="feature?.name + ' (₹ ' + feature?.price + ')'"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <ng-template #featuresError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                At least 1 feature is required!
+              </ng-container>
+            </ng-template>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+
+    <div class="d-flex justify-content-start mt-4 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="btn-a-secondary mr-4 mb-1"
+        (click)="onModalClose()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="btn-a-primary mb-1 mr-2"
+        (click)="onEditStudent()"
+      >
+        Save
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isPerformanceModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400">Test Performance Details</p>
+    <div class="d-flex align-items-end mt-4">
+      <div>
+        <p class="font-12 font-400">Total Score</p>
+        <p class="font-20 font-600 text-a-primary">
+          {{ selectedPerformance?.scoreObtained }}
+          /
+          {{ selectedPerformance?.totalScore }}
+        </p>
+      </div>
+      @if (
+        selectedPerformance?.previousScoreObtained &&
+        selectedPerformance?.previousTotalScore
+      ) {
+        <div class="ml-5">
+          <p class="font-12 font-400 text-aa">Previous Score</p>
+          <p class="font-20 font-500 text-aa">
+            {{ selectedPerformance?.previousScoreObtained }}
+            /
+            {{ selectedPerformance?.previousTotalScore }}
+          </p>
+        </div>
+      }
+    </div>
+
+    <nz-divider nzText="Performance Metrics" nzOrientation="left"></nz-divider>
+
+    <div class="row">
+      <div class="col-md-8 order-md-0 order-1">
+        <div class="row align-items-center">
+          <div class="col-10 font-14 font-400">Total No. of Questions</div>
+          <div class="col-2 font-14 font-600 text-a-primary">
+            :
+            {{
+              selectedPerformance?.correct +
+                selectedPerformance?.incorrect +
+                selectedPerformance?.unattempted
+            }}
+          </div>
+        </div>
+        <div class="row align-items-center mt-1">
+          <div class="col-10 font-14 font-400">No. of Questions Attempted</div>
+          <div class="col-2 font-14 font-600 text-a-primary">
+            :
+            {{ selectedPerformance?.correct + selectedPerformance?.incorrect }}
+          </div>
+        </div>
+        <div class="row align-items-center mt-1">
+          <div class="col-10 font-14 font-400">
+            No. of Questions Un-attempted
+          </div>
+          <div class="col-2 font-14 font-600 text-a-primary">
+            :
+            {{ selectedPerformance?.unattempted }}
+          </div>
+        </div>
+        <div class="row align-items-center mt-1">
+          <div class="col-10 font-14 font-400">No. of Correct Answers</div>
+          <div class="col-2 font-14 font-600 text-a-primary">
+            :
+            {{ selectedPerformance?.correct }}
+          </div>
+        </div>
+        <div class="row align-items-center mt-1">
+          <div class="col-10 font-14 font-400">No. of Incorrect Answers</div>
+          <div class="col-2 font-14 font-600 text-a-primary">
+            :
+            {{ selectedPerformance?.incorrect }}
+          </div>
+        </div>
+
+        <p class="font-16 font-500 mt-3">
+          Accuracy :
+          <span class="font-600 text-a-primary"
+            >{{
+              (selectedPerformance?.scoreObtained /
+                selectedPerformance?.totalScore) *
+                100 | number: ".2-2"
+            }}
+            %</span
+          >
+          <span
+            class="ml-2 text-aa font-12 font-400"
+            *ngIf="selectedPerformance?.scoreDifference"
+            >{{ selectedPerformance?.scoreDifference }} %</span
+          >
+        </p>
+      </div>
+      <div class="col-md-4 order-md-1 order-0">
+        <div
+          class="chart-div d-flex justify-content-center mt-md-1 mt-0 mb-md-0 mb-3"
+        >
+          <canvas
+            baseChart
+            [labels]="doughnutChartLabels"
+            [datasets]="performanceChartDatasets"
+            [options]="doughnutChartOptions"
+            [legend]="false"
+            [type]="'doughnut'"
+            height="96"
+            width="96"
+          >
+          </canvas>
+          <div class="admin-chart chart-center">A+</div>
+        </div>
+      </div>
+    </div>
+
+    <nz-divider nzText="Test Details" nzOrientation="left"></nz-divider>
+
+    <div class="row align-items-center">
+      <div class="col-4 font-14 font-400">Test Name</div>
+      <div class="col-8 font-14 font-500 text-a-primary">
+        :
+        <span class="ml-2">
+          {{ selectedPerformance?.testDetails?.name }}
+        </span>
+      </div>
+    </div>
+    <div class="row align-items-center mt-1">
+      <div class="col-4 font-14 font-400">Date</div>
+      <div class="col-8 font-14 font-500 text-a-primary">
+        :
+        <span class="ml-2">
+          {{ selectedPerformance?.testItem?.startTime ? (selectedPerformance?.testItem?.startTime | date: "dd MMM yyyy") : '-' }}
+        </span>
+      </div>
+    </div>
+    <div class="row align-items-center mt-1">
+      <div class="col-4 font-14 font-400">Start Time</div>
+      <div class="col-8 font-14 font-500 text-a-primary">
+        :
+        <span class="ml-2">
+          {{ selectedPerformance?.testItem?.startTime ? (selectedPerformance?.testItem?.startTime | date: "hh:mm a") : '-' }}
+        </span>
+      </div>
+    </div>
+    <div class="row align-items-center mt-1">
+      <div class="col-4 font-14 font-400">End Time</div>
+      <div class="col-8 font-14 font-500 text-a-primary">
+        :
+        <span class="ml-2">
+          {{ selectedPerformance?.testItem?.endTime ? (selectedPerformance?.testItem?.endTime | date: "hh:mm a") : '-' }}
+        </span>
+      </div>
+    </div>
+    @if (selectedPerformance?.testType !== "topic") {
+      <div class="row align-items-center mt-1">
+        <div class="col-4 font-14 font-400">Topics</div>
+        <div class="col-8 font-14 font-500 text-a-primary">
+          :
+          <span class="ml-2">
+            {{ selectedPerformance?.testDetails?.topics?.join(", ") }}
+          </span>
+        </div>
+      </div>
+    } @else {
+      <div class="row align-items-center mt-1">
+        <div class="col-4 font-14 font-400">Topic Name</div>
+        <div class="col-8 font-14 font-500 text-a-primary">
+          :
+          <span class="ml-2">
+            {{ selectedPerformance?.testDetails?.topicName }}
+          </span>
+        </div>
+      </div>
+    }
+    <div class="row align-items-center mt-1">
+      <div class="col-4 font-14 font-400">Test Type</div>
+      <div class="col-8 font-14 font-500 text-a-primary">
+        :
+        <span class="ml-2">
+          {{ selectedPerformance?.testType | titlecase }}
+        </span>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+      <button nz-button class="btn-a-primary" (click)="getTestLeaderboard()">
+        {{ isLeaderboardVisible ? 'Hide':'View' }} Leaderboard
+      </button>
+    </div>
+
+    <div id="admin-test-leaderboard" class="mt-3" *ngIf="isLeaderboardVisible">
+      <div
+        class="leaderboard-header admin-diagonal-gradient ant-row align-items-center justify-content-between px-2"
+      >
+        <div class="ant-col-5 text-center">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_1380_471)">
+              <path
+                d="M8.16782 5.54177C8.16782 6.18518 7.64457 6.70843 7.00115 6.70843C6.35774 6.70843 5.83449 6.18518 5.83449 5.54177C5.83449 4.89835 6.35774 4.3751 7.00115 4.3751C7.64457 4.3751 8.16782 4.89835 8.16782 5.54177ZM12.3491 4.79335C12.2097 4.54193 12.0242 4.34943 11.8136 4.21293C11.438 3.97027 11.2379 3.52402 11.3371 3.08827C11.3937 2.83802 11.3902 2.56502 11.3091 2.28268C11.1656 1.7816 10.7572 1.37327 10.2562 1.22977C9.97382 1.14868 9.70082 1.14518 9.45115 1.20177C9.01482 1.30093 8.56857 1.10143 8.3259 0.725182C8.18998 0.514599 7.9969 0.329098 7.74607 0.189682C7.2899 -0.0629017 6.71299 -0.0629017 6.25682 0.189682C6.0054 0.329098 5.8129 0.514599 5.67699 0.725182C5.43432 1.10085 4.98807 1.30093 4.55174 1.20177C4.30207 1.14518 4.02907 1.14868 3.74674 1.22977C3.24565 1.37327 2.83732 1.7816 2.69382 2.28268C2.61274 2.56502 2.60924 2.8386 2.66582 3.08827C2.76499 3.5246 2.5649 3.97085 2.18924 4.21293C1.97807 4.34885 1.79315 4.54193 1.65374 4.79335C1.52599 5.02318 1.46415 5.28452 1.46532 5.54527C1.46415 5.80602 1.52657 6.06677 1.65374 6.29718C1.79315 6.5486 1.97865 6.7411 2.18924 6.8776C2.5649 7.12027 2.76499 7.56652 2.66582 8.00227C2.60924 8.25252 2.61274 8.52552 2.69382 8.80844C2.83732 9.30952 3.24565 9.71785 3.74674 9.86135C4.02907 9.94244 4.30207 9.94594 4.55174 9.88935C4.98807 9.79018 5.43432 9.98969 5.67699 10.3659C5.8129 10.5765 6.0054 10.762 6.25682 10.9014C6.71299 11.154 7.29049 11.154 7.74607 10.9014C7.99749 10.762 8.18998 10.5765 8.3259 10.3659C8.56857 9.99027 9.01482 9.79018 9.45115 9.88935C9.70082 9.94594 9.97382 9.94244 10.2562 9.86135C10.7572 9.71785 11.1656 9.30952 11.3091 8.80844C11.3902 8.5261 11.3937 8.25252 11.3371 8.00227C11.2379 7.56593 11.438 7.11968 11.8136 6.8776C12.0248 6.74168 12.2097 6.5486 12.3491 6.29718C12.4769 6.06735 12.5387 5.80602 12.5376 5.54527C12.5387 5.28452 12.4763 5.02377 12.3491 4.79335ZM6.99474 7.87627C5.7079 7.87627 4.6614 6.82977 4.6614 5.54293C4.6614 4.2561 5.7079 3.2096 6.99474 3.2096C8.28157 3.2096 9.32807 4.2561 9.32807 5.54293C9.32807 6.82977 8.28157 7.87627 6.99474 7.87627ZM4.72674 11.0438C4.30324 11.1266 3.85407 11.1056 3.42532 10.9825C2.59524 10.7445 1.9209 10.1093 1.62807 9.30252L0.207654 10.7229C0.0950707 10.8361 0.0233207 10.986 0.00582069 11.1459C-0.0367626 11.5349 0.244404 11.8861 0.633487 11.9287L1.92907 12.0722L2.07199 13.3625C2.08832 13.5282 2.1624 13.6787 2.27557 13.7919C2.34965 13.8659 2.44007 13.9237 2.54215 13.9593C2.80115 14.052 3.09107 13.9849 3.2789 13.7924L5.36199 11.7094C5.11232 11.5233 4.8994 11.301 4.72615 11.0444L4.72674 11.0438ZM13.9971 11.1453C13.9796 10.986 13.9078 10.8355 13.7952 10.7224L12.3748 9.30194C12.082 10.1087 11.4071 10.7445 10.5776 10.9819C10.1482 11.1044 9.70023 11.1254 9.27615 11.0432C9.10348 11.2999 8.88999 11.5221 8.64032 11.7082L10.7234 13.7913C10.9118 13.9838 11.2017 14.0509 11.4601 13.9581C11.5622 13.9225 11.6526 13.8648 11.7267 13.7907C11.8399 13.6775 11.914 13.5264 11.9303 13.3614L12.0732 12.071L13.3688 11.9275C13.7579 11.8844 14.0391 11.5338 13.9965 11.1447L13.9971 11.1453Z"
+                fill="white"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_1380_471">
+                <rect
+                  width="14"
+                  height="14"
+                  class="leaderboard-badge"
+                  transform="translate(0.000854492)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+          {{ "Rank" }}
+        </div>
+        <!-- Incremented index to start from 1 -->
+        <div class="ant-col-14 px-2">{{ "Name" }}</div>
+        <div class="ant-col-5 text-center">{{ "Score %" }}</div>
+      </div>
+      @for (data of leaderboardData; let i = $index; track i) {
+        <div class="ranks" [class]="'rank-' + (i + 1)">
+          <div class="ant-row align-items-center justify-content-between px-2">
+            <div class="ant-col-5 text-center">
+              <svg
+                *ngIf="i < 3"
+                class="leaderboard-icon mr-2"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_1380_471)">
+                  <path
+                    d="M8.16782 5.54177C8.16782 6.18518 7.64457 6.70843 7.00115 6.70843C6.35774 6.70843 5.83449 6.18518 5.83449 5.54177C5.83449 4.89835 6.35774 4.3751 7.00115 4.3751C7.64457 4.3751 8.16782 4.89835 8.16782 5.54177ZM12.3491 4.79335C12.2097 4.54193 12.0242 4.34943 11.8136 4.21293C11.438 3.97027 11.2379 3.52402 11.3371 3.08827C11.3937 2.83802 11.3902 2.56502 11.3091 2.28268C11.1656 1.7816 10.7572 1.37327 10.2562 1.22977C9.97382 1.14868 9.70082 1.14518 9.45115 1.20177C9.01482 1.30093 8.56857 1.10143 8.3259 0.725182C8.18998 0.514599 7.9969 0.329098 7.74607 0.189682C7.2899 -0.0629017 6.71299 -0.0629017 6.25682 0.189682C6.0054 0.329098 5.8129 0.514599 5.67699 0.725182C5.43432 1.10085 4.98807 1.30093 4.55174 1.20177C4.30207 1.14518 4.02907 1.14868 3.74674 1.22977C3.24565 1.37327 2.83732 1.7816 2.69382 2.28268C2.61274 2.56502 2.60924 2.8386 2.66582 3.08827C2.76499 3.5246 2.5649 3.97085 2.18924 4.21293C1.97807 4.34885 1.79315 4.54193 1.65374 4.79335C1.52599 5.02318 1.46415 5.28452 1.46532 5.54527C1.46415 5.80602 1.52657 6.06677 1.65374 6.29718C1.79315 6.5486 1.97865 6.7411 2.18924 6.8776C2.5649 7.12027 2.76499 7.56652 2.66582 8.00227C2.60924 8.25252 2.61274 8.52552 2.69382 8.80844C2.83732 9.30952 3.24565 9.71785 3.74674 9.86135C4.02907 9.94244 4.30207 9.94594 4.55174 9.88935C4.98807 9.79018 5.43432 9.98969 5.67699 10.3659C5.8129 10.5765 6.0054 10.762 6.25682 10.9014C6.71299 11.154 7.29049 11.154 7.74607 10.9014C7.99749 10.762 8.18998 10.5765 8.3259 10.3659C8.56857 9.99027 9.01482 9.79018 9.45115 9.88935C9.70082 9.94594 9.97382 9.94244 10.2562 9.86135C10.7572 9.71785 11.1656 9.30952 11.3091 8.80844C11.3902 8.5261 11.3937 8.25252 11.3371 8.00227C11.2379 7.56593 11.438 7.11968 11.8136 6.8776C12.0248 6.74168 12.2097 6.5486 12.3491 6.29718C12.4769 6.06735 12.5387 5.80602 12.5376 5.54527C12.5387 5.28452 12.4763 5.02377 12.3491 4.79335ZM6.99474 7.87627C5.7079 7.87627 4.6614 6.82977 4.6614 5.54293C4.6614 4.2561 5.7079 3.2096 6.99474 3.2096C8.28157 3.2096 9.32807 4.2561 9.32807 5.54293C9.32807 6.82977 8.28157 7.87627 6.99474 7.87627ZM4.72674 11.0438C4.30324 11.1266 3.85407 11.1056 3.42532 10.9825C2.59524 10.7445 1.9209 10.1093 1.62807 9.30252L0.207654 10.7229C0.0950707 10.8361 0.0233207 10.986 0.00582069 11.1459C-0.0367626 11.5349 0.244404 11.8861 0.633487 11.9287L1.92907 12.0722L2.07199 13.3625C2.08832 13.5282 2.1624 13.6787 2.27557 13.7919C2.34965 13.8659 2.44007 13.9237 2.54215 13.9593C2.80115 14.052 3.09107 13.9849 3.2789 13.7924L5.36199 11.7094C5.11232 11.5233 4.8994 11.301 4.72615 11.0444L4.72674 11.0438ZM13.9971 11.1453C13.9796 10.986 13.9078 10.8355 13.7952 10.7224L12.3748 9.30194C12.082 10.1087 11.4071 10.7445 10.5776 10.9819C10.1482 11.1044 9.70023 11.1254 9.27615 11.0432C9.10348 11.2999 8.88999 11.5221 8.64032 11.7082L10.7234 13.7913C10.9118 13.9838 11.2017 14.0509 11.4601 13.9581C11.5622 13.9225 11.6526 13.8648 11.7267 13.7907C11.8399 13.6775 11.914 13.5264 11.9303 13.3614L12.0732 12.071L13.3688 11.9275C13.7579 11.8844 14.0391 11.5338 13.9965 11.1447L13.9971 11.1453Z"
+                    fill="white"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_1380_471">
+                    <rect
+                      width="14"
+                      height="14"
+                      class="leaderboard-badge"
+                      transform="translate(0.000854492)"
+                    />
+                  </clipPath>
+                </defs>
+              </svg>
+              {{ i + 1 }}
+            </div>
+            <!-- Incremented index to start from 1 -->
+            <div class="ant-col-14 px-2">{{ data?.studentName }}</div>
+            <div class="ant-col-5 text-center">
+              {{
+                (data?.scoreObtained / data?.totalScore) * 100 | number: ".2-2"
+              }}
+              %
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <nz-empty
+          class="mt-3"
+          [nzNotFoundImage]="
+            'https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
+          "
+        ></nz-empty>
+      }
+    </div>
+  </ng-container>
+</nz-modal>

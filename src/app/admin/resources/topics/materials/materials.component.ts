@@ -1,64 +1,270 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AdminHttpService } from '../../../../shared/services/admin-http.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
   styleUrl: './materials.component.scss',
 })
-export class MaterialsComponent {
+export class MaterialsComponent implements OnInit {
   subjectName: string = 'Subject';
   topicName: string = 'Topic';
 
-  materials: any[] = [
-    { name: 'Reasoning', id: 0, isFree: true },
-    { name: 'G.K. & G.S.', id: 1, isFree: true },
-    { name: 'Mathematics', id: 2, isFree: false },
-    { name: 'Current Affairs', id: 3, isFree: false },
-    { name: 'English', id: 4, isFree: false },
-    { name: 'Physics', id: 5, isFree: true },
-    { name: 'Chemistry', id: 6, isFree: false },
-    { name: 'Biology', id: 7, isFree: false },
-  ];
+  topicId: any;
 
-  topicTests: any = [
-    {
-      id: 0,
-      name: 'Test 1',
-      questions: 120,
-      type: 'free',
-      duration: 120,
-    },
-    {
-      id: 1,
-      name: 'Test 2',
-      questions: 105,
-      type: 'free',
-      duration: 50,
-    },
-    {
-      id: 2,
-      name: 'Test 3',
-      questions: 60,
-      type: 'paid',
-      duration: 50,
-    },
-    {
-      id: 3,
-      name: 'Test 4',
-      questions: 96,
-      type: 'free',
-      duration: 50,
-    },
-    {
-      id: 4,
-      name: 'Test 5',
-      questions: 55,
-      type: 'paid',
-      duration: 50,
-    },
-  ];
+  materials: any;
+  searchMaterial: string = '';
+  isCreateEditMaterialModal = false;
+  isEditModal = false;
+  addEditMaterialForm: FormGroup;
 
-  collapseFilter: boolean = false;
+  topicTests: any;
+  searchTest: string = '';
+  topicPageIndex: any = 1;
+  topicPageSize: any = 30;
+  totalTopicTestCount: any;
+  isTopicLoading = false;
+
+  isDeleteModal = false;
+  modalType: string = '';
+  deleteTestId: any;
+  deleteMaterialId: any;
+
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly http: AdminHttpService,
+    private readonly message: NzMessageService,
+    private readonly formBuilder: FormBuilder,
+  ) {
+    this.addEditMaterialForm = this.formBuilder.group({
+      id: [{ value: null, disabled: true }],
+      name: ['', [Validators.required]],
+      isFree: [false, [Validators.required]],
+      url: [
+        null,
+        [
+          Validators.required,
+          Validators.pattern(
+            /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/,
+          ),
+        ],
+      ],
+      topicId: [{ value: null, disabled: true }, [Validators.required]],
+    });
+  }
+
+  ngOnInit() {
+    this.topicId = +this.route.snapshot.params['topicId'];
+
+    if (isNaN(this.topicId)) {
+      this.message.error('Error! Invalid topic selected!');
+      this.router.navigate(['/', 'admin', 'resources']);
+      return;
+    }
+
+    this.addEditMaterialForm?.get('topicId')?.patchValue(this.topicId);
+    this.getMaterials();
+    this.getTopicTests();
+  }
+
+  getMaterials() {
+    const data: any = {};
+
+    data.topicId = this.topicId;
+    if (this.searchMaterial) data.search = this.searchMaterial;
+
+    this.http.getMaterials(data).subscribe({
+      next: (res: any) => {
+        this.materials = res?.data?.materials;
+        this.subjectName = res?.data?.subjectName;
+        this.topicName = res?.data?.topicName;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getTopicTests(event?: any) {
+    this.isTopicLoading = true;
+
+    const data: any = {
+      page: this.topicPageIndex,
+      limit: this.topicPageSize,
+    };
+
+    if (event) {
+      data['page'] = event?.pageIndex;
+      data['limit'] = event?.pageSize;
+      this.topicPageIndex = event?.pageIndex;
+      this.topicPageSize = event?.pageSize;
+    }
+
+    if (this.searchTest) {
+      data['search'] = this.searchTest;
+    }
+
+    this.http.getTopicTests(data).subscribe({
+      next: (res: any) => {
+        this.isTopicLoading = false;
+        this.topicTests = res?.data?.tests;
+        this.totalTopicTestCount = res?.data?.total;
+      },
+      error: (error: any) => {
+        this.isTopicLoading = false;
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  onChangeType(testId: number, testType: string, mode?: string) {
+    const data: any = {};
+    data['testId'] = testId;
+    data['testType'] = testType;
+    mode ? (data['mode'] = mode) : null;
+
+    this.http.putChangeTestType(data).subscribe({
+      next: (res: any) => {
+        this.message.success('Successful! Test type updated!');
+        this.getTopicTests();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  onDeleteTest() {
+    const data: any = {};
+    data['testId'] = this.deleteTestId;
+    data['testType'] = 'topic';
+
+    this.http.deleteTest(data).subscribe({
+      next: (res: any) => {
+        this.message.success('Successful! Test deleted!');
+        this.getTopicTests();
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  onOpenMaterialForm(material?: any) {
+    this.addEditMaterialForm.reset();
+    if (material) {
+      this.isEditModal = true;
+      this.addEditMaterialForm?.get('id')?.setValidators([Validators.required]);
+      this.addEditMaterialForm?.updateValueAndValidity();
+      this.addEditMaterialForm?.get('id')?.patchValue(material?.id);
+      this.addEditMaterialForm?.get('name')?.patchValue(material?.name);
+      this.addEditMaterialForm?.get('url')?.patchValue(material?.url);
+      this.addEditMaterialForm?.get('isFree')?.patchValue(material?.isFree);
+    } else {
+      this.isEditModal = false;
+      this.addEditMaterialForm?.get('id')?.clearValidators();
+      this.addEditMaterialForm?.updateValueAndValidity();
+      this.addEditMaterialForm?.get('isFree')?.patchValue(false);
+    }
+    this.addEditMaterialForm?.get('topicId')?.patchValue(this.topicId);
+    this.isCreateEditMaterialModal = true;
+  }
+
+  onCreateSaveMaterial() {
+    if (this.addEditMaterialForm.invalid) {
+      this.message.error('Marked fields are mandatory!');
+      Object.keys(this.addEditMaterialForm?.controls)?.forEach((field) => {
+        const control = this.addEditMaterialForm?.get(field);
+        control?.markAsDirty({ onlySelf: true });
+        control?.markAsTouched({ onlySelf: true });
+        control?.updateValueAndValidity({ onlySelf: true });
+      });
+      return;
+    }
+
+    const payload: any = {};
+    this.isEditModal
+      ? (payload.materialId = this.addEditMaterialForm?.get('id')?.value)
+      : null;
+    payload.name = this.addEditMaterialForm?.get('name')?.value;
+    payload.url = this.addEditMaterialForm?.get('url')?.value;
+    payload.isFree = this.addEditMaterialForm?.get('isFree')?.value;
+    payload.topicId = this.addEditMaterialForm?.get('topicId')?.value;
+
+    if (this.isEditModal) {
+      this.http.putEditMaterial(payload).subscribe({
+        next: (res: any) => {
+          this.message.success('Successful! Material updated!');
+          this.getMaterials();
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    } else {
+      this.http.postCreateMaterial(payload).subscribe({
+        next: (res: any) => {
+          this.message.success('Successful! Material created!');
+          this.getMaterials();
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    }
+  }
+
+  onDeleteMaterial() {
+    const data: any = {
+      materialId: this.deleteMaterialId,
+    };
+
+    this.http.deleteMaterial(data).subscribe({
+      next: (res: any) => {
+        this.message.success('Successful! Material deleted!');
+        this.getMaterials();
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  onModalClose() {
+    this.isDeleteModal = false;
+    this.isCreateEditMaterialModal = false;
+    this.deleteMaterialId = undefined;
+    this.deleteTestId = undefined;
+    this.modalType = '';
+  }
+
+  onClickTest(event: any, testType: string, testId: number) {
+    const excludedSection = (event.target as HTMLElement).closest(
+      '.dropdown-container',
+    );
+
+    if (excludedSection) {
+      // Do nothing if the click was on the excluded section
+      return;
+    }
+
+    this.router.navigate(['/', 'admin', 'tests', testType, testId]);
+  }
 
   protected readonly Math = Math;
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AdminHttpService } from '../../../shared/services/admin-http.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-test-detail',
@@ -7,28 +9,145 @@ import { Router } from '@angular/router';
   styleUrl: './test-detail.component.scss',
 })
 export class TestDetailComponent implements OnInit {
+  isRecorded = false;
   isRankList: boolean = false;
 
-  studentData: any = [
-    { id: 1, name: 'Aditya', score: '120/240', accuracy: '50%' },
-    { id: 2, name: 'Aditya 2', score: '124/240', accuracy: '50%' },
-    { id: 3, name: 'Aditya 3', score: '190/240', accuracy: '50%' },
-    { id: 4, name: 'Aditya 4', score: '156/240', accuracy: '50%' },
-    { id: 5, name: 'Aditya 5', score: '152/240', accuracy: '50%' },
-    { id: 6, name: 'Aditya 6', score: '112/240', accuracy: '50%' },
-    { id: 7, name: 'Aditya 7', score: '167/240', accuracy: '50%' },
-    { id: 8, name: 'Aditya 8', score: '78/240', accuracy: '50%' },
-  ];
+  testId: any;
+  testType: any;
 
-  constructor(private readonly router: Router) {}
+  isLoading = false;
+  testDetails: any;
+  participants: any;
+  recordedParticipants: any;
+  leaderboard: any;
+
+  isQuestionLoading = false;
+  isQuestionViewModal = false;
+  questions: any;
+
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly http: AdminHttpService,
+    private readonly message: NzMessageService,
+  ) {}
 
   ngOnInit() {
-    const urlFragments = this.router.url
-      .split('/')
-      .filter((fragment) => fragment);
-    // console.log(urlFragments);
-    if (!+urlFragments[urlFragments.length - 1]) {
-      this.router.navigate(['/', 'admin', 'tests']);
+    this.testId = +this.route.snapshot.params['testId'];
+    const url = this.router.url.split('/');
+    this.testType = url[url.length - 2];
+
+    if (
+      isNaN(this.testId) ||
+      !['live', 'mock', 'topic'].includes(this.testType)
+    ) {
+      this.message.error('Error! Invalid test!');
+    } else {
+      this.getTestDetails();
+      if (this.testType === 'live') {
+        this.getTestRecordedParticipants();
+      }
     }
   }
+
+  getTestDetails() {
+    this.isLoading = true;
+    const data: any = {
+      testId: this.testId,
+      testType: this.testType,
+    };
+
+    this.http.getTestDetails(data).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.testDetails = res?.data?.testDetails;
+        this.participants = res?.data?.participants;
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getTestRecordedParticipants() {
+    this.isLoading = true;
+    const data: any = {
+      testId: this.testId,
+    };
+
+    this.http.getTestRecordedParticipants(data).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.recordedParticipants = res?.data?.participants;
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  onRankModeChange() {
+    if (this.isRankList) {
+      this.testType === 'live' && this.isRecorded
+        ? this.getTestLeaderboard('recorded')
+        : this.getTestLeaderboard('live');
+    }
+  }
+
+  getTestLeaderboard(testType: string) {
+    this.isLoading = true;
+    const data: any = {
+      testId: this.testId,
+      testType,
+    };
+
+    this.http.getTestLeaderboard(data).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.leaderboard = res?.data;
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getTestQuestions() {
+    if (!this.questions) {
+      this.isQuestionLoading = true;
+      const data: any = {
+        testId: this.testId,
+        testType: this.testType,
+      };
+
+      this.http.getTestQuestions(data).subscribe({
+        next: (res: any) => {
+          this.isQuestionLoading = false;
+          this.questions = res?.data?.questions;
+        },
+        error: (error: any) => {
+          this.isQuestionLoading = false;
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    }
+  }
+
+  onModalOpen() {
+    this.getTestQuestions();
+    this.isQuestionViewModal = true;
+  }
+
+  onModalClose() {
+    this.isQuestionViewModal = false;
+  }
+
+  protected readonly Math = Math;
 }

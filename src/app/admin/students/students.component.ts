@@ -15,56 +15,7 @@ import {
   styleUrl: './students.component.scss',
 })
 export class StudentsComponent implements OnInit {
-  collapseFilter: boolean = false;
-
-  // Filters
-  filterNameOrId: string = '';
-  filterBatchId: string = '';
-
-  students: any = [
-    {
-      id: 0,
-      name: 'Test 1',
-      questions: 10,
-      isFree: true,
-      batchId: 90,
-    },
-    {
-      id: 1,
-      name: 'Test 2',
-      questions: 10,
-      isFree: false,
-      batchId: 120,
-    },
-    {
-      id: 2,
-      name: 'Test 3',
-      questions: 10,
-      isFree: false,
-      batchId: 50,
-    },
-    {
-      id: 3,
-      name: 'Test 4',
-      questions: 10,
-      isFree: true,
-      batchId: 75,
-    },
-    {
-      id: 4,
-      name: 'Test 5',
-      questions: 10,
-      isFree: false,
-      batchId: 60,
-    },
-    {
-      id: 5,
-      name: 'Test 6',
-      questions: 10,
-      isFree: true,
-      batchId: 80,
-    },
-  ];
+  students: any;
 
   batches: any;
   features: any;
@@ -161,7 +112,6 @@ export class StudentsComponent implements OnInit {
         this.isLoading = false;
         this.students = res?.data?.students;
         this.totalCount = res?.data?.total;
-        this.deleteStudentId = res?.data?.students[0]?.id;
       },
       error: (error: any) => {
         this.isLoading = false;

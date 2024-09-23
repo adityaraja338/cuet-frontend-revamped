@@ -25,7 +25,10 @@
           <div class="col-md-9 col-xl-9">
             <nz-form-item class="font-300">
               <nz-form-control>
-                <nz-radio-group formControlName="testType">
+                <nz-radio-group
+                  [nzDisabled]="isEditMode"
+                  formControlName="testType"
+                >
                   <label nz-radio nzValue="live">Live Test</label>
                   <label nz-radio nzValue="mock">Mock Test</label>
                   <label nz-radio nzValue="topic">Topic Test</label>
@@ -107,6 +110,7 @@
                     nzMode="tags"
                     nzPlaceHolder="Topics"
                     formControlName="topics"
+                    [nzMaxTagCount]="1"
                   >
                     <ng-container
                       *ngFor="let tag of testForm?.get('topics')?.value"
@@ -144,8 +148,11 @@
                     formControlName="subjectId"
                     [nzShowArrow]="true"
                   >
-                    <ng-container *ngFor="let tag of hoursList">
-                      <nz-option [nzLabel]="tag" [nzValue]="tag"></nz-option>
+                    <ng-container *ngFor="let subject of subjects">
+                      <nz-option
+                        [nzLabel]="subject?.name"
+                        [nzValue]="subject?.id"
+                      ></nz-option>
                     </ng-container>
                   </nz-select>
                 </nz-form-control>
@@ -172,8 +179,15 @@
                     formControlName="topicId"
                     [nzShowArrow]="true"
                   >
-                    <ng-container *ngFor="let tag of hoursList">
-                      <nz-option [nzLabel]="tag" [nzValue]="tag"></nz-option>
+                    <ng-container *ngFor="let topic of topics">
+                      @if (
+                        topic?.subjectId === testForm?.get("subjectId")?.value
+                      ) {
+                        <nz-option
+                          [nzLabel]="topic?.name"
+                          [nzValue]="topic?.id"
+                        ></nz-option>
+                      }
                     </ng-container>
                   </nz-select>
                 </nz-form-control>
@@ -352,9 +366,13 @@
                     nzPlaceHolder="Batch ID"
                     formControlName="batchIds"
                     [nzShowArrow]="true"
+                    [nzMaxTagCount]="1"
                   >
-                    <ng-container *ngFor="let tag of hoursList">
-                      <nz-option [nzLabel]="tag" [nzValue]="tag"></nz-option>
+                    <ng-container *ngFor="let batch of batches">
+                      <nz-option
+                        [nzLabel]="batch?.name"
+                        [nzValue]="batch?.id"
+                      ></nz-option>
                     </ng-container>
                   </nz-select>
                 </nz-form-control>
@@ -378,7 +396,7 @@
             [nzCustomRequest]="handleFileSelect"
             [nzAccept]="'text/csv'"
           >
-            <button nz-button class="btn-primary">
+            <button nz-button class="btn-a-primary">
               <span nz-icon nzType="upload"></span> Click to Select File
             </button>
           </nz-upload>
@@ -408,21 +426,41 @@
                 </p>
                 <div class="d-flex align-items-center">
                   <p
+                    class="font-10 text-red pr-2"
+                    *ngIf="isEditMode && !question?.get('questionId')?.value"
+                  >
+                    Not Saved Yet!
+                  </p>
+                  <p
                     *ngIf="isEditMode"
                     class="font-12 font-400 text-a-primary mb-md-0 mb-2 cursor-pointer"
-                    (click)="saveQuestion(i)"
+                    (click)="
+                      editQuestionId = question?.get('questionId')?.value;
+                      question?.get('questionId')?.value !== null
+                        ? saveQuestion(i)
+                        : addQuestion(i)
+                    "
                   >
                     <span nz-icon nzType="save"></span> Save Question
                   </p>
                   <p
-                    *ngIf="isEditMode"
+                    *ngIf="
+                      isEditMode && question?.get('questionId')?.value !== null
+                    "
                     class="ml-3 font-12 font-400 text-red cursor-pointer"
-                    (click)="removeQuestion(i)"
+                    (click)="
+                      deleteQuestionId = question?.get('questionId')?.value;
+                      isDeleteQuestionModal = true
+                    "
                   >
                     <span nz-icon nzType="delete"></span> Delete Question
                   </p>
                   <p
-                    *ngIf="!isEditMode && questions.controls?.length !== 1"
+                    *ngIf="
+                      (!isEditMode && questions.controls?.length !== 1) ||
+                      (isEditMode &&
+                        question?.get('questionId')?.value === null)
+                    "
                     class="ml-3 font-12 font-400 text-red cursor-pointer"
                     (click)="removeQuestion(i)"
                   >
@@ -433,7 +471,7 @@
               <div class="row" [formGroupName]="i">
                 <div class="col-md-9">
                   <nz-form-item class="mb-3">
-                    <nz-form-control [nzErrorTip]="'Field is Mandatory!'">
+                    <nz-form-control [nzErrorTip]="questionError">
                       <textarea
                         nz-input
                         rows="3"
@@ -442,6 +480,11 @@
                         formControlName="question"
                       ></textarea>
                     </nz-form-control>
+                    <ng-template #questionError let-control>
+                      <ng-container *ngIf="control?.hasError('required')">
+                        Question is required
+                      </ng-container>
+                    </ng-template>
                   </nz-form-item>
 
                   <!--   Correct Option   -->
@@ -455,7 +498,7 @@
                     </div>
                     <div class="col-md-8">
                       <nz-form-item class="">
-                        <nz-form-control>
+                        <nz-form-control [nzErrorTip]="correctOptionError">
                           <input
                             nz-input
                             type="text"
@@ -463,6 +506,11 @@
                             formControlName="correctOption"
                           />
                         </nz-form-control>
+                        <ng-template #correctOptionError let-control>
+                          <ng-container *ngIf="control?.hasError('required')">
+                            Correct Option is required
+                          </ng-container>
+                        </ng-template>
                       </nz-form-item>
                     </div>
                   </div>
@@ -478,7 +526,7 @@
                     </div>
                     <div class="col-md-8">
                       <nz-form-item class="">
-                        <nz-form-control>
+                        <nz-form-control [nzErrorTip]="incorrect1Error">
                           <input
                             nz-input
                             type="text"
@@ -486,6 +534,11 @@
                             formControlName="incorrectOption1"
                           />
                         </nz-form-control>
+                        <ng-template #incorrect1Error let-control>
+                          <ng-container *ngIf="control?.hasError('required')">
+                            Option is required
+                          </ng-container>
+                        </ng-template>
                       </nz-form-item>
                     </div>
                   </div>
@@ -501,7 +554,7 @@
                     </div>
                     <div class="col-md-8">
                       <nz-form-item class="">
-                        <nz-form-control>
+                        <nz-form-control [nzErrorTip]="incorrect2Error">
                           <input
                             nz-input
                             type="text"
@@ -509,6 +562,11 @@
                             formControlName="incorrectOption2"
                           />
                         </nz-form-control>
+                        <ng-template #incorrect2Error let-control>
+                          <ng-container *ngIf="control?.hasError('required')">
+                            Option is required
+                          </ng-container>
+                        </ng-template>
                       </nz-form-item>
                     </div>
                   </div>
@@ -524,7 +582,7 @@
                     </div>
                     <div class="col-md-8">
                       <nz-form-item class="">
-                        <nz-form-control>
+                        <nz-form-control [nzErrorTip]="incorrect3Error">
                           <input
                             nz-input
                             type="text"
@@ -532,6 +590,11 @@
                             formControlName="incorrectOption3"
                           />
                         </nz-form-control>
+                        <ng-template #incorrect3Error let-control>
+                          <ng-container *ngIf="control?.hasError('required')">
+                            Option is required
+                          </ng-container>
+                        </ng-template>
                       </nz-form-item>
                     </div>
                   </div>
@@ -559,7 +622,7 @@
                 </div>
               </div>
             </div>
-            <button nz-button class="btn-secondary" (click)="addQuestion()">
+            <button nz-button class="btn-a-secondary" (click)="onAddQuestion()">
               <span nz-icon nzType="plus"></span>
               Add Question
             </button>
@@ -571,10 +634,112 @@
         </nz-collapse>
       </div>
 
-      <div class="col-12 d-flex justify-content-start">
-        <button nz-button class="btn-danger">Cancel</button>
-        <button nz-button class="ml-2 btn-primary">Submit</button>
+      <div class="col-xl-3 col-md-4 col-12 d-flex justify-content-start">
+        <button
+          nz-button
+          class="btn-danger w-50 mr-1"
+          [routerLink]="['/', 'admin', 'tests']"
+        >
+          Cancel
+        </button>
+        <button
+          nz-button
+          class="w-50 ml-1 btn-a-primary"
+          (click)="isEditMode ? (isSaveTestModal = true) : createTest()"
+        >
+          {{ isEditMode ? "Save" : "Create" }}
+        </button>
       </div>
     </div>
   </form>
 </nz-card>
+
+<nz-modal
+  [(nzVisible)]="isDeleteQuestionModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="isDeleteQuestionModal = false"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">
+      <svg
+        class="mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+      >
+        <path
+          d="M16 22.6665C16.3778 22.6665 16.6945 22.5387 16.95 22.2832C17.2056 22.0276 17.3333 21.7109 17.3333 21.3332C17.3333 20.9554 17.2056 20.6387 16.95 20.3832C16.6945 20.1276 16.3778 19.9998 16 19.9998C15.6222 19.9998 15.3056 20.1276 15.05 20.3832C14.7945 20.6387 14.6667 20.9554 14.6667 21.3332C14.6667 21.7109 14.7945 22.0276 15.05 22.2832C15.3056 22.5387 15.6222 22.6665 16 22.6665ZM14.6667 17.3332H17.3333V9.33317H14.6667V17.3332ZM16 29.3332C14.1556 29.3332 12.4222 28.9832 10.8 28.2832C9.17778 27.5832 7.76667 26.6332 6.56667 25.4332C5.36667 24.2332 4.41667 22.8221 3.71667 21.1998C3.01667 19.5776 2.66667 17.8443 2.66667 15.9998C2.66667 14.1554 3.01667 12.4221 3.71667 10.7998C4.41667 9.17762 5.36667 7.7665 6.56667 6.5665C7.76667 5.3665 9.17778 4.4165 10.8 3.7165C12.4222 3.0165 14.1556 2.6665 16 2.6665C17.8444 2.6665 19.5778 3.0165 21.2 3.7165C22.8222 4.4165 24.2333 5.3665 25.4333 6.5665C26.6333 7.7665 27.5833 9.17762 28.2833 10.7998C28.9833 12.4221 29.3333 14.1554 29.3333 15.9998C29.3333 17.8443 28.9833 19.5776 28.2833 21.1998C27.5833 22.8221 26.6333 24.2332 25.4333 25.4332C24.2333 26.6332 22.8222 27.5832 21.2 28.2832C19.5778 28.9832 17.8444 29.3332 16 29.3332Z"
+          fill="#FF6161"
+        />
+      </svg>
+      Confirmation!
+    </div>
+    <p class="mt-3 font-16 font-400">
+      Are you sure you want to delete this question?
+    </p>
+
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="btn-danger mr-4 mb-1"
+        (click)="isDeleteQuestionModal = false; deleteQuestionId = undefined"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="btn-danger-secondary mb-1 mr-2"
+        (click)="deleteQuestion()"
+      >
+        Delete
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isSaveTestModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="isSaveTestModal = false"
+>
+  <ng-container *nzModalContent>
+    <div class="d-flex align-items-center font-24 font-500">
+      <svg
+        class="mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+      >
+        <path
+          d="M16 22.6665C16.3778 22.6665 16.6945 22.5387 16.95 22.2832C17.2056 22.0276 17.3333 21.7109 17.3333 21.3332C17.3333 20.9554 17.2056 20.6387 16.95 20.3832C16.6945 20.1276 16.3778 19.9998 16 19.9998C15.6222 19.9998 15.3056 20.1276 15.05 20.3832C14.7945 20.6387 14.6667 20.9554 14.6667 21.3332C14.6667 21.7109 14.7945 22.0276 15.05 22.2832C15.3056 22.5387 15.6222 22.6665 16 22.6665ZM14.6667 17.3332H17.3333V9.33317H14.6667V17.3332ZM16 29.3332C14.1556 29.3332 12.4222 28.9832 10.8 28.2832C9.17778 27.5832 7.76667 26.6332 6.56667 25.4332C5.36667 24.2332 4.41667 22.8221 3.71667 21.1998C3.01667 19.5776 2.66667 17.8443 2.66667 15.9998C2.66667 14.1554 3.01667 12.4221 3.71667 10.7998C4.41667 9.17762 5.36667 7.7665 6.56667 6.5665C7.76667 5.3665 9.17778 4.4165 10.8 3.7165C12.4222 3.0165 14.1556 2.6665 16 2.6665C17.8444 2.6665 19.5778 3.0165 21.2 3.7165C22.8222 4.4165 24.2333 5.3665 25.4333 6.5665C26.6333 7.7665 27.5833 9.17762 28.2833 10.7998C28.9833 12.4221 29.3333 14.1554 29.3333 15.9998C29.3333 17.8443 28.9833 19.5776 28.2833 21.1998C27.5833 22.8221 26.6333 24.2332 25.4333 25.4332C24.2333 26.6332 22.8222 27.5832 21.2 28.2832C19.5778 28.9832 17.8444 29.3332 16 29.3332Z"
+          fill="#008cff"
+        />
+      </svg>
+      Confirmation!
+    </div>
+    <p class="mt-3 font-16 font-400">
+      Are you sure you want to save the changes?
+    </p>
+
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="btn-a-secondary mr-4 mb-1"
+        (click)="isSaveTestModal = false"
+      >
+        Cancel
+      </button>
+      <button nz-button class="btn-a-primary mb-1 mr-2" (click)="saveTest()">
+        Confirm
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

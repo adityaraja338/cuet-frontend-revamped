@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 import * as Papa from 'papaparse';
 import { ActivatedRoute, Router } from '@angular/router';
-import _default from 'chart.js/dist/plugins/plugin.tooltip';
-import duration = _default.defaults.animation.duration;
+import { AdminHttpService } from '../../../shared/services/admin-http.service';
 
 @Component({
   selector: 'app-add-edit-test',
@@ -24,14 +29,33 @@ export class AddEditTestComponent implements OnInit {
 
   viewQuestions: boolean = true;
 
+  isLoading = false;
+  testDetails: any;
+
+  isQuestionLoading = false;
+  testId: any;
+  testType: any;
+  testQuestions: any;
+
+  subjects: any;
+  topics: any;
+  batches: any;
+
+  isDeleteQuestionModal = false;
+  editQuestionId: any;
+  deleteQuestionId: any;
+
+  isSaveTestModal = false;
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly message: NzMessageService,
+    private readonly http: AdminHttpService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
   ) {
     this.testForm = this.formBuilder.group({
-      testType: ['live', Validators.required],
+      testType: ['live', !this.isEditMode ? [Validators.required] : []],
       testName: [null, Validators.required],
       subjectName: [null],
       topics: [[]],
@@ -52,25 +76,45 @@ export class AddEditTestComponent implements OnInit {
       this.setTestFormValidation(value);
     });
 
+    this.testForm?.get('subjectId')?.valueChanges.subscribe((value) => {
+      if (
+        this.testForm?.get('testType')?.value === 'topic' &&
+        this.testForm?.get('topicId')?.value
+      ) {
+        const topic = this.topics?.find(
+          (topic: any) => topic?.id === this.testForm?.get('topicId')?.value,
+        );
+        if (topic?.subjectId !== value) {
+          this.testForm?.get('topicId')?.patchValue(null);
+        }
+      }
+    });
+
     this.setTestFormValidation('live');
-    this.addQuestion();
   }
 
   ngOnInit() {
-    const urlFragments = this.router.url
-      .split('/')
-      .filter((fragment) => fragment);
-    // console.log(urlFragments);
-    if (
-      urlFragments[urlFragments.length - 2] === 'edit-live' ||
-      urlFragments[urlFragments.length - 2] === 'edit-mock' ||
-      urlFragments[urlFragments.length - 2] === 'edit-topic'
-    ) {
+    this.getBatchList();
+    this.getSubjectList();
+    this.getTopicList();
+    this.testId = +this.route.snapshot.params['testId'];
+    if (this.testId) {
       this.isEditMode = true;
-      this.patchValue(
-        urlFragments[urlFragments.length - 2],
-        +urlFragments[urlFragments.length - 1],
-      );
+      const url = this.router?.url?.split('/');
+      this.testType = url[url.length - 2]?.split('-')[1];
+      this.viewQuestions = false;
+
+      if (
+        isNaN(this.testId) ||
+        !['live', 'mock', 'topic'].includes(this.testType)
+      ) {
+        this.message.error('Error! Invalid test!');
+      } else {
+        this.getTestDetails();
+        this.getTestQuestions();
+      }
+    } else {
+      this.onAddQuestion();
     }
   }
 
@@ -78,96 +122,60 @@ export class AddEditTestComponent implements OnInit {
     return this.testForm?.get('questions') as FormArray;
   }
 
-  private patchValue(testType: string, testId: number) {
-    if (testType === 'edit-live') {
+  private patchValue() {
+    if (this.testType === 'live') {
       this.testForm.get('testType')?.patchValue('live');
-      this.testForm.get('testName')?.patchValue('Live Test Patch');
-      this.testForm.get('subjectName')?.patchValue('Live Test Subject');
-      this.testForm.get('topics')?.patchValue(['Topic 1', 'Topic 2']);
-      const duration = 125;
+      this.testForm.get('testName')?.patchValue(this.testDetails?.name);
+      this.testForm.get('subjectName')?.patchValue(this.testDetails?.subject);
+      this.testForm.get('topics')?.patchValue(this.testDetails?.topic);
+      const duration = this.testDetails?.duration;
       this.testForm.get('durationHour')?.patchValue(Math.floor(duration / 60));
       this.testForm.get('durationMinutes')?.patchValue(duration % 60);
-      this.testForm.get('startDate')?.patchValue(new Date('12-06-2024'));
+      this.testForm
+        .get('startDate')
+        ?.patchValue(new Date(this.testDetails?.startTime));
       this.testForm
         .get('startTime')
-        ?.patchValue(new Date('12-06-2024').getTime());
-      this.testForm.get('endDate')?.patchValue(new Date('12-07-2024'));
+        ?.patchValue(new Date(this.testDetails?.startTime).getTime());
+      this.testForm
+        .get('endDate')
+        ?.patchValue(new Date(this.testDetails?.endTime));
       this.testForm
         .get('endTime')
-        ?.patchValue(new Date('12-07-2024').getTime());
-      if (testId === 0) {
-        this.testForm.get('isFree')?.patchValue(true);
-        this.testForm.get('batchIds')?.patchValue([]);
-      } else {
-        this.testForm.get('isFree')?.patchValue(false);
-        this.testForm.get('batchIds')?.patchValue([2, 5, 8]);
-      }
-    } else if (testType === 'edit-mock') {
+        ?.patchValue(new Date(this.testDetails?.endTime).getTime());
+      this.testForm.get('isFree')?.patchValue(this.testDetails?.isFree);
+      this.testForm.get('batchIds')?.patchValue(this.testDetails?.batchId);
+    } else if (this.testType === 'mock') {
       this.testForm.get('testType')?.patchValue('mock');
-      this.testForm.get('testName')?.patchValue('Mock Test Patch');
-      this.testForm.get('subjectName')?.patchValue('Mock Test Subject');
-      this.testForm.get('topics')?.patchValue(['Topic 1', 'Topic 2']);
-      const duration = 125;
+      this.testForm.get('testName')?.patchValue(this.testDetails?.name);
+      this.testForm.get('subjectName')?.patchValue(this.testDetails?.subject);
+      this.testForm.get('topics')?.patchValue(this.testDetails?.topic);
+      const duration = this.testDetails?.duration;
       this.testForm.get('durationHour')?.patchValue(Math.floor(duration / 60));
       this.testForm.get('durationMinutes')?.patchValue(duration % 60);
-      if (testId === 2) {
-        this.testForm.get('isFree')?.patchValue(true);
-      } else {
-        this.testForm.get('isFree')?.patchValue(false);
-      }
+      this.testForm.get('isFree')?.patchValue(this.testDetails?.isFree);
     } else {
       this.testForm.get('testType')?.patchValue('topic');
-      this.testForm.get('testName')?.patchValue('Topic Test Patch');
-      this.testForm.get('topicId')?.patchValue(15);
-      const duration = 125;
+      this.testForm.get('testName')?.patchValue(this.testDetails?.name);
+
+      const topic = this.topics?.find(
+        (topic: any) => topic?.id === this.testDetails?.topicId,
+      );
+      const subject = this.subjects?.find(
+        (subject: any) => subject.id === topic?.subjectId,
+      );
+
+      this.testForm.get('subjectId')?.patchValue(subject?.id);
+      this.testForm.get('topicId')?.patchValue(this.testDetails?.topicId);
+      const duration = this.testDetails?.duration;
       this.testForm.get('durationHour')?.patchValue(Math.floor(duration / 60));
       this.testForm.get('durationMinutes')?.patchValue(duration % 60);
-      if (testId > 3 && testId < 10) {
-        this.testForm.get('isFree')?.patchValue(true);
-      } else {
-        this.testForm.get('isFree')?.patchValue(false);
-      }
+      this.testForm.get('isFree')?.patchValue(this.testDetails?.isFree);
     }
-
-    const questions = [
-      {
-        question: 'Q1',
-        correctOption: 'Correct 1',
-        option2: 'Incorrect 1',
-        option3: 'Incorrect 2',
-        option4: 'Incorrect 3',
-        option5: 'Incorrect 4',
-      },
-      {
-        question: 'Q2',
-        correctOption: 'Correct 2',
-        option2: 'Incorrect 1',
-        option3: 'Incorrect 2',
-        option4: 'Incorrect 3',
-        option5: 'Incorrect 4',
-      },
-      {
-        question: 'Q3',
-        correctOption: 'Correct 3',
-        option2: 'Incorrect 1',
-        option3: 'Incorrect 2',
-        option4: 'Incorrect 3',
-        option5: 'Incorrect 4',
-      },
-      {
-        question: 'Q4',
-        correctOption: 'Correct 4',
-        option2: 'Incorrect 1',
-        option3: 'Incorrect 2',
-        option4: 'Incorrect 3',
-        option5: 'Incorrect 4',
-      },
-    ];
-
-    this.addCSVQuestions(questions);
   }
 
-  addQuestion(question?: {
+  onAddQuestion(question?: {
+    questionId?: any;
     question: string;
     correct: string;
     incorrect1: string;
@@ -178,28 +186,273 @@ export class AddEditTestComponent implements OnInit {
     const previousControl = this.questions.at(this.questions.length - 1);
 
     if (!question && previousControl?.invalid) {
-      return this.message.error('Please enter question details before adding!');
+      return this.message.error(
+        'Error! Please enter question details before adding new!',
+      );
     }
 
     const questionControl = this.formBuilder.group({
-      question: [question?.question ?? null, Validators.required],
-      correctOption: [question?.correct ?? null, Validators.required],
-      incorrectOption1: [question?.incorrect1 ?? null, Validators.required],
-      incorrectOption2: [question?.incorrect2 ?? null, Validators.required],
-      incorrectOption3: [question?.incorrect3 ?? null, Validators.required],
+      questionId: [question?.questionId ?? null],
+      question: [question?.question ?? null, [Validators.required]],
+      correctOption: [question?.correct ?? null, [Validators.required]],
+      incorrectOption1: [question?.incorrect1 ?? null, [Validators.required]],
+      incorrectOption2: [question?.incorrect2 ?? null, [Validators.required]],
+      incorrectOption3: [question?.incorrect3 ?? null, [Validators.required]],
       incorrectOption4: [question?.incorrect4 ?? null],
     });
 
     this.questions.push(questionControl);
   }
 
-  saveQuestion(index: number) {}
+  addQuestion(index: number) {
+    if (!this.isEditMode) {
+      this.message.error("Error! Can't add question on unsaved tests!");
+      return;
+    }
 
-  deleteQuestion(index: number) {}
+    const control = this.questions.at(index) as FormGroup;
+    if (!control.valid) {
+      this.message.error('Marked fields are mandatory!');
+      Object.keys(control?.controls)?.forEach((controlName) => {
+        control.get(controlName)?.markAsTouched({ onlySelf: true });
+        control.get(controlName)?.markAsDirty({ onlySelf: true });
+        control.get(controlName)?.updateValueAndValidity({ onlySelf: true });
+      });
+      return;
+    }
+
+    const data: any = {
+      testId: this.testId,
+      testType: this.testType,
+      question: control?.get('question')?.value,
+      correctOption: control?.get('correctOption')?.value,
+      option2: control?.get('incorrectOption1')?.value,
+      option3: control?.get('incorrectOption2')?.value,
+      option4: control?.get('incorrectOption3')?.value,
+    };
+
+    control?.get('incorrectOption4')?.value
+      ? (data.option5 = control?.get('incorrectOption4')?.value)
+      : null;
+
+    this.http.createQuestion(data).subscribe({
+      next: (res: any) => {
+        control?.get('questionId')?.patchValue(res?.data?.questionId);
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  saveQuestion(index: number) {
+    const data: any = {};
+    const control = this.questions?.at(index);
+
+    data.questionId = control?.get('questionId')?.value;
+    data.question = control?.get('question')?.value;
+    data.correctOption = control?.get('correctOption')?.value;
+    data.option2 = control?.get('incorrectOption1')?.value;
+    data.option3 = control?.get('incorrectOption2')?.value;
+    data.option4 = control?.get('incorrectOption3')?.value;
+    data.option5 = control?.get('incorrectOption4')?.value;
+
+    this.http.saveQuestion(data).subscribe({
+      next: (res: any) => {
+        this.getTestQuestions();
+        // this.topics = res?.data;
+        this.editQuestionId = undefined;
+        this.message.success('Successful! Question saved!');
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  deleteQuestion() {
+    this.http.deleteQuestion({ questionId: this.deleteQuestionId }).subscribe({
+      next: (res: any) => {
+        this.getTestQuestions();
+        // this.topics = res?.data;
+        this.deleteQuestionId = undefined;
+        this.isDeleteQuestionModal = false;
+        this.message.success('Successful! Question deleted!');
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+    console.log(this.deleteQuestionId);
+  }
 
   removeQuestion(index: number) {
     this.questions.removeAt(index);
   }
+
+  saveTest() {
+    if (this.isEditMode) {
+      console.log(this.testType);
+      if (this.testType === 'live') {
+        this.saveLiveTest();
+      } else if (this.testType === 'mock') {
+        this.saveMockTest();
+      } else if (this.testType === 'topic') {
+        this.saveTopicTest();
+      } else {
+        this.router.navigate(['/', 'admin', 'tests']);
+        this.message.error('Error! Invalid test!');
+      }
+    } else {
+      this.message.error('Error! Invalid request!');
+    }
+  }
+
+  saveLiveTest() {
+    if (this.testForm.invalid) {
+      this.isSaveTestModal = false;
+      this.message.error('Marked fields are mandatory!');
+      this.markFormGroupTouchedDirty(this.testForm);
+      return;
+    }
+
+    const data: any = {};
+    data.testId = this.testId;
+    data.name = this.testForm?.get('testName')?.value;
+    data.subject = this.testForm?.get('subjectName')?.value;
+    data.topics = this.testForm?.get('topics')?.value;
+    data.duration =
+      this.testForm?.get('durationHour')?.value * 60 +
+      this.testForm?.get('durationMinutes')?.value;
+
+    const startDate = new Date(this.testForm?.get('startDate')?.value);
+    const startTime = new Date(this.testForm?.get('startTime')?.value);
+    const endDate = new Date(this.testForm?.get('endDate')?.value);
+    const endTime = new Date(this.testForm?.get('endTime')?.value);
+
+    let year = startDate?.getFullYear();
+    let month = startDate?.getMonth();
+    let day = startDate?.getDate();
+
+    // Extract the hours, minutes, and seconds from the time object
+    let hours = startTime?.getHours();
+    let minutes = startTime?.getMinutes();
+    data.startTime = new Date(
+      year,
+      month,
+      day,
+      hours,
+      minutes,
+      0,
+    ).toISOString();
+
+    year = endDate?.getFullYear();
+    month = endDate?.getMonth();
+    day = endDate?.getDate();
+
+    // Extract the hours, minutes, and seconds from the time object
+    hours = endTime?.getHours();
+    minutes = endTime?.getMinutes();
+    data.endTime = new Date(year, month, day, hours, minutes, 0).toISOString();
+
+    data.isFree = this.testForm?.get('isFree')?.value;
+    data.batchIds = this.testForm?.get('batchIds')?.value;
+
+    this.http.saveLiveTest(data).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.saveTestAndNavigate();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  saveMockTest() {
+    if (this.testForm.invalid) {
+      this.isSaveTestModal = false;
+      this.message.error('Marked fields are mandatory!');
+      this.markFormGroupTouchedDirty(this.testForm);
+      return;
+    }
+
+    const data: any = {};
+    data.testId = this.testId;
+    data.name = this.testForm?.get('testName')?.value;
+    data.subject = this.testForm?.get('subjectName')?.value;
+    data.topics = this.testForm?.get('topics')?.value;
+    data.duration =
+      this.testForm?.get('durationHour')?.value * 60 +
+      this.testForm?.get('durationMinutes')?.value;
+
+    data.isFree = this.testForm?.get('isFree')?.value;
+
+    this.http.saveMockTest(data).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.saveTestAndNavigate();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  saveTopicTest() {
+    if (this.testForm.invalid) {
+      this.isSaveTestModal = false;
+      this.message.error('Marked fields are mandatory!');
+      this.markFormGroupTouchedDirty(this.testForm);
+      return;
+    }
+
+    const data: any = {};
+    data.testId = this.testId;
+    data.name = this.testForm?.get('testName')?.value;
+    data.topicId = this.testForm?.get('topicId')?.value;
+    data.duration =
+      this.testForm?.get('durationHour')?.value * 60 +
+      this.testForm?.get('durationMinutes')?.value;
+
+    data.isFree = this.testForm?.get('isFree')?.value;
+
+    this.http.saveTopicTest(data).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.saveTestAndNavigate();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  markFormGroupTouchedDirty(formGroup: FormGroup | FormArray): void {
+    Object.keys(formGroup.controls).forEach((field) => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control?.markAsTouched({ onlySelf: true });
+        control?.markAsDirty({ onlySelf: true });
+        control?.updateValueAndValidity({ onlySelf: true });
+      } else if (control instanceof FormGroup || control instanceof FormArray) {
+        this.markFormGroupTouchedDirty(control); // Recursively handle nested FormGroups and FormArrays
+      }
+    });
+  }
+
+  saveTestAndNavigate() {
+    this.message.success('Successful! Test saved!');
+    this.router.navigate(['/', 'admin', 'tests']);
+  }
+
+  createTest() {}
 
   beforeUpload = (file: NzUploadFile): boolean => {
     // this.readFileContent(file);
@@ -233,13 +486,12 @@ export class AddEditTestComponent implements OnInit {
   }
 
   addCSVQuestions(questions: any) {
-    console.log(questions);
-    // while (this.questions.length !== 0) {
-    //   this.questions.removeAt(0);
-    // }
-    this.questions.clear();
+    if (!this.isEditMode) {
+      this.questions.clear();
+    }
     questions?.forEach((question: any) => {
-      this.addQuestion({
+      this.onAddQuestion({
+        questionId: question?.id,
         question: question?.question,
         correct: question?.correctOption,
         incorrect1: question?.option2,
@@ -312,6 +564,84 @@ export class AddEditTestComponent implements OnInit {
         this.testForm?.get('batchIds')?.setValidators([Validators.required]);
       }
     }
+  }
+
+  getTestDetails() {
+    this.isLoading = true;
+    const data: any = {
+      testId: this.testId,
+      testType: this.testType,
+    };
+
+    this.http.getTestDetails(data).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.testDetails = res?.data?.testDetails;
+        this.patchValue();
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getTestQuestions() {
+    this.isQuestionLoading = true;
+    const data: any = {
+      testId: this.testId,
+      testType: this.testType,
+    };
+
+    this.http.getTestQuestions(data).subscribe({
+      next: (res: any) => {
+        this.isQuestionLoading = false;
+        this.testQuestions = res?.data?.questions;
+        this.addCSVQuestions(this.testQuestions);
+      },
+      error: (error: any) => {
+        this.isQuestionLoading = false;
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getSubjectList() {
+    this.http.getSubjectList().subscribe({
+      next: (res: any) => {
+        this.subjects = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getTopicList() {
+    this.http.getTopicList().subscribe({
+      next: (res: any) => {
+        this.topics = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getBatchList() {
+    this.http.getBatchList().subscribe({
+      next: (res: any) => {
+        this.batches = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
   }
 
   protected readonly console = console;

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GlobalService } from '../shared/services/global.service';
+import { StudentAuthService } from '../shared/auth/student-auth.service';
 
 @Component({
   selector: 'app-student',
@@ -8,5 +9,14 @@ import { GlobalService } from '../shared/services/global.service';
 })
 export class StudentComponent {
   isCollapsed = false;
-  constructor(protected globalService: GlobalService) {}
+  isLogoutModal = false;
+
+  constructor(
+    protected globalService: GlobalService,
+    private authService: StudentAuthService,
+  ) {}
+
+  onClickLogout() {
+    this.authService.logout();
+  }
 }

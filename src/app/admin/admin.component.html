@@ -97,6 +97,13 @@
           <span>Students</span>
         </li>
       </ul>
+      <div *ngIf="!isCollapsed" class="d-flex justify-content-center px-4 mt-4">
+        <button
+          nz-button
+          class="btn-a-secondary w-100"
+          (click)="isLogoutModal = true;"
+        >Logout</button>
+      </div>
     </nz-sider>
 
     <nz-content>
@@ -105,7 +112,7 @@
         style="overflow-y: auto; max-height: calc(100vh - 64px); padding: 24px"
       >
         <section class="ant-row ant-row-center">
-          <section style="position: relative" class="ant-col-xs-24 ant-col-xl-20 ant-col-xxl-12">
+          <section style="position: relative" class="ant-col-xs-24 ant-col-xl-22 ant-col-xxl-20">
             <router-outlet></router-outlet>
           </section>
         </section>
@@ -113,3 +120,25 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
+
+<nz-modal
+  [(nzVisible)]="isLogoutModal"
+  nzMaskClosable
+  [nzFooter]="null"
+  nzCentered
+  (nzOnCancel)="isLogoutModal = false"
+  [nzWidth]="'auto'"
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-500">
+      <span class="mr-2 text-primary" nz-icon nzType="info-circle" nzTheme="outline"></span>
+      Confirmation
+    </p>
+    <p class="font-14 font-400 mt-3"> Are you sure you want to logout? </p>
+    <div class="d-flex px-0 mt-3">
+      <button nz-button class="mr-1 w-50 btn-a-secondary" (click)="isLogoutModal = false">Cancel</button>
+      <button nz-button class="ml-1 w-50 btn-a-primary" (click)="onClickLogout()">Logout</button>
+    </div>
+  </ng-container>
+</nz-modal>
+

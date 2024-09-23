@@ -5,48 +5,60 @@
   <nz-tabset>
     <nz-tab nzTitle="Live/Recorded Tests">
       <ng-template nz-tab>
-        <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row">
-                  <div class="col-md-6 mb-md-0 mb-2">
-                    <input
-                      nz-input
-                      type="text"
-                      placeholder="Enter Test Name or ID"
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <nz-select nzPlaceHolder="Select Batch" nzAllowClear>
-                      <nz-option
-                        [nzLabel]="'Option 1'"
-                        [nzValue]="'option1'"
-                      ></nz-option>
-                      <nz-option
-                        [nzLabel]="'Option 2'"
-                        [nzValue]="'option2'"
-                      ></nz-option>
-                      <nz-option
-                        [nzLabel]="'Option 3'"
-                        [nzValue]="'option3'"
-                      ></nz-option>
-                    </nz-select>
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+        <p class="font-12 font-400">Search Test</p>
+        <div class="row justify-content-between align-items-start mb-3 mt-1">
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Test Name"
+                  [(ngModel)]="liveSearch"
+                />
+              </div>
+              <div class="col-md-4 mt-md-0 px-2 mt-2">
+                <nz-select
+                  nzPlaceHolder="Select Batch"
+                  [(ngModel)]="liveSearchBatch"
+                  nzShowSearch
+                  nzAllowClear
+                  (ngModelChange)="getLiveTests()"
+                >
+                  <nz-option *ngFor="let batch of batches" [nzValue]="batch?.id" [nzLabel]="batch?.name"></nz-option>
+                </nz-select>
+              </div>
+              <div class="col-md-4 mt-md-0 px-2 mt-2">
+                <nz-select
+                  nzPlaceHolder="Select Type"
+                  [(ngModel)]="selectLiveType"
+                  nzShowSearch
+                  nzAllowClear
+                  (ngModelChange)="getLiveTests()"
+                >
+                  <nz-option [nzValue]="'all'" [nzLabel]="'All'"></nz-option>
+                  <nz-option [nzValue]="'free'" [nzLabel]="'Free'"></nz-option>
+                  <nz-option [nzValue]="'paid'" [nzLabel]="'Paid'"></nz-option>
+                </nz-select>
+              </div>
+              <div class="col-md-4 px-2 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getLiveTests()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
           <div
-            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
           >
             <button
               nz-button
-              class="btn-primary filter-btn"
+              class="btn-a-primary w-100"
               [routerLink]="['create']"
             >
               <span nz-icon nzType="plus"></span>
@@ -55,23 +67,24 @@
           </div>
         </div>
         <nz-table
-          [nzData]="topicTests"
+          [nzData]="liveTests"
           [nzFrontPagination]="false"
           [nzShowSizeChanger]="true"
           [nzShowPagination]="true"
           [nzTotal]="totalLiveTestCount"
           [nzPageIndex]="livePageIndex"
-          [nzPageSize]="pageSize"
+          [nzPageSize]="livePageSize"
           [nzShowTotal]="printLiveCount"
-          [nzScroll]="{ x: '840px' }"
+          (nzQueryParams)="liveTests ? getLiveTests($event) : ''"
+          [nzScroll]="{ x: '880px' }"
         >
           <thead>
             <tr>
               <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
               <th [nzWidth]="'160px'">Name</th>
               <th class="text-center" [nzWidth]="'84px'">Questions</th>
-              <th class="text-center" [nzWidth]="'136px'">Start Time</th>
-              <th class="text-center" [nzWidth]="'136px'">End Time</th>
+              <th class="text-center" [nzWidth]="'160px'">Start Time</th>
+              <th class="text-center" [nzWidth]="'160px'">End Time</th>
               <th class="text-center" [nzWidth]="'64px'">Type</th>
               <th class="text-center" [nzWidth]="'84px'">Duration</th>
               <th class="text-center" [nzWidth]="'48px'"></th>
@@ -79,23 +92,23 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let test of topicTests; let i = index"
+              *ngFor="let test of liveTests; let i = index"
               (click)="onClickTest($event, 'live', test?.id)"
             >
               <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test.name }}</td>
+              <td>{{ test?.name || '-' }}</td>
               <td class="text-center">
-                {{ test.questions }}
+                {{ test?.totalQuestions || '-' }}
               </td>
               <td class="text-center">
-                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
+                {{ test?.startTime ? (test?.startTime | date: "dd MMM yyyy") : '-' }} {{ "@ "+ (test?.startTime ? (test?.startTime | date: "hh:mm a") : '-') }}
               </td>
               <td class="text-center">
-                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
+                {{ test?.endTime ? (test?.endTime | date: "dd MMM yyyy") : '-' }} {{ "@ " + (test?.endTime ? (test?.endTime | date: "hh:mm a") : '-')}}
               </td>
               <td
-                class="text-center font-400"
-                [class]="test?.isFree ? 'text-free' : 'text-paid'"
+                class="text-center font-600"
+                [class]="test?.isFree ? 'text-free' : 'text-a-primary'"
               >
                 {{ test.isFree ? "Free" : "Paid" }}
               </td>
@@ -129,8 +142,24 @@
                     >
                       <span class="m-l-5">Edit</span>
                     </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      (click)="onChangeType(test?.id, 'live')"
+                    >
+                      <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
+                    </li>
+                    @if(!(test?.batchId?.length === 0 && test?.isFree)){
+                      <li
+                        class="tiny-li"
+                        nz-menu-item
+                        (click)="onChangeType(test?.id, 'live', 'free-for-all')"
+                      >
+                        <span class="m-l-5" >Set as Free for All</span>
+                      </li>
+                    }
+                    <li class="tiny-li" nz-menu-item (click)="onDeleteTest(test?.id, 'live')">
+                      <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>
                 </nz-dropdown-menu>
@@ -150,32 +179,49 @@
     </nz-tab>
     <nz-tab nzTitle="Mock Tests">
       <ng-template nz-tab>
-        <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row">
-                  <div class="col-md-6">
-                    <input
-                      nz-input
-                      type="text"
-                      placeholder="Search Test Name or ID"
-                    />
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+        <p class="font-12 font-400">Search Test</p>
+        <div class="row justify-content-between align-items-start mb-3 mt-1">
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Test Name"
+                  [(ngModel)]="mockSearch"
+                />
+              </div>
+              <div class="col-md-4 mt-md-0 px-2 mt-2">
+                <nz-select
+                  nzPlaceHolder="Select Type"
+                  [(ngModel)]="selectMockType"
+                  nzShowSearch
+                  nzAllowClear
+                  (ngModelChange)="getMockTests()"
+                >
+                  <nz-option [nzValue]="'all'" [nzLabel]="'All'"></nz-option>
+                  <nz-option [nzValue]="'free'" [nzLabel]="'Free'"></nz-option>
+                  <nz-option [nzValue]="'paid'" [nzLabel]="'Paid'"></nz-option>
+                </nz-select>
+              </div>
+              <div class="col-md-4 mt-md-0 px-2 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getMockTests()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
           <div
-            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
           >
             <button
               nz-button
-              class="btn-primary filter-btn"
+              class="btn-a-primary w-100"
               [routerLink]="['create']"
             >
               <span nz-icon nzType="plus"></span>
@@ -184,23 +230,23 @@
           </div>
         </div>
         <nz-table
-          [nzData]="topicTests"
+          [nzData]="mockTests"
           [nzFrontPagination]="false"
           [nzShowSizeChanger]="true"
           [nzShowPagination]="true"
-          [nzTotal]="totalLiveTestCount"
-          [nzPageIndex]="livePageIndex"
-          [nzPageSize]="pageSize"
+          [nzTotal]="totalMockTestCount"
+          [nzPageIndex]="mockPageIndex"
+          [nzPageSize]="mockPageSize"
           [nzShowTotal]="printMockCount"
-          [nzScroll]="{ x: '840px' }"
+          (nzQueryParams)="mockTests ? getMockTests($event) : ''"
+          [nzScroll]="{ x: '680px' }"
         >
           <thead>
             <tr>
               <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
               <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'84px'">Subject</th>
               <th class="text-center" [nzWidth]="'84px'">Questions</th>
-              <th class="text-center" [nzWidth]="'136px'">Start Time</th>
-              <th class="text-center" [nzWidth]="'136px'">End Time</th>
               <th class="text-center" [nzWidth]="'64px'">Type</th>
               <th class="text-center" [nzWidth]="'84px'">Duration</th>
               <th class="text-center" [nzWidth]="'48px'"></th>
@@ -208,23 +254,20 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let test of topicTests; let i = index"
+              *ngFor="let test of mockTests; let i = index"
               (click)="onClickTest($event, 'mock', test?.id)"
             >
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test.name }}</td>
+              <td class="text-center">{{ ((mockPageIndex - 1) * mockPageSize) + (i + 1) }}</td>
+              <td>{{ test?.name || '-' }}</td>
               <td class="text-center">
-                {{ test.questions }}
+                {{ test?.subject || '-' }}
               </td>
               <td class="text-center">
-                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
-              </td>
-              <td class="text-center">
-                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
+                {{ test?.totalQuestions || '-' }}
               </td>
               <td
-                class="text-center font-400"
-                [class]="test?.isFree ? 'text-free' : 'text-paid'"
+                class="text-center font-600"
+                [class]="test?.isFree ? 'text-free' : 'text-a-primary'"
               >
                 {{ test.isFree ? "Free" : "Paid" }}
               </td>
@@ -258,8 +301,15 @@
                     >
                       <span class="m-l-5">Edit</span>
                     </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      (click)="onChangeType(test?.id, 'mock')"
+                    >
+                      <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item (click)="onDeleteTest(test?.id, 'mock')">
+                      <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>
                 </nz-dropdown-menu>
@@ -268,59 +318,84 @@
           </tbody>
         </nz-table>
         <ng-template #printMockCount>
-          <div *ngIf="!totalLiveTestCount" class="font-weight-normal">
+          <div *ngIf="!totalMockTestCount" class="font-weight-normal">
             No Results Found
           </div>
-          <div *ngIf="totalLiveTestCount" class="font-weight-normal">
-            <b>{{ totalLiveTestCount }}</b> Results Found
+          <div *ngIf="totalMockTestCount" class="font-weight-normal">
+            <b>{{ totalMockTestCount }}</b> Results Found
           </div>
         </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Topic Wise Tests">
       <ng-template nz-tab>
-        <div class="row justify-content-between align-items-start mb-3">
-          <div class="col-md-8 col-xl-6">
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [nzHeader]="'Filters'"
-                [nzActive]="collapseFilter"
-                [nzDisabled]="false"
-              >
-                <div class="row">
-                  <div class="col-md-6 mb-md-0 mb-2">
-                    <input
-                      nz-input
-                      type="text"
-                      placeholder="Search Test Name"
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <nz-select nzPlaceHolder="Select Subject" nzAllowClear>
-                      <nz-option
-                        [nzLabel]="'Option 1'"
-                        [nzValue]="'option1'"
-                      ></nz-option>
-                      <nz-option
-                        [nzLabel]="'Option 2'"
-                        [nzValue]="'option2'"
-                      ></nz-option>
-                      <nz-option
-                        [nzLabel]="'Option 3'"
-                        [nzValue]="'option3'"
-                      ></nz-option>
-                    </nz-select>
-                  </div>
-                </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+        <p class="font-12 font-400">Search Test</p>
+        <div class="row justify-content-between align-items-start mb-3 mt-1">
+          <div class="col-md-9 col-xl-9">
+            <div class="row mx-n2">
+              <div class="col-md-4 px-2">
+                <input
+                  nz-input
+                  type="text"
+                  placeholder="Search Test Name"
+                  [(ngModel)]="topicSearch"
+                />
+              </div>
+              <div class="col-md-4 mt-md-0 px-2 mt-2">
+                <nz-select
+                  nzPlaceHolder="Select Subject"
+                  [(ngModel)]="topicSearchSubject"
+                  nzShowSearch
+                  nzAllowClear
+                  (ngModelChange)="getTopicTests()"
+                >
+                  <nz-option *ngFor="let subject of subjects" [nzValue]="subject?.id" [nzLabel]="subject?.name"></nz-option>
+                </nz-select>
+              </div>
+              <div class="col-md-4 mt-md-0 px-2 mt-2">
+                <nz-select
+                  nzPlaceHolder="Select Topic"
+                  [(ngModel)]="topicSearchTopic"
+                  nzShowSearch
+                  nzAllowClear
+                  (ngModelChange)="getTopicTests()"
+                >
+                  @for(topic of topics; track $index){
+                    <nz-option *ngIf="!topicSearchSubject || topic?.subjectId === topicSearchSubject" [nzValue]="topic?.id" [nzLabel]="topic?.name"></nz-option>
+                  }
+                </nz-select>
+              </div>
+              <div class="col-md-4 px-2 mt-2">
+                <nz-select
+                  nzPlaceHolder="Select Type"
+                  [(ngModel)]="selectTopicType"
+                  nzShowSearch
+                  nzAllowClear
+                  (ngModelChange)="getTopicTests()"
+                >
+                  <nz-option [nzValue]="'all'" [nzLabel]="'All'"></nz-option>
+                  <nz-option [nzValue]="'free'" [nzLabel]="'Free'"></nz-option>
+                  <nz-option [nzValue]="'paid'" [nzLabel]="'Paid'"></nz-option>
+                </nz-select>
+              </div>
+              <div class="col-md-4 px-2 mt-2">
+                <button
+                  nz-button
+                  class="btn-a-secondary w-100"
+                  (click)="getTopicTests()"
+                >
+                  Filter
+                  <span nz-icon nzType="search"></span>
+                </button>
+              </div>
+            </div>
           </div>
           <div
-            class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
           >
             <button
               nz-button
-              class="btn-primary filter-btn"
+              class="btn-a-primary filter-btn w-100"
               [routerLink]="['create']"
             >
               <span nz-icon nzType="plus"></span>
@@ -333,19 +408,19 @@
           [nzFrontPagination]="false"
           [nzShowSizeChanger]="true"
           [nzShowPagination]="true"
-          [nzTotal]="totalLiveTestCount"
-          [nzPageIndex]="livePageIndex"
-          [nzPageSize]="pageSize"
-          [nzShowTotal]="printMockCount"
-          [nzScroll]="{ x: '840px' }"
+          [nzTotal]="totalTopicTestCount"
+          [nzPageIndex]="topicPageIndex"
+          [nzPageSize]="topicPageSize"
+          [nzShowTotal]="printTopicCount"
+          [nzScroll]="{ x: '680px' }"
+          (nzQueryParams)="topicTests ? getTopicTests($event) : ''"
         >
           <thead>
             <tr>
               <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
               <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'84px'">Topic</th>
               <th class="text-center" [nzWidth]="'84px'">Questions</th>
-              <th class="text-center" [nzWidth]="'136px'">Start Time</th>
-              <th class="text-center" [nzWidth]="'136px'">End Time</th>
               <th class="text-center" [nzWidth]="'64px'">Type</th>
               <th class="text-center" [nzWidth]="'84px'">Duration</th>
               <th class="text-center" [nzWidth]="'48px'"></th>
@@ -356,20 +431,17 @@
               *ngFor="let test of topicTests; let i = index"
               (click)="onClickTest($event, 'topic', test?.id)"
             >
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test.name }}</td>
+              <td class="text-center">{{ ((topicPageIndex - 1) * topicPageSize) + (i + 1) }}</td>
+              <td>{{ test?.name || '-' }}</td>
               <td class="text-center">
-                {{ test.questions }}
+                {{ test?.topic?.name || '-' }}
               </td>
               <td class="text-center">
-                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 7:00 PM" }}
-              </td>
-              <td class="text-center">
-                {{ "12/06/2024" | date: "dd/MM/yy" }} {{ "@ 10:00 PM" }}
+                {{ test?.totalQuestions || '-' }}
               </td>
               <td
-                class="text-center font-400"
-                [class]="test?.isFree ? 'text-free' : 'text-paid'"
+                class="text-center font-600"
+                [class]="test?.isFree ? 'text-free' : 'text-a-primary'"
               >
                 {{ test.isFree ? "Free" : "Paid" }}
               </td>
@@ -403,8 +475,15 @@
                     >
                       <span class="m-l-5">Edit</span>
                     </li>
-                    <li class="tiny-li" nz-menu-item>
-                      <span class="m-l-5" style="color: red">Delete</span>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      (click)="onChangeType(test?.id, 'topic')"
+                    >
+                      <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
+                    </li>
+                    <li class="tiny-li" nz-menu-item (click)="onDeleteTest(test?.id, 'topic')">
+                      <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>
                 </nz-dropdown-menu>
@@ -412,12 +491,12 @@
             </tr>
           </tbody>
         </nz-table>
-        <ng-template #printMockCount>
-          <div *ngIf="!totalLiveTestCount" class="font-weight-normal">
+        <ng-template #printTopicCount>
+          <div *ngIf="!totalTopicTestCount" class="font-weight-normal">
             No Results Found
           </div>
-          <div *ngIf="totalLiveTestCount" class="font-weight-normal">
-            <b>{{ totalLiveTestCount }}</b> Results Found
+          <div *ngIf="totalTopicTestCount" class="font-weight-normal">
+            <b>{{ totalTopicTestCount }}</b> Results Found
           </div>
         </ng-template>
       </ng-template>

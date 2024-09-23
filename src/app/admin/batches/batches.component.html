@@ -50,6 +50,7 @@
     [nzShowTotal]="printBatchCount"
     (nzQueryParams)="batches ? getBatches($event) : ''"
     [nzScroll]="{ x: '680px' }"
+    [nzNoResult]="customNoData"
   >
     <thead>
       <tr>
@@ -135,6 +136,10 @@
       </tr>
     </tbody>
   </nz-table>
+  <ng-template #customNoData>
+    <img class="mt-3" src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" alt="">
+    <p class="font-16 font-300 mt-3">No Batches Found!</p>
+  </ng-template>
   <ng-template #printBatchCount>
     <div
       *ngIf="totalBatchCount === 0"

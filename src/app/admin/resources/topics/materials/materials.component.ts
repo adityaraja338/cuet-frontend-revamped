@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminHttpService } from '../../../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GlobalService } from '../../../../shared/services/global.service';
 
 @Component({
   selector: 'app-materials',
@@ -39,6 +40,7 @@ export class MaterialsComponent implements OnInit {
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
     private readonly formBuilder: FormBuilder,
+    protected readonly globalService: GlobalService,
   ) {
     this.addEditMaterialForm = this.formBuilder.group({
       id: [{ value: null, disabled: true }],
@@ -225,6 +227,18 @@ export class MaterialsComponent implements OnInit {
         },
       });
     }
+  }
+
+  onOpenDeleteModal(id: any, type: string) {
+    if (type === 'test') {
+      this.deleteTestId = id;
+    } else if (type === 'material') {
+      this.deleteMaterialId = id;
+    } else {
+      this.message.error('Error! Invalid selection!');
+      return;
+    }
+    this.isDeleteModal = true;
   }
 
   onDeleteMaterial() {

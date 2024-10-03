@@ -4,6 +4,7 @@ import { ResourcesComponent } from './resources.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ResourcesComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
     NgZorroAntdModule,
     ReactiveFormsModule,
     FormsModule,
+    ImageFallbackDirective,
   ],
 })
 export class ResourcesModule {}

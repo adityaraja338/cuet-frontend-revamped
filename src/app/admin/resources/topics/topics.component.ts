@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminHttpService } from '../../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
   selector: 'app-topics',
@@ -28,6 +29,7 @@ export class TopicsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
+    protected readonly globalService: GlobalService,
   ) {}
 
   ngOnInit() {
@@ -101,6 +103,18 @@ export class TopicsComponent implements OnInit {
     this.isDeleteModal = false;
     this.isEditMode = false;
     this.topicAddEditName = '';
+  }
+
+  onOpenEditModal(topic: any) {
+    this.currentTopic = topic;
+    this.topicAddEditName = topic?.name;
+    this.isEditMode = true;
+    this.isAddEditModal = true;
+  }
+
+  onOpenDeleteModal(topic: any) {
+    this.currentTopic = topic;
+    this.isDeleteModal = true;
   }
 
   onDeleteTopic() {

@@ -1,13 +1,44 @@
 <nz-layout class="app-layout student">
   <nz-header>
-    <div class="app-header">
-      <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-        <span
-          class="trigger"
-          nz-icon
-          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-        ></span>
-      </span>
+    <div class="app-header row mx-0 align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span class="trigger" nz-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              fill="none"
+            >
+              <path
+                d="M3.75 15H21.25M3.75 7.5H26.25M3.75 22.5H26.25"
+                stroke="#101828"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </span>
+        <div class="d-flex flex-column align-items-start">
+          <p class="font-16 font-500">Cuet Corner</p>
+          <p class="font-10 font-400">Welcomes You!</p>
+        </div>
+      </div>
+      <div class="user-info d-flex align-items-center">
+        <div class="d-flex flex-column align-items-end">
+          <p class="font-12 font-500">{{ globalService?.userDetails?.name || '-' }}</p>
+          <p class="font-10 font-400">{{ globalService?.userDetails?.email || '-' }}</p>
+        </div>
+        <div class="user-icon-div">
+          @if(globalService?.userDetails?.imageUrl){
+            <img [src]="globalService?.userDetails?.imageUrl" alt="">
+          } @else {
+            <span class="font-16 text-white" nz-icon nzType="user" nzTheme="outline"></span>
+          }
+        </div>
+      </div>
     </div>
   </nz-header>
   <nz-layout>
@@ -25,10 +56,23 @@
         class="student-diagonal-gradient padding-lg"
         [style]="isCollapsed ? 'display:none;' : ''"
       >
-        <h1 class="font-24 font-600 mb-1 text-white">Aditya</h1>
-        <p class="font-10 font-300 text-white">Student ID: 1</p>
-        <p class="font-10 font-300 text-white">Batch ID: 1</p>
-        <p class="font-10 font-300 text-white">Subscription ID: 1</p>
+        <h1 class="font-24 font-600 mb-1 text-white">
+          {{ globalService?.userDetails?.name?.split(" ")[0] || "-" }}
+        </h1>
+        <p class="font-10 font-300 text-white">
+          Student ID: {{ globalService?.userDetails?.id }}
+        </p>
+        <p class="font-10 font-300 text-white">
+          Batch:
+          {{
+            globalService?.userDetails?.batchId
+              ? globalService?.userDetails?.batchName
+              : "- (Un-enrolled)"
+          }}
+        </p>
+        <p class="font-10 font-300 text-white">
+          Plan: {{ globalService?.userDetails?.plan }}
+        </p>
       </div>
       <ul
         nz-menu
@@ -101,8 +145,10 @@
         <button
           nz-button
           class="btn-secondary w-100"
-          (click)="isLogoutModal = true;"
-        >Logout</button>
+          (click)="isLogoutModal = true"
+        >
+          Logout
+        </button>
       </div>
     </nz-sider>
 
@@ -131,13 +177,26 @@
 >
   <ng-container *nzModalContent>
     <p class="font-20 font-500">
-      <span class="mr-2 text-primary" nz-icon nzType="info-circle" nzTheme="outline"></span>
+      <span
+        class="mr-2 text-primary"
+        nz-icon
+        nzType="info-circle"
+        nzTheme="outline"
+      ></span>
       Confirmation
     </p>
-    <p class="font-14 font-400 mt-3"> Are you sure you want to logout? </p>
+    <p class="font-14 font-400 mt-3">Are you sure you want to logout?</p>
     <div class="d-flex px-0 mt-3">
-      <button nz-button class="mr-1 w-50 btn-secondary" (click)="isLogoutModal = false">Cancel</button>
-      <button nz-button class="ml-1 w-50 btn-primary" (click)="onClickLogout()">Logout</button>
+      <button
+        nz-button
+        class="mr-1 w-50 btn-secondary"
+        (click)="isLogoutModal = false"
+      >
+        Cancel
+      </button>
+      <button nz-button class="ml-1 w-50 btn-primary" (click)="onClickLogout()">
+        Logout
+      </button>
     </div>
   </ng-container>
 </nz-modal>

@@ -316,10 +316,11 @@
             width="96"
           >
           </canvas>
-          <div class="student-chart chart-center">A+</div>
+          <div class="student-chart chart-center">{{ selectedPerformance?.grade || '-' }}</div>
         </div>
       </div>
     </div>
+    <p class="font-14 font-300 text-4a mt-2"><span class="font-500 text-primary">Remark :</span> {{ selectedPerformance?.remark }}</p>
 
     <nz-divider nzText="Test Details" nzOrientation="left"></nz-divider>
 

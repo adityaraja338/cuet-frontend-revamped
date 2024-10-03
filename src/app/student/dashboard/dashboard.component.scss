@@ -104,8 +104,8 @@
         justify-content: center;
         align-items: center;
         img{
-          height: 20px;
-          width: 20px;
+          height: 16px;
+          width: 16px;
         }
       }
     }
@@ -145,7 +145,11 @@
 }
 
 ::ng-deep #performance-overview {
-  height: 100%;
+  .ant-card-body{
+    padding-top: .75rem;
+    height: 242px;
+  }
+  //height: 100%;
   .card{
     width: 100%;
     min-height: 204px;
@@ -171,7 +175,7 @@
   max-height: calc(100% - 48.8px);
 
   .card {
-    height: 100% !important;
+    //height: 100% !important;
     display: flex;
     flex-direction: column;
   }
@@ -179,7 +183,8 @@
   .scrollable-content {
     flex: 1;
     overflow-y: auto; // Make the content scrollable
-    max-height: 172px; // Ensure it doesn't grow beyond the card
+    height: 210px; // Ensure it doesn't grow beyond the card
+    max-height: 210px; // Ensure it doesn't grow beyond the card
     //border: 1px solid black;
     width: 100%;
   }

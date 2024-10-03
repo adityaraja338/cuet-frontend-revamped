@@ -15,11 +15,17 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClientModule,
+  provideHttpClient,
+} from '@angular/common/http';
 import { NgZorroAntdModule } from './ng-zorro-antd.module';
 import { AuthComponent } from './shared/components/auth/auth.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { AuthInterceptor } from './shared/auth/auth-interceptor.service';
+import { ImageFallbackDirective } from './shared/directive/img-fallback.directive';
 
 registerLocaleData(en);
 
@@ -36,12 +42,16 @@ registerLocaleData(en);
     OAuthModule.forRoot(),
     SimplebarAngularModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    ImageFallbackDirective,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
     provideAnimationsAsync(),
     provideHttpClient(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
+  exports: [ImageFallbackDirective],
 })
 export class AppModule {}

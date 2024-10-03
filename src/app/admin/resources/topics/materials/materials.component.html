@@ -57,19 +57,44 @@
               <div class="material ant-row ant-row-middle">
                 <div class="ant-col-5">
                   <div class="material-icon admin-diagonal-gradient">
-                    <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                    <span nz-icon>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="24"
+                        viewBox="0 0 25 24"
+                        fill="none"
+                      >
+                        <g clip-path="url(#clip0_1345_513)">
+                          <path
+                            d="M24.286 19.492L17.213 1.83602C16.589 0.307016 14.837 -0.432984 13.302 0.191016L12.377 0.569016C12.128 0.671016 11.905 0.813016 11.697 0.971016C11.149 0.377016 10.371 -0.000984438 9.501 -0.000984438H3.5C1.846 1.55624e-05 0.5 1.34602 0.5 3.00002V21C0.5 22.654 1.846 24 3.5 24H9.5C11.154 24 12.5 22.654 12.5 21V8.89502L17.804 22.137C18.429 23.68 20.221 24.397 21.713 23.778L22.639 23.4C24.144 22.826 24.925 20.965 24.286 19.492ZM14.074 7.44602L16.852 6.31402L21.023 16.726L18.245 17.858L14.074 7.44602ZM13.132 2.42102L14.057 2.04302C14.553 1.83702 15.154 2.07402 15.359 2.58602L16.109 4.45702L13.332 5.58902L12.585 3.72302C12.377 3.21302 12.623 2.62802 13.134 2.42002L13.132 2.42102ZM2.5 7.00002H5.5V17H2.5V7.00002ZM7.5 7.00002H10.5V17H7.5V7.00002ZM10.5 3.00002V5.00002H7.5V2.00002H9.5C10.051 2.00002 10.5 2.44802 10.5 3.00002ZM3.5 2.00002H5.5V5.00002H2.5V3.00002C2.5 2.44802 2.949 2.00002 3.5 2.00002ZM2.5 21V19H5.5V22H3.5C2.949 22 2.5 21.552 2.5 21ZM9.5 22H7.5V19H10.5V21C10.5 21.552 10.051 22 9.5 22ZM22.429 21.009C22.325 21.256 22.132 21.447 21.885 21.548L20.959 21.926C20.448 22.132 19.864 21.889 19.659 21.386L18.99 19.715L21.768 18.583L22.433 20.244C22.535 20.491 22.534 20.764 22.43 21.01L22.429 21.009Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1345_513">
+                            <rect
+                              width="24"
+                              height="24"
+                              fill="white"
+                              transform="translate(0.5)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
                   </div>
                 </div>
                 <div class="ant-col-17">
                   <p class="text-a-primary font-16 font-400 mb-1">
                     {{ material.name }}
                   </p>
-                  <p
-                    class="font-12 font-600 text-free"
-                  >
-                  <span [class]="material.isFree ? 'text-free' : 'text-primary'">
-                    {{ material.isFree ? "Free" : "Paid" }}
-                  </span>
+                  <p class="font-12 font-600 text-free">
+                    <span
+                      [class]="material.isFree ? 'text-free' : 'text-primary'"
+                    >
+                      {{ material.isFree ? "Free" : "Paid" }}
+                    </span>
                   </p>
                 </div>
                 <div class="ant-col-2">
@@ -88,14 +113,31 @@
                       <li
                         class="tiny-li"
                         nz-menu-item
-                        (click)="onOpenMaterialForm(material)"
+                        [nzDisabled]="
+                          !globalService?.userDetails?.permissions
+                            ?.edit_material
+                        "
+                        (click)="
+                          globalService?.userDetails?.permissions?.edit_material
+                            ? onOpenMaterialForm(material)
+                            : null
+                        "
                       >
                         <span class="m-l-5">Edit</span>
                       </li>
                       <li
                         class="tiny-li"
                         nz-menu-item
-                        (click)="isDeleteModal = true; modalType = 'material'; deleteMaterialId = material?.id"
+                        [nzDisabled]="
+                          !globalService?.userDetails?.permissions
+                            ?.delete_material
+                        "
+                        (click)="
+                          globalService?.userDetails?.permissions
+                            ?.delete_material
+                            ? onOpenDeleteModal(material?.id, 'material')
+                            : null
+                        "
                       >
                         <span class="m-l-5 text-red">Delete</span>
                       </li>
@@ -108,7 +150,9 @@
         } @else {
           <div class="mt-2 d-flex align-items-center">
             <img src="assets/images/not-found-2.svg" height="160" alt="" />
-            <p class="ml-4 font-20 font-300 text-8a">O! Oh! No Materials found!</p>
+            <p class="ml-4 font-20 font-300 text-8a">
+              O! Oh! No Materials found!
+            </p>
           </div>
         }
       </ng-template>
@@ -141,6 +185,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            *ngIf="globalService?.userDetails?.permissions?.create_test"
           >
             <button
               nz-button
@@ -166,79 +211,105 @@
           (nzQueryParams)="topicTests ? getTopicTests($event) : ''"
         >
           <thead>
-          <tr>
-            <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
-            <th [nzWidth]="'160px'">Name</th>
-            <th class="text-center" [nzWidth]="'84px'">Topic</th>
-            <th class="text-center" [nzWidth]="'84px'">Questions</th>
-            <th class="text-center" [nzWidth]="'64px'">Type</th>
-            <th class="text-center" [nzWidth]="'84px'">Duration</th>
-            <th class="text-center" [nzWidth]="'48px'"></th>
-          </tr>
+            <tr>
+              <th class="text-center" [nzWidth]="'64px'">Sl. No.</th>
+              <th [nzWidth]="'160px'">Name</th>
+              <th class="text-center" [nzWidth]="'84px'">Topic</th>
+              <th class="text-center" [nzWidth]="'84px'">Questions</th>
+              <th class="text-center" [nzWidth]="'64px'">Type</th>
+              <th class="text-center" [nzWidth]="'84px'">Duration</th>
+              <th class="text-center" [nzWidth]="'48px'"></th>
+            </tr>
           </thead>
           <tbody>
-          <tr
-            *ngFor="let test of topicTests; let i = index"
-            (click)="onClickTest($event, 'topic', test?.id)"
-          >
-            <td class="text-center">{{ ((topicPageIndex - 1) * topicPageSize) + (i + 1) }}</td>
-            <td>{{ test?.name || '-' }}</td>
-            <td class="text-center">
-              {{ test?.topic?.name || '-' }}
-            </td>
-            <td class="text-center">
-              {{ test?.totalQuestions || '-' }}
-            </td>
-            <td
-              class="text-center font-600"
-              [class]="test?.isFree ? 'text-free' : 'text-a-primary'"
+            <tr
+              *ngFor="let test of topicTests; let i = index"
+              (click)="onClickTest($event, 'topic', test?.id)"
             >
-              {{ test.isFree ? "Free" : "Paid" }}
-            </td>
-            <td class="text-center">
-              {{ Math.floor(test?.duration / 60) }} hr
-              {{ test?.duration % 60 }} min
-            </td>
-            <td class="text-center dropdown-container">
-              <a
-                class="text-dark font-size-20"
-                nz-dropdown
-                [nzClickHide]="false"
-                [nzTrigger]="'click'"
-                [nzPlacement]="'bottomRight'"
-                [nzDropdownMenu]="latestUploadDropDown"
+              <td class="text-center">
+                {{ (topicPageIndex - 1) * topicPageSize + (i + 1) }}
+              </td>
+              <td>{{ test?.name || "-" }}</td>
+              <td class="text-center">
+                {{ test?.topic?.name || "-" }}
+              </td>
+              <td class="text-center">
+                {{ test?.totalQuestions || "-" }}
+              </td>
+              <td
+                class="text-center font-600"
+                [class]="test?.isFree ? 'text-free' : 'text-a-primary'"
               >
-                <i nz-icon nzType="ellipsis" theme="outline"></i>
-              </a>
-              <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
-                <ul class="table-menu rounded" nz-menu>
-                  <li
-                    class="tiny-li"
-                    nz-menu-item
-                    [routerLink]="[
-                        '/',
-                        'admin',
-                        'tests',
-                        'edit-topic',
-                        test?.id,
-                      ]"
-                  >
-                    <span class="m-l-5">Edit</span>
-                  </li>
-                  <li
-                    class="tiny-li"
-                    nz-menu-item
-                    (click)="onChangeType(test?.id, 'topic')"
-                  >
-                    <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
-                  </li>
-                  <li class="tiny-li" nz-menu-item (click)="deleteTestId = test?.id; modalType = 'test'; isDeleteModal = true;">
-                    <span class="m-l-5 text-red">Delete</span>
-                  </li>
-                </ul>
-              </nz-dropdown-menu>
-            </td>
-          </tr>
+                {{ test.isFree ? "Free" : "Paid" }}
+              </td>
+              <td class="text-center">
+                {{ Math.floor(test?.duration / 60) }} hr
+                {{ test?.duration % 60 }} min
+              </td>
+              <td class="text-center dropdown-container">
+                <a
+                  class="text-dark font-size-20"
+                  nz-dropdown
+                  [nzClickHide]="false"
+                  [nzTrigger]="'click'"
+                  [nzPlacement]="'bottomRight'"
+                  [nzDropdownMenu]="latestUploadDropDown"
+                >
+                  <i nz-icon nzType="ellipsis" theme="outline"></i>
+                </a>
+                <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
+                  <ul class="table-menu rounded" nz-menu>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [nzDisabled]="
+                        !globalService?.userDetails?.permissions
+                          ?.edit_topic_test
+                      "
+                      [routerLink]="
+                        globalService?.userDetails?.permissions?.edit_topic_test
+                          ? ['/', 'admin', 'tests', 'edit-topic', test?.id]
+                          : []
+                      "
+                    >
+                      <span class="m-l-5">Edit</span>
+                    </li>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [nzDisabled]="
+                        !globalService?.userDetails?.permissions
+                          ?.change_test_type
+                      "
+                      (click)="
+                        globalService?.userDetails?.permissions
+                          ?.change_test_type
+                          ? onChangeType(test?.id, 'topic')
+                          : null
+                      "
+                    >
+                      <span class="m-l-5"
+                        >Set as {{ test?.isFree ? "Paid" : "Free" }}</span
+                      >
+                    </li>
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [nzDisabled]="
+                        !globalService?.userDetails?.permissions?.delete_test
+                      "
+                      (click)="
+                        globalService?.userDetails?.permissions?.delete_test
+                          ? onOpenDeleteModal(test?.id, 'test')
+                          : null
+                      "
+                    >
+                      <span class="m-l-5 text-red">Delete</span>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </td>
+            </tr>
           </tbody>
         </nz-table>
         <ng-template #printTopicCount>
@@ -264,14 +335,14 @@
 >
   <ng-container *nzModalContent>
     <p class="font-20 font-400 mb-3">
-      {{ isEditModal ? 'Edit' : 'Add' }} Material
+      {{ isEditModal ? "Edit" : "Add" }} Material
     </p>
     <form class="admin-form" [formGroup]="addEditMaterialForm">
-      @if(isEditModal){
+      @if (isEditModal) {
         <p class="mb-2 font-12 font-400">Material ID</p>
         <nz-form-item class="mb-3">
           <nz-form-control [nzErrorTip]="idError">
-            <input nz-input type="text" formControlName="id">
+            <input nz-input type="text" formControlName="id" />
           </nz-form-control>
           <ng-template #idError let-control>
             <ng-container *ngIf="control?.hasError('required')">
@@ -284,7 +355,7 @@
       <p class="mb-2 font-12 font-400">Material Name</p>
       <nz-form-item class="mb-3">
         <nz-form-control [nzErrorTip]="nameError">
-          <input nz-input type="text" formControlName="name">
+          <input nz-input type="text" formControlName="name" />
         </nz-form-control>
         <ng-template #nameError let-control>
           <ng-container *ngIf="control?.hasError('required')">
@@ -307,7 +378,7 @@
       <p class="mb-2 font-12 font-400">URL</p>
       <nz-form-item class="">
         <nz-form-control [nzErrorTip]="urlError">
-          <input nz-input type="text" formControlName="url">
+          <input nz-input type="text" formControlName="url" />
         </nz-form-control>
         <ng-template #urlError let-control>
           <ng-container *ngIf="control?.hasError('required')">
@@ -320,8 +391,20 @@
       </nz-form-item>
     </form>
     <div class="col-md-8 col-12 px-0 mt-3 d-flex">
-      <button nz-button class="btn-a-secondary mr-1 w-50" (click)="onModalClose()">Cancel</button>
-      <button nz-button class="btn-a-primary ml-1 w-50" (click)="onCreateSaveMaterial()">{{ isEditModal ? 'Save' : 'Create' }}</button>
+      <button
+        nz-button
+        class="btn-a-secondary mr-1 w-50"
+        (click)="onModalClose()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="btn-a-primary ml-1 w-50"
+        (click)="onCreateSaveMaterial()"
+      >
+        {{ isEditModal ? "Save" : "Create" }}
+      </button>
     </div>
   </ng-container>
 </nz-modal>
@@ -339,10 +422,20 @@
       <span class="text-red" nz-icon nzType="info-circle"></span>
       Confirmation
     </p>
-    <p class="font-14 mt-3"> Are you sure you want to delete this {{ modalType }}? </p>
+    <p class="font-14 mt-3">
+      Are you sure you want to delete this {{ modalType }}?
+    </p>
     <div class="col-md-8 col-12 d-flex px-0 mt-2">
-      <button nz-button class="mr-1 w-50 btn-danger" (click)="onModalClose()">Cancel</button>
-      <button nz-button class="ml-1 w-50 btn-danger-secondary" (click)="modalType === 'test' ? onDeleteTest(): onDeleteMaterial()">Delete</button>
+      <button nz-button class="mr-1 w-50 btn-danger" (click)="onModalClose()">
+        Cancel
+      </button>
+      <button
+        nz-button
+        class="ml-1 w-50 btn-danger-secondary"
+        (click)="modalType === 'test' ? onDeleteTest() : onDeleteMaterial()"
+      >
+        Delete
+      </button>
     </div>
   </ng-container>
 </nz-modal>

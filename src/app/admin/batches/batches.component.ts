@@ -8,6 +8,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   selector: 'app-batches',
@@ -41,6 +42,7 @@ export class BatchesComponent implements OnInit {
     private message: NzMessageService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    protected readonly globalService: GlobalService,
   ) {
     this.createEditBatchForm = this.formBuilder.group({
       name: [null, [Validators.required, Validators.maxLength(40)]],
@@ -262,6 +264,11 @@ export class BatchesComponent implements OnInit {
     this.deleteBatchId = undefined;
     this.editModalDetails = undefined;
     this.createEditBatchForm.reset();
+  }
+
+  onOpenDeleteModal(deleteBatchId: any) {
+    this.deleteBatchId = deleteBatchId;
+    this.isDeleteModal = true;
   }
 
   onDeleteBatch() {

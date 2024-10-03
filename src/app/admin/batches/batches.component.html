@@ -26,7 +26,10 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end">
+    <div
+      class="col-md-4 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+      *ngIf="globalService?.userDetails?.permissions?.create_test"
+    >
       <button
         nz-button
         class="btn-a-primary w-100"
@@ -99,7 +102,8 @@
               <li
                 class="tiny-li"
                 nz-menu-item
-                (click)="getBatchInfo(batch?.id)"
+                [nzDisabled]="!globalService?.userDetails?.permissions?.edit_batch"
+                (click)="globalService?.userDetails?.permissions?.edit_batch ? getBatchInfo(batch?.id) : null"
               >
                 <span class="m-l-5">Edit</span>
               </li>
@@ -107,7 +111,8 @@
                 <li
                   class="tiny-li"
                   nz-menu-item
-                  (click)="onChangeEntry(batch?.id, true)"
+                  [nzDisabled]="!globalService?.userDetails?.permissions?.change_batch_entry"
+                  (click)="globalService?.userDetails?.permissions?.change_batch_entry ? onChangeEntry(batch?.id, true) : null"
                 >
                   <span class="m-l-5">Open Entry</span>
                 </li>
@@ -115,7 +120,8 @@
                 <li
                   class="tiny-li"
                   nz-menu-item
-                  (click)="onChangeEntry(batch?.id, false)"
+                  [nzDisabled]="!globalService?.userDetails?.permissions?.change_batch_entry"
+                  (click)="globalService?.userDetails?.permissions?.change_batch_entry ? onChangeEntry(batch?.id, false) : null"
                 >
                   <span class="m-l-5">Close Entry</span>
                 </li>
@@ -123,11 +129,11 @@
               <li
                 class="tiny-li"
                 nz-menu-item
-                (click)="isDeleteModal = true; deleteBatchId = batch?.id"
+                [nzDisabled]="!globalService?.userDetails?.permissions?.delete_batch"
+                (click)="globalService?.userDetails?.permissions?.delete_batch ? onOpenDeleteModal(batch?.id) : null"
               >
                 <span
-                  class="m-l-5"
-                  style="color: rgba(255, 97, 97, 1)"
+                  class="m-l-5 text-red"
                 >Delete</span>
               </li>
             </ul>

@@ -7,7 +7,7 @@
       <ng-template nz-tab>
         <p class="font-12 font-400">Search Test</p>
         <div class="row justify-content-between align-items-start mb-3 mt-1">
-          <div class="col-md-9 col-xl-9">
+          <div [class]="globalService?.userDetails?.permissions?.create_test ? 'col-md-9 col-xl-9' : 'col-md-12'">
             <div class="row mx-n2">
               <div class="col-md-4 px-2">
                 <input
@@ -55,6 +55,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            *ngIf="globalService?.userDetails?.permissions?.create_test"
           >
             <button
               nz-button
@@ -132,20 +133,22 @@
                     <li
                       class="tiny-li"
                       nz-menu-item
-                      [routerLink]="[
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.edit_live_test"
+                      [routerLink]="globalService?.userDetails?.permissions?.edit_live_test ? [
                         '/',
                         'admin',
                         'tests',
                         'edit-live',
                         test?.id,
-                      ]"
+                      ] : []"
                     >
                       <span class="m-l-5">Edit</span>
                     </li>
                     <li
                       class="tiny-li"
                       nz-menu-item
-                      (click)="onChangeType(test?.id, 'live')"
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.change_test_type"
+                      (click)="globalService?.userDetails?.permissions?.change_test_type ? onChangeType(test?.id, 'live') : null"
                     >
                       <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
                     </li>
@@ -153,12 +156,18 @@
                       <li
                         class="tiny-li"
                         nz-menu-item
-                        (click)="onChangeType(test?.id, 'live', 'free-for-all')"
+                        [nzDisabled]="!globalService?.userDetails?.permissions?.change_test_type"
+                        (click)="globalService?.userDetails?.permissions?.change_test_type ? onChangeType(test?.id, 'live', 'free-for-all') : null"
                       >
                         <span class="m-l-5" >Set as Free for All</span>
                       </li>
                     }
-                    <li class="tiny-li" nz-menu-item (click)="onDeleteTest(test?.id, 'live')">
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.delete_test"
+                      (click)="globalService?.userDetails?.permissions?.delete_test ? onDeleteTest(test?.id, 'live') : null"
+                    >
                       <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>
@@ -181,7 +190,7 @@
       <ng-template nz-tab>
         <p class="font-12 font-400">Search Test</p>
         <div class="row justify-content-between align-items-start mb-3 mt-1">
-          <div class="col-md-9 col-xl-9">
+          <div [class]="globalService?.userDetails?.permissions?.create_test ?'col-md-9' : 'col-md-12'" class="col-xl-9">
             <div class="row mx-n2">
               <div class="col-md-4 px-2">
                 <input
@@ -218,6 +227,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            *ngIf="globalService?.userDetails?.permissions?.create_test"
           >
             <button
               nz-button
@@ -291,24 +301,31 @@
                     <li
                       class="tiny-li"
                       nz-menu-item
-                      [routerLink]="[
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.edit_mock_test"
+                      [routerLink]="globalService?.userDetails?.permissions?.edit_mock_test ? [
                         '/',
                         'admin',
                         'tests',
                         'edit-mock',
                         test?.id,
-                      ]"
+                      ] : []"
                     >
                       <span class="m-l-5">Edit</span>
                     </li>
                     <li
                       class="tiny-li"
                       nz-menu-item
-                      (click)="onChangeType(test?.id, 'mock')"
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.change_test_type"
+                      (click)="globalService?.userDetails?.permissions?.change_test_type ? onChangeType(test?.id, 'mock') : null"
                     >
                       <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
                     </li>
-                    <li class="tiny-li" nz-menu-item (click)="onDeleteTest(test?.id, 'mock')">
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.delete_test"
+                      (click)="globalService?.userDetails?.permissions?.delete_test ? onDeleteTest(test?.id, 'mock') : null"
+                    >
                       <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>
@@ -331,9 +348,9 @@
       <ng-template nz-tab>
         <p class="font-12 font-400">Search Test</p>
         <div class="row justify-content-between align-items-start mb-3 mt-1">
-          <div class="col-md-9 col-xl-9">
+          <div [class]="globalService?.userDetails?.permissions?.create_test ? 'col-md-9 col-xl-9' : 'col-12'">
             <div class="row mx-n2">
-              <div class="col-md-4 px-2">
+              <div [class.col-xl-3]="!globalService?.userDetails?.permissions?.create_test" class="col-md-4 px-2">
                 <input
                   nz-input
                   type="text"
@@ -341,7 +358,7 @@
                   [(ngModel)]="topicSearch"
                 />
               </div>
-              <div class="col-md-4 mt-md-0 px-2 mt-2">
+              <div [class.col-xl-3]="!globalService?.userDetails?.permissions?.create_test" class="col-md-4 mt-md-0 px-2 mt-2">
                 <nz-select
                   nzPlaceHolder="Select Subject"
                   [(ngModel)]="topicSearchSubject"
@@ -352,7 +369,7 @@
                   <nz-option *ngFor="let subject of subjects" [nzValue]="subject?.id" [nzLabel]="subject?.name"></nz-option>
                 </nz-select>
               </div>
-              <div class="col-md-4 mt-md-0 px-2 mt-2">
+              <div [class.col-xl-3]="!globalService?.userDetails?.permissions?.create_test" class="col-md-4 mt-md-0 px-2 mt-2">
                 <nz-select
                   nzPlaceHolder="Select Topic"
                   [(ngModel)]="topicSearchTopic"
@@ -365,7 +382,7 @@
                   }
                 </nz-select>
               </div>
-              <div class="col-md-4 px-2 mt-2">
+              <div [class.col-xl-3]="!globalService?.userDetails?.permissions?.create_test" class="col-md-4 px-2 mt-xl-0 mt-2">
                 <nz-select
                   nzPlaceHolder="Select Type"
                   [(ngModel)]="selectTopicType"
@@ -378,7 +395,7 @@
                   <nz-option [nzValue]="'paid'" [nzLabel]="'Paid'"></nz-option>
                 </nz-select>
               </div>
-              <div class="col-md-4 px-2 mt-2">
+              <div [class.col-xl-3]="!globalService?.userDetails?.permissions?.create_test" class="col-md-4 px-2 mt-2">
                 <button
                   nz-button
                   class="btn-a-secondary w-100"
@@ -392,6 +409,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
+            *ngIf="globalService?.userDetails?.permissions?.create_test"
           >
             <button
               nz-button
@@ -465,24 +483,31 @@
                     <li
                       class="tiny-li"
                       nz-menu-item
-                      [routerLink]="[
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.edit_topic_test"
+                      [routerLink]="globalService?.userDetails?.permissions?.edit_topic_test ? [
                         '/',
                         'admin',
                         'tests',
                         'edit-topic',
                         test?.id,
-                      ]"
+                      ] : []"
                     >
                       <span class="m-l-5">Edit</span>
                     </li>
                     <li
                       class="tiny-li"
                       nz-menu-item
-                      (click)="onChangeType(test?.id, 'topic')"
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.change_test_type"
+                      (click)="globalService?.userDetails?.permissions?.change_test_type ? onChangeType(test?.id, 'topic') : null"
                     >
                       <span class="m-l-5" >Set as {{ test?.isFree ? 'Paid' : 'Free' }}</span>
                     </li>
-                    <li class="tiny-li" nz-menu-item (click)="onDeleteTest(test?.id, 'topic')">
+                    <li
+                      class="tiny-li"
+                      nz-menu-item
+                      [nzDisabled]="!globalService?.userDetails?.permissions?.delete_test"
+                      (click)="globalService?.userDetails?.permissions?.delete_test ? onDeleteTest(test?.id, 'topic') : null"
+                    >
                       <span class="m-l-5 text-red">Delete</span>
                     </li>
                   </ul>

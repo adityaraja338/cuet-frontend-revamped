@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminHttpService } from '../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   selector: 'app-resources',
@@ -37,6 +38,10 @@ export class ResourcesComponent implements OnInit {
   isAddEditNewspaperModal = false;
   isEditNewspaperMode = false;
 
+  isDeleteModal = false;
+  deleteMode = '';
+  deleteId: any;
+
   pyqs: any;
   searchPYQ: string = '';
   addEditPyqForm: FormGroup;
@@ -54,6 +59,7 @@ export class ResourcesComponent implements OnInit {
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
     private readonly formBuilder: FormBuilder,
+    protected readonly globalService: GlobalService,
   ) {
     this.addEditSubjectForm = this.formBuilder.group({
       subjectId: [{ value: null, disabled: true }],
@@ -325,6 +331,71 @@ export class ResourcesComponent implements OnInit {
     }
   }
 
+  onOpenDeleteModal(deleteId: any, deleteMode: string) {
+    if (deleteId === undefined || deleteId === null) {
+      this.message.error('Error! Selection Invalid!');
+      return;
+    }
+    this.deleteId = deleteId;
+    this.deleteMode = deleteMode;
+    this.isDeleteModal = true;
+  }
+
+  onDelete() {
+    if (this.deleteMode === 'pyq') {
+      this.http.deletePYQ({ pyqId: this.deleteId }).subscribe({
+        next: (res: any) => {
+          this.getPYQs();
+          this.message.success('Successful! PYQ deleted!');
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    } else if (this.deleteMode === 'video link') {
+      this.http.deleteVideoLink({ videoId: this.deleteId }).subscribe({
+        next: (res: any) => {
+          this.getVideoLinks();
+          this.message.success('Successful! Video Link deleted!');
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    } else if (this.deleteMode === 'newspaper') {
+      this.http.deleteNewspaper({ newspaperId: this.deleteId }).subscribe({
+        next: (res: any) => {
+          this.getNewspapers();
+          this.message.success('Successful! Newspaper deleted!');
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    } else if (this.deleteMode === 'subject') {
+      this.http.deleteSubject({ subjectId: this.deleteId }).subscribe({
+        next: (res: any) => {
+          this.getSubjects();
+          this.message.success('Successful! Subject deleted!');
+          this.onModalClose();
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.message.error(error?.error?.message);
+        },
+      });
+    } else {
+      this.message.error('Error! Selection Invalid!');
+      return;
+    }
+  }
+
   getNewspapers(event?: any) {
     const data: any = {
       page: this.newspaperPageIndex,
@@ -475,13 +546,11 @@ export class ResourcesComponent implements OnInit {
     }
 
     const payload: any = {};
-    this.isEditPyqMode
-      ? (payload.pyqId = this.addEditPyqForm?.get('pyqId')?.value)
-      : null;
     payload.name = this.addEditPyqForm?.get('name')?.value;
     payload.url = this.addEditPyqForm?.get('url')?.value;
 
     if (this.isEditPyqMode) {
+      payload.pyqId = this.addEditPyqForm?.get('pyqId')?.value;
       this.http.putEditPYQ(payload).subscribe({
         next: (res: any) => {
           this.message.success('Successful! PYQ updated!');
@@ -517,6 +586,9 @@ export class ResourcesComponent implements OnInit {
     this.isEditVideoMode = false;
     this.isAddEditPyqModal = false;
     this.isEditPyqMode = false;
+    this.isDeleteModal = false;
+    this.deleteId = undefined;
+    this.deleteMode = '';
     this.addEditSubjectForm?.reset();
     this.addEditNewspaperForm?.reset();
     this.addEditVideoForm?.reset();

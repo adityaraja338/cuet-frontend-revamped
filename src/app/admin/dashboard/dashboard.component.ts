@@ -10,6 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AdminHttpService } from '../../shared/services/admin-http.service';
 import { BaseChartDirective } from 'ng2-charts';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -57,6 +58,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private readonly http: AdminHttpService,
     private message: NzMessageService,
+    protected readonly globalService: GlobalService,
   ) {}
 
   ngOnInit() {

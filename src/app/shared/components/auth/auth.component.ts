@@ -23,16 +23,16 @@ export class AuthComponent implements OnInit {
 
   adminEmail: string = '';
   adminPassword: string = '';
+  yearsOptions: any;
 
-  features: any = [
-    { name: 'Live Test', included: true },
-    { name: 'Mock Test', included: true },
-    { name: 'Topic-wise Test', included: false },
-    { name: 'Newspaper', included: false },
-    { name: 'PYQ', included: true },
-    { name: 'Materials', included: true },
-    { name: 'Video Lectures', included: true },
-  ];
+  currentDate: Date = new Date();
+
+  selectedBatch: any;
+  batches: any = [];
+  totalBatchCount = 0;
+
+  features: any = [];
+  featuresCount = 0;
 
   constructor(
     private googleAuthService: GoogleAuthService,
@@ -78,6 +78,8 @@ export class AuthComponent implements OnInit {
       this.router.navigate(['/', 'admin', 'home']);
     }
     this.getYearsFrom2022();
+    this.getBatches();
+    this.getFeatures();
     // console.log('student data', this.globalService.studentTempData);
     this.dataSubscription = this.globalService.data$.subscribe(
       (receivedData: any) => {
@@ -87,6 +89,38 @@ export class AuthComponent implements OnInit {
         }
       },
     );
+  }
+
+  getBatches() {
+    this.http.getBatches().subscribe({
+      next: (res: any) => {
+        this.batches = res?.data?.batches;
+        this.totalBatchCount = res?.data?.total;
+
+        this.batches?.forEach((batch: any) => {
+          batch.showDetails = false;
+          batch.startDate = new Date(batch.startDate);
+          batch.type = 'basic';
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
+  getFeatures() {
+    this.http.getFeatureList().subscribe({
+      next: (res: any) => {
+        this.features = res?.data?.features;
+        this.featuresCount = res?.data?.total;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
   }
 
   patchValues(data: any) {
@@ -100,11 +134,16 @@ export class AuthComponent implements OnInit {
     this.googleAuthService.loginWithGoogle();
   }
 
-  onClickBatch(batchId: number | null) {
-    this.registrationForm?.get('batchId')?.patchValue(batchId);
+  onClickBatch(batch: any) {
+    if (batch) {
+      this.selectedBatch = batch;
+      this.registrationForm?.get('batchId')?.patchValue(batch?.id);
+    } else {
+      this.selectedBatch = null;
+      this.registrationForm?.get('batchId')?.patchValue(null);
+    }
   }
 
-  yearsOptions: any;
   getYearsFrom2022() {
     const startYear = 2022;
     const currentYear = new Date().getFullYear(); // Get the current year

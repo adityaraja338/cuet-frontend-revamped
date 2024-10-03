@@ -24,6 +24,14 @@ export class AdminHttpService {
     return this.http.post(`${this.url}auth`, data);
   }
 
+  refreshAccessToken(data: any) {
+    return this.http.post(`${this.url}refresh-token`, data);
+  }
+
+  getMe() {
+    return this.http.get(`${this.url}get-me`);
+  }
+
   // Dashboard APIs
   getLastTestDate() {
     return this.http.get(`${this.url}get-last-live-test`);
@@ -283,6 +291,67 @@ export class AdminHttpService {
     return this.http.get(`${this.url}get-student-details-and-performances`, {
       params: params,
     });
+  }
+
+  // Admins APIs
+  putResetPassword(data: any) {
+    return this.http.put(`${this.url}update-admin-password`, data);
+  }
+
+  putChangeImage(data: any) {
+    return this.http.put(`${this.url}update-profile-image`, data);
+  }
+
+  getAdmins(params: any) {
+    return this.http.get(`${this.url}get-admins`, { params: params });
+  }
+
+  postCreateAdmin(data: any) {
+    return this.http.post(`${this.url}create-admin`, data);
+  }
+
+  putEditAdmin(data: any) {
+    return this.http.put(`${this.url}edit-admin`, data);
+  }
+
+  deleteAdmin(params: any) {
+    return this.http.delete(`${this.url}delete-admin`, { params: params });
+  }
+
+  getRoles(params: any) {
+    return this.http.get(`${this.url}get-roles`, { params: params });
+  }
+
+  postCreateRole(data: any) {
+    return this.http.post(`${this.url}create-role`, data);
+  }
+
+  putEditRole(data: any) {
+    return this.http.put(`${this.url}edit-role`, data);
+  }
+
+  deleteRole(params: any) {
+    return this.http.delete(`${this.url}delete-role`, { params: params });
+  }
+
+  getPermissions(params: any) {
+    return this.http.get(`${this.url}get-permissions`, { params: params });
+  }
+
+  postCreatePermission(data: any) {
+    return this.http.post(`${this.url}create-permission`, data);
+  }
+
+  putEditPermission(data: any) {
+    return this.http.put(`${this.url}edit-permission`, data);
+  }
+
+  putEditPermissionRoute(data: any) {
+    return this.http.put(`${this.url}edit-permission-route`, data);
+  }
+
+  deletePermission(params: any) {
+    return this.http.delete(`${this.url}delete-permission`, { params: params });
   }
 
   // Get List APIs

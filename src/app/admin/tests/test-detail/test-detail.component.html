@@ -8,9 +8,14 @@
   <div class="ant-row justify-content-between mb-2">
     <p class="font-16 font-400">Test Details</p>
     <button
+      *ngIf="
+      (testType === 'live' && globalService?.userDetails?.permissions?.edit_live_test) ||
+      (testType === 'mock' && globalService?.userDetails?.permissions?.edit_mock_test) ||
+      (testType === 'topic' && globalService?.userDetails?.permissions?.edit_topic_test)
+"
       nz-button
       class="btn-a-secondary"
-      [routerLink]="['/', 'admin', 'tests', 'edit-live', 1]"
+      [routerLink]="['/', 'admin', 'tests', 'edit-'+testType , testDetails?.id]"
     >
       <span nz-icon nzType="edit"></span>
       Edit Test

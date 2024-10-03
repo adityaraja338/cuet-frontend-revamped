@@ -8,6 +8,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   selector: 'app-students',
@@ -49,6 +50,7 @@ export class StudentsComponent implements OnInit {
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
     private readonly formBuilder: FormBuilder,
+    protected readonly globalService: GlobalService,
   ) {
     this.editForm = this.formBuilder.group({
       studentId: [{ value: null, disabled: true }, [Validators.required]],
@@ -145,6 +147,12 @@ export class StudentsComponent implements OnInit {
     });
   }
 
+  onOpenChangeBatchModal(studentId: any, studentName: any) {
+    this.changeBatchStudentId = studentId;
+    this.currentStudentName = studentName;
+    this.isChangeBatchModal = true;
+  }
+
   onChangeBatch() {
     const data: any = {
       studentId: this.changeBatchStudentId,
@@ -182,6 +190,12 @@ export class StudentsComponent implements OnInit {
     this.editForm
       ?.get('features')
       ?.patchValue(this.editStudentDetails?.individualFeatures);
+  }
+
+  onOpenEditStudentModal(student: any) {
+    this.editStudentDetails = student;
+    this.patchForm();
+    this.isEditModal = true;
   }
 
   onEditStudent() {
@@ -222,6 +236,12 @@ export class StudentsComponent implements OnInit {
     }
   }
 
+  onOpenDeleteBatchModal(deleteStudentId: any, currentStudentName: any) {
+    this.currentStudentName = currentStudentName;
+    this.deleteStudentId = deleteStudentId;
+    this.isDeleteBatchModal = true;
+  }
+
   onDeleteStudentBatch() {
     const data: any = {
       studentId: this.deleteStudentId,
@@ -238,6 +258,12 @@ export class StudentsComponent implements OnInit {
         this.message.error(error?.error?.message);
       },
     });
+  }
+
+  onOpenDeleteStudentModal(deleteStudentId: any, currentStudentName: any) {
+    this.currentStudentName = currentStudentName;
+    this.deleteStudentId = deleteStudentId;
+    this.isDeleteModal = true;
   }
 
   onDeleteStudent() {

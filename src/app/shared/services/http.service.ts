@@ -20,15 +20,9 @@ export class HttpService {
     }
   }
 
-  // httpCallFn(){
-  //   this.http.getLiveTestsOverview().subscribe({
-  //     next: (res: any) => {},
-  //     error: (error: any) => {
-  //       console.log(error);
-  //       this.message.error(error?.error?.message);
-  //     },
-  //   })
-  // }
+  refreshAccessToken(data: any) {
+    return this.http.post(`${this.url}refresh-token`, data);
+  }
 
   registerAndInitiatePayment(data: any) {
     return this.http.post(`${this.url}register/create-order`, data);
@@ -40,6 +34,18 @@ export class HttpService {
 
   postStudentGoogleLogin(data: any) {
     return this.http.post(`${this.url}auth`, data);
+  }
+
+  getMe() {
+    return this.http.get(`${this.url}get-me`);
+  }
+
+  getBatches() {
+    return this.http.get(`${this.url}register/get-batches`);
+  }
+
+  getFeatureList() {
+    return this.http.get(`${this.url}register/get-features`);
   }
 
   // Student Dashboard
@@ -138,10 +144,48 @@ export class HttpService {
 
   // Account Details
   getAccountDetails() {
-    return this.http.get(`${this.url}get-account-details`);
+    return this.http.get(`${this.url}account/get-details`);
+  }
+
+  getAccountFeatures() {
+    return this.http.get(`${this.url}account/get-features`);
+  }
+
+  getAccountBatches() {
+    return this.http.get(`${this.url}account/get-batches`);
   }
 
   putImageUpdate(data: any) {
     return this.http.put(`${this.url}account/update-image`, data);
+  }
+
+  enrollInitiatePayment(data: any) {
+    return this.http.post(`${this.url}account-enroll/create-order`, data);
+  }
+
+  verifyEnrollPayment(data: any) {
+    return this.http.post(`${this.url}account-enroll/verify-payment`, data);
+  }
+
+  upgradeInitiatePayment() {
+    return this.http.post(`${this.url}account-upgrade/create-order`, {});
+  }
+
+  verifyUpgradePayment(data: any) {
+    return this.http.post(`${this.url}account-upgrade/verify-payment`, data);
+  }
+
+  purchaseFeatureInitiatePayment(data: any) {
+    return this.http.post(
+      `${this.url}account-purchase-feature/create-order`,
+      data,
+    );
+  }
+
+  verifyFeaturePayment(data: any) {
+    return this.http.post(
+      `${this.url}account-purchase-feature/verify-payment`,
+      data,
+    );
   }
 }

@@ -394,6 +394,10 @@ button.ant-btn.btn-a-secondary {
   font-weight: 400;
 }
 
+.ant-table-tbody > tr:hover {
+  cursor: pointer;
+}
+
 .ant-table-tbody > tr:not(:first-child) {
   height: 36px;
 }
@@ -560,6 +564,11 @@ nz-input-number {
     font-size: 12px;
     font-weight: 300;
   }
+}
+
+nz-input-group.password-input{
+  border-radius: 6px;
+  font-size: 12px;
 }
 
 .ant-input[disabled] {

@@ -10,6 +10,7 @@ import { AdminHttpService } from '../../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
+import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
   selector: 'app-student-detail',
@@ -17,16 +18,7 @@ import { ChartConfiguration } from 'chart.js';
   styleUrl: './student-detail.component.scss',
 })
 export class StudentDetailComponent implements OnInit {
-  studentPerformanceData: any = [
-    { id: 1, name: 'Aditya', score: '120/240', accuracy: '50%' },
-    { id: 2, name: 'Aditya 2', score: '124/240', accuracy: '50%' },
-    { id: 3, name: 'Aditya 3', score: '190/240', accuracy: '50%' },
-    { id: 4, name: 'Aditya 4', score: '156/240', accuracy: '50%' },
-    { id: 5, name: 'Aditya 5', score: '152/240', accuracy: '50%' },
-    { id: 6, name: 'Aditya 6', score: '112/240', accuracy: '50%' },
-    { id: 7, name: 'Aditya 7', score: '167/240', accuracy: '50%' },
-    { id: 8, name: 'Aditya 8', score: '78/240', accuracy: '50%' },
-  ];
+  studentPerformanceData: any = [];
 
   batches: any;
   features: any;
@@ -70,6 +62,7 @@ export class StudentDetailComponent implements OnInit {
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
     private readonly formBuilder: FormBuilder,
+    protected readonly globalService: GlobalService,
   ) {
     this.editForm = this.formBuilder.group({
       studentId: [{ value: null, disabled: true }, [Validators.required]],

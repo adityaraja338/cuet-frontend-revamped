@@ -10,6 +10,7 @@ import { AdminHttpService } from '../../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
+import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
   selector: 'app-batch-detail',
@@ -58,6 +59,7 @@ export class BatchDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    protected readonly globalService: GlobalService,
   ) {
     this.editBatchForm = this.formBuilder.group({
       batchId: [{ value: null, disabled: true }, [Validators.pattern(/^\d*$/)]],

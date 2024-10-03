@@ -417,19 +417,20 @@
                   </div>
                 </div>
                 <div
-                  *ngFor="let item of [1, 2, 3, 4]"
+                  *ngFor="let batch of batches"
                   class="col-md-7 col-xl-5 col-11"
                 >
                   <div
-                    (click)="onClickBatch(item)"
+                    (click)="onClickBatch(batch)"
                     [class.selected-batch]="
-                      registrationForm?.get('batchId')?.value === item
+                      registrationForm?.get('batchId')?.value === batch?.id
                     "
-                    class="batch-card bg-white br-6 p-xl-3 p-2 d-flex flex-column justify-content-center align-items-start cursor-pointer"
+                    class="batch-card h-100 bg-white br-6 p-xl-3 p-2 d-flex flex-column justify-content-center align-items-start cursor-pointer"
                   >
-                    <p class="font-16 font-400">Sankalp Batch</p>
+                    <p class="font-16 font-400">{{ batch?.name }} Batch</p>
                     <p class="font-12 font-300 text-aa">
-                      16 Aug | <span class="text-8a">View Details</span>
+                      {{ currentDate > batch?.startDate ? 'Started' : 'Starts' }}
+                      <span>{{ batch?.startDate ? (batch?.startDate | date: 'dd MMM yyyy') : '-' }}</span>
                     </p>
                     <p class="font-20 font-500 text-primary mt-1">₹ 999</p>
                   </div>
@@ -445,13 +446,16 @@
                     <div class="row flex-nowrap mx-0">
                       <!-- First Column for Sankalp -->
                       <div class="col-xl-6 col-8 px-0">
-                        <label nz-radio nzValue="basic">Sankalp</label>
-                        <p class="font-20 font-500 text-primary">₹ 999</p>
+                        <label nz-radio nzValue="basic">
+                          {{ selectedBatch?.name || '-' }}
+                          <span class="text-aa font-600">Basic</span>
+                        </label>
+                        <p class="font-20 font-500 text-primary">₹ {{ selectedBatch?.basePrice }}</p>
                         @for (feature of features; track $index) {
                           <label class="font-12 font-400 mt-2 text-8a">
                             <span>
                               <svg
-                                *ngIf="feature?.included"
+                                *ngIf="selectedBatch?.baseFeatures?.includes(feature?.id)"
                                 class="mr-2"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -473,7 +477,7 @@
                                 />
                               </svg>
                               <svg
-                                *ngIf="!feature?.included"
+                                *ngIf="!selectedBatch?.baseFeatures?.includes(feature?.id)"
                                 class="mr-2"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -497,10 +501,10 @@
                       <!-- Second Column for Sankalp Premium -->
                       <div class="col-md-6 col-11 px-0">
                         <label nz-radio nzValue="premium">
-                          Sankalp
+                          {{ selectedBatch?.name || '-' }}
                           <span class="text-primary font-600">Premium</span>
                         </label>
-                        <p class="font-20 font-500 text-primary">₹ 999</p>
+                        <p class="font-20 font-500 text-primary">₹ {{ selectedBatch?.premiumPrice }}</p>
                         @for (feature of features; track $index) {
                           <label class="font-12 font-400 mt-2 text-8a">
                             <span>

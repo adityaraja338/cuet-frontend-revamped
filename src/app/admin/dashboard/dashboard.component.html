@@ -1,5 +1,5 @@
-<p class="font-16 font-400">Welcome,</p>
-<p class="font-40 font-600 mb-3">Abhinav</p>
+<p class="font-14 font-400">Welcome,</p>
+<p class="font-28 font-600 mb-3">{{ globalService?.userDetails?.name || '-' }}</p>
 
 <div class="row mx-n2 metric-cards mb-3">
   <div class="col-md-4 px-2 mb-md-0 mb-3">
@@ -295,19 +295,21 @@
         <span nz-icon nzType="export"></span>
         Manage All Tests
       </button>
-      <button
-        nz-button
-        class="btn-a-primary"
-        (click)="showModal('confirm-refresh')"
-      >
-        <span nz-icon nzType="undo"></span>
-        Refresh Leaderboards
-      </button>
+      @if(globalService?.userDetails?.permissions?.refresh_leaderboards){
+        <button
+          nz-button
+          class="btn-a-primary"
+          (click)="showModal('confirm-refresh')"
+        >
+          <span nz-icon nzType="undo"></span>
+          Refresh Leaderboards
+        </button>
+      }
     </nz-card>
   </div>
   <div class="col-md-4 px-2 manage-entities">
     <nz-card nzHoverable nzBorderless>
-      <p class="font-14 font-400 mb-3">Manage Tests</p>
+      <p class="font-14 font-400 mb-3">Manage Users</p>
       <button
         nz-button
         class="btn-a-primary mb-2"

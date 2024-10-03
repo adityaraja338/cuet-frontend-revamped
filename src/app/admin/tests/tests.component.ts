@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminHttpService } from '../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   selector: 'app-tests',
@@ -45,6 +46,7 @@ export class TestsComponent implements OnInit {
     private readonly router: Router,
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
+    protected readonly globalService: GlobalService,
   ) {}
 
   ngOnInit() {

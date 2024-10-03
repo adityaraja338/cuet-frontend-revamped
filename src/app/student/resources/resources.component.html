@@ -27,12 +27,18 @@
             *ngFor="let subject of nonDomainSubjects"
           >
             <div
-              class="subject ant-row ant-row-middle"
+              class="subject ant-row ant-row-middle cursor-pointer"
               (click)="onClickSubject(subject.id)"
             >
               <div class="ant-col-xl-6 ant-col-5">
                 <div class="subject-icon student-diagonal-gradient">
-                  <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                  <img
+                    [src]="subject?.iconUrl"
+                    [imgFallback]="
+                        'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
+                      "
+                    alt=""
+                  />
                 </div>
               </div>
               <div class="ant-col-xl-18 ant-col-19">
@@ -57,12 +63,18 @@
               *ngFor="let subject of domainSubjects"
             >
               <div
-                class="subject ant-row ant-row-middle"
+                class="subject ant-row ant-row-middle cursor-pointer"
                 (click)="onClickSubject(subject.name)"
               >
                 <div class="ant-col-xl-6 ant-col-5">
                   <div class="subject-icon student-diagonal-gradient">
-                    <img src="assets/icon/leaderboard-badge.svg" alt="" />
+                    <img
+                      [src]="subject?.iconUrl"
+                      [imgFallback]="
+                        'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
+                      "
+                      alt=""
+                    />
                   </div>
                 </div>
                 <div class="ant-col-xl-18 ant-col-19">
@@ -283,7 +295,7 @@
               "
               class="text-decoration-none"
             >
-              <div class="subject ant-row ant-row-middle">
+              <div class="subject ant-row ant-row-middle cursor-pointer" >
                 <div class="ant-col-xl-6 ant-col-5">
                   <div class="subject-icon student-diagonal-gradient">
                     <svg

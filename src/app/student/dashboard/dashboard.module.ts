@@ -9,6 +9,7 @@ import {
   withDefaultRegisterables,
 } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
+import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
     SimplebarAngularModule,
     BaseChartDirective,
     CommonModule,
+    ImageFallbackDirective,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
   declarations: [DashboardComponent],

@@ -46,7 +46,7 @@ export class GoogleAuthService {
           if (res?.data?.userExists === true) {
             localStorage.setItem('cuet_access_token', res.data.accessToken);
             localStorage.setItem('cuet_refresh_token', res.data.refreshToken);
-            localStorage.setItem('cuet_role', 'student');
+            localStorage.setItem('cuet_role', res.data.role);
             this.studentAuthService.login();
           } else {
             // User does not exist, return the response to display a registration form

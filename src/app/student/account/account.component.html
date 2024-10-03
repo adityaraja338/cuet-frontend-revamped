@@ -2,7 +2,7 @@
   <nz-breadcrumb-item>My Account</nz-breadcrumb-item>
 </nz-breadcrumb>
 <div class="ant-row">
-  <div class="ant-col-md-14">
+  <div class="ant-col-md-12">
     <nz-card nzHoverable nzBorderless>
       <div class="row mx-0 justify-content-center">
         <img
@@ -71,23 +71,20 @@
           </div>
           <div class="ant-col-24 mb-2">
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Batch ID</h4>
+              <h4 class="common-label font-500 font-10 mb-1">Batch Name</h4>
             </nz-form-label>
             <nz-form-item>
               <nz-form-control [nzErrorTip]="nameError" class="">
                 <input
                   nz-input
-                  placeholder="Batch ID"
+                  placeholder="Haven't enrolled yet"
                   class=""
-                  formControlName="batchId"
+                  formControlName="batchName"
                 />
               </nz-form-control>
               <ng-template #nameError let-control>
                 <ng-container *ngIf="control.hasError('required')">
                   Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
                 </ng-container>
               </ng-template>
             </nz-form-item>
@@ -194,46 +191,341 @@
     </nz-card>
   </div>
   @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
-    <div class="ant-col-md-10 px-md-4 px-0 mt-md-0 mt-4">
+    <div class="ant-col-md-12 pl-md-4 px-0 mt-md-0 mt-4">
       <p class="enroll-text mb-4">
         Haven’t<br /><span>Enrolled</span><br />Yet?
       </p>
-      <button nz-button ngSkipHydration class="enroll-btn">
-        <span nz-icon nzType="form"></span>
-        Enroll Now
-      </button>
+
+      <div class="col-xl-8 px-0">
+        <button
+          nz-button
+          class="enroll-btn w-100"
+          (click)="isShowBatches = true"
+        >
+          <span nz-icon nzType="form"></span>
+          Enroll Now
+        </button>
+      </div>
+      <p class="font-12 font-300 ml-2 mt-2">
+        <span class="text-primary font-600">{{ totalBatchCount }}</span> Batches
+        Avaliable
+      </p>
+
+      <div class="d-md-block d-none">
+        <nz-divider
+          class="font-14 font-500"
+          nzOrientation="left"
+          nzText="OR"
+        ></nz-divider>
+      </div>
+      <div class="d-md-none d-block">
+        <nz-divider
+          class="font-14 font-500"
+          nzOrientation="center"
+          nzText="OR"
+        ></nz-divider>
+      </div>
+      <nz-card nzHoverable nzBorderless>
+        <p class="font-16 font-400">Buy Individual Features</p>
+
+        <div class="d-flex py-2 mt-2 justify-content-between border-bottom">
+          <p class="font-12 font-400 text-8a">Feature Name</p>
+          <p class="font-12 font-400 text-8a">Price</p>
+        </div>
+
+        <div
+          *ngFor="let feature of features"
+          class="d-flex py-1 justify-content-between"
+        >
+          <label
+            nz-checkbox
+            class="font-12 font-400 text-4a"
+            [nzDisabled]="!feature.canPurchase"
+            [(nzChecked)]="feature.selectedToBuy"
+            (nzCheckedChange)="isFeatureSelectedToBuy()"
+            >{{ feature?.name }}</label
+          >
+          <p class="font-12 font-500 text-primary">₹ {{ feature?.price }}</p>
+        </div>
+
+        <button
+          nz-button
+          class="btn-primary mt-2"
+          *ngIf="showPurchaseButton"
+          (click)="onInitiateFeaturePayment()"
+        >
+          ₹ {{ totalPurchaseAmount }} Purchase
+        </button>
+      </nz-card>
     </div>
   } @else if (!accountDetails?.isPremium && accountDetails?.isUpgradeable) {
-    <div class="ant-col-md-10 px-md-4 px-0 mt-md-0 mt-4">
+    <div class="ant-col-md-12 ant-col-24 pl-md-4 px-0 mt-md-0 mt-4">
       <p class="upgrade-text mb-4">
         Haven’t<br /><span>Access</span><br />To All Things Yet?
       </p>
-      <button nz-button ngSkipHydration class="enroll-btn">
-        <span nz-icon>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 48 48"
-            fill="none"
+      <div class="col-xl-8 px-0">
+        <button
+          nz-button
+          class="enroll-btn w-100"
+          (click)="onInitiateUpgradePayment()"
+        >
+          <span nz-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 48 48"
+              fill="none"
+            >
+              <path
+                d="M34 22L24 12L14 22M34 36L24 26L14 36"
+                stroke="#FFF"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          Upgrade to <span class="font-600 px-1"> Premium </span> Now
+        </button>
+      </div>
+      <div class="d-md-block d-none">
+        <nz-divider
+          class="font-14 font-500"
+          nzOrientation="left"
+          nzText="OR"
+        ></nz-divider>
+      </div>
+      <div class="d-md-none d-block">
+        <nz-divider
+          class="font-14 font-500"
+          nzOrientation="center"
+          nzText="OR"
+        ></nz-divider>
+      </div>
+      <nz-card nzHoverable nzBorderless>
+        <p class="font-16 font-400">Buy Individual Features</p>
+
+        <div class="d-flex py-2 mt-2 justify-content-between border-bottom">
+          <p class="font-12 font-400 text-8a">Feature Name</p>
+          <p class="font-12 font-400 text-8a">Price</p>
+        </div>
+
+        <div
+          *ngFor="let feature of features"
+          class="d-flex py-1 justify-content-between"
+        >
+          <label
+            nz-checkbox
+            class="font-12 font-400 text-4a"
+            [nzDisabled]="!feature.canPurchase"
+            [(nzChecked)]="feature.selectedToBuy"
+            (nzCheckedChange)="isFeatureSelectedToBuy()"
+            >{{ feature?.name }}</label
           >
-            <path
-              d="M34 22L24 12L14 22M34 36L24 26L14 36"
-              stroke="#FFF"
-              stroke-width="4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </span>
-        Upgrade to <span class="font-600">Premium</span> Now
-      </button>
+          <p class="font-12 font-500 text-primary">₹ {{ feature?.price }}</p>
+        </div>
+
+        <button
+          nz-button
+          class="btn-primary mt-2"
+          *ngIf="showPurchaseButton"
+          (click)="onInitiateFeaturePayment()"
+        >
+          ₹ {{ totalPurchaseAmount }} Purchase
+        </button>
+      </nz-card>
     </div>
   } @else {
-    <div class="ant-col-md-10 px-md-4 px-0 mt-md-0 mt-4">
+    <div class="ant-col-md-12 pl-md-4 px-0 mt-md-0 mt-4">
       <p class="thank-you-text mb-4">
         Thanks for<br /><span>Supporting</span><br />Us!
+      </p>
+
+      <nz-divider nzOrientation="left" nzText="Token of Appreciation"></nz-divider>
+
+      <p class="font-14 font-400">
+        🎉 Thank You for Your Support! 🎉 <br>
+        <br>
+
+        Dear <span class="font-600 text-primary">{{ accountDetails?.name }}</span>, <br>
+        <br>
+        We want to extend our heartfelt gratitude for choosing our premium
+        membership! Your support not only empowers your own learning journey but
+        also helps us continue to enhance our offerings and provide the best
+        possible resources for all students. <br>
+        <br>
+        Thank you for being a vital part of our community. Together, we are
+        paving the way for success and achieving
+        great things! <br>
+        <br>
+        With appreciation, <br>
+        Cuet Corner
       </p>
     </div>
   }
 </div>
+
+<nz-modal
+  [(nzVisible)]="isShowBatches"
+  [nzFooter]="null"
+  nzMaskClosable
+  nzClosable
+  (nzOnCancel)="isShowBatches = false; closeAllCollapse()"
+>
+  <ng-container *nzModalContent>
+    <p class="font-20 font-400">Available Batches</p>
+
+    <p class="font-12 font-300 mt-1">
+      Note: You can't change batch after enrolling once!
+    </p>
+    <div class="account-batch-modal mt-4">
+      <div
+        *ngFor="let batch of batches"
+        class="mt-3 batch w-100 d-flex flex-column align-items-center"
+      >
+        <div class="batch-container">
+          <p class="font-16 font-500 text-primary">{{ batch?.name }} Batch</p>
+          <p class="font-12 font-500 mt-1">
+            <span class="font-300"
+              >{{
+                batch?.startDate < currentDate ? "Started" : "Starts"
+              }}:</span
+            >
+            {{
+              batch?.startDate ? (batch?.startDate | date: "dd MMM yyyy") : "-"
+            }}
+          </p>
+          <div class="payment-selection">
+            <nz-radio-group
+              class="mt-2 w-100"
+              #radioGroup
+              [(ngModel)]="batch.type"
+            >
+              <label class="w-50 text-8a mx-0" nz-radio nzValue="basic">
+                Basic - ₹ {{ batch?.basePrice }}
+              </label>
+              <label class="w-50 mx-0" nz-radio nzValue="premium">
+                Premium - ₹ {{ batch?.premiumPrice }}
+              </label>
+            </nz-radio-group>
+
+            <button
+              nz-button
+              class="btn-primary mt-2"
+              (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
+            >
+              Pay ₹
+              {{
+                batch?.type === "basic" ? batch?.basePrice : batch?.premiumPrice
+              }}
+              and Enroll
+            </button>
+          </div>
+        </div>
+        <div class="batch-details py-2 px-4">
+          <p
+            class="text-center font-12 font-300 cursor-pointer"
+            (click)="batch.showDetails = !batch?.showDetails"
+          >
+            {{ batch?.showDetails ? "Hide Details" : "View Details" }}
+          </p>
+          <nz-collapse nzGhost>
+            <nz-collapse-panel
+              [class.pb-2]="batch?.showDetails"
+              [class]="batch?.showDetails ? 'd-block' : 'd-none'"
+              [nzShowArrow]="false"
+              [nzHeader]="undefined"
+              [nzActive]="batch?.showDetails"
+            >
+              <p class="font-16 font-400">Features Included</p>
+              <div class="mt-2 row">
+                <div class="col-md-6">
+                  <p class="font-14 font-300 mb-2">
+                    <span class="font-600 text-aa">Basic</span> Plan
+                  </p>
+                  @for (feature of features; track $index) {
+                    @if (batch?.baseFeatures?.includes(feature?.id)) {
+                      <p class="mt-1">
+                        <span class="mr-2"
+                          ><svg
+                            class="mr-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <rect
+                              width="16"
+                              height="16"
+                              rx="8"
+                              fill="#F4EBFF"
+                            />
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M11.3977 4.92667L6.62434 9.53334L5.35767 8.18C5.12434 7.96 4.75767 7.94667 4.491 8.13334C4.231 8.32667 4.15767 8.66667 4.31767 8.94L5.81767 11.38C5.96434 11.6067 6.21767 11.7467 6.50434 11.7467C6.77767 11.7467 7.03767 11.6067 7.18434 11.38C7.42434 11.0667 12.0043 5.60667 12.0043 5.60667C12.6043 4.99334 11.8777 4.45334 11.3977 4.92V4.92667Z"
+                              fill="#6964FF"
+                            /></svg
+                        ></span>
+                        {{ feature?.name }}
+                      </p>
+                    } @else {
+                      <p class="mt-1">
+                        <span class="mr-2">
+                          <svg
+                            class="mr-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M12 4L4 12M4 4L12 12"
+                              stroke="#8A8A8A"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            /></svg
+                        ></span>
+                        {{ feature?.name }}
+                      </p>
+                    }
+                  }
+                </div>
+                <div class="col-md-6">
+                  <p class="font-14 font-300 mb-2">
+                    <span class="font-600 text-primary">Premium</span> Plan
+                  </p>
+                  @for (feature of features; track $index) {
+                    <p class="mt-1">
+                      <span class="mr-2"
+                        ><svg
+                          class="mr-2"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                        >
+                          <rect width="16" height="16" rx="8" fill="#F4EBFF" />
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M11.3977 4.92667L6.62434 9.53334L5.35767 8.18C5.12434 7.96 4.75767 7.94667 4.491 8.13334C4.231 8.32667 4.15767 8.66667 4.31767 8.94L5.81767 11.38C5.96434 11.6067 6.21767 11.7467 6.50434 11.7467C6.77767 11.7467 7.03767 11.6067 7.18434 11.38C7.42434 11.0667 12.0043 5.60667 12.0043 5.60667C12.6043 4.99334 11.8777 4.45334 11.3977 4.92V4.92667Z"
+                            fill="#6964FF"
+                          /></svg
+                      ></span>
+                      {{ feature?.name }}
+                    </p>
+                  }
+                </div>
+              </div>
+            </nz-collapse-panel>
+          </nz-collapse>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>

@@ -66,8 +66,6 @@ export class GoogleAuthService {
     this.oauthService.tryLogin().then(() => {
       if (this.oauthService.hasValidAccessToken()) {
         return this.getUserData();
-      } else {
-        this.studentAuthService.logout();
       }
     });
   }

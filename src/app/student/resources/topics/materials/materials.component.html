@@ -344,3 +344,40 @@
     </div>
   </ng-container>
 </nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isPendingTest"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  (nzOnCancel)="onModalClose()"
+  [nzWidth]="360"
+>
+  <ng-container *nzModalContent>
+    <p class="font-16 font-400"> Continue or Submit Pending Test </p>
+
+    <p class="mt-3 font-12 font-400">
+      You have a pending {{ pendingTestDetails?.testType }} test!
+    </p>
+    <p class="font-14 font-400">
+      Do you want to continue or submit the test?
+    </p>
+
+    <div class="d-flex justify-content-start mt-2 pt-2">
+      <button
+        nz-button
+        type="button"
+        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        (click)="submitPendingTest()"
+      >
+        Submit
+      </button>
+      <button
+        nz-button
+        class="modal-btn btn-primary mb-1 mr-2"
+        [routerLink]="['/', 'student', 'tests','attempt', pendingTestDetails?.testType, pendingTestDetails?.testId]"
+      >
+        Continue
+      </button>
+    </div>
+  </ng-container>
+</nz-modal>

@@ -18,6 +18,10 @@ $admin-primary: #00a3ff;
   line-height: normal;
 }
 
+.drawer-open {
+  overflow: auto !important;
+}
+
 pre {
   font-family: "Lexend", sans-serif;
 }
@@ -101,6 +105,10 @@ p {
 
 .text-aa {
   color: #aaaaaa !important;
+}
+
+.text-ea {
+  color: #eaeaea !important;
 }
 
 .row-gap-4 {
@@ -846,6 +854,31 @@ nz-switch:has(.ant-switch-small) {
   }
 }
 
+.ant-pagination-simple .ant-pagination-simple-pager{
+  height: auto;
+  input{
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    :focus{
+
+    }
+  }
+}
+
+.admin .ant-pagination-simple .ant-pagination-simple-pager {
+  input {
+    &:hover{
+      border-color: #00a3ff;
+    }
+    &:focus{
+      border-color: #00a3ff;
+      box-shadow: 0 0 0 2px rgba(0, 163, 255, 0.50);
+    }
+  }
+}
+
 // Divider
 .ant-divider-horizontal.ant-divider-with-text {
   font-size: 12px;
@@ -862,6 +895,11 @@ nz-switch:has(.ant-switch-small) {
 
 .ant-divider-horizontal.ant-divider-with-text-left::after {
   width: calc(100% - 10px);
+}
+
+//Calendar
+.ant-picker-calendar-header .ant-picker-calendar-mode-switch{
+  display: none;
 }
 
 // Modal

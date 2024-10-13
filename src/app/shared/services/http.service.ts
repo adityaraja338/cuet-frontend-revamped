@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../enviroments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-  url: any = new URL(window.location.href);
+  domain: any = window.location.hostname;
+  url: any;
 
   constructor(private readonly http: HttpClient) {
     this.getUrl();
   }
 
   getUrl() {
-    if (this.url == 'https://www.cuetcorner.in') {
-      this.url = environment.baseUrl + 'student/';
-    } else {
-      this.url = 'http://localhost:3000/student/';
-    }
+    this.url = environment.baseUrl + 'student/';
+
+    console.log('this.url', this.domain);
+    console.log('this.url', this.url);
   }
 
   refreshAccessToken(data: any) {
@@ -63,6 +63,18 @@ export class HttpService {
 
   getLeaderboard() {
     return this.http.get(`${this.url}get-leaderboard`);
+  }
+
+  getUserNotifications() {
+    return this.http.get(`${this.url}get-user-notifications`, {});
+  }
+
+  getUserEvents() {
+    return this.http.get(`${this.url}get-user-events`, {});
+  }
+
+  checkUnfinishedTest() {
+    return this.http.get(`${this.url}check-unfinished-tests`);
   }
 
   // Resources Page

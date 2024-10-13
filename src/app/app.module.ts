@@ -26,11 +26,12 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { AuthInterceptor } from './shared/auth/auth-interceptor.service';
 import { ImageFallbackDirective } from './shared/directive/img-fallback.directive';
+import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent, AuthComponent],
+  declarations: [AppComponent, AuthComponent, LandingPageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

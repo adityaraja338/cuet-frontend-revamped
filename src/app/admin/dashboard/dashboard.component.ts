@@ -1,12 +1,5 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
-import { isPlatformBrowser } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AdminHttpService } from '../../shared/services/admin-http.service';
 import { BaseChartDirective } from 'ng2-charts';
@@ -29,6 +22,9 @@ export class DashboardComponent implements OnInit {
   worstBatch: any;
 
   overallMetricDetails: any;
+
+  events: any = [];
+  notifications: any = [];
 
   isModalVisible = false;
   modalName: string = '';
@@ -67,6 +63,8 @@ export class DashboardComponent implements OnInit {
     this.getOverallPerformance();
     this.getBestAndWorstBatch();
     this.getCountMetrics();
+    this.getUserEvents();
+    this.getUserNotifications();
   }
 
   getLastTestDate() {
@@ -130,6 +128,30 @@ export class DashboardComponent implements OnInit {
     this.http.getCountMetrics().subscribe({
       next: (res: any) => {
         this.overallMetricDetails = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  getUserEvents() {
+    this.http.getUserEvents().subscribe({
+      next: (res: any) => {
+        this.events = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  getUserNotifications() {
+    this.http.getUserNotifications().subscribe({
+      next: (res: any) => {
+        this.notifications = res?.data;
       },
       error: (error: any) => {
         console.log(error);

@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../enviroments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminHttpService {
-  url: any = new URL(window.location.href);
+  domain: any = window.location.hostname;
+  url: any;
 
   constructor(private readonly http: HttpClient) {
     this.getUrl();
   }
 
   getUrl() {
-    if (this.url == 'https://www.cuetcorner.in') {
-      this.url = environment.baseUrl + 'admin/';
-    } else {
-      this.url = 'http://localhost:3000/admin/';
-    }
+    this.url = environment.baseUrl + 'admin/';
+
+    console.log('this.url', this.domain);
+    console.log('this.url', this.url);
   }
 
   postAdminLogin(data: any) {
@@ -354,6 +354,52 @@ export class AdminHttpService {
     return this.http.delete(`${this.url}delete-permission`, { params: params });
   }
 
+  getUserNotifications() {
+    return this.http.get(`${this.url}get-user-notifications`, {});
+  }
+
+  getUserEvents() {
+    return this.http.get(`${this.url}get-user-events`, {});
+  }
+
+  getNotifications(params?: any) {
+    return this.http.get(`${this.url}get-notifications`, {
+      params: params,
+    });
+  }
+
+  postCreateNotification(data: any) {
+    return this.http.post(`${this.url}create-notification`, data);
+  }
+
+  putEditNotification(data: any) {
+    return this.http.put(`${this.url}edit-notification`, data);
+  }
+
+  deleteNotification(params: any) {
+    return this.http.delete(`${this.url}delete-notification`, {
+      params: params,
+    });
+  }
+
+  getEvents(params?: any) {
+    return this.http.get(`${this.url}get-events`, {
+      params: params,
+    });
+  }
+
+  postCreateEvent(data: any) {
+    return this.http.post(`${this.url}create-event`, data);
+  }
+
+  putEditEvent(data: any) {
+    return this.http.put(`${this.url}edit-event`, data);
+  }
+
+  deleteEvent(params: any) {
+    return this.http.delete(`${this.url}delete-event`, { params: params });
+  }
+
   // Get List APIs
   getFeaturesList(params?: any) {
     return this.http.get(`${this.url}get-feature-list`, {
@@ -377,5 +423,17 @@ export class AdminHttpService {
     return this.http.get(`${this.url}get-topic-list`, {
       params: params,
     });
+  }
+
+  getAdminList() {
+    return this.http.get(`${this.url}get-admin-list`, {});
+  }
+
+  getStudentList() {
+    return this.http.get(`${this.url}get-student-list`, {});
+  }
+
+  getRoleList() {
+    return this.http.get(`${this.url}get-role-list`, {});
   }
 }

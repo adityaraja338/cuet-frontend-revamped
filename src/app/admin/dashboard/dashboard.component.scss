@@ -59,3 +59,27 @@
     color: #FFF;
   }
 }
+
+.events, .notifications {
+  .admin-image-div {
+    height: 36px;
+    width: 36px;
+    aspect-ratio: 1 !important;
+    border-radius: 50%;
+    background: linear-gradient(
+        to top right,
+        #007dd4,
+        #00a3ff
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      height: 32px;
+      width: 32px;
+      aspect-ratio: 1 !important;
+      border-radius: 50%;
+    }
+  }
+}

@@ -27,6 +27,9 @@ export class MaterialsComponent implements OnInit {
   selectedTest: any;
   selectedTestType: any;
 
+  isPendingTest = false;
+  pendingTestDetails: any;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -95,13 +98,54 @@ export class MaterialsComponent implements OnInit {
   }
 
   onClickStartTest(test: any, testType: string) {
-    if (!test?.canAttempt) {
-      this.isInvalidModal = true;
-    } else {
-      this.selectedTest = test;
-      this.selectedTestType = testType;
-      this.isStartTestModal = true;
-    }
+    this.http.checkUnfinishedTest().subscribe({
+      next: (res: any) => {
+        // this.notifications = res?.data;
+        if (!res?.data) {
+          if (!test?.canAttempt) {
+            this.isInvalidModal = true;
+          } else {
+            this.selectedTest = test;
+            this.selectedTestType = testType;
+            this.isStartTestModal = true;
+          }
+        } else {
+          this.pendingTestDetails = res?.data;
+          this.isPendingTest = true;
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  submitPendingTest() {
+    const data: any = {
+      testId: this.pendingTestDetails?.testId,
+      testItemId: this.pendingTestDetails?.testItemId,
+      testType: this.pendingTestDetails?.testType,
+    };
+
+    this.http.postSubmitTest(data).subscribe({
+      next: (res: any) => {
+        this.message.success('Successful! Test submitted!');
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message?.error(error?.error?.message);
+      },
+    });
+  }
+
+  onModalClose() {
+    this.selectedTest = undefined;
+    this.isStartTestModal = false;
+    this.isInvalidModal = false;
+    this.isPendingTest = false;
+    this.pendingTestDetails = undefined;
   }
 
   protected readonly Math = Math;

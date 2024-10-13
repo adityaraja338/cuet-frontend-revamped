@@ -4,6 +4,7 @@ import { HttpService } from './http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StudentAuthService } from '../auth/student-auth.service';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 declare var Razorpay: any;
 
@@ -24,7 +25,7 @@ export class PaymentService {
         // console.log('response', response);
         if (response?.data?.paymentRequired) {
           const options = {
-            key: 'rzp_test_xtHIdQfnQPITKE', // Enter the Key ID generated from the Dashboard
+            key: environment.razorpayKey, // Enter the Key ID generated from the Dashboard
             amount: response.amount, // amount in the smallest currency unit
             currency: 'INR',
             name: 'Cuet Corner',
@@ -109,7 +110,7 @@ export class PaymentService {
         next: (response: any) => {
           if (response?.data?.paymentRequired) {
             const options = {
-              key: 'rzp_test_xtHIdQfnQPITKE', // Enter the Key ID generated from the Dashboard
+              key: environment.razorpayKey, // Enter the Key ID generated from the Dashboard
               amount: response.amount, // amount in the smallest currency unit
               currency: 'INR',
               name: 'Cuet Corner',
@@ -189,7 +190,7 @@ export class PaymentService {
         next: (response: any) => {
           if (response?.data?.paymentRequired) {
             const options = {
-              key: 'rzp_test_xtHIdQfnQPITKE', // Enter the Key ID generated from the Dashboard
+              key: environment.razorpayKey, // Enter the Key ID generated from the Dashboard
               amount: response.amount, // amount in the smallest currency unit
               currency: 'INR',
               name: 'Cuet Corner',
@@ -249,7 +250,7 @@ export class PaymentService {
         next: (response: any) => {
           if (response?.data?.paymentRequired) {
             const options = {
-              key: 'rzp_test_xtHIdQfnQPITKE', // Enter the Key ID generated from the Dashboard
+              key: environment.razorpayKey, // Enter the Key ID generated from the Dashboard
               amount: response.amount, // amount in the smallest currency unit
               currency: 'INR',
               name: 'Cuet Corner',

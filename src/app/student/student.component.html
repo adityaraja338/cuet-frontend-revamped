@@ -27,11 +27,11 @@
         </div>
       </div>
       <div class="user-info d-flex align-items-center">
-        <div class="d-flex flex-column align-items-end">
+        <div class="d-md-flex d-none flex-column align-items-end">
           <p class="font-12 font-500">{{ globalService?.userDetails?.name || '-' }}</p>
           <p class="font-10 font-400">{{ globalService?.userDetails?.email || '-' }}</p>
         </div>
-        <div class="user-icon-div">
+        <div class="user-icon-div" [routerLink]="['/', 'student', 'account']">
           @if(globalService?.userDetails?.imageUrl){
             <img [src]="globalService?.userDetails?.imageUrl" alt="">
           } @else {
@@ -57,21 +57,21 @@
         [style]="isCollapsed ? 'display:none;' : ''"
       >
         <h1 class="font-24 font-600 mb-1 text-white">
-          {{ globalService?.userDetails?.name?.split(" ")[0] || "-" }}
+          {{ globalService.userDetails?.name?.split(" ")[0] || "-" }}
         </h1>
         <p class="font-10 font-300 text-white">
-          Student ID: {{ globalService?.userDetails?.id }}
+          Student ID: {{ globalService.userDetails?.id }}
         </p>
         <p class="font-10 font-300 text-white">
           Batch:
           {{
-            globalService?.userDetails?.batchId
-              ? globalService?.userDetails?.batchName
+            globalService.userDetails?.batchId
+              ? globalService.userDetails?.batchName
               : "- (Un-enrolled)"
           }}
         </p>
         <p class="font-10 font-300 text-white">
-          Plan: {{ globalService?.userDetails?.plan }}
+          Plan: {{ globalService.userDetails?.plan }}
         </p>
       </div>
       <ul

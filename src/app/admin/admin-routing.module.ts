@@ -34,6 +34,13 @@ const routes: Routes = [
           import('./tests/tests.module').then((m) => m.TestsModule),
       },
       {
+        path: 'events-and-notifications',
+        loadChildren: () =>
+          import(
+            './events-and-notifications/events-and-notifications.module'
+          ).then((m) => m.EventsAndNotificationsModule),
+      },
+      {
         path: 'admins',
         loadChildren: () =>
           import('./admins/admins.module').then((m) => m.AdminsModule),

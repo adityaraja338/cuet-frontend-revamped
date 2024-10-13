@@ -5,66 +5,16 @@
   <nz-tabset>
     <nz-tab nzTitle="Subjects">
       <ng-template nz-tab>
-        <!-- Non Domain Subjects        -->
-        <div id="subjects-container" class="ant-row mx-n1">
-          <!--          <div class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1">-->
-          <!--            <div-->
-          <!--              class="newspaper student-diagonal-gradient ant-row ant-row-middle"-->
-          <!--            >-->
-          <!--              <div class="ant-col-5">-->
-          <!--                <div class="subject-icon bg-white">-->
-          <!--                  <img src="assets/icon/leaderboard-badge.svg" alt="" />-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--              <div class="ant-col-19">-->
-          <!--                <p class="text-white font-16 font-500 mb-1">Newspapers</p>-->
-          <!--                <p class="text-white font-10 font-500">Total: {{ 12 }}</p>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let subject of nonDomainSubjects"
-          >
-            <div
-              class="subject ant-row ant-row-middle cursor-pointer"
-              (click)="onClickSubject(subject.id)"
-            >
-              <div class="ant-col-xl-6 ant-col-5">
-                <div class="subject-icon student-diagonal-gradient">
-                  <img
-                    [src]="subject?.iconUrl"
-                    [imgFallback]="
-                        'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
-                      "
-                    alt=""
-                  />
-                </div>
-              </div>
-              <div class="ant-col-xl-18 ant-col-19">
-                <p class="text-primary font-16 font-500 mb-1">
-                  {{ subject.name }}
-                </p>
-                <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        @if (domainSubjects?.length > 0) {
-          <!-- Domain Subjects       -->
-          <nz-divider
-            nzOrientation="left"
-            nzText="Domain Subjects"
-          ></nz-divider>
-          <div id="domain-subjects-container" class="ant-row mx-n1">
+        @if(nonDomainSubjects?.length > 0 || domainSubjects?.length > 0){
+          <!-- Non Domain Subjects        -->
+          <div id="subjects-container" class="ant-row mx-n1">
             <div
               class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-              *ngFor="let subject of domainSubjects"
+              *ngFor="let subject of nonDomainSubjects"
             >
               <div
                 class="subject ant-row ant-row-middle cursor-pointer"
-                (click)="onClickSubject(subject.name)"
+                (click)="onClickSubject(subject.id)"
               >
                 <div class="ant-col-xl-6 ant-col-5">
                   <div class="subject-icon student-diagonal-gradient">
@@ -86,6 +36,49 @@
               </div>
             </div>
           </div>
+
+          @if (domainSubjects?.length > 0) {
+            <!-- Domain Subjects       -->
+            <nz-divider
+              nzOrientation="left"
+              nzText="Domain Subjects"
+            ></nz-divider>
+            <div id="domain-subjects-container" class="ant-row mx-n1">
+              <div
+                class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+                *ngFor="let subject of domainSubjects"
+              >
+                <div
+                  class="subject ant-row ant-row-middle cursor-pointer"
+                  (click)="onClickSubject(subject.id)"
+                >
+                  <div class="ant-col-xl-6 ant-col-5">
+                    <div class="subject-icon student-diagonal-gradient">
+                      <img
+                        [src]="subject?.iconUrl"
+                        [imgFallback]="
+                        'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
+                      "
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div class="ant-col-xl-18 ant-col-19">
+                    <p class="text-primary font-16 font-500 mb-1">
+                      {{ subject.name }}
+                    </p>
+                    <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        } @else {
+          <nz-empty
+            nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            nzNotFoundContent="No Subjects Found"
+            class="pb-4"
+          ></nz-empty>
         }
       </ng-template>
     </nz-tab>
@@ -279,91 +272,100 @@
     </nz-tab>
     <nz-tab nzTitle="PYQs">
       <ng-template nz-tab>
-        <div id="pyq-container" class="ant-row mx-n1">
-          <div
-            class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-            *ngFor="let pyq of pyqs"
-          >
-            <a
-              *ngIf="pyq?.url"
-              target="_blank"
-              [href]="
+        @if(pyqs?.length > 0){
+          <div id="pyq-container" class="ant-row mx-n1">
+            <div
+              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+              *ngFor="let pyq of pyqs"
+            >
+              <a
+                *ngIf="pyq?.url"
+                target="_blank"
+                [href]="
                 pyq?.url?.startsWith('https://') ||
                 pyq?.url?.startsWith('http://')
                   ? pyq?.url
                   : 'https://' + pyq?.url
               "
-              class="text-decoration-none"
-            >
-              <div class="subject ant-row ant-row-middle cursor-pointer" >
-                <div class="ant-col-xl-6 ant-col-5">
-                  <div class="subject-icon student-diagonal-gradient">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <g clip-path="url(#clip0_1305_208)">
-                        <path
-                          d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_1305_208">
-                          <rect width="24" height="24" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                class="text-decoration-none"
+              >
+                <div class="subject ant-row ant-row-middle cursor-pointer" >
+                  <div class="ant-col-xl-6 ant-col-5">
+                    <div class="subject-icon student-diagonal-gradient">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <g clip-path="url(#clip0_1305_208)">
+                          <path
+                            d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1305_208">
+                            <rect width="24" height="24" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ant-col-xl-18 ant-col-19">
+                    <p class="text-primary font-16 font-400">
+                      {{ pyq.name }}
+                    </p>
                   </div>
                 </div>
-                <div class="ant-col-xl-18 ant-col-19">
-                  <p class="text-primary font-16 font-400">
-                    {{ pyq.name }}
-                  </p>
-                </div>
-              </div>
-            </a>
-            <a
-              *ngIf="!pyq?.url"
-              (click)="isInvalidModal = true"
-              class="text-decoration-none"
-            >
-              <div class="subject ant-row ant-row-middle">
-                <div class="ant-col-xl-6 ant-col-5">
-                  <div class="subject-icon student-diagonal-gradient">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <g clip-path="url(#clip0_1305_208)">
-                        <path
-                          d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_1305_208">
-                          <rect width="24" height="24" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+              </a>
+              <a
+                *ngIf="!pyq?.url"
+                (click)="isInvalidModal = true"
+                class="text-decoration-none"
+              >
+                <div class="subject ant-row ant-row-middle">
+                  <div class="ant-col-xl-6 ant-col-5">
+                    <div class="subject-icon student-diagonal-gradient">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <g clip-path="url(#clip0_1305_208)">
+                          <path
+                            d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1305_208">
+                            <rect width="24" height="24" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ant-col-xl-18 ant-col-19">
+                    <p class="text-primary font-16 font-400">
+                      {{ pyq.name }}
+                    </p>
                   </div>
                 </div>
-                <div class="ant-col-xl-18 ant-col-19">
-                  <p class="text-primary font-16 font-400">
-                    {{ pyq.name }}
-                  </p>
-                </div>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
-        </div>
+        } @else {
+          <nz-empty
+            nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            nzNotFoundContent="No PYQs Found"
+            class="pb-4"
+          ></nz-empty>
+        }
+
       </ng-template>
     </nz-tab>
   </nz-tabset>

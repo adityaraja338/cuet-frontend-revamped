@@ -27,7 +27,7 @@ export class AdminsComponent implements OnInit {
 
   roles: any = [];
   rolePageIndex: number = 1;
-  rolePageSize: number = 30;
+  rolePageSize: number = 10;
   roleTotalCount: number = 0;
   roleSearch: string = '';
   isCreateEditRoleModal: boolean = false;
@@ -36,7 +36,7 @@ export class AdminsComponent implements OnInit {
 
   permissions: any = [];
   permissionPageIndex: number = 1;
-  permissionPageSize: number = 30;
+  permissionPageSize: number = 10;
   permissionTotalCount: number = 0;
   permissionSearch: string = '';
   isCreateEditPermissionModal: boolean = false;
@@ -99,7 +99,8 @@ export class AdminsComponent implements OnInit {
         ],
       ],
       email: [null, [Validators.required, Validators.email]],
-      roleId: [null, [Validators.required]],
+      superAdmin: [false, [Validators.required]],
+      roleId: [null],
     });
 
     this.roleForm = this.fb.group({
@@ -122,6 +123,18 @@ export class AdminsComponent implements OnInit {
       route: [null, [Validators.required]],
       method: [null, [Validators.required]],
     });
+
+    this.adminForm
+      ?.get('superAdmin')
+      ?.valueChanges?.subscribe((value: boolean) => {
+        if (this.adminForm?.get('superAdmin')?.value) {
+          this.adminForm?.get('roleId')?.clearValidators();
+          this.adminForm?.updateValueAndValidity();
+        } else {
+          this.adminForm?.get('roleId')?.setValidators([Validators.required]);
+          this.adminForm?.updateValueAndValidity();
+        }
+      });
   }
 
   ngOnInit() {
@@ -224,6 +237,7 @@ export class AdminsComponent implements OnInit {
       this.adminForm?.get('id')?.patchValue(admin?.id);
       this.adminForm?.get('name')?.patchValue(admin?.name);
       this.adminForm?.get('email')?.patchValue(admin?.email);
+      this.adminForm?.get('superAdmin')?.patchValue(admin?.superAdmin);
       this.adminForm?.get('roleId')?.patchValue(admin?.role?.id);
       this.isEditAdmin = true;
     } else {
@@ -261,6 +275,7 @@ export class AdminsComponent implements OnInit {
     data.name = this.adminForm?.get('name')?.value;
     data.email = this.adminForm?.get('email')?.value;
     data.password = this.adminForm?.get('password')?.value;
+    data.superAdmin = this.adminForm?.get('superAdmin')?.value;
     data.roleId = this.adminForm?.get('roleId')?.value;
 
     if (this.isEditAdmin) {

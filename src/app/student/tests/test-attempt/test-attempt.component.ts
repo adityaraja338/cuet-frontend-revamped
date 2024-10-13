@@ -159,7 +159,6 @@ export class TestAttemptComponent implements OnInit {
       error: (error: any) => {
         console.log(error);
         this.message?.error(error?.error?.message);
-        this.router.navigate(['/', 'student', 'home']);
       },
     });
   }

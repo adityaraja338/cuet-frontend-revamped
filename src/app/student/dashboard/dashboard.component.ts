@@ -10,16 +10,15 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
-  previous = [1, 2, 3, 4, 5];
+  previous = [];
 
-  subjects: any = [
-    'English',
-    'Maths',
-    'Reasoning',
-    'GS & GK',
-    'Biology',
-    'Physics',
-  ];
+  popoverText = ''; // Text to show inside the popover
+  popoverVisible = false;
+
+  subjects: any = [];
+
+  events: any = [];
+  notifications: any = [];
 
   resourcesScrollbarOptions: any = {
     direction: 'rtl',
@@ -35,7 +34,6 @@ export class DashboardComponent implements OnInit {
     '# of Incorrect',
     '# of Unattempted',
   ];
-
   public overallChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] =
     [
       {
@@ -45,7 +43,6 @@ export class DashboardComponent implements OnInit {
         borderRadius: 12,
       },
     ];
-
   public previousChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] =
     [
       {
@@ -55,13 +52,15 @@ export class DashboardComponent implements OnInit {
         borderRadius: 12,
       },
     ];
-
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: false,
     radius: 56,
     cutout: '78%',
     // borderColor: 'violet'
   };
+
+  isPendingTest = false;
+  pendingTestDetails: any;
 
   constructor(
     private http: HttpService,
@@ -73,6 +72,9 @@ export class DashboardComponent implements OnInit {
     this.getHomescreenSubjects();
     this.getPerformanceCharts();
     this.getLeaderboard();
+    this.getUserEvents();
+    this.getUserNotifications();
+    this.checkUnfinishedTest();
   }
 
   upcomingTestOverviewData: any;
@@ -142,6 +144,82 @@ export class DashboardComponent implements OnInit {
         console.log(error);
         this.message.error(error?.error?.message);
       },
+    });
+  }
+
+  getUserEvents() {
+    this.http.getUserEvents().subscribe({
+      next: (res: any) => {
+        this.events = res?.data;
+        this.filterUpcomingEvents(res?.data);
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  getUserNotifications() {
+    this.http.getUserNotifications().subscribe({
+      next: (res: any) => {
+        this.notifications = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  checkUnfinishedTest() {
+    this.http.checkUnfinishedTest().subscribe({
+      next: (res: any) => {
+        if (res?.data) {
+          this.pendingTestDetails = res?.data;
+          this.isPendingTest = true;
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error.message);
+      },
+    });
+  }
+
+  submitPendingTest() {
+    const data: any = {
+      testId: this.pendingTestDetails?.testId,
+      testItemId: this.pendingTestDetails?.testItemId,
+      testType: this.pendingTestDetails?.testType,
+    };
+
+    this.http.postSubmitTest(data).subscribe({
+      next: (res: any) => {
+        this.message.success('Successful! Test submitted!');
+        this.pendingTestDetails = undefined;
+        this.isPendingTest = false;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message?.error(error?.error?.message);
+      },
+    });
+  }
+
+  upcomingEvents: any = [];
+  filterUpcomingEvents(events: any) {
+    this.upcomingEvents = events?.filter((event: any) => {
+      const currentDate = new Date();
+      const eventDate = new Date(event?.date);
+
+      if (eventDate?.getMonth() > currentDate?.getMonth()) {
+        return true;
+      } else if (eventDate?.getMonth() === currentDate?.getMonth()) {
+        return eventDate?.getDate() >= currentDate?.getDate();
+      } else {
+        return false;
+      }
     });
   }
 }

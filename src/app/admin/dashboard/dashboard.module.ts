@@ -8,6 +8,8 @@ import {
   provideCharts,
   withDefaultRegisterables,
 } from 'ng2-charts';
+import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -21,6 +23,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgZorroAntdModule,
     BaseChartDirective,
+    ImageFallbackDirective,
+    SimplebarAngularModule,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
   exports: [DashboardComponent],

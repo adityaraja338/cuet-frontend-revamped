@@ -78,6 +78,30 @@
   }
 }
 
+.events, .notifications {
+  .admin-image-div {
+    height: 36px;
+    width: 36px;
+    aspect-ratio: 1 !important;
+    border-radius: 50%;
+    background: linear-gradient(
+        to top right,
+        #007dd4,
+        #00a3ff
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      height: 32px;
+      width: 32px;
+      aspect-ratio: 1 !important;
+      border-radius: 50%;
+    }
+  }
+}
+
 #resources {
   .subjects-container {
     padding: 16px;
@@ -237,4 +261,22 @@
       rgba(205, 127, 50, 0.24)
     );
   }
+}
+
+.custom-date-cell {
+  position: relative;
+  cursor: pointer;
+}
+
+.popover-helper {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  z-index: 1;
+}
+
+::ng-deep .student-calendar .ant-picker-calendar-mode-switch{
+  display: none;
 }

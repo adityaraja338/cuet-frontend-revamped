@@ -165,7 +165,8 @@ export class AuthComponent implements OnInit {
       data['phone'] = this.registrationForm?.get('phone')?.value;
       data['age'] = this.registrationForm?.get('age')?.value;
       data['cuetAttempts'] = this.registrationForm?.get('cuetAttempts')?.value;
-      data['batchId'] = this.registrationForm?.get('batchId')?.value;
+      if (this.registrationForm?.get('batchId')?.value)
+        data['batchId'] = this.registrationForm?.get('batchId')?.value;
       data['planType'] = this.registrationForm?.get('planType')?.value;
       this.payment.initiateRegisterPayment(data);
     } else {

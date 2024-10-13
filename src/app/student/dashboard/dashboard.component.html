@@ -91,8 +91,144 @@
   </div>
 </section>
 
-<nz-divider nzOrientation="left" nzText="Study Resources"></nz-divider>
+@if(pendingTestDetails){
+  <nz-divider nzOrientation="left" nzText="Unfinished Test"></nz-divider>
+  <nz-card nzHoverable nzBorderless>
+    <div class="row align-items-center justify-content-between">
+      <div class="col-md-8">
+        <p class="font-14 font-400"> You have an unfinished test! </p>
+        <p class="font-12 font-400"> Do want to continue or submit the test? </p>
+        <div class="row mt-2">
+          <div class="col-md-4 col-6">
+            <p class="font-10 font-400">
+              Test Name: <br>
+              <span class="font-12 text-primary">{{ pendingTestDetails?.testName }} </span>
+            </p>
+          </div>
+          <div class="col-md-4 col-6">
+            <p class="font-10 font-400 mx-2">
+              Test Type: <br>
+              <span class="font-12 text-primary">
+                {{ pendingTestDetails?.testType | titlecase }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4 col-6 mt-md-0 mt-2">
+            <p class="font-10 font-400"> Started At: <br>
+              <span class="font-12 text-primary">
+                {{ pendingTestDetails?.startTime | date: 'hh:mm a' }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex justify-content-md-end mt-md-0 mt-3">
+        <button
+          nz-button
+          type="button"
+          class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+          (click)="submitPendingTest()"
+        >
+          Submit
+        </button>
+        <button
+          nz-button
+          class="modal-btn btn-primary mb-1 mr-2"
+          [routerLink]="['/', 'student', 'tests','attempt', pendingTestDetails?.testType, pendingTestDetails?.testId]"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  </nz-card>
+}
 
+<div class="row mx-n2">
+  <div class="col-md-6 px-2 events">
+    <nz-divider nzText="Your Events" nzOrientation="left"></nz-divider>
+    <nz-card nzHoverable nzBorderless>
+      <p class="font-14 font-400">Upcoming Events</p>
+      @if(upcomingEvents?.length > 0){
+        <ngx-simplebar style="height: 160px; max-height: 160px">
+          <div class="row mx-0 mt-3">
+            @for (event of upcomingEvents; let i = $index; track i) {
+              <nz-divider *ngIf="i!=0" class="my-2"></nz-divider>
+              <div class="col-12 px-0 d-flex align-items-center">
+                <div class="admin-image-div mr-2">
+                  <img
+                    [src]="event?.admin?.imageUrl"
+                    [imgFallback]="
+                    'https://cdn-icons-png.flaticon.com/512/1624/1624453.png'
+                  "
+                  />
+                </div>
+                <div class="flex-grow-1 d-flex flex-column">
+                  <p class="font-14 font-400">{{ event?.title || "-" }}</p>
+                  <p class="font-12 font-400 mb-1 text-8a">{{ event?.text || "-" }}</p>
+                  <div class="d-flex justify-content-between">
+                    <p class="font-10 text-ca">By: {{ event?.admin?.name }}</p>
+                    <p class="font-10 text-ca">
+                      Event Date: {{ event?.date | date: "dd MMM yyyy" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </ngx-simplebar>
+      } @else {
+        <nz-empty
+          nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+          nzNotFoundContent="No Events Found"
+          class="pb-4"
+        ></nz-empty>
+      }
+    </nz-card>
+  </div>
+  <div class="col-md-6 px-2 notifications">
+    <nz-divider nzText="Your Notifications" nzOrientation="left"></nz-divider>
+    <nz-card nzHoverable nzBorderless>
+      <p class="font-14 font-400">Notifications</p>
+      @if(upcomingEvents?.length > 0){
+        <ngx-simplebar style="height: 160px; max-height: 160px">
+          <div class="row mx-0 mt-3">
+            @for (notification of notifications; let i = $index; track i) {
+              <nz-divider *ngIf="i!=0" class="my-2"></nz-divider>
+              <div class="col-12 px-0 d-flex align-items-center">
+                <div class="admin-image-div mr-2">
+                  <img
+                    [src]="notification?.admin?.imageUrl"
+                    [imgFallback]="
+                  'https://cdn-icons-png.flaticon.com/512/1624/1624453.png'
+                "
+                  />
+                </div>
+                <div class="flex-grow-1 d-flex flex-column">
+                  <p class="font-14 font-400">{{ notification?.title || "-" }}</p>
+                  <p class="font-12 font-400 text-8a mb-1">{{ notification?.text || "-" }}</p>
+                  <div class="d-flex justify-content-between">
+                    <p class="font-10 text-ca">By: {{ notification?.admin?.name }}</p>
+                    <p class="font-10 text-ca">
+                      Created: {{ notification?.createdAt | date: "dd MMM yyyy | hh:mm a" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </ngx-simplebar>
+      } @else {
+        <nz-empty
+          nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+          nzNotFoundContent="No Notifications Yet!"
+          class="pb-4"
+        ></nz-empty>
+      }
+    </nz-card>
+  </div>
+</div>
+
+<nz-divider nzOrientation="left" nzText="Study Resources"></nz-divider>
 <section id="resources">
   <nz-card nzHoverable nzBorderless>
     <ngx-simplebar [options]="resourcesScrollbarOptions">
@@ -173,7 +309,7 @@
 
 <div nz-row [nzGutter]="[16, 0]">
   <div nz-col [nzXs]="24" [nzMd]="12">
-    <nz-divider nzOrientation="left" nzText="Performance Divider"></nz-divider>
+    <nz-divider nzOrientation="left" nzText="Performance"></nz-divider>
     <section id="performance-overview">
       <nz-card nzHoverable nzBorderless>
         <nz-tabset class="w-100">
@@ -427,13 +563,42 @@
               [nzNotFoundImage]="
                 'https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
               "
+              nzNotFoundContent="No Data Found"
             ></nz-empty>
           }
-          <ng-container *ngIf="leaderboardData?.length === 0">
-            <p class="text-center">No Data Found!</p>
-          </ng-container>
         </ngx-simplebar>
       </nz-card>
     </section>
   </div>
 </div>
+
+<nz-divider nzOrientation="left" nzText="Calendar"></nz-divider>
+<nz-card nzBorderless nzHoverable>
+  <ngx-simplebar style="max-height: 360px; max-width: 100%;">
+    <nz-calendar
+      [nzMode]="'month'"
+      class="d-md-inline d-block"
+      style="width: max(100%, 640px)"
+    >
+      <ul *nzDateCell="let date" class="events">
+        @for(event of events; track $index){
+          <li *ngIf="event?.date === (date | date:'yyyy-MM-dd')">
+            <nz-badge
+              nzStatus="success"
+              [nzText]="event?.title"
+              nz-popover
+              [nzPopoverVisible]="popoverVisible"
+              [nzPopoverContent]="contentTemplate"
+              nzPopoverTrigger="hover"
+            >
+            </nz-badge>
+            <ng-template #contentTemplate>
+              {{ event?.text }}
+            </ng-template>
+          </li>
+        }
+      </ul>
+    </nz-calendar>
+  </ngx-simplebar>
+</nz-card>
+

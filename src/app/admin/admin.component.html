@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="user-info d-flex align-items-center">
-        <div class="d-flex flex-column align-items-end">
+        <div class="d-md-flex d-none flex-column align-items-end">
           <p class="font-12 font-500">{{ globalService?.userDetails?.name || '-' }}</p>
           <p class="font-10 font-400">{{ globalService?.userDetails?.email || '-' }}</p>
         </div>
@@ -37,6 +37,8 @@
         >
           @if(globalService?.userDetails?.imageUrl){
             <img [src]="globalService?.userDetails?.imageUrl">
+          } @else if(globalService?.userDetails?.isSuperAdmin) {
+            <img src="https://cdn-icons-png.flaticon.com/512/1624/1624453.png">
           } @else {
             <span class="font-16 text-white" nz-icon nzType="user" nzTheme="outline"></span>
           }
@@ -128,6 +130,18 @@
         >
           <span nz-icon nzType="usergroup-add"></span>
           <span>Students</span>
+        </li>
+        <li
+          nz-menu-item
+          nz-tooltip
+          nzTooltipPlacement="right"
+          [nzTooltipTitle]="isCollapsed ? 'Events & Noti\'s' : ''"
+          nzSelected
+          nzMatchRouter="/admin/events-and-notifications"
+          routerLink="/admin/events-and-notifications"
+        >
+          <span nz-icon nzType="bell" nzTheme="outline"></span>
+          <span>Events & Notifications</span>
         </li>
         <li
           nz-menu-item

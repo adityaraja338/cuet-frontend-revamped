@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-md-6">
     <nz-card nzHoverable nzBorderless>
-      @if(!globalService?.userDetails?.isSuperAdmin){
+      @if (globalService?.userDetails?.adminId) {
         <div class="d-flex justify-content-center align-items-center mb-4">
           <div class="profile-image-container">
             @if (globalService?.userDetails?.imageUrl) {
@@ -15,10 +15,20 @@
                 alt=""
               />
             } @else {
-              <p class="font-10 cursor-pointer" (click)="onOpenUpdateProfileImageModal()"> Add Image </p>
+              <p
+                class="font-10 cursor-pointer"
+                (click)="onOpenUpdateProfileImageModal()"
+              >
+                Add Image
+              </p>
             }
           </div>
-            <span class="ml-2" nz-icon nzType="edit" (click)="onOpenUpdateProfileImageModal()"></span>
+          <span
+            class="ml-2"
+            nz-icon
+            nzType="edit"
+            (click)="onOpenUpdateProfileImageModal()"
+          ></span>
         </div>
       }
       <div class="">
@@ -48,7 +58,7 @@
         />
       </div>
     </nz-card>
-    @if (!globalService.userDetails?.isSuperAdmin){
+    @if (!globalService.userDetails?.isSuperAdmin) {
       <nz-card nzBorderless nzHoverable class="mt-4">
         <p class="font-16 font-400 mb-2">Want to reset your password?</p>
         <button
@@ -115,6 +125,7 @@
           [nzShowPagination]="true"
           [nzFrontPagination]="false"
           [nzShowSizeChanger]="true"
+          [nzSimple]="true"
           [nzPageSize]="adminPageSize"
           [nzPageIndex]="adminPageIndex"
           [nzTotal]="adminTotalCount"
@@ -138,7 +149,9 @@
                 {{ (adminPageIndex - 1) * adminPageSize + i + 1 }}
               </td>
               <td class="">{{ admin?.name }}</td>
-              <td class="text-center">{{ admin?.role?.name }}</td>
+              <td class="text-center">
+                {{ admin?.superAdmin ? "Super Admin" : admin?.role?.name }}
+              </td>
               <td class="text-center dropdown-container">
                 <a
                   class="text-dark font-size-20"
@@ -173,7 +186,11 @@
     }
   </div>
   <div class="col-md-6 mt-md-0 mt-4">
-    @if (globalService.userDetails?.permissions?.get_roles) {
+    @if (
+      globalService.userDetails?.permissions?.get_roles ||
+      (globalService.userDetails?.isSuperAdmin &&
+        !globalService.userDetails?.adminId)
+    ) {
       <nz-card class="mb-4" nzHoverable nzBorderless>
         <p class="font-16 font-400 mb-3">Roles</p>
         <input
@@ -214,6 +231,7 @@
           [nzPageIndex]="rolePageIndex"
           [nzTotal]="roleTotalCount"
           [nzScroll]="{ x: '300px' }"
+          [nzSimple]="true"
           (nzQueryParams)="roles[0] ? getRoles($event) : null"
         >
           <thead>
@@ -264,7 +282,11 @@
         </nz-table>
       </nz-card>
     }
-    @if (globalService.userDetails?.permissions?.get_permissions) {
+    @if (
+      globalService.userDetails?.permissions?.get_roles ||
+      (globalService.userDetails?.isSuperAdmin &&
+        !globalService.userDetails?.adminId)
+      ) {
       <nz-card nzHoverable nzBorderless>
         <p class="font-16 font-400 mb-3">Permissions</p>
         <input
@@ -301,6 +323,7 @@
           [nzShowPagination]="true"
           [nzFrontPagination]="false"
           [nzShowSizeChanger]="true"
+          [nzSimple]="true"
           [nzPageSize]="permissionPageSize"
           [nzPageIndex]="permissionPageIndex"
           [nzTotal]="permissionTotalCount"
@@ -365,7 +388,7 @@
   </div>
 </div>
 
-<!-- Delete Modal -->
+<!-- Update Image Modal -->
 <nz-modal
   [(nzVisible)]="isUpdateImageModal"
   [nzMaskClosable]="true"
@@ -376,11 +399,16 @@
     <div class="d-flex align-items-center font-16 font-400">
       Update Profile Image
     </div>
-    <p class="mt-3 font-12 font-400 mb-1">
-      Image URL
-    </p>
+    <p class="mt-3 font-12 font-400 mb-1">Image URL</p>
 
-    <input nz-input class="admin-input" type="text" placeholder="URL" [(ngModel)]="imageUrl" [value]="globalService?.userDetails?.imageUrl">
+    <input
+      nz-input
+      class="admin-input"
+      type="text"
+      placeholder="URL"
+      [(ngModel)]="imageUrl"
+      [value]="globalService?.userDetails?.imageUrl"
+    />
 
     <div class="d-flex justify-content-start mt-2 pt-2">
       <button
@@ -747,33 +775,38 @@
             </ng-template>
           </nz-form-item>
         </div>
-        <div class="col-12 mb-4">
-          <p class="font-12 font-400 mb-1">Select Role</p>
-          <nz-form-item>
-            <nz-form-control [nzErrorTip]="roleError">
-              <nz-select
-                [nzShowArrow]="true"
-                nzShowSearch
-                nzAllowClear
-                nzPlaceHolder="Role"
-                formControlName="roleId"
-              >
-                <nz-option
-                  *ngFor="let role of roles"
-                  [nzValue]="role?.id"
-                  [nzLabel]="role?.name"
-                ></nz-option>
-              </nz-select>
-            </nz-form-control>
-            <ng-template #roleError let-control>
-              <ng-container *ngIf="control?.hasError('required')">
-                Role is Required!
-              </ng-container>
-            </ng-template>
-          </nz-form-item>
+        <div class="col-12 mb-3">
+          <label nz-checkbox formControlName="superAdmin">Is Super Admin</label>
         </div>
+        @if (!adminForm?.get("superAdmin")?.value) {
+          <div class="col-12">
+            <p class="font-12 font-400 mb-1">Select Role</p>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="roleError">
+                <nz-select
+                  [nzShowArrow]="true"
+                  nzShowSearch
+                  nzAllowClear
+                  nzPlaceHolder="Role"
+                  formControlName="roleId"
+                >
+                  <nz-option
+                    *ngFor="let role of roles"
+                    [nzValue]="role?.id"
+                    [nzLabel]="role?.name"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+              <ng-template #roleError let-control>
+                <ng-container *ngIf="control?.hasError('required')">
+                  Role is Required!
+                </ng-container>
+              </ng-template>
+            </nz-form-item>
+          </div>
+        }
       </div>
-      <div class="px-0 col-md-7 d-flex">
+      <div class="mt-4 px-0 col-md-7 d-flex">
         <button
           nz-button
           class="mr-1 w-50 btn-a-secondary"

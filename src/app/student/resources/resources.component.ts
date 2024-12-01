@@ -136,5 +136,17 @@ export class ResourcesComponent implements OnInit {
     this.router.navigate(['/student/resources', subjectId]);
   }
 
+  onViewVideo(id: number) {
+    this.http.postLogAccess({ itemId: id, itemType: 'video' }).subscribe({
+      next: (res: any) => {
+        // Nothing to do
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message?.error(error?.error?.message);
+      },
+    });
+  }
+
   protected readonly Math = Math;
 }

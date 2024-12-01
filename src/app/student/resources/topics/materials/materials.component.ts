@@ -140,6 +140,18 @@ export class MaterialsComponent implements OnInit {
     });
   }
 
+  onReadMaterial(id: number) {
+    this.http.postLogAccess({ itemId: id, itemType: 'material' }).subscribe({
+      next: (res: any) => {
+        // Nothing to do
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message?.error(error?.error?.message);
+      },
+    });
+  }
+
   onModalClose() {
     this.selectedTest = undefined;
     this.isStartTestModal = false;

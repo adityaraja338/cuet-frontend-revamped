@@ -1,4 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 // import { debounce } from 'lodash';
 
 @Component({
@@ -6,7 +13,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
 })
-export class LandingPageComponent implements OnInit {
+export class LandingPageComponent implements OnInit, AfterViewInit {
   showHeader = true;
   activeSection = 'home'; // Track the active section
   private lastScrollTop = 0;
@@ -16,13 +23,15 @@ export class LandingPageComponent implements OnInit {
     // this.onScroll = debounce(this.onScroll.bind(this), 100);
   }
 
-  ngOnInit() {
-    // console.log('ngOnint');
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    window.scrollTo(0, 0);
   }
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    const st = window.pageYOffset || document.documentElement.scrollTop;
+    const st = window.scrollY || document.documentElement.scrollTop;
 
     // Show/hide header based on scroll direction
     if (st > this.lastScrollTop) {
@@ -35,6 +44,14 @@ export class LandingPageComponent implements OnInit {
     this.updateActiveSection();
 
     this.lastScrollTop = st <= 0 ? 0 : st; // For mobile or negative scrolling
+  }
+
+  @HostListener('window:load')
+  removeLoading() {
+    const load = document?.getElementById('loader-screen');
+    const landing = document?.getElementById('landing-page');
+    load?.classList.remove('loading');
+    landing?.classList.remove('loading');
   }
 
   // Method to update active section based on scroll position

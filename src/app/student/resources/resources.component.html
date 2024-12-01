@@ -147,6 +147,7 @@
                       ? video?.url
                       : 'https://' + video?.url
                   "
+                  (click)="onViewVideo(video?.id)"
                   >Click Here</a
                 >
                 <a *ngIf="video?.url === null" (click)="isInvalidModal = true">

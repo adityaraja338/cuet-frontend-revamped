@@ -116,6 +116,10 @@ export class HttpService {
     });
   }
 
+  postLogAccess(data: any) {
+    return this.http.post(`${this.url}log-access`, data);
+  }
+
   // Tests
   getRecordedAndMockTests(params?: any) {
     return this.http.get(`${this.url}get-recorded-and-mock-tests`, {

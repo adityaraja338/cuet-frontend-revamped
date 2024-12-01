@@ -33,6 +33,8 @@
                   ? material?.url
                   : 'https://' + material?.url
               "
+              target="_blank"
+              (click)="onReadMaterial(material?.id)"
               class="text-decoration-none"
             >
               <div class="subject ant-row ant-row-middle cursor-pointer">

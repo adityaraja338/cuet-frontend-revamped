@@ -111,41 +111,34 @@ p {
   color: #eaeaea !important;
 }
 
-.row-gap-4 {
-  row-gap: 4px;
+@mixin col-gaps($start, $end) {
+  @for $i from $start through $end {
+    .col-gap-#{$i} {
+      column-gap: #{$i}px;
+    }
+  }
 }
-.row-gap-8 {
-  row-gap: 8px;
+
+@include col-gaps(1, 24);
+
+@mixin row-gaps($start, $end) {
+  @for $i from $start through $end {
+    .row-gap-#{$i} {
+      row-gap: #{$i}px;
+    }
+  }
 }
-.row-gap-12 {
-  row-gap: 12px;
+
+@include row-gaps(1, 24);
+
+.row {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
 }
-.row-gap-16 {
-  row-gap: 16px;
-}
-.row-gap-20 {
-  row-gap: 20px;
-}
-.row-gap-24 {
-  row-gap: 24px;
-}
-.col-gap-4 {
-  column-gap: 4px;
-}
-.col-gap-8 {
-  column-gap: 8px;
-}
-.col-gap-12 {
-  column-gap: 12px;
-}
-.col-gap-16 {
-  column-gap: 16px;
-}
-.col-gap-20 {
-  column-gap: 20px;
-}
-.col-gap-24 {
-  column-gap: 24px;
+
+[class^="col-"] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .ant-row {
@@ -288,7 +281,7 @@ button.ant-btn.btn-a-secondary {
 
 // NgZorro Edited Styles
 .admin .ant-layout {
-  background-color: #eff8ff;
+  background-color: #EDE9FE40;
 }
 
 .ant-layout-header {
@@ -1031,4 +1024,8 @@ nz-switch:has(.ant-switch-small) {
 
 .border-a-primary {
   border-color: $admin-primary !important;
+}
+
+.simplebar-placeholder{
+  //height: 100%;
 }

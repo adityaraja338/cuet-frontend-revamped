@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartConfiguration } from 'chart.js';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { HttpService } from '../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BaseChartDirective } from 'ng2-charts';
@@ -59,6 +59,32 @@ export class DashboardComponent implements OnInit {
     // borderColor: 'violet'
   };
 
+  public lineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        data: [65, 59, 80, 81, 56, 55, 40],
+        label: 'Series A',
+        fill: true,
+        tension: 0.5,
+        borderColor: 'black',
+        backgroundColor: 'rgba(133, 85, 253, 0.24)',
+        showLine: false,
+      },
+    ],
+  };
+  public lineChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+  public lineChartLegend = false;
+
   isPendingTest = false;
   pendingTestDetails: any;
 
@@ -70,7 +96,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.getLiveTestsOverview();
     this.getHomescreenSubjects();
-    this.getPerformanceCharts();
+    // this.getPerformanceCharts();
     this.getLeaderboard();
     this.getUserEvents();
     this.getUserNotifications();

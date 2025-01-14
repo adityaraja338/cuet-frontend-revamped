@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -203,6 +203,10 @@ export class AdminHttpService {
 
   deleteQuestion(params: any) {
     return this.http.delete(`${this.url}delete-question`, { params: params });
+  }
+
+  createTest(data: any) {
+    return this.http.post(`${this.url}create-test`, data);
   }
 
   createQuestion(data: any) {

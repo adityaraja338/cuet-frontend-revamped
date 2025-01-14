@@ -85,6 +85,37 @@ export class DashboardComponent implements OnInit {
   };
   public lineChartLegend = false;
 
+  public barChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
+    datasets: [
+      {
+        data: [65, 59, 80, 81, 56, 55, 40],
+        label: 'Series A',
+        backgroundColor: '#8555FDD6',
+        borderRadius: 10,
+        maxBarThickness: 16,
+        // fill: true,
+      },
+    ],
+  };
+
+  public barChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+  public barChartLegend = false;
+
   isPendingTest = false;
   pendingTestDetails: any;
 
@@ -160,7 +191,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  leaderboardData: any;
+  leaderboardData: any[] = [];
   getLeaderboard() {
     this.http.getLeaderboard().subscribe({
       next: (res: any) => {
@@ -231,6 +262,18 @@ export class DashboardComponent implements OnInit {
         this.message?.error(error?.error?.message);
       },
     });
+  }
+
+  isStartTestModal: boolean = false;
+  currentTest: any;
+  onClickStartTest(data: any) {
+    this.currentTest = data;
+    this.isStartTestModal = true;
+  }
+
+  onModalClose() {
+    this.currentTest = undefined;
+    this.isStartTestModal = false;
   }
 
   upcomingEvents: any = [];

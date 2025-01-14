@@ -260,6 +260,7 @@ export class AddEditTestComponent implements OnInit {
 
     this.http.saveQuestion(data).subscribe({
       next: (res: any) => {
+        this.questions.clear();
         this.getTestQuestions();
         // this.topics = res?.data;
         this.editQuestionId = undefined;
@@ -437,6 +438,9 @@ export class AddEditTestComponent implements OnInit {
   markFormGroupTouchedDirty(formGroup: FormGroup | FormArray): void {
     Object.keys(formGroup.controls).forEach((field) => {
       const control = formGroup.get(field);
+      if (control?.errors) {
+        console.log(field);
+      }
       if (control instanceof FormControl) {
         control?.markAsTouched({ onlySelf: true });
         control?.markAsDirty({ onlySelf: true });
@@ -452,7 +456,85 @@ export class AddEditTestComponent implements OnInit {
     this.router.navigate(['/', 'admin', 'tests']);
   }
 
-  createTest() {}
+  createTest() {
+    if (!this.testForm.valid) {
+      console.log(this.testForm);
+      this.isSaveTestModal = false;
+      this.message.error('Marked fields are mandatory!');
+      this.markFormGroupTouchedDirty(this.testForm);
+      return;
+    }
+
+    const formValues = this.testForm.value;
+
+    const formData: any = {
+      testType: formValues?.testType,
+      testName: formValues?.testName,
+      duration: +formValues?.durationHour * 60 + +formValues?.durationMinutes,
+      isFree: formValues?.isFree,
+    };
+
+    switch (formValues?.testType) {
+      case 'live':
+        formData.batchIds = formValues?.batchIds ?? [];
+
+        if (!formValues?.batchIds || formValues?.batchIds?.length === 0) {
+          formData.isFree = true;
+        }
+
+        formData.subject = formValues?.subjectName;
+        formData.topics = formValues?.topics;
+
+        const startTime = new Date(formValues?.startDate);
+        startTime.setTime(new Date(formValues?.startTime).getTime());
+
+        const endTime = new Date(formValues?.endDate);
+        startTime.setTime(new Date(formValues?.endTime).getTime());
+
+        formData.startTime = startTime.toISOString();
+        formData.endTime = endTime.toISOString();
+        break;
+
+      case 'mock':
+        formData.subject = formValues?.subjectName;
+        formData.topics = formValues?.topics;
+        break;
+
+      case 'topic':
+        formData.topicId = formValues?.topicId;
+        break;
+
+      default:
+        this.message.error('Invalid Operation');
+        return;
+    }
+
+    formData.questions = formValues.questions?.map((question: any) => {
+      return {
+        question: question.question,
+        correctOption: question.correctOption,
+        option2: question.incorrectOption1,
+        option3: question.incorrectOption2,
+        option4: question.incorrectOption3,
+        option5: question.incorrectOption4,
+      };
+    });
+
+    // console.log(formData);
+
+    this.http.createTest(formData).subscribe({
+      next: (res: any) => {
+        this.message.success('Test created successfully');
+        this.router.navigate(['/', 'admin', 'tests']);
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(
+          error?.error?.message ?? 'Oops! Something went wrong',
+        );
+      },
+    });
+  }
 
   beforeUpload = (file: NzUploadFile): boolean => {
     // this.readFileContent(file);
@@ -518,11 +600,7 @@ export class AddEditTestComponent implements OnInit {
       startTimeControl?.setValidators([Validators.required]);
       endDateControl?.setValidators([Validators.required]);
       endTimeControl?.setValidators([Validators.required]);
-      if (!this.testForm?.get('isFree')?.value) {
-        batchIdControl?.setValidators([Validators.required]);
-      } else {
-        batchIdControl?.clearValidators();
-      }
+      batchIdControl?.clearValidators();
       topicIdControl?.clearValidators();
     } else if (testType === 'mock') {
       subjectControl?.setValidators([Validators.required]);
@@ -554,16 +632,6 @@ export class AddEditTestComponent implements OnInit {
     endTimeControl?.updateValueAndValidity();
     batchIdControl?.updateValueAndValidity();
     topicIdControl?.updateValueAndValidity();
-  }
-
-  onIsFreeChange(isFree: boolean) {
-    if (this.testForm?.get('testType')?.value === 'live') {
-      if (isFree) {
-        this.testForm?.get('batchIds')?.clearValidators();
-      } else {
-        this.testForm?.get('batchIds')?.setValidators([Validators.required]);
-      }
-    }
   }
 
   getTestDetails() {
@@ -598,6 +666,7 @@ export class AddEditTestComponent implements OnInit {
       next: (res: any) => {
         this.isQuestionLoading = false;
         this.testQuestions = res?.data?.questions;
+        this.questions.clear();
         this.addCSVQuestions(this.testQuestions);
       },
       error: (error: any) => {

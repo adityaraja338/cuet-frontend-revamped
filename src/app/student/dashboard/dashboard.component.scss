@@ -214,6 +214,14 @@
   }
 }
 
+::ng-deep#subject-analysis-leaderboard{
+  .leaderboard-image {
+    height: 36px;
+    aspect-ratio: 1 !important;
+    border-radius: 50%;
+  }
+}
+
 .upcoming-test,
 .previous-test {
   // width: 90%;

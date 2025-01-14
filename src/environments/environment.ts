@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  baseUrl: 'https://localhost:3000/',
-  // baseUrl: 'https://api.cuetcorner.in/',
+  // baseUrl: 'http://localhost:3000/',
+  baseUrl: 'https://api.cuetcorner.in/',
   clientId:
     '834932707480-uvmoe5v9umcbuo7l7jtofe3qg2einp99.apps.googleusercontent.com',
   redirectUri: 'http://localhost:4200/login',

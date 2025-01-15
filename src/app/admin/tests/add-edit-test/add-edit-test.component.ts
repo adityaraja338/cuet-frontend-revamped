@@ -320,47 +320,25 @@ export class AddEditTestComponent implements OnInit {
       return;
     }
 
-    const data: any = {};
-    data.testId = this.testId;
-    data.name = this.testForm?.get('testName')?.value;
-    data.subject = this.testForm?.get('subjectName')?.value;
-    data.topics = this.testForm?.get('topics')?.value;
-    data.duration =
-      this.testForm?.get('durationHour')?.value * 60 +
-      this.testForm?.get('durationMinutes')?.value;
-
-    const startDate = new Date(this.testForm?.get('startDate')?.value);
-    const startTime = new Date(this.testForm?.get('startTime')?.value);
-    const endDate = new Date(this.testForm?.get('endDate')?.value);
-    const endTime = new Date(this.testForm?.get('endTime')?.value);
-
-    let year = startDate?.getFullYear();
-    let month = startDate?.getMonth();
-    let day = startDate?.getDate();
-
-    // Extract the hours, minutes, and seconds from the time object
-    let hours = startTime?.getHours();
-    let minutes = startTime?.getMinutes();
-    data.startTime = new Date(
-      year,
-      month,
-      day,
-      hours,
-      minutes,
-      0,
-    ).toISOString();
-
-    year = endDate?.getFullYear();
-    month = endDate?.getMonth();
-    day = endDate?.getDate();
-
-    // Extract the hours, minutes, and seconds from the time object
-    hours = endTime?.getHours();
-    minutes = endTime?.getMinutes();
-    data.endTime = new Date(year, month, day, hours, minutes, 0).toISOString();
-
-    data.isFree = this.testForm?.get('isFree')?.value;
-    data.batchIds = this.testForm?.get('batchIds')?.value;
+    const data: any = {
+      testId: this.testId,
+      name: this.testForm?.get('testName')?.value,
+      subject: this.testForm?.get('subjectName')?.value,
+      topics: this.testForm?.get('topics')?.value,
+      duration:
+        this.testForm?.get('durationHour')?.value * 60 +
+        this.testForm?.get('durationMinutes')?.value,
+      startTime: this.combineDateAndTime(
+        new Date(this.testForm?.get('startDate')?.value),
+        new Date(this.testForm?.get('startTime')?.value),
+      ).toISOString(),
+      endTime: this.combineDateAndTime(
+        new Date(this.testForm?.get('endDate')?.value),
+        new Date(this.testForm?.get('endTime')?.value),
+      ).toISOString(),
+      isFree: this.testForm?.get('isFree')?.value,
+      batchIds: this.testForm?.get('batchIds')?.value,
+    };
 
     this.http.saveLiveTest(data).subscribe({
       next: (res: any) => {
@@ -382,22 +360,19 @@ export class AddEditTestComponent implements OnInit {
       return;
     }
 
-    const data: any = {};
-    data.testId = this.testId;
-    data.name = this.testForm?.get('testName')?.value;
-    data.subject = this.testForm?.get('subjectName')?.value;
-    data.topics = this.testForm?.get('topics')?.value;
-    data.duration =
-      this.testForm?.get('durationHour')?.value * 60 +
-      this.testForm?.get('durationMinutes')?.value;
-
-    data.isFree = this.testForm?.get('isFree')?.value;
+    const data = {
+      testId: this.testId,
+      name: this.testForm?.get('testName')?.value,
+      subject: this.testForm?.get('subjectName')?.value,
+      topics: this.testForm?.get('topics')?.value,
+      duration:
+        this.testForm?.get('durationHour')?.value * 60 +
+        this.testForm?.get('durationMinutes')?.value,
+      isFree: this.testForm?.get('isFree')?.value,
+    };
 
     this.http.saveMockTest(data).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.saveTestAndNavigate();
-      },
+      next: () => this.saveTestAndNavigate(),
       error: (error: any) => {
         console.log(error);
         this.message.error(error?.error?.message);
@@ -413,21 +388,18 @@ export class AddEditTestComponent implements OnInit {
       return;
     }
 
-    const data: any = {};
-    data.testId = this.testId;
-    data.name = this.testForm?.get('testName')?.value;
-    data.topicId = this.testForm?.get('topicId')?.value;
-    data.duration =
-      this.testForm?.get('durationHour')?.value * 60 +
-      this.testForm?.get('durationMinutes')?.value;
-
-    data.isFree = this.testForm?.get('isFree')?.value;
+    const data = {
+      testId: this.testId,
+      name: this.testForm?.get('testName')?.value,
+      topicId: this.testForm?.get('topicId')?.value,
+      duration:
+        this.testForm?.get('durationHour')?.value * 60 +
+        this.testForm?.get('durationMinutes')?.value,
+      isFree: this.testForm?.get('isFree')?.value,
+    };
 
     this.http.saveTopicTest(data).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.saveTestAndNavigate();
-      },
+      next: () => this.saveTestAndNavigate(),
       error: (error: any) => {
         console.log(error);
         this.message.error(error?.error?.message);
@@ -485,14 +457,14 @@ export class AddEditTestComponent implements OnInit {
         formData.subject = formValues?.subjectName;
         formData.topics = formValues?.topics;
 
-        const startTime = new Date(formValues?.startDate);
-        startTime.setTime(new Date(formValues?.startTime).getTime());
-
-        const endTime = new Date(formValues?.endDate);
-        startTime.setTime(new Date(formValues?.endTime).getTime());
-
-        formData.startTime = startTime.toISOString();
-        formData.endTime = endTime.toISOString();
+        formData.startTime = this.combineDateAndTime(
+          new Date(formValues?.startDate),
+          new Date(formValues?.startTime),
+        )?.toISOString();
+        formData.endTime = this.combineDateAndTime(
+          new Date(formValues?.endDate),
+          new Date(formValues?.endTime),
+        )?.toISOString();
         break;
 
       case 'mock':
@@ -711,6 +683,22 @@ export class AddEditTestComponent implements OnInit {
         this.message.error(error?.error?.message);
       },
     });
+  }
+
+  combineDateAndTime(startDate: Date, startTime: Date): Date {
+    // Create a new Date based on the startDate
+    const combinedDateTime = new Date(startDate);
+
+    // Extract hours, minutes, seconds, and milliseconds from startTime
+    const hours = startTime.getHours();
+    const minutes = startTime.getMinutes();
+    const seconds = startTime.getSeconds();
+    const milliseconds = startTime.getMilliseconds();
+
+    // Set the time components on the combined Date object
+    combinedDateTime.setHours(hours, minutes, seconds, milliseconds);
+
+    return combinedDateTime;
   }
 
   protected readonly console = console;

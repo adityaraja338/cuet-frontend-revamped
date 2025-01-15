@@ -16,8 +16,8 @@ export class HttpService {
   getUrl() {
     this.url = environment.baseUrl + 'student/';
 
-    console.log('this.url', this.domain);
-    console.log('this.url', this.url);
+    // console.log('this.url', this.domain);
+    // console.log('this.url', this.url);
   }
 
   refreshAccessToken(data: any) {

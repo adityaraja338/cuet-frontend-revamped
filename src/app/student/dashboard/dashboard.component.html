@@ -262,7 +262,12 @@
 
       <div class="row row-gap-20">
         <div class="col-6">
-          <nz-card nzHoverable nzBorderless>
+          <nz-card
+            nzHoverable
+            nzBorderless
+            class="cursor-pointer"
+            [routerLink]="['/', 'student', 'tests']"
+          >
             <div class="d-flex align-items-center col-gap-8">
               <div class="quick-link-icon">
                 <span nz-icon>
@@ -297,7 +302,12 @@
           </nz-card>
         </div>
         <div class="col-6">
-          <nz-card nzHoverable nzBorderless>
+          <nz-card
+            nzHoverable
+            nzBorderless
+            class="cursor-pointer"
+            [routerLink]="['/', 'student', 'resources']"
+          >
             <div class="d-flex align-items-center col-gap-8">
               <div class="quick-link-icon">
                 <span nz-icon>
@@ -327,7 +337,12 @@
           </nz-card>
         </div>
         <div class="col-6">
-          <nz-card nzHoverable nzBorderless>
+          <nz-card
+            nzHoverable
+            nzBorderless
+            class="cursor-pointer"
+            [routerLink]="['/', 'student', 'performances']"
+          >
             <div class="d-flex align-items-center col-gap-8">
               <div class="quick-link-icon">
                 <span nz-icon>
@@ -377,7 +392,12 @@
           </nz-card>
         </div>
         <div class="col-6">
-          <nz-card nzHoverable nzBorderless>
+          <nz-card
+            nzHoverable
+            nzBorderless
+            class="cursor-pointer"
+            [routerLink]="['/', 'student', 'account']"
+          >
             <div class="d-flex align-items-center col-gap-8">
               <div class="quick-link-icon">
                 <span nz-icon>
@@ -420,34 +440,36 @@
             style="max-width: 100%; min-height: 100%; height: 100%"
           >
             <div class="previous-accordion">
-              <div class="test">
-                <img src="assets/images/registration-card.jpg" alt="" />
+              @for (test of previousTestOverviewData; track test; let i= $index) {
+                <div class="test">
+                  <img src="assets/images/registration-card.jpg" alt="" />
 
-                <div class="date">
-                  <div class="test-date">
-                    <p class="text-white font-10 font-400 month">Aug</p>
-                    <p class="text-white font-12 font-700 day">12</p>
-                  </div>
-                  <p class="text-white font-12 font-600 test-name">
-                    Reasoning Test
-                  </p>
-                </div>
-
-                <div class="duration-with-button">
-                  <div class="duration">
-                    <div class="time">
-                      <p class="text-white font-12 font-700">90</p>
-                      <p class="text-white font-10 font-400">Min</p>
+                  <div class="date">
+                    <div class="test-date">
+                      <p class="text-white font-10 font-400 month">{{ (test?.startTime | date: 'MMM') ?? '-' }}</p>
+                      <p class="text-white font-12 font-700 day">{{ (test?.startTime | date: 'dd') ?? '-' }}</p>
                     </div>
-                    <p class="text-white font-12 font-600 subject-name">
-                      {{ "Mathematics" }}
+                    <p class="text-white font-12 font-600 test-name">
+                      Reasoning Test
                     </p>
                   </div>
-                  <button nz-button class="previous-test-start-btn">
-                    <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-                  </button>
+
+                  <div class="duration-with-button">
+                    <div class="duration">
+                      <div class="time">
+                        <p class="text-white font-12 font-700">{{ test?.duration }}</p>
+                        <p class="text-white font-10 font-400">Min</p>
+                      </div>
+                      <p class="text-white font-12 font-600 subject-name">
+                        {{ test?.subject ? (test?.subject?.length > 10 ? (test?.subject?.substring(10)) : test?.subject) : '-'}}
+                      </p>
+                    </div>
+                    <button nz-button class="previous-test-start-btn">
+                      <span nz-icon nzType="arrow-right" nzTheme="outline" (click)="onClickPreviousTest(test)"></span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              }
               <a
                 nz-button
                 [routerLink]="['/', 'student', 'tests']"
@@ -598,7 +620,7 @@
                 >
                   <span class="font-16 font-600">{{ 1 }}</span>
                   <div
-                    class="br-12 bg-gold px-2 py-2 flex-grow-1 d-flex col-gap-12 align-items-center"
+                    class="br-12 bg-gold px-3 py-3 flex-grow-1 d-flex col-gap-12 align-items-center"
                   >
                     <img
                       src="assets/images/login-card.png"
@@ -607,8 +629,8 @@
                     />
                     <div>
                       <p class="font-16 font-800">{{ data?.studentName }}</p>
-                      <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-2" }}%
+                      <p class="font-12 font-400 mt-1">
+                        Score: <span class="text-primary font-800">{{ ((data?.scoreObtained / data?.totalScore * 100) | number: "1.0-2") ?? '-' }}</span>%
                       </p>
                     </div>
                   </div>

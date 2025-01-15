@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AdminHttpService } from '../../shared/services/admin-http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { GlobalService } from '../../shared/services/global.service';
+import { DeleteConfirmationComponent } from '../../shared/components/delete-confirmation/delete-confirmation.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-tests',
@@ -46,6 +48,7 @@ export class TestsComponent implements OnInit {
     private readonly router: Router,
     private readonly http: AdminHttpService,
     private readonly message: NzMessageService,
+    private readonly modal: NzModalService,
     protected readonly globalService: GlobalService,
   ) {}
 
@@ -232,7 +235,29 @@ export class TestsComponent implements OnInit {
     });
   }
 
-  onDeleteTest(testId: number, testType: string) {
+  onClickDeleteTest(testId: number, testType: string) {
+    const modal = this.modal.create({
+      nzContent: DeleteConfirmationComponent,
+      nzFooter: null,
+      nzData: {
+        title: 'Test',
+        onConfirm: () => this.onDelete(testId, testType),
+        onCancel: () => modal.destroy(),
+      },
+      nzClosable: true,
+      nzCentered: true,
+      nzClassName: '',
+      nzTitle: undefined,
+      nzWidth: 450,
+      nzMaskClosable: true,
+    });
+    const a = {
+      product: 1,
+      input_assumption: [],
+    };
+  }
+
+  onDelete(testId: number, testType: string) {
     const data: any = {};
     data['testId'] = testId;
     data['testType'] = testType;
@@ -247,6 +272,8 @@ export class TestsComponent implements OnInit {
         } else {
           this.getTopicTests();
         }
+
+        this.modal.closeAll();
       },
       error: (error: any) => {
         console.log(error);

@@ -127,7 +127,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.getLiveTestsOverview();
     this.getHomescreenSubjects();
-    // this.getPerformanceCharts();
+    this.getPerformanceCharts();
     this.getLeaderboard();
     this.getUserEvents();
     this.getUserNotifications();
@@ -266,9 +266,15 @@ export class DashboardComponent implements OnInit {
 
   isStartTestModal: boolean = false;
   currentTest: any;
+  currentTestType: 'Live' | 'Recorded' | undefined;
   onClickStartTest(data: any) {
+    this.currentTestType = 'Live';
     this.currentTest = data;
     this.isStartTestModal = true;
+  }
+
+  onClickPreviousTest(data: any) {
+    this.currentTestType = 'Recorded';
   }
 
   onModalClose() {

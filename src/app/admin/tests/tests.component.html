@@ -166,7 +166,7 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="!globalService?.userDetails?.permissions?.delete_test"
-                      (click)="globalService?.userDetails?.permissions?.delete_test ? onDeleteTest(test?.id, 'live') : null"
+                      (click)="globalService?.userDetails?.permissions?.delete_test ? onClickDeleteTest(test?.id, 'live') : null"
                     >
                       <span class="m-l-5 text-red">Delete</span>
                     </li>
@@ -324,7 +324,7 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="!globalService?.userDetails?.permissions?.delete_test"
-                      (click)="globalService?.userDetails?.permissions?.delete_test ? onDeleteTest(test?.id, 'mock') : null"
+                      (click)="globalService?.userDetails?.permissions?.delete_test ? onClickDeleteTest(test?.id, 'mock') : null"
                     >
                       <span class="m-l-5 text-red">Delete</span>
                     </li>
@@ -506,7 +506,7 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="!globalService?.userDetails?.permissions?.delete_test"
-                      (click)="globalService?.userDetails?.permissions?.delete_test ? onDeleteTest(test?.id, 'topic') : null"
+                      (click)="globalService?.userDetails?.permissions?.delete_test ? onClickDeleteTest(test?.id, 'topic') : null"
                     >
                       <span class="m-l-5 text-red">Delete</span>
                     </li>

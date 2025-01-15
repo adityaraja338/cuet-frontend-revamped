@@ -195,7 +195,7 @@ export class DashboardComponent implements OnInit {
   getLeaderboard() {
     this.http.getLeaderboard().subscribe({
       next: (res: any) => {
-        this.leaderboardData = res?.data;
+        this.leaderboardData = res?.data?.leaderboard;
       },
       error: (error: any) => {
         console.log(error);

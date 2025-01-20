@@ -85,6 +85,10 @@ export class DashboardComponent implements OnInit {
         },
         display: false,
       },
+      y: {
+        beginAtZero: true,
+        max: 100,
+      },
     },
   };
 

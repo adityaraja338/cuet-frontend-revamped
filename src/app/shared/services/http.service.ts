@@ -20,6 +20,10 @@ export class HttpService {
     // console.log('this.url', this.url);
   }
 
+  getApi(path: string, params: any = {}) {
+    return this.http.get(`${this.url}${path}`, { params: params });
+  }
+
   refreshAccessToken(data: any) {
     return this.http.post(`${this.url}refresh-token`, data);
   }

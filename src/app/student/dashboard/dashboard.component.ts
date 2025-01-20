@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { HttpService } from '../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -20,70 +20,73 @@ export class DashboardComponent implements OnInit {
   events: any = [];
   notifications: any = [];
 
-  resourcesScrollbarOptions: any = {
-    direction: 'rtl',
-  };
-
-  // leaderboardScrollbarOptions: any = {
-  //   // direction: 'ttb',
-  // };
-
   // Doughnut
-  public doughnutChartLabels: string[] = [
+  doughnutChartLabels: string[] = [
     '# of Correct',
     '# of Incorrect',
     '# of Unattempted',
   ];
-  public overallChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] =
-    [
-      {
-        data: [350, 450, 100],
-        backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
-        borderWidth: 4,
-        borderRadius: 12,
-      },
-    ];
-  public previousChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] =
-    [
-      {
-        data: [350, 450, 100],
-        backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
-        borderWidth: 4,
-        borderRadius: 12,
-      },
-    ];
-  public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+  previousChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] = [
+    {
+      data: [0, 0, 0],
+      backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
+      borderWidth: 4,
+      borderRadius: 12,
+    },
+  ];
+  doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: false,
     radius: 56,
     cutout: '78%',
     // borderColor: 'violet'
   };
 
-  public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  averageScoreChartData: ChartConfiguration<'line'>['data'] = {
+    labels: ['-', '-', '-', '-', '-', '-', '-'],
     datasets: [
       {
-        data: [65, 59, 80, 81, 56, 55, 40],
-        label: 'Series A',
+        data: [0, 0, 0, 0, 0, 0, 0],
+        label: 'Average',
         fill: true,
-        tension: 0.5,
+        tension: 0.4,
         borderColor: 'black',
-        backgroundColor: 'rgba(133, 85, 253, 0.24)',
+        backgroundColor: (context) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+
+          if (!chartArea) {
+            // Return transparent background if chart area is not ready
+            return 'rgba(0,0,0,0)';
+          }
+
+          // Create gradient
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom,
+          );
+          gradient.addColorStop(0, 'rgba(133, 85, 253, 0.5)'); // Top color
+          gradient.addColorStop(1, 'rgba(133, 85, 253, 0.1)'); // Bottom transparent
+
+          return gradient;
+        },
         showLine: false,
       },
     ],
   };
-  public lineChartOptions: ChartOptions<'line'> = {
+  averageScoreChartOptions: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         grid: {
           display: false,
         },
+        display: false,
       },
     },
   };
-  public lineChartLegend = false;
 
   public barChartData: ChartConfiguration<'bar'>['data'] = {
     labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
@@ -125,13 +128,40 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getProgressOverview();
+    this.getSubjectAnalysis();
     this.getLiveTestsOverview();
-    this.getHomescreenSubjects();
     this.getPerformanceCharts();
     this.getLeaderboard();
     this.getUserEvents();
     this.getUserNotifications();
     this.checkUnfinishedTest();
+  }
+
+  progressStats: any;
+  getProgressOverview() {
+    this.http.getApi(`get-progress-stats`).subscribe({
+      next: (res: any) => {
+        this.progressStats = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message ?? 'Something went wrong');
+      },
+    });
+  }
+
+  subjectAnalysis: any;
+  getSubjectAnalysis() {
+    this.http.getApi(`get-subject-analysis`).subscribe({
+      next: (res: any) => {
+        this.subjectAnalysis = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message ?? 'Something went wrong');
+      },
+    });
   }
 
   upcomingTestOverviewData: any;
@@ -149,19 +179,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getHomescreenSubjects() {
-    this.http.getHomescreenSubjects().subscribe({
-      next: (res: any) => {
-        this.subjects = res?.data;
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message.error(error?.error?.message);
-      },
-    });
-  }
-
-  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  @ViewChildren(BaseChartDirective) charts!: QueryList<BaseChartDirective>;
   overallPerformanceData: any;
   previousPerformanceData: any;
   getPerformanceCharts() {
@@ -169,19 +187,22 @@ export class DashboardComponent implements OnInit {
       next: (res: any) => {
         this.overallPerformanceData = res?.data?.overallPerformance;
         this.previousPerformanceData = res?.data?.previousTestPerformance;
-        this.overallChartDatasets[0].data = [
-          res?.data?.overallPerformance?.correct,
-          res?.data?.overallPerformance?.incorrect,
-          res?.data?.overallPerformance?.unattempted,
-        ];
+
+        this.averageScoreChartData.labels =
+          res?.data?.overallPerformance?.labels;
+        this.averageScoreChartData.datasets[0].data =
+          res?.data?.overallPerformance?.scores?.map(
+            (score: any) => score ?? 0,
+          );
+
         this.previousChartDatasets[0].data = [
           res?.data?.previousTestPerformance?.correct,
           res?.data?.previousTestPerformance?.incorrect,
           res?.data?.previousTestPerformance?.unattempted,
         ];
         // this.doughnutChartOptions?.update();
-        if (this.chart) {
-          this.chart.update();
+        if (this.charts) {
+          this.charts.forEach((chart) => chart.update());
         }
       },
       error: (error: any) => {
@@ -275,6 +296,8 @@ export class DashboardComponent implements OnInit {
 
   onClickPreviousTest(data: any) {
     this.currentTestType = 'Recorded';
+    this.currentTest = data;
+    this.isStartTestModal = true;
   }
 
   onModalClose() {

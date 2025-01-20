@@ -3,6 +3,8 @@ import { HttpService } from '../../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzRadioComponent } from 'ng-zorro-antd/radio';
+import { ChartConfiguration } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-test-attempt',
@@ -16,6 +18,8 @@ export class TestAttemptComponent implements OnInit {
   questions: any;
 
   isSubmitModal = false;
+
+  isPerformanceModal = false;
 
   constructor(
     private http: HttpService,
@@ -154,12 +158,92 @@ export class TestAttemptComponent implements OnInit {
     this.http.postSubmitTest(data).subscribe({
       next: (res: any) => {
         this.message.success('Successful! Test submitted!');
-        this.router.navigate(['/', 'student', 'home']);
+        // this.router.navigate(['/', 'student', 'home']);
+        this.getPerformanceDetails(res?.data);
       },
       error: (error: any) => {
         console.log(error);
         this.message?.error(error?.error?.message);
       },
     });
+  }
+
+  testPerformance: any;
+  doughnutChartLabels: string[] = [
+    '# of Correct',
+    '# of Incorrect',
+    '# of Unattempted',
+  ];
+  performanceChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] =
+    [
+      {
+        data: [0, 0, 0],
+        backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
+        borderWidth: 4,
+        borderRadius: 12,
+      },
+    ];
+  doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+    responsive: false,
+    radius: 48,
+    cutout: '78%',
+  };
+  isLeaderboardVisible = false;
+  leaderboardData: any[] = [];
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  getPerformanceDetails(data: any) {
+    this.http.getApi(`get-performance-details`, data).subscribe({
+      next: (res: any) => {
+        this.testPerformance = res?.data;
+
+        this.performanceChartDatasets[0].data = [
+          this.testPerformance?.correct,
+          this.testPerformance?.incorrect,
+          this.testPerformance?.unattempted,
+        ];
+        this.chart?.update();
+
+        this.isPerformanceModal = true;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message?.error(error?.error?.message);
+      },
+    });
+  }
+
+  getTestLeaderboard() {
+    this.isLeaderboardVisible = !this.isLeaderboardVisible;
+
+    if (!this.isLeaderboardVisible) {
+      return;
+    }
+
+    if (!this.testPerformance) {
+      this.message.error('Error! No test selected!');
+      return;
+    }
+
+    const data = {
+      testId: this.testPerformance?.testId,
+      testType: this.testPerformance?.testType,
+    };
+
+    this.http.getTestLeaderboard(data).subscribe({
+      next: (res: any) => {
+        this.leaderboardData = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message?.error(error?.error?.message);
+      },
+    });
+  }
+
+  onModalClose() {
+    this.isSubmitModal = false;
+    this.isPerformanceModal = false;
+    this.isLeaderboardVisible = false;
+    this.router.navigate(['/', 'student', 'home']);
   }
 }

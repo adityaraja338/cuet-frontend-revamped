@@ -7,6 +7,11 @@ import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { IconsProviderModule } from '../../icons-provider.module';
 import { TestAttemptComponent } from './test-attempt/test-attempt.component';
 import { FormsModule } from '@angular/forms';
+import {
+  BaseChartDirective,
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 
 const routes: Routes = [
   { path: '', component: TestsComponent },
@@ -25,6 +30,8 @@ const routes: Routes = [
     NgZorroAntdModule,
     IconsProviderModule,
     FormsModule,
+    BaseChartDirective,
   ],
+  providers: [provideCharts(withDefaultRegisterables())],
 })
 export class TestsModule {}

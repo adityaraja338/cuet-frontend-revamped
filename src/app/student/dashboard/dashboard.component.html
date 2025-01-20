@@ -267,7 +267,7 @@
       <p class="font-16 font-700 mb-2">Quick Links</p>
 
       <div class="row row-gap-20">
-        <div class="col-6">
+        <div class="col-md-6">
           <nz-card
             nzHoverable
             nzBorderless
@@ -307,7 +307,7 @@
             </div>
           </nz-card>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
           <nz-card
             nzHoverable
             nzBorderless
@@ -342,7 +342,7 @@
             </div>
           </nz-card>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
           <nz-card
             nzHoverable
             nzBorderless
@@ -397,7 +397,7 @@
             </div>
           </nz-card>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
           <nz-card
             nzHoverable
             nzBorderless
@@ -531,7 +531,7 @@
               {{
                 (((previousPerformanceData?.scoreObtained /
                   previousPerformanceData?.totalScore) *
-                  100 | number: '1.0-2') ?? '-')
+                  100 | number: '1.0-1') ?? '-')
               }}
               %
             </p>
@@ -638,12 +638,12 @@
         <p class="font-14 font-500"> Your Best Subjects: </p>
         <div class="row mt-2">
           @for(subject of subjectAnalysis?.bestSubjects; track subject; let i = $index) {
-            <div class="col-4">
+            <div class="col-md-4 py-1">
               <div class="subject-card best">
                 <p class="font-12 font-500 text-primary"> {{ subject?.name ?? '-' }} </p>
                 <p class="font-12 font-400">
-                  Avg. Score:
-                  <span class="font-16 font-800 text-primary"> {{ (subject?.score | number: '1.0-2') ?? '-' }}  </span>
+                  Avg.:
+                  <span class="font-16 font-800 text-primary"> {{ (subject?.score | number: '1.0-1') ?? '-' }}  </span>
                 </p>
               </div>
             </div>
@@ -653,12 +653,12 @@
         <p class="font-14 font-500 mt-4"> Your Worst Subjects: </p>
         <div class="row mt-2">
           @for(subject of subjectAnalysis?.worstSubjects; track subject; let i = $index) {
-            <div class="col-4">
+            <div class="col-md-4 py-1">
               <div class="subject-card worst">
                 <p class="font-12 font-500 text-danger"> {{ subject?.name ?? '-' }} </p>
                 <p class="font-12 font-400">
-                  Avg. Score:
-                  <span class="font-16 font-800 text-danger"> {{ (subject?.score | number: '1.0-2') ?? '-' }}  </span>
+                  Avg.:
+                  <span class="font-16 font-800 text-danger"> {{ (subject?.score | number: '1.0-1') ?? '-' }}  </span>
                 </p>
               </div>
             </div>
@@ -669,7 +669,7 @@
     <div class="col-md-6">
       <p class="font-16 font-700 mb-2">Leaderboard</p>
       <nz-card nzBorderless nzHoverable>
-        <ngx-simplebar style="height: 181px; max-height: 181px">
+        <ngx-simplebar style="height: 197px; max-height: 197px">
           @for (data of leaderboardData; track data; let i = $index) {
             @switch (i) {
               @case (0) {
@@ -692,7 +692,7 @@
                         Score:
                         <span class="text-primary font-800">{{
                           ((data?.scoreObtained / data?.totalScore) * 100
-                            | number: "1.0-2") ?? "-"
+                            | number: "1.0-1") ?? "-"
                         }}</span
                         >%
                       </p>
@@ -717,7 +717,7 @@
                     <div>
                       <p class="font-16 font-800">{{ data?.studentName }}</p>
                       <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-2" }}%
+                        {{ data?.accuracy | number: "1.0-1" }}%
                       </p>
                     </div>
                   </div>
@@ -740,7 +740,7 @@
                     <div>
                       <p class="font-16 font-800">{{ data?.studentName }}</p>
                       <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-2" }}%
+                        {{ data?.accuracy | number: "1.0-1" }}%
                       </p>
                     </div>
                   </div>
@@ -763,7 +763,7 @@
                         {{ data?.studentName ?? "-" }}
                       </p>
                       <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-2" }}%
+                        {{ data?.accuracy | number: "1.0-1" }}%
                       </p>
                     </div>
                   </div>

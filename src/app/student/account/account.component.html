@@ -1,8 +1,8 @@
 <nz-breadcrumb nzSeparator=">">
   <nz-breadcrumb-item>My Account</nz-breadcrumb-item>
 </nz-breadcrumb>
-<div class="ant-row">
-  <div class="ant-col-md-12">
+<div class="row">
+  <div class="col-md-6">
     <nz-card nzHoverable nzBorderless>
       <div class="row mx-0 justify-content-center">
         <img
@@ -191,7 +191,7 @@
     </nz-card>
   </div>
   @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
-    <div class="ant-col-md-12 pl-md-4 px-0 mt-md-0 mt-4">
+    <div class="col-md-6 pl-md-4 mt-md-0 mt-4">
       <p class="enroll-text mb-4">
         Haven’t<br /><span>Enrolled</span><br />Yet?
       </p>
@@ -259,7 +259,7 @@
       </nz-card>
     </div>
   } @else if (!accountDetails?.isPremium && accountDetails?.isUpgradeable) {
-    <div class="ant-col-md-12 ant-col-24 pl-md-4 px-0 mt-md-0 mt-4">
+    <div class="col-md-6 pl-md-4 mt-md-0 mt-4">
       <p class="upgrade-text mb-4">
         Haven’t<br /><span>Access</span><br />To All Things Yet?
       </p>
@@ -337,7 +337,7 @@
       </nz-card>
     </div>
   } @else {
-    <div class="ant-col-md-12 pl-md-4 px-0 mt-md-0 mt-4">
+    <div class="col-md-6 pl-md-4 mt-md-0 mt-4">
       <p class="thank-you-text mb-4">
         Thanks for<br /><span>Supporting</span><br />Us!
       </p>

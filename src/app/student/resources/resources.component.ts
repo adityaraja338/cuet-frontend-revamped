@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-resources',
@@ -9,6 +10,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrl: './resources.component.scss',
 })
 export class ResourcesComponent implements OnInit {
+  readonly debounceTimeMs = 400;
+
   nonDomainSubjects: any;
   domainSubjects: any;
   videoLinks: any;
@@ -16,12 +19,14 @@ export class ResourcesComponent implements OnInit {
   pyqs: any;
 
   searchNewspaper: string = '';
+  searchNewspaperSubject = new Subject<string>();
   searchNewspaperDate: any;
   totalNewspaper: number = 0;
   newspaperPageIndex: number = 1;
   newspaperPageSize: number = 30;
 
   searchVideo: string = '';
+  searchVideoSubject = new Subject<string>();
   totalVideos: number = 0;
   videosPageIndex: number = 1;
   videosPageSize: number = 30;
@@ -39,6 +44,20 @@ export class ResourcesComponent implements OnInit {
     this.getVideoLinks();
     this.getNewspapers();
     this.getPYQs();
+
+    this.searchNewspaperSubject
+      .pipe(debounceTime(this.debounceTimeMs))
+      .subscribe((searchValue) => {
+        this.searchNewspaper = searchValue;
+        this.getNewspapers();
+      });
+
+    this.searchVideoSubject
+      .pipe(debounceTime(this.debounceTimeMs))
+      .subscribe((searchValue) => {
+        this.searchVideo = searchValue;
+        this.getVideoLinks();
+      });
   }
 
   getSubjects() {
@@ -85,10 +104,14 @@ export class ResourcesComponent implements OnInit {
     });
   }
 
+  onSearchVideoLinks(searchValue: string) {
+    this.searchVideoSubject.next(searchValue);
+  }
+
   getNewspapers(event?: any) {
     const data: any = {
-      page: this.videosPageIndex,
-      limit: this.videosPageSize,
+      page: this.newspaperPageIndex,
+      limit: this.newspaperPageSize,
     };
 
     if (event) {
@@ -118,6 +141,10 @@ export class ResourcesComponent implements OnInit {
         this.message?.error(error?.error?.message);
       },
     });
+  }
+
+  onSearchNewspaper(searchValue: string) {
+    this.searchNewspaperSubject.next(searchValue);
   }
 
   getPYQs() {

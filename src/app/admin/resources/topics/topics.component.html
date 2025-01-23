@@ -49,8 +49,8 @@
         *ngFor="let topic of topics"
         (click)="onClickTopic($event, topic.id)"
       >
-        <div class="topic ant-row ant-row-middle cursor-pointer">
-          <div class="ant-col-5">
+        <div class="topic d-flex align-items-center cursor-pointer">
+          <div class="mr-2">
             <div class="topic-icon admin-diagonal-gradient">
               <span nz-icon>
                 <svg
@@ -75,7 +75,7 @@
               </span>
             </div>
           </div>
-          <div class="ant-col-17">
+          <div class="flex-grow-1">
             <p class="text-a-primary font-16 font-400 mb-1">
               {{ topic?.name || "-" }}
             </p>
@@ -83,7 +83,7 @@
               Materials: {{ topic?.material || "-" }}
             </p>
           </div>
-          <div class="ant-col-2 dropdown-div">
+          <div class="ml-2 dropdown-div">
             <a
               class="text-dark font-size-20"
               nz-dropdown

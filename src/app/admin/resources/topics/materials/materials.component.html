@@ -54,8 +54,8 @@
               class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
               *ngFor="let material of materials"
             >
-              <div class="material ant-row ant-row-middle">
-                <div class="ant-col-5">
+              <div class="material d-flex align-items-center">
+                <div class="mr-2">
                   <div class="material-icon admin-diagonal-gradient">
                     <span nz-icon>
                       <svg
@@ -85,7 +85,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="ant-col-17">
+                <div class="flex-grow-1">
                   <p class="text-a-primary font-16 font-400 mb-1">
                     {{ material.name }}
                   </p>
@@ -97,7 +97,7 @@
                     </span>
                   </p>
                 </div>
-                <div class="ant-col-2">
+                <div class="ml-2">
                   <a
                     class="text-dark font-size-20"
                     nz-dropdown

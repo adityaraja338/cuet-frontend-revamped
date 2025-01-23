@@ -13,10 +13,10 @@
               *ngFor="let subject of nonDomainSubjects"
             >
               <div
-                class="subject ant-row ant-row-middle cursor-pointer"
+                class="subject d-flex align-items-center cursor-pointer"
                 (click)="onClickSubject(subject.id)"
               >
-                <div class="ant-col-xl-6 ant-col-5">
+                <div class="mr-2">
                   <div class="subject-icon student-diagonal-gradient">
                     <img
                       [src]="subject?.iconUrl"
@@ -27,7 +27,7 @@
                     />
                   </div>
                 </div>
-                <div class="ant-col-xl-18 ant-col-19">
+                <div class="flex-grow-1">
                   <p class="text-primary font-16 font-500 mb-1">
                     {{ subject.name }}
                   </p>
@@ -49,10 +49,10 @@
                 *ngFor="let subject of domainSubjects"
               >
                 <div
-                  class="subject ant-row ant-row-middle cursor-pointer"
+                  class="subject d-flex align-items-center cursor-pointer"
                   (click)="onClickSubject(subject.id)"
                 >
-                  <div class="ant-col-xl-6 ant-col-5">
+                  <div class="mr-2">
                     <div class="subject-icon student-diagonal-gradient">
                       <img
                         [src]="subject?.iconUrl"
@@ -63,7 +63,7 @@
                       />
                     </div>
                   </div>
-                  <div class="ant-col-xl-18 ant-col-19">
+                  <div class="flex-grow-1">
                     <p class="text-primary font-16 font-500 mb-1">
                       {{ subject.name }}
                     </p>
@@ -84,20 +84,17 @@
     </nz-tab>
     <nz-tab nzTitle="Videos">
       <ng-template nz-tab>
-        <div class="col-md-5 px-0 mb-3">
-          <p class="font-12 font-500 mb-2">Search Video</p>
-          <div class="d-flex align-items-center">
+        <p class="font-12 font-500 mb-2">Search Video</p>
+        <div class="row align-items-center">
+          <div class="col-md-4 mb-3">
             <input
+              #videoSearchInput
               nz-input
               type="text"
               class="mr-3"
               placeholder="Search"
-              [(ngModel)]="searchVideo"
+              (input)="onSearchVideoLinks(videoSearchInput.value)"
             />
-            <button nz-button class="btn-primary" (click)="getVideoLinks()">
-              Filter
-              <span nz-icon nzType="search"></span>
-            </button>
           </div>
         </div>
         <nz-table
@@ -176,27 +173,23 @@
     <nz-tab nzTitle="Newspapers">
       <ng-template nz-tab>
         <p class="font-12 font-500 mb-2">Search Newspaper</p>
-        <div class="row">
+        <div class="row mb-md-0 mb-4">
           <div class="col-md-4 mb-3">
             <input
+              #newspaperSearchInput
               nz-input
               type="text"
               class="mr-3"
               placeholder="Search"
-              [(ngModel)]="searchNewspaper"
+              (input)="onSearchNewspaper(newspaperSearchInput.value)"
             />
           </div>
           <div class="col-md-4">
             <nz-date-picker
               [(ngModel)]="searchNewspaperDate"
+              (ngModelChange)="getNewspapers()"
               nzFormat="dd MMM yyyy"
             ></nz-date-picker>
-          </div>
-          <div class="col-md-4">
-            <button nz-button class="btn-primary" (click)="getNewspapers()">
-              Filter
-              <span nz-icon nzType="search"></span>
-            </button>
           </div>
         </div>
         <nz-table
@@ -290,8 +283,8 @@
               "
                 class="text-decoration-none"
               >
-                <div class="subject ant-row ant-row-middle cursor-pointer" >
-                  <div class="ant-col-xl-6 ant-col-5">
+                <div class="subject d-flex align-items-center cursor-pointer" >
+                  <div class="mr-2">
                     <div class="subject-icon student-diagonal-gradient">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -314,7 +307,7 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="ant-col-xl-18 ant-col-19">
+                  <div class="flex-grow-1">
                     <p class="text-primary font-16 font-400">
                       {{ pyq.name }}
                     </p>

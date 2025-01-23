@@ -42,8 +42,8 @@
             </button>
           </div>
         </div>
-        <!-- Non Domain Subjects        -->
 
+        <!-- Non Domain Subjects        -->
         @if (coreSubjects?.length > 0 || domainSubjects?.length > 0) {
           <div id="subjects-container" class="ant-row mx-n1">
             <div
@@ -51,10 +51,10 @@
               *ngFor="let subject of coreSubjects"
             >
               <div
-                class="subject ant-row ant-row-middle cursor-pointer"
+                class="subject d-flex align-items-center cursor-pointer"
                 (click)="onClickSubject($event, subject.id)"
               >
-                <div class="ant-col-5">
+                <div class="mr-2">
                   <div class="subject-icon admin-diagonal-gradient">
                     <!--                  <img [src]="subject?.iconUrl" alt="" />-->
                     <img
@@ -66,7 +66,7 @@
                     />
                   </div>
                 </div>
-                <div class="ant-col-17">
+                <div class="flex-grow-1">
                   <p class="text-a-primary font-16 font-400 mb-1">
                     {{ subject?.name || "-" }}
                   </p>
@@ -74,7 +74,7 @@
                     Topics: {{ subject?.topic || "-" }}
                   </p>
                 </div>
-                <div class="ant-col-2 dropdown-div">
+                <div class="ml-2 dropdown-div">
                   <a
                     class="text-dark font-size-20"
                     nz-dropdown
@@ -136,10 +136,10 @@
                 *ngFor="let subject of domainSubjects"
               >
                 <div
-                  class="subject ant-row ant-row-middle cursor-pointer"
+                  class="subject d-flex align-items-center cursor-pointer"
                   (click)="onClickSubject($event, subject.id)"
                 >
-                  <div class="ant-col-5">
+                  <div class="mr-2">
                     <div class="subject-icon admin-diagonal-gradient">
                       <img
                         [src]="subject?.iconUrl"
@@ -151,7 +151,7 @@
                       <!--                      <img src="assets/icon/leaderboard-badge.svg" alt="" />-->
                     </div>
                   </div>
-                  <div class="ant-col-17">
+                  <div class="flex-grow-1">
                     <p class="text-a-primary font-16 font-500 mb-1">
                       {{ subject?.name || "-" }}
                     </p>
@@ -159,7 +159,7 @@
                       Topics: {{ subject?.topic || "-" }}
                     </p>
                   </div>
-                  <div class="ant-col-2 dropdown-div">
+                  <div class="ml-2 dropdown-div">
                     <a
                       class="text-dark font-size-20"
                       nz-dropdown
@@ -578,8 +578,8 @@
               class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
               *ngFor="let pyq of pyqs"
             >
-              <div class="subject ant-row ant-row-middle">
-                <div class="ant-col-5">
+              <div class="subject d-flex align-items-center">
+                <div class="mr-2">
                   <div class="subject-icon admin-diagonal-gradient">
                     <span nz-icon>
                       <svg
@@ -604,7 +604,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="ant-col-17">
+                <div class="flex-grow-1">
                   <p class="text-a-primary font-16 font-400">
                     @if (pyq?.url) {
                       <a
@@ -626,7 +626,7 @@
                     }
                   </p>
                 </div>
-                <div class="ant-col-2">
+                <div class="ml-2">
                   <a
                     class="text-dark font-size-20"
                     nz-dropdown

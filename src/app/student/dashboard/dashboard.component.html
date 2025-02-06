@@ -675,9 +675,9 @@
               @case (0) {
                 <div
                   class="d-flex col-gap-16 align-items-center"
-                  [class.mb-2]="i === leaderboardData.length - 1"
+                  [class.mb-2]="i !== leaderboardData.length - 1"
                 >
-                  <span class="font-16 font-600">{{ 1 }}</span>
+                  <span class="font-16 font-600 pl-2">{{ 1 }}</span>
                   <div
                     class="br-12 bg-gold px-3 py-3 flex-grow-1 d-flex col-gap-12 align-items-center"
                   >
@@ -687,7 +687,7 @@
                       class="leaderboard-image"
                     />
                     <div>
-                      <p class="font-16 font-800">{{ data?.studentName }}</p>
+                      <p class="font-16 font-600">{{ data?.studentName }}</p>
                       <p class="font-12 font-400 mt-1">
                         Score:
                         <span class="text-primary font-800">{{
@@ -703,11 +703,11 @@
               @case (1) {
                 <div
                   class="d-flex col-gap-16 align-items-center"
-                  [class.mb-2]="i === leaderboardData.length - 1"
+                  [class.mb-2]="i !== leaderboardData.length - 1"
                 >
-                  <span class="font-16 font-600">{{ 2 }}</span>
+                  <span class="font-16 font-600 pl-2">{{ 2 }}</span>
                   <div
-                    class="br-12 bg-silver px-2 py-2 flex-grow-1 d-flex col-gap-12 align-items-center"
+                    class="br-12 bg-silver px-3 py-3 flex-grow-1 d-flex col-gap-12 align-items-center"
                   >
                     <img
                       src="assets/images/login-card.png"
@@ -715,9 +715,14 @@
                       class="leaderboard-image"
                     />
                     <div>
-                      <p class="font-16 font-800">{{ data?.studentName }}</p>
-                      <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-1" }}%
+                      <p class="font-16 font-600">{{ data?.studentName }}</p>
+                      <p class="font-12 font-400 mt-1">
+                        Score:
+                        <span class="text-primary font-800">{{
+                            ((data?.scoreObtained / data?.totalScore) * 100
+                              | number: "1.0-1") ?? "-"
+                          }}</span
+                        >%
                       </p>
                     </div>
                   </div>
@@ -726,11 +731,11 @@
               @case (2) {
                 <div
                   class="d-flex col-gap-16 align-items-center"
-                  [class.mb-2]="i === leaderboardData.length - 1"
+                  [class.mb-2]="i !== leaderboardData.length - 1"
                 >
-                  <span class="font-16 font-600">{{ 3 }}</span>
+                  <span class="font-16 font-600 pl-2">{{ 3 }}</span>
                   <div
-                    class="br-12 bg-bronze px-2 py-2 flex-grow-1 d-flex col-gap-12 align-items-center"
+                    class="br-12 bg-bronze px-3 py-3 flex-grow-1 d-flex col-gap-12 align-items-center"
                   >
                     <img
                       src="assets/images/login-card.png"
@@ -738,9 +743,14 @@
                       class="leaderboard-image"
                     />
                     <div>
-                      <p class="font-16 font-800">{{ data?.studentName }}</p>
-                      <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-1" }}%
+                      <p class="font-16 font-600">{{ data?.studentName }}</p>
+                      <p class="font-12 font-400 mt-1">
+                        Score:
+                        <span class="text-primary font-800">{{
+                            ((data?.scoreObtained / data?.totalScore) * 100
+                              | number: "1.0-1") ?? "-"
+                          }}</span
+                        >%
                       </p>
                     </div>
                   </div>
@@ -749,21 +759,26 @@
               @default {
                 <div
                   class="d-flex col-gap-16 align-items-center"
-                  [class.mb-2]="i === leaderboardData.length - 1"
+                  [class.mb-2]="i !== leaderboardData.length - 1"
                 >
-                  <span class="font-16 font-500">{{ i + 1 }}</span>
-                  <div class="br-12 px-2 py-2 flex-grow-1">
+                  <span class="font-16 font-500 pl-2">{{ i + 1 }}</span>
+                  <div class="br-12 px-3 py-2 flex-grow-1 d-flex col-gap-12 align-items-center">
                     <img
                       src="assets/images/login-card.png"
                       alt=""
                       class="leaderboard-image"
                     />
                     <div>
-                      <p class="font-16 font-800">
+                      <p class="font-16 font-600">
                         {{ data?.studentName ?? "-" }}
                       </p>
-                      <p class="font-12 font-400">
-                        {{ data?.accuracy | number: "1.0-1" }}%
+                      <p class="font-12 font-400 mt-1">
+                        Score:
+                        <span class="text-primary font-800">{{
+                            ((data?.scoreObtained / data?.totalScore) * 100
+                              | number: "1.0-1") ?? "-"
+                          }}</span
+                        >%
                       </p>
                     </div>
                   </div>

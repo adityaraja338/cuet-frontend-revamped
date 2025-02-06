@@ -960,6 +960,8 @@ nz-switch:has(.ant-switch-small) {
 
 .chart-div {
   position: relative !important;
+  //height: 100%;
+  //width: 100%;
   canvas {
     display: block;
   }
@@ -977,6 +979,10 @@ nz-switch:has(.ant-switch-small) {
     aspect-ratio: 1;
     border-radius: 50%;
   }
+}
+
+.overflow-visible {
+  overflow: visible;
 }
 
 .student .chart-center,

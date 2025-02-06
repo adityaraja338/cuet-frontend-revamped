@@ -46,9 +46,30 @@ export class DashboardComponent implements OnInit {
 
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: false,
+    maintainAspectRatio: false,
     radius: 46,
     cutout: '78%',
     // borderColor: 'violet'
+    // plugins: {
+    //   tooltip: {
+    //     // You can try disabling color boxes if they cause layout issues
+    //     displayColors: false,
+    //     // Adjust padding or other properties to give the tooltip more room
+    //     padding: 10,
+    //     cornerRadius: 4,
+    //     // Optionally, add a custom callback if you need to adjust the tooltip content
+    //     callbacks: {
+    //       label: (context) => {
+    //         const label = context.label || '';
+    //         const value = context.raw || '';
+    //         return `${label}: ${value}`;
+    //       },
+    //     },
+    //     // If you need to reposition the tooltip, consider using a custom external tooltip or adjust the position
+    //     // For example, using the 'nearest' position:
+    //     position: 'nearest',
+    //   },
+    // },
   };
 
   constructor(

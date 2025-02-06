@@ -156,6 +156,8 @@
                 </div>
               </div>
             </div>
+          } @empty {
+            <p class="font-14 font-400 text-ca"> No events yet... </p>
           }
         </div>
       </ngx-simplebar>
@@ -190,6 +192,8 @@
                 </div>
               </div>
             </div>
+          } @empty {
+            <p class="font-14 font-400 text-ca"> No notifications yet... </p>
           }
         </div>
       </ngx-simplebar>
@@ -203,8 +207,9 @@
   <div class="col-md-6 mb-md-0 mb-3 px-2 overall-performance-card">
     <nz-card nzBorderless nzHoverable>
       <p class="font-14 font-400 mb-3">Overall Performance</p>
-      <div class="ant-row align-items-center">
-        <div class="ant-col-8 d-flex justify-content-start">
+      <div class="d-flex align-items-center flex-wrap">
+<!--        <div class="col-auto"></div>-->
+        <div class="d-flex flex-grow-1 justify-content-center align-items-center">
           <div class="chart-div">
             <canvas
               baseChart
@@ -220,7 +225,7 @@
             <div class="chart-center text-a-primary">A+</div>
           </div>
         </div>
-        <div class="ant-col-16 pl-3 py-1 pb-2">
+        <div class="flex-grow-1 pl-md-3 py-1 pb-2">
           <p class="font-12 font-300 d-flex align-items-center">
             <svg
               class="mr-2"
@@ -234,7 +239,7 @@
             </svg>
             Good Performing:
             <span class="font-500 text-a-primary ml-2"
-              >{{ overallPerformance?.goodPercentage }} %</span
+              >{{ (overallPerformance?.goodPercentage | number: '1.0-2') ?? '-' }} %</span
             >
           </p>
           <p class="font-12 font-300 d-flex align-items-center mb-2">
@@ -250,7 +255,7 @@
             </svg>
             Bad Performing:
             <span class="font-500 text-red ml-2"
-              >{{ overallPerformance?.badPercentage }} %</span
+              >{{ (overallPerformance?.badPercentage | number: '1.0-2') ?? '-' }} %</span
             >
           </p>
           <div
@@ -447,9 +452,10 @@
 
 <nz-modal
   [(nzVisible)]="isModalVisible"
-  nzWidth="500px"
+  nzWidth="520px"
   [nzFooter]="null"
   nzClosable="true"
+  nzCentered
   [nzMaskClosable]="true"
   (nzOnCancel)="handleCloseModal()"
 >
@@ -459,7 +465,7 @@
       <nz-table
         [nzData]="bestStudents"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '452px' }"
+        [nzScroll]="{ x: '480px' }"
       >
         <thead>
           <tr>
@@ -475,7 +481,7 @@
             <td class="text-center">{{ i + 1 }}</td>
             <td>{{ data?.student?.name || "-" }}</td>
             <td class="text-center">{{ data?.student?.id || "-" }}</td>
-            <td class="text-center">{{ data?.student?.batchId[0] || "-" }}</td>
+            <td class="text-center">{{ data?.student?.batchId || "-" }}</td>
             <td class="text-center">
               {{ (data?.averagePercentageScore | number: ".2-2") || "-" }} %
             </td>
@@ -488,7 +494,7 @@
       <nz-table
         [nzData]="worstStudents"
         [nzShowPagination]="false"
-        [nzScroll]="{ x: '452px' }"
+        [nzScroll]="{ x: '480px' }"
       >
         <thead>
           <tr>
@@ -508,11 +514,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of bestStudents; let i = index">
+          <tr *ngFor="let data of worstStudents; let i = index">
             <td class="text-center">{{ i + 1 }}</td>
             <td>{{ data?.student?.name || "-" }}</td>
             <td class="text-center">{{ data?.student?.id || "-" }}</td>
-            <td class="text-center">{{ data?.student?.batchId[0] || "-" }}</td>
+            <td class="text-center">{{ data?.student?.batchId || "-" }}</td>
             <td class="text-center">
               {{ (data?.averagePercentageScore | number: ".2-2") || "-" }} %
             </td>

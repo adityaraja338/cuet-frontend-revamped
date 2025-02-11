@@ -150,12 +150,6 @@ export class HttpService {
   }
 
   // Performances
-  getPerformances(params?: any) {
-    return this.http.get(`${this.url}get-performances`, {
-      params: params,
-    });
-  }
-
   getTestLeaderboard(params: any) {
     return this.http.get(`${this.url}get-test-leaderboard`, {
       params: params,

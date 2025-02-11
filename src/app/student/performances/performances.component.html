@@ -2,13 +2,26 @@
   <nz-breadcrumb-item>My Performances</nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
-  <nz-tabset>
+  <nz-tabset
+    [(nzSelectedIndex)]="tabIndex"
+    (nzSelectedIndexChange)="onTabChange($event)"
+  >
     <nz-tab nzTitle="Live Tests">
       <ng-template nz-tab>
         <nz-table
+          [nzLoading]="isLiveLoading"
           [nzData]="livePerformances"
-          [nzShowPagination]="false"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzShowPagination]="true"
+          [nzTotal]="totalLiveCount"
+          [nzPageIndex]="livePageIndex"
+          [nzPageSize]="livePageSize"
+          [nzNoResult]="customNoData"
+          [nzShowTotal]="printLiveCount"
           [nzScroll]="{ x: '640px' }"
+          (nzPageIndexChange)="livePageIndex = $event; getLivePerformances()"
+          (nzPageSizeChange)="livePageSize = $event; getLivePerformances()"
         >
           <thead>
             <tr>
@@ -37,29 +50,61 @@
                 }}
               </td>
               <td class="text-center">
-                {{ performance?.startTime | date: "dd MMM yy" }}
+                {{
+                  (performance?.testItem?.startTime | date: "dd MMM yy") ?? "-"
+                }}
               </td>
               <td class="text-center text-primary font-500">
                 {{ performance.scoreObtained }} / {{ performance.totalScore }}
               </td>
               <td class="text-center">
                 {{
-                  (performance.scoreObtained / performance.totalScore) * 100
-                    | number: ".0-2"
+                  ((performance.scoreObtained / performance.totalScore) * 100
+                    | number: ".0-2") ?? "-"
                 }}
                 %
               </td>
             </tr>
           </tbody>
         </nz-table>
+        <ng-template #customNoData>
+          <img
+            class="mt-3"
+            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            alt=""
+          />
+          <p class="font-16 font-300 mt-3">No Performances Found!</p>
+        </ng-template>
+        <ng-template #printLiveCount>
+          <div *ngIf="!totalLiveCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="totalLiveCount" class="font-weight-normal">
+            <b>{{ totalLiveCount }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Recorded Tests">
       <ng-template nz-tab>
         <nz-table
+          [nzLoading]="isRecordedLoading"
           [nzData]="recordedPerformances"
-          [nzShowPagination]="false"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzShowPagination]="true"
+          [nzTotal]="totalRecordedCount"
+          [nzPageIndex]="recordedPageIndex"
+          [nzPageSize]="recordedPageSize"
+          [nzNoResult]="customNoData"
+          [nzShowTotal]="printRecordedCount"
           [nzScroll]="{ x: '640px' }"
+          (nzPageIndexChange)="
+            recordedPageIndex = $event; getRecordedPerformances()
+          "
+          (nzPageSizeChange)="
+            recordedPageSize = $event; getRecordedPerformances()
+          "
         >
           <thead>
             <tr>
@@ -88,7 +133,7 @@
                 }}
               </td>
               <td class="text-center">
-                {{ performance?.startTime | date: "dd MMM yy" }}
+                {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
               </td>
               <td class="text-center text-primary font-500">
                 {{ performance.scoreObtained }} / {{ performance.totalScore }}
@@ -103,14 +148,40 @@
             </tr>
           </tbody>
         </nz-table>
+        <ng-template #customNoData>
+          <img
+            class="mt-3"
+            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            alt=""
+          />
+          <p class="font-16 font-300 mt-3">No Performances Found!</p>
+        </ng-template>
+        <ng-template #printRecordedCount>
+          <div *ngIf="!totalRecordedCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="totalRecordedCount" class="font-weight-normal">
+            <b>{{ totalRecordedCount }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Mock Tests">
       <ng-template nz-tab>
         <nz-table
+          [nzLoading]="isMockLoading"
           [nzData]="mockPerformances"
-          [nzShowPagination]="false"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzShowPagination]="true"
+          [nzTotal]="totalMockCount"
+          [nzPageIndex]="mockPageIndex"
+          [nzPageSize]="mockPageSize"
+          [nzNoResult]="customNoData"
+          [nzShowTotal]="printMockCount"
           [nzScroll]="{ x: '640px' }"
+          (nzPageIndexChange)="mockPageIndex = $event; getMockPerformances()"
+          (nzPageSizeChange)="mockPageSize = $event; getMockPerformances()"
         >
           <thead>
             <tr>
@@ -139,7 +210,7 @@
                 }}
               </td>
               <td class="text-center">
-                {{ performance?.startTime | date: "dd MMM yy" }}
+                {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
               </td>
               <td class="text-center text-primary font-500">
                 {{ performance.scoreObtained }} / {{ performance.totalScore }}
@@ -154,14 +225,40 @@
             </tr>
           </tbody>
         </nz-table>
+        <ng-template #customNoData>
+          <img
+            class="mt-3"
+            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            alt=""
+          />
+          <p class="font-16 font-300 mt-3">No Performances Found!</p>
+        </ng-template>
+        <ng-template #printMockCount>
+          <div *ngIf="!totalMockCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="totalMockCount" class="font-weight-normal">
+            <b>{{ totalMockCount }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Topic-wise Tests">
       <ng-template nz-tab>
         <nz-table
+          [nzLoading]="isTopicLoading"
           [nzData]="topicPerformances"
-          [nzShowPagination]="false"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzShowPagination]="true"
+          [nzTotal]="totalTopicCount"
+          [nzPageIndex]="topicPageIndex"
+          [nzPageSize]="topicPageSize"
+          [nzNoResult]="customNoData"
+          [nzShowTotal]="printTopicCount"
           [nzScroll]="{ x: '640px' }"
+          (nzPageIndexChange)="topicPageIndex = $event; getTopicPerformances()"
+          (nzPageSizeChange)="topicPageSize = $event; getTopicPerformances()"
         >
           <thead>
             <tr>
@@ -190,7 +287,7 @@
                 }}
               </td>
               <td class="text-center">
-                {{ performance?.startTime | date: "dd MMM yy" }}
+                {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
               </td>
               <td class="text-center text-primary font-500">
                 {{ performance.scoreObtained }} / {{ performance.totalScore }}
@@ -205,6 +302,22 @@
             </tr>
           </tbody>
         </nz-table>
+        <ng-template #customNoData>
+          <img
+            class="mt-3"
+            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            alt=""
+          />
+          <p class="font-16 font-300 mt-3">No Performances Found!</p>
+        </ng-template>
+        <ng-template #printTopicCount>
+          <div *ngIf="!totalTopicCount" class="font-weight-normal">
+            No Results Found
+          </div>
+          <div *ngIf="totalTopicCount" class="font-weight-normal">
+            <b>{{ totalTopicCount }}</b> Results Found
+          </div>
+        </ng-template>
       </ng-template>
     </nz-tab>
   </nz-tabset>
@@ -215,6 +328,7 @@
   [nzMaskClosable]="true"
   [nzFooter]="null"
   (nzOnCancel)="onModalClose()"
+  nzCentered
 >
   <ng-container *nzModalContent>
     <p class="font-20 font-400">Test Performance Details</p>
@@ -298,7 +412,11 @@
             }}
             %</span
           >
-          <span class="ml-2 text-aa font-12 font-400" *ngIf="selectedPerformance?.scoreDifference">{{ selectedPerformance?.scoreDifference }} %</span>
+          <span
+            class="ml-2 text-aa font-12 font-400"
+            *ngIf="selectedPerformance?.scoreDifference"
+            >{{ selectedPerformance?.scoreDifference }} %</span
+          >
         </p>
       </div>
       <div class="col-md-4 order-md-1 order-0">
@@ -316,11 +434,16 @@
             width="96"
           >
           </canvas>
-          <div class="student-chart chart-center">{{ selectedPerformance?.grade || '-' }}</div>
+          <div class="student-chart chart-center">
+            {{ selectedPerformance?.grade || "-" }}
+          </div>
         </div>
       </div>
     </div>
-    <p class="font-14 font-300 text-4a mt-2"><span class="font-500 text-primary">Remark :</span> {{ selectedPerformance?.remark }}</p>
+    <p class="font-14 font-300 text-4a mt-2">
+      <span class="font-500 text-primary">Remark :</span>
+      {{ selectedPerformance?.remark }}
+    </p>
 
     <nz-divider nzText="Test Details" nzOrientation="left"></nz-divider>
 
@@ -338,7 +461,10 @@
       <div class="col-8 font-14 font-500 text-primary">
         :
         <span class="ml-2">
-          {{ selectedPerformance?.startTime | date: "dd MMM yyyy" }}
+          {{
+            (selectedPerformance?.testItem?.startTime | date: "dd MMM yyyy") ??
+              "-"
+          }}
         </span>
       </div>
     </div>
@@ -347,7 +473,9 @@
       <div class="col-8 font-14 font-500 text-primary">
         :
         <span class="ml-2">
-          {{ selectedPerformance?.startTime | date: "hh:mm a" }}
+          {{
+            (selectedPerformance?.testItem?.startTime | date: "hh:mm a") ?? "-"
+          }}
         </span>
       </div>
     </div>
@@ -356,7 +484,9 @@
       <div class="col-8 font-14 font-500 text-primary">
         :
         <span class="ml-2">
-          {{ selectedPerformance?.endTime | date: "hh:mm a" }}
+          {{
+            (selectedPerformance?.testItem?.endTime | date: "hh:mm a") ?? "-"
+          }}
         </span>
       </div>
     </div>
@@ -391,11 +521,66 @@
       </div>
     </div>
 
-    <div class="d-flex justify-content-center mt-4">
+    <div class="d-flex flex-wrap justify-content-center mt-4">
+      <button
+        nz-button
+        class="btn-secondary mr-3"
+        (click)="isShowAnswer = !isShowAnswer"
+      >
+        {{ isShowAnswer ? "Hide" : "Show" }} Answers
+      </button>
       <button nz-button class="btn-primary" (click)="getTestLeaderboard()">
         View Leaderboard
       </button>
     </div>
+
+    @if (isShowAnswer) {
+      <div id="test-answers">
+        @for (
+          question of selectedPerformance.questions;
+          track question;
+          let i = $index
+        ) {
+          <p class="font-12 font-font-400 mt-3">Question {{ i + 1 }}:</p>
+          <pre class="font-16 font-400 mw-100 text-wrap mb-1">
+          {{ question?.question ?? "-" }}
+        </pre
+          >
+          <p class="font-14 font-400">
+            Correct Option: {{ question?.correctOption ?? "-" }}
+            @if (question?.correctOption === question?.answerChosen) {
+              <span class="text-primary text-500"> (Your Answer) </span>
+            }
+          </p>
+          <p class="font-14 font-300">
+            Incorrect Option 1: {{ question?.option2 ?? "-" }}
+            @if (question?.option2 === question?.answerChosen) {
+              <span class="text-red font-500"> (Your Answer) </span>
+            }
+          </p>
+          <p class="font-14 font-300">
+            Incorrect Option 2: {{ question?.option3 ?? "-" }}
+            @if (question?.option3 === question?.answerChosen) {
+              <span class="text-red font-500"> (Your Answer) </span>
+            }
+          </p>
+          <p class="font-14 font-300">
+            Incorrect Option 3: {{ question?.option4 ?? "-" }}
+            @if (question?.option4 === question?.answerChosen) {
+              <span class="text-red font-500"> (Your Answer) </span>
+            }
+          </p>
+          @if (question?.option5) {
+            <p class="font-14 font-300">
+              Incorrect Option 4: {{ question?.option5 ?? "-" }}
+              @if (question?.option5 === question?.answerChosen) {
+                <span class="text-red font-500"> (Your Answer) </span>
+              }
+            </p>
+          }
+        }
+      </div>
+    }
 
     <div id="test-leaderboard" class="mt-3" *ngIf="isLeaderboardVisible">
       <div
@@ -432,14 +617,9 @@
         <div class="ant-col-14 px-2">{{ "Name" }}</div>
         <div class="ant-col-5 text-center">{{ "Score %" }}</div>
       </div>
-      @for(data of leaderboardData; let i = $index; track i){
-        <div
-          class="ranks"
-          [class]="'rank-' + (i + 1)"
-        >
-          <div
-            class="ant-row align-items-center justify-content-between px-2"
-          >
+      @for (data of leaderboardData; let i = $index; track i) {
+        <div class="ranks" [class]="'rank-' + (i + 1)">
+          <div class="ant-row align-items-center justify-content-between px-2">
             <div class="ant-col-5 text-center">
               <svg
                 *ngIf="i < 3"
@@ -473,8 +653,7 @@
             <div class="ant-col-14 px-2">{{ data?.studentName }}</div>
             <div class="ant-col-5 text-center">
               {{
-                (data?.scoreObtained / data?.totalScore) * 100
-                  | number: ".2-2"
+                (data?.scoreObtained / data?.totalScore) * 100 | number: ".2-2"
               }}
               %
             </div>
@@ -483,7 +662,9 @@
       } @empty {
         <nz-empty
           class="mt-3"
-          [nzNotFoundImage]="'https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'"
+          [nzNotFoundImage]="
+            'https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
+          "
         ></nz-empty>
       }
     </div>

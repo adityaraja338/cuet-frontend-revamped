@@ -522,13 +522,15 @@
     </div>
 
     <div class="d-flex flex-wrap justify-content-center mt-4">
-      <button
-        nz-button
-        class="btn-secondary mr-3"
-        (click)="isShowAnswer = !isShowAnswer"
-      >
-        {{ isShowAnswer ? "Hide" : "Show" }} Answers
-      </button>
+      @if(selectedPerformance?.showAnswers) {
+        <button
+          nz-button
+          class="btn-secondary mr-3"
+          (click)="isShowAnswer = !isShowAnswer"
+        >
+          {{ isShowAnswer ? "Hide" : "Show" }} Answers
+        </button>
+      }
       <button nz-button class="btn-primary" (click)="getTestLeaderboard()">
         View Leaderboard
       </button>

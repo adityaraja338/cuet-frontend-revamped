@@ -517,6 +517,15 @@ nz-breadcrumb {
   margin: 0;
 }
 
+nz-input-group.search-input {
+  padding-block: 0px;
+  border-radius: 6px;
+  .ant-input {
+    height: 34px !important;
+    font-size: 12px !important;
+  }
+}
+
 .ant-input {
   height: 36px;
   font-size: 12px;

@@ -102,6 +102,123 @@
         </nz-table>
       </ng-template>
     </nz-tab>
+    <nz-tab nzTitle="Topic-wise Tests">
+      <ng-template nz-tab>
+        <div class="row mb-3">
+          <div class="col-md-4 col-xl-3">
+            <nz-input-group
+              [nzPrefix]="prefixIcon"
+              [nzSuffix]="suffixIcon"
+              class="search-input"
+            >
+              <input
+                #testSearchInput
+                nz-input
+                type="text"
+                class="mr-3"
+                placeholder="Search"
+                (input)="topicSubject.next(testSearchInput.value)"
+              />
+            </nz-input-group>
+            <ng-template #prefixIcon>
+              <span nz-icon nzType="search" class="font-12 text-light"></span>
+            </ng-template>
+            <ng-template #suffixIcon>
+              @if(testSearchInput.value.length > 0) {
+                <span
+                  nz-icon
+                  nzType="close"
+                  nzTheme="outline"
+                  class="font-12 text-light cursor-pointer"
+                  (click)="testSearchInput.value = ''; topicSubject.next('')"
+                ></span>
+              }
+            </ng-template>
+          </div>
+          <div class="col-md-4 col-xl-3">
+            <nz-select
+              [(ngModel)]="topicIdFilter"
+              (ngModelChange)="getTopicTests()"
+              (nzScrollToBottom)="getAllTopics()"
+              (nzOnSearch)="topicSearchSubject.next($event)"
+              [nzShowArrow]="true"
+              nzShowSearch
+              nzAllowClear
+              nzPlaceHolder="Select Topic"
+            >
+              <nz-option *ngFor="let topic of topics" [nzLabel]="topic?.name" [nzValue]="topic?.id"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+
+        <nz-table
+          [nzData]="topicTests"
+          [nzShowPagination]="true"
+          [nzFrontPagination]="false"
+          [nzShowSizeChanger]="true"
+          [nzTotal]="topicCount"
+          [nzPageIndex]="topicIndex"
+          [nzPageSize]="topicLimit"
+          [nzShowTotal]="printTopicTotalCount"
+          (nzPageIndexChange)="this.topicIndex = $event; this.getTopicTests()"
+          (nzPageSizeChange)="this.topicLimit = $event; this.getTopicTests()"
+          [nzScroll]="{ x: '640px' }"
+        >
+          <thead>
+          <tr>
+            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+            <th [nzWidth]="'160px'">Name</th>
+            <th class="text-center" [nzWidth]="'64px'">Questions</th>
+            <th class="text-center" [nzWidth]="'64px'">Type</th>
+            <th class="text-center" [nzWidth]="'84px'">Duration</th>
+            <th class="text-center" [nzWidth]="'84px'"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let test of topicTests; let i = index">
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{ test?.name }}</td>
+            <td class="text-center">
+              {{ test?.totalQuestions }}
+            </td>
+            <td
+              class="text-center font-600"
+              [class]="test?.isFree ? 'text-free' : 'text-paid'"
+            >
+              {{ test?.isFree ? "Free" : "Paid" }}
+            </td>
+            <td class="text-center">
+              {{ Math.floor(test?.duration / 60) }} hr
+              {{ test?.duration % 60 }} min
+            </td>
+            <td class="text-center">
+              <button
+                nz-button
+                class="start-test-btn"
+                (click)="onClickStartTest(test, 'topic')"
+              >
+                Start Test
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+        <ng-template #printTopicTotalCount>
+          <div
+            *ngIf="topicCount === 0"
+            class="result-not-found font-weight-normal"
+          >
+            No Results Found
+          </div>
+          <div
+            *ngIf="topicCount !== 0"
+            class="result-not-found font-weight-normal"
+          >
+            <b>{{ topicCount }}</b> Results Found
+          </div>
+        </ng-template>
+      </ng-template>
+    </nz-tab>
   </nz-tabset>
 </nz-card>
 
@@ -159,6 +276,7 @@
   [nzMaskClosable]="true"
   [nzFooter]="null"
   (nzOnCancel)="onModalClose()"
+  nzCentered
 >
   <ng-container *nzModalContent>
     <div class="d-flex align-items-center font-24 font-500">
@@ -191,33 +309,44 @@
         </p>
       </div>
 
-      <div class="col-md-6 mt-md-0 mt-2">
-        <p class="font-12 text-2a">Subject</p>
-        <p class="font-16 text-primary">
-          {{ selectedTest?.subject }}
-        </p>
-      </div>
+      @if(selectedTestType !== 'topic') {
+        <div class="col-md-6 mt-md-0 mt-2">
+          <p class="font-12 text-2a">Subject</p>
+          <p class="font-16 text-primary">
+            {{ selectedTest?.subject ?? '-' }}
+          </p>
+        </div>
+      } @else {
+        <div class="col-md-6 mt-md-0 mt-2">
+          <p class="font-12 text-2a">Topic</p>
+          <p class="font-16 text-primary">
+            {{ selectedTest?.name ?? '-' }}
+          </p>
+        </div>
+      }
 
       <div class="col-md-6 mt-2">
         <p class="font-12 text-2a">Total Questions</p>
         <p class="font-16 text-primary">
-          {{ selectedTest?.totalQuestions }}
+          {{ selectedTest?.totalQuestions ?? '-' }}
         </p>
       </div>
 
       <div class="col-md-6 mt-2">
-        <p class="font-12 text-2a">Type</p>
+        <p class="font-12 text-2a">Test Type</p>
         <p class="font-16 text-primary">
-          {{ selectedTestType | titlecase }}
+          {{ (selectedTestType | titlecase) ?? '-' }}
         </p>
       </div>
 
-      <div class="col-12 mt-2">
-        <p class="font-12 text-2a">Topics</p>
-        <p class="font-16 text-primary">
-          {{ selectedTest?.topic?.join(', ') }}
-        </p>
-      </div>
+      @if(selectedTestType !== 'topic') {
+        <div class="col-12 mt-2">
+          <p class="font-12 text-2a">Topics</p>
+          <p class="font-16 text-primary">
+            {{ selectedTest?.topic?.join(', ') }}
+          </p>
+        </div>
+      }
     </div>
 
     <p class="mt-3 font-16 font-500">

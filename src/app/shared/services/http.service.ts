@@ -131,6 +131,14 @@ export class HttpService {
     });
   }
 
+  getAllTopicTests(params?: any) {
+    return this.http.get(`${this.url}get-all-topic-tests`, { params: params });
+  }
+
+  getAllTopics(params?: any) {
+    return this.http.get(`${this.url}get-all-topics`, { params: params });
+  }
+
   postStartTest(data: any) {
     return this.http.post(`${this.url}start-test`, data);
   }

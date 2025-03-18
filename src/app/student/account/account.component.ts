@@ -69,6 +69,7 @@ export class AccountComponent implements OnInit {
         this.features?.forEach((feature: any) => {
           feature.selectedToBuy = !feature?.canPurchase;
         });
+        this.isFeatureSelectedToBuy();
       },
       error: (error: any) => {
         console.log(error);
@@ -207,6 +208,7 @@ export class AccountComponent implements OnInit {
         // console.log('Payment and enrollment successful:', response);
         // Make additional API calls or perform other actions here
         this.getAccountDetails();
+        this.getFeaturesList();
       },
       error: (error: any) => {
         console.log('Payment failed or enrollment failed:', error);

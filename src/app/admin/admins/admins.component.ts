@@ -49,6 +49,12 @@ export class AdminsComponent implements OnInit {
   deleteMode = '';
   deleteId: any;
 
+  features: any[] = [];
+  isEditFeaturePriceModal = false;
+  currentFeature: any;
+  featurePriceInput: string = '';
+  isPriceInputTouched = false;
+
   isUpdateImageModal = false;
   imageUrl: string = '';
 
@@ -143,6 +149,7 @@ export class AdminsComponent implements OnInit {
         if (data?.permissions?.get_admins) this.getAdmins();
         if (data?.permissions?.get_roles) this.getRoles();
         if (data?.permissions?.get_permissions) this.getPermissions();
+        this.getFeatures();
       },
     });
   }
@@ -662,6 +669,113 @@ export class AdminsComponent implements OnInit {
     });
   }
 
+  getFeatures() {
+    this.http.getFeatures().subscribe({
+      next: (res: any) => {
+        this.features = res?.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(
+          error?.error?.message ?? 'Oops! Something went wrong!',
+        );
+      },
+    });
+  }
+
+  onClickFeatureEdit(feature: any) {
+    this.currentFeature = feature;
+    this.featurePriceInput = feature?.price ?? 0;
+    this.isEditFeaturePriceModal = true;
+    this.isPriceInputTouched = false;
+  }
+
+  onSaveFeaturePrice() {
+    if (this.featurePriceInput?.length === 0 || +this.featurePriceInput < 0) {
+      this.message.error('Please enter a valid price!');
+      return;
+    }
+
+    const data: any = {};
+    data.id = this.currentFeature?.id;
+    data.price = +this.featurePriceInput;
+
+    this.http.updateFeaturePrice(data).subscribe({
+      next: (res: any) => {
+        this.getFeatures();
+        this.message.success('Saved successfully!');
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(
+          error?.error?.message ?? 'Oops! Something went wrong!',
+        );
+      },
+    });
+  }
+
+  isFeatureDeleteModal = false;
+  onFeatureDeleteModal(feature: any) {
+    this.currentFeature = feature;
+    this.isFeatureDeleteModal = true;
+  }
+
+  onDeleteFeature() {
+    this.http.deleteFeature({ featureId: this.currentFeature?.id }).subscribe({
+      next: (res: any) => {
+        this.getFeatures();
+        this.message.success('Feature deleted successfully!');
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(
+          error?.error?.message ?? 'Failed to delete feature!',
+        );
+      },
+    });
+  }
+
+  isCreateFeatureModal = false;
+  featureForm: FormGroup = this.fb.group({
+    name: [undefined, [Validators.required]],
+    price: [undefined, [Validators.required]],
+  });
+  onOpenCreateFeatureModal() {
+    this.featureForm.reset();
+    this.isCreateFeatureModal = true;
+  }
+
+  onCreateFeature() {
+    if (this.featureForm.invalid) {
+      Object.keys(this.featureForm.controls).forEach((field: string) => {
+        const control = this.featureForm.get(field);
+        control?.markAsDirty({ onlySelf: true });
+        control?.markAsTouched({ onlySelf: true });
+        control?.updateValueAndValidity({ onlySelf: true });
+      });
+      return;
+    }
+
+    const data: any = {
+      name: this.featureForm?.get('name')?.value,
+      price: this.featureForm?.get('price')?.value,
+    };
+
+    this.http.createFeature(data).subscribe({
+      next: (res: any) => {
+        this.getFeatures();
+        this.message.success('Successful! Feature created!');
+        this.onModalClose();
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.message.error(error?.error?.message);
+      },
+    });
+  }
+
   onModalClose() {
     this.isCreateEditAdminModal = false;
     this.isCreateEditRoleModal = false;
@@ -683,5 +797,13 @@ export class AdminsComponent implements OnInit {
     this.roleForm.reset();
     this.permissionForm.reset();
     this.permissionRouteForm.reset();
+    this.currentFeature = undefined;
+    this.isEditFeaturePriceModal = false;
+    this.isPriceInputTouched = false;
+    this.featurePriceInput = '';
+    this.isFeatureDeleteModal = false;
+    this.isCreateFeatureModal = false;
   }
+
+  protected readonly isNaN = isNaN;
 }

@@ -404,6 +404,22 @@ export class AdminHttpService {
     return this.http.delete(`${this.url}delete-event`, { params: params });
   }
 
+  getFeatures() {
+    return this.http.get(`${this.url}get-features`);
+  }
+
+  updateFeaturePrice(data: any) {
+    return this.http.put(`${this.url}update-feature-price`, data);
+  }
+
+  createFeature(data: any) {
+    return this.http.post(`${this.url}create-feature`, data);
+  }
+
+  deleteFeature(params: any) {
+    return this.http.delete(`${this.url}delete-feature`, { params: params });
+  }
+
   // Get List APIs
   getFeaturesList(params?: any) {
     return this.http.get(`${this.url}get-feature-list`, {

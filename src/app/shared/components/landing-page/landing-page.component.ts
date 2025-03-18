@@ -78,4 +78,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+  protected readonly localStorage = localStorage;
 }

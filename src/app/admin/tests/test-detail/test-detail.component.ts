@@ -94,9 +94,22 @@ export class TestDetailComponent implements OnInit {
 
   onRankModeChange() {
     if (this.isRankList) {
-      this.testType === 'live' && this.isRecorded
-        ? this.getTestLeaderboard('recorded')
-        : this.getTestLeaderboard('live');
+      switch (this.testType) {
+        case 'live':
+          this.testType === 'live' && this.isRecorded
+            ? this.getTestLeaderboard('recorded')
+            : this.getTestLeaderboard('live');
+          break;
+        case 'mock':
+          this.getTestLeaderboard('mock');
+          break;
+        case 'topic':
+          this.getTestLeaderboard('topic');
+          break;
+        default:
+          this.message.error('Invalid Request!')
+          break;
+      }
     }
   }
 

@@ -107,7 +107,7 @@ export class TestDetailComponent implements OnInit {
           this.getTestLeaderboard('topic');
           break;
         default:
-          this.message.error('Invalid Request!')
+          this.message.error('Invalid Request!');
           break;
       }
     }

@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-test-detail',
   templateUrl: './test-detail.component.html',
   styleUrl: './test-detail.component.scss',

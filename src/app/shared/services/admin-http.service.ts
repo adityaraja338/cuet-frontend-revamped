@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class AdminHttpService {
-  domain: any = window.location.hostname;
+  domain: any = typeof window !== 'undefined' ? window.location.hostname : '';
   url: any;
 
   constructor(private readonly http: HttpClient) {

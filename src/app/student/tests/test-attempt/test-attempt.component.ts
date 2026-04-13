@@ -7,6 +7,7 @@ import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
+  standalone: false,
   selector: 'app-test-attempt',
   templateUrl: './test-attempt.component.html',
   styleUrl: './test-attempt.component.scss',

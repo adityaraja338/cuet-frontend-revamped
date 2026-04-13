@@ -2,7 +2,7 @@
   <nz-breadcrumb-item>My Performances</nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card nzBorderless nzHoverable>
-  <nz-tabset
+  <nz-tabs
     [(nzSelectedIndex)]="tabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
@@ -320,7 +320,7 @@
         </ng-template>
       </ng-template>
     </nz-tab>
-  </nz-tabset>
+  </nz-tabs>
 </nz-card>
 
 <nz-modal

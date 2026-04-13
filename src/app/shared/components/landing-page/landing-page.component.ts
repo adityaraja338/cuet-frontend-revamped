@@ -9,6 +9,7 @@ import {
 // import { debounce } from 'lodash';
 
 @Component({
+  standalone: false,
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
@@ -29,7 +30,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     window.scrollTo(0, 0);
   }
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onScroll() {
     const st = window.scrollY || document.documentElement.scrollTop;
 

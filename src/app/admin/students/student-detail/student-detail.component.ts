@@ -13,6 +13,7 @@ import { ChartConfiguration } from 'chart.js';
 import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-student-detail',
   templateUrl: './student-detail.component.html',
   styleUrl: './student-detail.component.scss',

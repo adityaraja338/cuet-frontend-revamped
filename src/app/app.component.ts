@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 import { GlobalService } from './shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

@@ -11,6 +11,7 @@ import {
 import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-students',
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',

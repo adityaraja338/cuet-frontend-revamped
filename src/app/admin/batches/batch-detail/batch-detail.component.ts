@@ -13,6 +13,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-batch-detail',
   templateUrl: './batch-detail.component.html',
   styleUrl: './batch-detail.component.scss',

@@ -11,6 +11,7 @@ import {
 import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-batches',
   templateUrl: './batches.component.html',
   styleUrl: './batches.component.scss',

@@ -6,6 +6,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-performances',
   templateUrl: './performances.component.html',
   styleUrl: './performances.component.scss',

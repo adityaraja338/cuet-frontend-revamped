@@ -7,6 +7,7 @@ import { DeleteConfirmationComponent } from '../../shared/components/delete-conf
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
+  standalone: false,
   selector: 'app-tests',
   templateUrl: './tests.component.html',
   styleUrl: './tests.component.scss',

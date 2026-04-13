@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { debounceTime, Subject } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-resources',
   templateUrl: './resources.component.html',
   styleUrl: './resources.component.scss',

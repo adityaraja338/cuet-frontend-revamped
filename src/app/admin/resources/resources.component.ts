@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-resources',
   templateUrl: './resources.component.html',
   styleUrl: './resources.component.scss',

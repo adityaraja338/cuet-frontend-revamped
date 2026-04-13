@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-tests',
   templateUrl: './tests.component.html',
   styleUrl: './tests.component.scss',

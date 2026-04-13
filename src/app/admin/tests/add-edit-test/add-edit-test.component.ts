@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminHttpService } from '../../../shared/services/admin-http.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-test',
   templateUrl: './add-edit-test.component.html',
   styleUrl: './add-edit-test.component.scss',

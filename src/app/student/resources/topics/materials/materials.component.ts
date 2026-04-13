@@ -4,6 +4,7 @@ import { HttpService } from '../../../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
+  standalone: false,
   selector: 'app-materials',
   templateUrl: './materials.component.html',
   styleUrl: './materials.component.scss',

@@ -3,6 +3,7 @@ import { GlobalService } from '../shared/services/global.service';
 import { StudentAuthService } from '../shared/auth/student-auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-student',
   templateUrl: './student.component.html',
   styleUrl: './student.component.scss',

@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-admins',
   templateUrl: './admins.component.html',
   styleUrl: './admins.component.scss',

@@ -6,6 +6,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

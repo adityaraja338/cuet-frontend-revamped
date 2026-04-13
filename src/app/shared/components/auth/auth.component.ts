@@ -12,6 +12,7 @@ import { HttpService } from '../../services/http.service';
 import { AdminHttpService } from '../../services/admin-http.service';
 
 @Component({
+  standalone: false,
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',

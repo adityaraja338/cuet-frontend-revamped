@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PaymentService } from '../../shared/services/payment.service';
 
 @Component({
+  standalone: false,
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrl: './account.component.scss',

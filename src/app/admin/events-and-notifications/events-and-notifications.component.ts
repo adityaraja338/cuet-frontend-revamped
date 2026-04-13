@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'app-events-and-notifications',
   templateUrl: './events-and-notifications.component.html',
   styleUrl: './events-and-notifications.component.scss',

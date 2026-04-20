@@ -1,1 +1,172 @@
-<div class="panel"></div>
+<!-- ── Materials section ──────────────────────────────────────────────── -->
+<div class="panel">
+
+  <p class="panel__section-head">
+    <span class="material-symbols-outlined">article</span>
+    Study Materials
+  </p>
+
+  @if (materialsState.status === 'loading') {
+    <app-resource-skeleton variant="card" [count]="3"></app-resource-skeleton>
+  }
+
+  @if (materialsState.status === 'loaded') {
+    @if (materialsState.data.length) {
+      <div class="panel__materials-grid">
+        @for (material of materialsState.data; track material?.id) {
+          @if (material?.url) {
+            <a
+              [href]="material.url.startsWith('https://') || material.url.startsWith('http://')
+                ? material.url
+                : 'https://' + material.url"
+              target="_blank"
+              (click)="onReadMaterial(material?.id)"
+              class="panel__material-card"
+              [id]="'panel-material-' + material?.id"
+            >
+              <div class="panel__material-icon">
+                <span class="material-symbols-outlined">article</span>
+              </div>
+              <div class="panel__material-body">
+                <p class="panel__material-name">{{ material?.name }}</p>
+                <span class="panel__material-badge"
+                  [class.panel__material-badge--free]="material?.isFree"
+                  [class.panel__material-badge--paid]="!material?.isFree">
+                  {{ material?.isFree ? 'Free' : 'Premium' }}
+                </span>
+              </div>
+            </a>
+          } @else {
+            <div
+              class="panel__material-card panel__material-card--locked"
+              (click)="onLockedClick()"
+              [id]="'panel-material-locked-' + material?.id"
+            >
+              <div class="panel__material-icon panel__material-icon--locked">
+                <span class="material-symbols-outlined">lock</span>
+              </div>
+              <div class="panel__material-body">
+                <p class="panel__material-name">{{ material?.name }}</p>
+                <span class="panel__material-badge panel__material-badge--paid">Premium</span>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    } @else {
+      <div class="panel__empty panel__empty--sm">
+        <span class="panel__empty-icon material-symbols-outlined">library_books</span>
+        <div>
+          <p class="panel__empty-title">No materials yet</p>
+          <p class="panel__empty-subtitle">No study materials available for this topic.</p>
+        </div>
+      </div>
+    }
+  }
+
+  @if (materialsState.status === 'error') {
+    <div class="panel__empty panel__empty--sm">
+      <span class="panel__empty-icon material-symbols-outlined">error_outline</span>
+      <div>
+        <p class="panel__empty-title">Failed to load materials</p>
+        <p class="panel__empty-subtitle">{{ materialsState.message }}</p>
+      </div>
+    </div>
+  }
+
+  <!-- ── Tests section ──────────────────────────────────────────────────── -->
+  <p class="panel__section-head panel__section-head--mt">
+    <span class="material-symbols-outlined">quiz</span>
+    Topic Tests
+  </p>
+
+  @if (testsState.status === 'loading') {
+    <app-resource-skeleton variant="card" [count]="2"></app-resource-skeleton>
+  }
+
+  @if (testsState.status === 'loaded') {
+    @if (testsState.data.items.length) {
+      <!-- Search bar -->
+      <div class="panel__search-bar">
+        <input
+          #testSearch
+          nz-input
+          type="text"
+          placeholder="Search tests…"
+          (input)="onSearchChange(testSearch.value)"
+          [id]="'panel-test-search-' + topicId"
+        />
+      </div>
+
+      <nz-spin [nzSpinning]="isTestsReloading">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+          @for (test of testsState.data.items; track test?.id) {
+            <div
+              class="panel__test-card"
+              (click)="onStartTestClick(test, 'topic')"
+              [id]="'panel-test-' + test?.id"
+            >
+              <div class="panel__test-icon">
+                <span class="material-symbols-outlined">quiz</span>
+              </div>
+              <div class="panel__test-body">
+                <p class="panel__test-name">{{ test?.name }}</p>
+                <div class="panel__test-meta">
+                  <span class="panel__test-stat">
+                    <span class="material-symbols-outlined">description</span>
+                    {{ test?.totalQuestions }} Qs
+                  </span>
+                  <span class="panel__test-stat">
+                    <span class="material-symbols-outlined">schedule</span>
+                    {{ Math.floor(test?.duration / 60) }}h {{ test?.duration % 60 }}m
+                  </span>
+                </div>
+              </div>
+              <div class="panel__test-actions">
+                <span class="panel__test-badge"
+                  [class.panel__test-badge--free]="test?.isFree"
+                  [class.panel__test-badge--paid]="!test?.isFree">
+                  {{ test?.isFree ? 'Free' : 'Paid' }}
+                </span>
+                <button nz-button class="panel__test-btn ant-btn-sm ant-btn-primary">
+                  Start
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </nz-spin>
+
+      @if (testsState.data.total > pageSize) {
+        <div class="panel__pagination mt-3">
+          <nz-pagination
+            [nzPageIndex]="pageIndex"
+            [nzTotal]="testsState.data.total"
+            [nzPageSize]="pageSize"
+            [nzShowSizeChanger]="false"
+            (nzPageIndexChange)="reloadTests({ pageIndex: $event, pageSize: pageSize })"
+          ></nz-pagination>
+        </div>
+      }
+    } @else if (!isTestsReloading) {
+      <div class="panel__empty panel__empty--sm">
+        <span class="panel__empty-icon material-symbols-outlined">quiz</span>
+        <div>
+          <p class="panel__empty-title">No tests yet</p>
+          <p class="panel__empty-subtitle">No topic tests available.</p>
+        </div>
+      </div>
+    }
+  }
+
+  @if (testsState.status === 'error') {
+    <div class="panel__empty panel__empty--sm">
+      <span class="panel__empty-icon material-symbols-outlined">error_outline</span>
+      <div>
+        <p class="panel__empty-title">Failed to load tests</p>
+        <p class="panel__empty-subtitle">{{ testsState.message }}</p>
+      </div>
+    </div>
+  }
+
+</div>

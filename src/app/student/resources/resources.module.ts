@@ -1,37 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
+import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
 
 import { ResourcesComponent } from './resources.component';
-import { BaseChartDirective } from 'ng2-charts';
-import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
-import { FormsModule } from '@angular/forms';
-import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
-import { SimplebarAngularModule } from 'simplebar-angular';
+import { ResourceTopicPanelComponent } from './topic-panel/topic-panel.component';
+import { ResourceSkeletonComponent } from './skeleton/skeleton.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ResourcesComponent },
-  {
-    path: '',
-    children: [
-      {
-        path: ':subjectId',
-        loadChildren: () =>
-          import('./topics/topics.module').then((m) => m.TopicsModule),
-      },
-    ],
-  },
 ];
 
 @NgModule({
-  declarations: [ResourcesComponent],
+  declarations: [
+    ResourcesComponent,
+    ResourceTopicPanelComponent,
+    ResourceSkeletonComponent,
+  ],
   imports: [
     RouterModule.forChild(routes),
-    BaseChartDirective,
     CommonModule,
     NgZorroAntdModule,
     FormsModule,
-    SimplebarAngularModule,
     ImageFallbackDirective,
   ],
   exports: [ResourcesComponent],

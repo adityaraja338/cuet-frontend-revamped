@@ -14,7 +14,6 @@ export class GlobalService {
   isRegistrationPage: boolean = false;
   private dataSubject = new BehaviorSubject<any>(null);
 
-  // Expose the data as an Observable
   data$ = this.dataSubject.asObservable();
 
   constructor(
@@ -30,6 +29,7 @@ export class GlobalService {
   }
 
   userDetails: any;
+
   getMe() {
     if (this.studentAuthService?.isUserLoggedIn()) {
       this.http.getMe().subscribe({
@@ -58,7 +58,6 @@ export class GlobalService {
     }
   }
 
-  // Call this method when new data is received
   setData(newData: any): void {
     this.dataSubject.next(newData);
   }

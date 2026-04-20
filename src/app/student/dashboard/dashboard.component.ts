@@ -3,6 +3,7 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { HttpService } from '../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BaseChartDirective } from 'ng2-charts';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   standalone: false,
@@ -18,6 +19,8 @@ export class DashboardComponent implements OnInit {
   events: any = [];
   notifications: any = [];
 
+  today = new Date();
+
   // Doughnut
   doughnutChartLabels: string[] = [
     '# of Correct',
@@ -27,16 +30,17 @@ export class DashboardComponent implements OnInit {
   previousChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] = [
     {
       data: [0, 0, 0],
-      backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
-      borderWidth: 4,
-      borderRadius: 12,
+      backgroundColor: ['#004ac6', '#60a5fa', '#e0e7ff'],
+      borderWidth: 2,
+      borderColor: '#ffffff',
+      borderRadius: 10,
+      hoverOffset: 4,
     },
   ];
   doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: false,
-    radius: 56,
-    cutout: '78%',
-    // borderColor: 'violet'
+    radius: 80,
+    cutout: '68%',
   };
 
   averageScoreChartData: ChartConfiguration<'line'>['data'] = {
@@ -47,45 +51,67 @@ export class DashboardComponent implements OnInit {
         label: 'Average',
         fill: true,
         tension: 0.4,
-        borderColor: 'black',
+        borderColor: '#004ac6',
+        pointBackgroundColor: '#004ac6',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
         backgroundColor: (context) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
 
           if (!chartArea) {
-            // Return transparent background if chart area is not ready
             return 'rgba(0,0,0,0)';
           }
 
-          // Create gradient
           const gradient = ctx.createLinearGradient(
             0,
             chartArea.top,
             0,
             chartArea.bottom,
           );
-          gradient.addColorStop(0, 'rgba(133, 85, 253, 0.5)'); // Top color
-          gradient.addColorStop(1, 'rgba(133, 85, 253, 0.1)'); // Bottom transparent
+          gradient.addColorStop(0, 'rgba(0, 74, 198, 0.32)');
+          gradient.addColorStop(1, 'rgba(0, 74, 198, 0.02)');
 
           return gradient;
         },
-        showLine: false,
+        showLine: true,
       },
     ],
   };
   averageScoreChartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0f172a',
+        titleColor: '#f8fafc',
+        bodyColor: '#e2e8f0',
+        borderColor: 'rgba(255,255,255,0.08)',
+        borderWidth: 1,
+        padding: 10,
+        displayColors: false,
+      },
+    },
     scales: {
       x: {
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
         display: false,
       },
       y: {
         beginAtZero: true,
         max: 100,
+        grid: {
+          color: 'rgba(148, 163, 184, 0.18)',
+        },
+        ticks: {
+          color: '#64748b',
+          font: { size: 11 },
+          stepSize: 25,
+        },
+        border: { display: false },
       },
     },
   };
@@ -96,7 +122,23 @@ export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpService,
     private message: NzMessageService,
+    public globalService: GlobalService,
   ) {}
+
+  get firstName(): string {
+    const name = this.globalService.userDetails?.name?.trim();
+    if (!name) {
+      return 'there';
+    }
+    return name.split(' ')[0];
+  }
+
+  get greeting(): string {
+    const hour = this.today.getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
 
   ngOnInit() {
     this.getProgressOverview();
@@ -137,11 +179,19 @@ export class DashboardComponent implements OnInit {
 
   upcomingTestOverviewData: any;
   previousTestOverviewData: any;
+  featuredPreviousTest: any;
+  recentPreviousTests: any[] = [];
   getLiveTestsOverview() {
     this.http.getLiveTestsOverview().subscribe({
       next: (res: any) => {
         this.upcomingTestOverviewData = res?.data?.upcoming;
         this.previousTestOverviewData = res?.data?.previous;
+        this.featuredPreviousTest = this.previousTestOverviewData?.[0];
+
+        const baseRecentPreviousTests = this.previousTestOverviewData?.slice(1) ?? [];
+        this.recentPreviousTests = baseRecentPreviousTests.length
+          ? [...baseRecentPreviousTests, ...baseRecentPreviousTests]
+          : [];
       },
       error: (error: any) => {
         console.log(error);
@@ -171,7 +221,7 @@ export class DashboardComponent implements OnInit {
           res?.data?.previousTestPerformance?.incorrect,
           res?.data?.previousTestPerformance?.unattempted,
         ];
-        // this.doughnutChartOptions?.update();
+
         if (this.charts) {
           this.charts.forEach((chart) => chart.update());
         }

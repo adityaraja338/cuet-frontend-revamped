@@ -59,7 +59,7 @@ export class AuthInterceptor implements HttpInterceptor {
         ) {
           return this.handle401Error(clonedReq, next, authService);
         }
-        return throwError(error);
+        return throwError(() => error);
       }),
     );
   }

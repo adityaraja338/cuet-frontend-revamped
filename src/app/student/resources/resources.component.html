@@ -5,39 +5,43 @@
   <nz-tabs>
     <nz-tab nzTitle="Subjects">
       <ng-template nz-tab>
-        @if(nonDomainSubjects?.length > 0 || domainSubjects?.length > 0){
-          <!-- Non Domain Subjects        -->
-          <div id="subjects-container" class="ant-row mx-n1">
-            <div
-              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-              *ngFor="let subject of nonDomainSubjects"
-            >
-              <div
-                class="subject d-flex align-items-center cursor-pointer"
-                (click)="onClickSubject(subject.id)"
-              >
-                <div class="mr-2">
-                  <div class="subject-icon student-diagonal-gradient">
-                    <img
-                      [src]="subject?.iconUrl"
-                      [imgFallback]="
-                        'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
-                      "
-                      alt=""
-                    />
+        @if(nonDomainSubjects.length || domainSubjects.length){
+          <div class="ant-row mx-n1">
+            <!-- Subject list -->
+            <div class="ant-col-xs-24 ant-col-lg-10 ant-col-xl-9 p-1">
+              <!-- Non Domain Subjects -->
+              <div id="subjects-container" class="ant-row mx-n1">
+                <div
+                  class="ant-col-xs-24 ant-col-md-12 ant-col-lg-24 ant-col-xl-24 p-1"
+                  *ngFor="let subject of nonDomainSubjects"
+                >
+                  <div
+                    class="subject d-flex align-items-center cursor-pointer"
+                    [class.subject--active]="selectedSubjectId === subject?.id"
+                    (click)="selectSubject(subject)"
+                  >
+                    <div class="mr-2">
+                      <div class="subject-icon student-diagonal-gradient">
+                        <img
+                          [src]="subject?.iconUrl"
+                          [imgFallback]="
+                            'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
+                          "
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                      <p class="text-primary font-16 font-500 mb-1">
+                        {{ subject.name }}
+                      </p>
+                      <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
+                    </div>
                   </div>
                 </div>
-                <div class="flex-grow-1">
-                  <p class="text-primary font-16 font-500 mb-1">
-                    {{ subject.name }}
-                  </p>
-                  <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
-                </div>
               </div>
-            </div>
-          </div>
 
-          @if (domainSubjects?.length > 0) {
+          @if (domainSubjects.length) {
             <!-- Domain Subjects       -->
             <nz-divider
               nzOrientation="left"
@@ -45,12 +49,13 @@
             ></nz-divider>
             <div id="domain-subjects-container" class="ant-row mx-n1">
               <div
-                class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
+                class="ant-col-xs-24 ant-col-md-12 ant-col-lg-24 ant-col-xl-24 p-1"
                 *ngFor="let subject of domainSubjects"
               >
                 <div
                   class="subject d-flex align-items-center cursor-pointer"
-                  (click)="onClickSubject(subject.id)"
+                  [class.subject--active]="selectedSubjectId === subject?.id"
+                  (click)="selectSubject(subject)"
                 >
                   <div class="mr-2">
                     <div class="subject-icon student-diagonal-gradient">
@@ -73,6 +78,61 @@
               </div>
             </div>
           }
+            </div>
+
+            <!-- Topics panel -->
+            <div class="ant-col-xs-24 ant-col-lg-14 ant-col-xl-15 p-1">
+              <nz-card nzBorderless class="resources-topics">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <p class="font-12 font-500 mb-1 text-8a">Selected subject</p>
+                    <p class="font-16 font-600 text-primary mb-0">
+                      {{ selectedSubjectName || '—' }}
+                    </p>
+                  </div>
+
+                  <button
+                    nz-button
+                    class="btn-primary"
+                    [disabled]="!selectedSubjectId"
+                    (click)="selectedSubjectId ? onClickSubject(selectedSubjectId) : null"
+                  >
+                    Open
+                  </button>
+                </div>
+
+                <nz-divider class="my-2"></nz-divider>
+
+                <nz-spin [nzSpinning]="isTopicsLoading">
+                  @if (topicGroups.length) {
+                    <ngx-simplebar class="resources-topics__scroll">
+                      <div class="resources-topics__groups">
+                        @for (group of topicGroups; track group.title) {
+                          <div class="resources-topics__group">
+                            <p class="resources-topics__group-title">{{ group.title }}</p>
+                            <ul class="resources-topics__list">
+                              @for (topic of group.topics; track topic) {
+                                <li class="resources-topics__item">
+                                  <span class="resources-topics__dot"></span>
+                                  <span class="resources-topics__name">{{ topic?.name ?? '-' }}</span>
+                                  <span class="resources-topics__meta">Materials: {{ topic?.material ?? 0 }}</span>
+                                </li>
+                              }
+                            </ul>
+                          </div>
+                        }
+                      </div>
+                    </ngx-simplebar>
+                  } @else {
+                    <nz-empty
+                      nzNotFoundContent="No topics found for this subject"
+                      class="pb-2"
+                    ></nz-empty>
+                  }
+                </nz-spin>
+              </nz-card>
+            </div>
+          </div>
         } @else {
           <nz-empty
             nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
@@ -266,7 +326,7 @@
     </nz-tab>
     <nz-tab nzTitle="PYQs">
       <ng-template nz-tab>
-        @if(pyqs?.length > 0){
+        @if(pyqs.length){
           <div id="pyq-container" class="ant-row mx-n1">
             <div
               class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"

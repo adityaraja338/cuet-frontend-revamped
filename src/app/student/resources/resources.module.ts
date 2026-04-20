@@ -7,6 +7,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { FormsModule } from '@angular/forms';
 import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: ResourcesComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
     CommonModule,
     NgZorroAntdModule,
     FormsModule,
+    SimplebarAngularModule,
     ImageFallbackDirective,
   ],
   exports: [ResourcesComponent],

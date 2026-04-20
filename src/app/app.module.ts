@@ -1,8 +1,5 @@
-import { NgModule } from '@angular/core';
-import {
-  BrowserModule,
-  provideClientHydration,
-} from '@angular/platform-browser';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,8 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   HTTP_INTERCEPTORS,
-  HttpClientModule,
   provideHttpClient,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { NgZorroAntdModule } from './ng-zorro-antd.module';
 import { AuthComponent } from './shared/components/auth/auth.component';
@@ -45,13 +42,16 @@ registerLocaleData(en);
     OAuthModule.forRoot(),
     SimplebarAngularModule,
     ReactiveFormsModule,
-    HttpClientModule,
     ImageFallbackDirective,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
+    provideZoneChangeDetection({
+      eventCoalescing: false,
+      runCoalescing: false,
+    }),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],

@@ -1,6 +1,6 @@
 <p class="font-14 font-400">Welcome,</p>
 <p class="font-28 font-600 mb-3">
-  {{ globalService?.userDetails?.name || "-" }}
+  {{ globalService.userDetails?.name || "-" }}
 </p>
 
 <div class="row mx-n2 metric-cards mb-3">
@@ -406,7 +406,7 @@
         <span nz-icon nzType="export"></span>
         Manage All Tests
       </button>
-      @if (globalService?.userDetails?.permissions?.refresh_leaderboards) {
+      @if (globalService.userDetails?.permissions?.refresh_leaderboards) {
         <button
           nz-button
           class="btn-a-primary"

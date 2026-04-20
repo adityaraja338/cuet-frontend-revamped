@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { GoogleAuthService } from '../../auth/google-auth.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StudentAuthService } from '../../auth/student-auth.service';
 import { AdminAuthService } from '../../auth/admin-auth.service';
@@ -11,16 +19,19 @@ import { Subscription } from 'rxjs';
 import { HttpService } from '../../services/http.service';
 import { AdminHttpService } from '../../services/admin-http.service';
 
+export type AuthMode = 'student' | 'admin';
+
 @Component({
   standalone: false,
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   registrationForm: FormGroup;
   loginTabIndex: number = 0;
   passwordVisible: boolean = false;
+  authMode: AuthMode = 'student';
 
   adminEmail: string = '';
   adminPassword: string = '';
@@ -35,8 +46,14 @@ export class AuthComponent implements OnInit {
   features: any = [];
   featuresCount = 0;
 
+  userData: any;
+  dataSubscription?: Subscription;
+
+  private previousRootClasses: string | null = null;
+
   constructor(
     private googleAuthService: GoogleAuthService,
+    private oauthService: OAuthService,
     private formBuilder: FormBuilder,
     private router: Router,
     private payment: PaymentService,
@@ -46,6 +63,7 @@ export class AuthComponent implements OnInit {
     private adminHttp: AdminHttpService,
     private adminAuthService: AdminAuthService,
     private studentAuthService: StudentAuthService,
+    @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
     this.registrationForm = this.formBuilder.group({
       googleUserId: [null, [Validators.required]],
@@ -69,27 +87,43 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  userData: any;
-  dataSubscription!: Subscription;
   ngOnInit(): any {
-    if (this.studentAuthService.isUserLoggedIn()) {
-      this.router.navigate(['/', 'student', 'home']);
+    if (isPlatformBrowser(this.platformId)) {
+      const root = document.documentElement;
+      this.previousRootClasses = root.className;
+      root.classList.remove('dark');
+      if (!root.classList.contains('light')) root.classList.add('light');
+
+      if (this.studentAuthService.isUserLoggedIn()) {
+        this.router.navigate(['/', 'student', 'home']);
+      }
+      if (this.adminAuthService.isUserLoggedIn()) {
+        this.router.navigate(['/', 'admin', 'home']);
+      }
     }
-    if (this.adminAuthService.isUserLoggedIn()) {
-      this.router.navigate(['/', 'admin', 'home']);
-    }
+
     this.getYearsFrom2022();
     this.getBatches();
     this.getFeatures();
-    // console.log('student data', this.globalService.studentTempData);
+
     this.dataSubscription = this.globalService.data$.subscribe(
       (receivedData: any) => {
         if (receivedData) {
           this.patchValues(receivedData);
-          // You can now use this data in the component, e.g., display it in the template
         }
       },
     );
+  }
+
+  ngOnDestroy(): void {
+    this.dataSubscription?.unsubscribe();
+    this.dataSubscription = undefined;
+
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.previousRootClasses !== null) {
+      document.documentElement.className = this.previousRootClasses;
+      this.previousRootClasses = null;
+    }
   }
 
   getBatches() {
@@ -131,8 +165,42 @@ export class AuthComponent implements OnInit {
   }
 
   loginWithGoogle() {
-    // This will redirect the user to Google for login
     this.googleAuthService.loginWithGoogle();
+  }
+
+  goHome(event?: MouseEvent): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.router.navigate(['/'], { state: { back: true } });
+  }
+
+  changeGoogleAccount(): void {
+    try {
+      this.oauthService.logOut(true);
+    } catch {
+      /* no-op: token may already be cleared */
+    }
+
+    this.registrationForm.reset({
+      countryCode: 91,
+      cuetAttempts: [],
+      planType: 'basic',
+    });
+    this.selectedBatch = null;
+    this.globalService.setData(null);
+
+    if (this.globalService.isRegistrationPage) {
+      this.globalService.toggleRegistrationPage();
+    }
+
+    this.message.info('Choose a different Google account to continue.');
+  }
+
+  setAuthMode(mode: AuthMode): void {
+    if (this.authMode === mode) return;
+    this.authMode = mode;
+    this.loginTabIndex = mode === 'admin' ? 1 : 0;
   }
 
   onClickBatch(batch: any) {
@@ -147,7 +215,7 @@ export class AuthComponent implements OnInit {
 
   getYearsFrom2022() {
     const startYear = 2022;
-    const currentYear = new Date().getFullYear(); // Get the current year
+    const currentYear = new Date().getFullYear();
     const years: number[] = [];
 
     for (let year = startYear; year <= currentYear; year++) {
@@ -188,10 +256,11 @@ export class AuthComponent implements OnInit {
     };
     this.adminHttp.postAdminLogin(data).subscribe({
       next: (res: any) => {
-        localStorage.setItem('cuet_access_token', res.data.accessToken);
-        localStorage.setItem('cuet_refresh_token', res.data.refreshToken);
-        localStorage.setItem('cuet_role', 'admin');
-        // localStorage.setItem('cuet_admin_name', res.data.adminName);
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('cuet_access_token', res.data.accessToken);
+          localStorage.setItem('cuet_refresh_token', res.data.refreshToken);
+          localStorage.setItem('cuet_role', 'admin');
+        }
         this.adminAuthService.login();
       },
       error: (error: any) => {

@@ -72,7 +72,7 @@ export class StudentAuthService {
     this.clearTokens();
     this.message.success('Successful! Student logged out!');
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], { state: { back: true } });
     // this.message.success('User logged out!');
   }
 }

@@ -5,13 +5,13 @@
 <div class="row">
   <div class="col-md-6">
     <nz-card nzHoverable nzBorderless>
-      @if (globalService?.userDetails?.adminId) {
+      @if (globalService.userDetails?.adminId) {
         <div class="d-flex justify-content-center align-items-center mb-4">
           <div class="profile-image-container">
-            @if (globalService?.userDetails?.imageUrl) {
+            @if (globalService.userDetails?.imageUrl) {
               <img
                 nz-image
-                [nzSrc]="globalService?.userDetails?.imageUrl"
+                [nzSrc]="globalService.userDetails?.imageUrl"
                 alt=""
               />
             } @else {
@@ -37,7 +37,7 @@
           class="admin-input mb-3"
           nz-input
           type="text"
-          [value]="globalService?.userDetails?.name"
+          [value]="globalService.userDetails?.name"
           disabled
         />
         <p class="font-12 font-400 mb-1">Email</p>
@@ -45,7 +45,7 @@
           class="admin-input mb-3"
           nz-input
           type="text"
-          [value]="globalService?.userDetails?.email"
+          [value]="globalService.userDetails?.email"
           disabled
         />
         <p class="font-12 font-400 mb-1">Role</p>
@@ -53,7 +53,7 @@
           class="admin-input"
           nz-input
           type="text"
-          [value]="globalService?.userDetails?.role"
+          [value]="globalService.userDetails?.role"
           disabled
         />
       </div>
@@ -452,7 +452,7 @@
       type="text"
       placeholder="URL"
       [(ngModel)]="imageUrl"
-      [value]="globalService?.userDetails?.imageUrl"
+      [value]="globalService.userDetails?.imageUrl"
     />
 
     <div class="d-flex justify-content-start mt-2 pt-2">
@@ -666,10 +666,10 @@
             </ng-template>
             <ng-container
               *ngIf="
-                resetPasswordForm?.get('newPassword')?.value !==
-                  resetPasswordForm?.get('confirmNewPassword')?.value &&
-                resetPasswordForm?.get('newPassword')?.touched &&
-                resetPasswordForm?.get('confirmNewPassword')?.touched
+                resetPasswordForm.get('newPassword')?.value !==
+                  resetPasswordForm.get('confirmNewPassword')?.value &&
+                resetPasswordForm.get('newPassword')?.touched &&
+                resetPasswordForm.get('confirmNewPassword')?.touched
               "
             >
               <span class="text-red">New passwords must be same!</span>
@@ -823,7 +823,7 @@
         <div class="col-12 mb-3">
           <label nz-checkbox formControlName="superAdmin">Is Super Admin</label>
         </div>
-        @if (!adminForm?.get("superAdmin")?.value) {
+        @if (!adminForm.get("superAdmin")?.value) {
           <div class="col-12">
             <p class="font-12 font-400 mb-1">Select Role</p>
             <nz-form-item>
@@ -1253,7 +1253,7 @@
       class="mt-2"
       (ngModelChange)="isPriceInputTouched = true"
     >
-    <p *ngIf="isPriceInputTouched && (featurePriceInput?.length === 0 || isNaN(+featurePriceInput) || +featurePriceInput < 0)" class="text-red font-14 mt-1"> Invalid Price </p>
+    <p *ngIf="isPriceInputTouched && (featurePriceInput.length === 0 || isNaN(+featurePriceInput) || +featurePriceInput < 0)" class="text-red font-14 mt-1"> Invalid Price </p>
 
     <div class="d-flex justify-content-end mt-3">
       <button nz-button class="btn-a-secondary" (click)="onModalClose()"> Cancel </button>

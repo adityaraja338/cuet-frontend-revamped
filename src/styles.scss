@@ -1,126 +1,171 @@
 /* You can add global styles to this file, and also import other style files */
-// @import "~ng-zorro-antd/ng-zorro-antd.css";
+@use "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 @import url("./assets/scss/font-face.scss");
 @import url("./assets/scss/font-variables.scss");
-@import url("./assets/scss/layouting.css");
+// @import url("./assets/scss/layouting.css");
 @import url("./assets/scss/colors.scss");
+@import "ng-zorro-antd/ng-zorro-antd.min.css";
 
-$student-primary: #8555fd;
-$student-dark-primary: #6f2dbd;
-$admin-primary: #00a3ff;
+@theme {
+  /* Colors — same tokens as landing.html tailwind.config theme.extend.colors */
+  --color-on-secondary-fixed-variant: #38485d;
+  --color-error-container: #ffdad6;
+  --color-on-tertiary-fixed: #360f00;
+  --color-surface-container-highest: #e0e3e5;
+  --color-on-primary: #ffffff;
+  --color-secondary: #505f76;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-fixed: #ffdbcd;
+  --color-tertiary-fixed-dim: #ffb596;
+  --color-outline: #737686;
+  --color-primary-fixed-dim: #b4c5ff;
+  --color-on-primary-fixed-variant: #003ea8;
+  --color-on-secondary: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-tertiary: #943700;
+  --color-secondary-fixed: #d3e4fe;
+  --color-on-surface: #191c1e;
+  --color-inverse-primary: #b4c5ff;
+  --color-secondary-fixed-dim: #b7c8e1;
+  --color-inverse-surface: #2d3133;
+  --color-surface-container-high: #e6e8ea;
+  --color-error: #ba1a1a;
+  --color-surface-bright: #f7f9fb;
+  --color-on-tertiary-fixed-variant: #7d2d00;
+  --color-surface-variant: #e0e3e5;
+  --color-on-tertiary-container: #ffede6;
+  --color-on-secondary-container: #54647a;
+  --color-surface-container: #eceef0;
+  --color-surface-container-low: #f2f4f6;
+  --color-on-error-container: #93000a;
+  --color-on-error: #ffffff;
+  --color-on-surface-variant: #434655;
+  --color-on-background: #191c1e;
+  --color-tertiary-container: #bc4800;
+  --color-on-primary-fixed: #00174b;
+  --color-surface-dim: #d8dadc;
+  --color-on-primary-container: #eeefff;
+  --color-primary: #004ac6;
+  --color-primary-fixed: #dbe1ff;
+  --color-background: #f7f9fb;
+  --color-surface-tint: #0053db;
+  --color-inverse-on-surface: #eff1f3;
+  --color-outline-variant: #c3c6d7;
+  --color-primary-container: #2563eb;
+  --color-surface: #f7f9fb;
+  --color-secondary-container: #d0e1fb;
+  --color-on-secondary-fixed: #0b1c30;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Lexend", sans-serif;
-  // color: #3a3a3a;
-  line-height: normal;
+  /* Border Radius */
+  --radius-default: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
+  /* Fonts */
+  --font-headline: "Manrope";
+  --font-body: "Inter";
+  --font-label: "Inter";
+}
+
+/* Force dark mode to be class-based as you requested */
+@custom-variant dark (&:where(.dark, .dark *));
+
+$student-primary: #004ac6;
+$student-dark-primary: #003ea8;
+$admin-primary: #0284c7;
+
+:root {
+  // color-scheme: light !important;
+  --primary: #004ac6;
+  --primary-container: #2563eb;
+  --primary-fixed: #dbe1ff;
+  --on-primary-fixed: #00174b;
+  --surface: #f7f9fb;
+  --surface-container-low: #f2f4f6;
+  --surface-container-lowest: #ffffff;
+  --on-surface: #191c1e;
+  --on-surface-variant: #434655;
+  --outline-variant: rgba(195, 198, 215, 0.15);
+
+  --secondary-container: #d0e1fb;
+  --on-secondary-container: #54647a;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --ambient-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06);
+  
+  --glass-bg: rgba(247, 249, 251, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+  --indigo-mesh: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                 radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                 radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+  /* Light marketing hero — used by landing parallax mesh (falls back to --indigo-mesh if unset) */
+  --landing-hero-mesh:
+    radial-gradient(ellipse 120% 90% at 0% -30%, rgba(0, 74, 198, 0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 80% at 100% -10%, rgba(37, 99, 235, 0.14) 0%, transparent 52%),
+    radial-gradient(ellipse 90% 70% at 50% 110%, rgba(0, 74, 198, 0.09) 0%, transparent 58%);
+}
+
+/*
+  Put shared resets in `@layer base` and app helpers in `@layer components` so
+  Tailwind `@layer utilities` wins (hover scale, transitions, margins, etc.).
+  Ng-Zorro / `.ant-*` overrides below stay unlayered so they still beat Ant Design.
+*/
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: normal;
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--on-surface);
+  }
+
+  pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+  }
+
+  h1, h2, h3, h4, h5, h6, .brand-font {
+    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
 }
 
 .drawer-open {
   overflow: auto !important;
-}
-
-pre {
-  font-family: "Lexend", sans-serif;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin: 0;
-  padding: 0;
-  color: #4a4a4a;
-}
-
-.text-primary {
-  color: $student-primary !important;
-  transition: color 0.6s;
-  &:hover {
-    color: $student-dark-primary !important;
-  }
-}
-
-.text-dark-primary {
-  color: $student-dark-primary !important;
-  transition: color 0.6s;
-}
-
-.text-a-primary {
-  color: $admin-primary !important;
-  transition: color 0.6s;
-}
-
-.text-a-primary:hover {
-  color: #007dd4 !important;
-}
-
-.text-free {
-  color: #bebebe !important;
-}
-
-.text-paid {
-  color: #561abd !important;
-}
-
-.text-red {
-  color: rgba(255, 97, 97, 1);
-  &:hover {
-    color: rgba(255, 93, 93, 1);
-  }
-}
-
-.bg-primary {
-  background-color: $student-primary !important;
-}
-
-.bg-a-primary {
-  background-color: $admin-primary !important;
-}
-
-.bg-danger {
-  background-color: rgba(255, 97, 97, 1) !important;
-}
-
-.bg-gold {
-  background: #FFD700 !important;
-}
-
-.bg-silver {
-  background: rgba(192, 192, 192, 0.50) !important;
-}
-
-.bg-bronze {
-  background: rgba(205, 127, 50, 0.50) !important;
-}
-
-.text-2a {
-  color: #2a2a2a !important;
-}
-
-.text-4a {
-  color: #4a4a4a !important;
-}
-
-.text-8a {
-  color: #8a8a8a !important;
-}
-
-.text-ca {
-  color: #cacaca !important;
-}
-
-.text-aa {
-  color: #aaaaaa !important;
-}
-
-.text-ea {
-  color: #eaeaea !important;
 }
 
 @mixin col-gaps($start, $end) {
@@ -131,8 +176,6 @@ p {
   }
 }
 
-@include col-gaps(1, 24);
-
 @mixin row-gaps($start, $end) {
   @for $i from $start through $end {
     .row-gap-#{$i} {
@@ -141,34 +184,139 @@ p {
   }
 }
 
-@include row-gaps(1, 24);
+@layer components {
+  // Glassmorphism Utility
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
+  }
 
-.row {
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
-}
+  // Reveal Animation Base
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 
-[class^="col-"] {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
+    &.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-.ant-row {
-  // margin: 0 !important;
-}
+  .text-primary {
+    color: $student-primary !important;
+    transition: color 0.6s;
+    &:hover {
+      color: $student-dark-primary !important;
+    }
+  }
 
-button,
-button.ant-btn {
-  display: flex;
-  height: 36px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 400;
-  padding: 0 24px;
-  transition: all 0.6s;
-  outline: none !important;
+  .text-dark-primary {
+    color: $student-dark-primary !important;
+    transition: color 0.6s;
+  }
+
+  .text-a-primary {
+    color: $admin-primary !important;
+    transition: color 0.6s;
+  }
+
+  .text-a-primary:hover {
+    color: #007dd4 !important;
+  }
+
+  .text-free {
+    color: #bebebe !important;
+  }
+
+  .text-paid {
+    color: #561abd !important;
+  }
+
+  .text-red {
+    color: rgba(255, 97, 97, 1);
+    &:hover {
+      color: rgba(255, 93, 93, 1);
+    }
+  }
+
+  .bg-primary {
+    background-color: $student-primary !important;
+  }
+
+  .bg-a-primary {
+    background-color: $admin-primary !important;
+  }
+
+  .bg-danger {
+    background-color: rgba(255, 97, 97, 1) !important;
+  }
+
+  .bg-gold {
+    background: #ffd700 !important;
+  }
+
+  .bg-silver {
+    background: rgba(192, 192, 192, 0.5) !important;
+  }
+
+  .bg-bronze {
+    background: rgba(205, 127, 50, 0.5) !important;
+  }
+
+  .text-2a {
+    color: #2a2a2a !important;
+  }
+
+  .text-4a {
+    color: #4a4a4a !important;
+  }
+
+  .text-8a {
+    color: #8a8a8a !important;
+  }
+
+  .text-ca {
+    color: #cacaca !important;
+  }
+
+  .text-aa {
+    color: #aaaaaa !important;
+  }
+
+  .text-ea {
+    color: #eaeaea !important;
+  }
+
+  @include col-gaps(1, 24);
+  @include row-gaps(1, 24);
+
+  .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+
+  [class^="col-"] {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Default native buttons; Tailwind utilities override. `.ant-btn` rules below stay unlayered. */
+  button {
+    display: flex;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 24px;
+    transition: all 0.6s;
+    outline: none !important;
+  }
 }
 
 button.modal-btn,
@@ -186,7 +334,7 @@ button.ant-button.dark-btn {
 }
 
 .ant-btn.student-diagonal-gradient:hover {
-  border: 1px solid #8555fd;
+  border: 1px solid $student-primary;
 }
 
 button.ant-btn.btn-primary {
@@ -201,11 +349,11 @@ button.ant-btn.btn-primary {
   }
 
   &:focus {
-    box-shadow: 0 0 0 0.2rem rgba(133, 85, 253, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 74, 198, 0.35) !important;
   }
 
   &:active {
-    box-shadow: 0 0 0 0.2rem rgba(133, 85, 253, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 74, 198, 0.35) !important;
   }
 }
 
@@ -284,10 +432,10 @@ button.ant-btn.btn-a-secondary {
 
 .student a,
 .student a:not([href]) {
-  color: #8555fd;
+  color: $student-primary;
 }
 .student a:not([href]):hover {
-  color: #8555fd;
+  color: $student-dark-primary;
   text-decoration: underline;
 }
 
@@ -526,12 +674,94 @@ nz-input-group.search-input {
   }
 }
 
+// Input — global, modernised default (matches nz-select visual language).
+// !important to beat ng-zorro's own `.ant-input { border-radius: 6px; ... }`
+// which is loaded at the same specificity and wins on some component trees.
 .ant-input {
-  height: 36px;
-  font-size: 12px;
-  font-weight: 300;
-  border-radius: 6px;
-  color: #4a4a4a;
+  min-height: 44px !important;
+  padding: 0.6rem 0.9rem !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(148, 163, 184, 0.42) !important;
+  background: #fff !important;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif !important;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+  color: var(--on-surface) !important;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+
+  &::placeholder {
+    color: color-mix(in srgb, var(--on-surface) 50%, #fff);
+    font-weight: 400;
+  }
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary) 45%, transparent) !important;
+  }
+
+  &:focus,
+  &.ant-input-focused {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent) !important;
+    background: #fff !important;
+  }
+}
+
+// Inputs nested inside an affix-wrapper or input-group should not stack a
+// second border/padding — the wrapper owns the chrome.
+.ant-input-affix-wrapper .ant-input,
+nz-input-group .ant-input {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+
+  &:hover,
+  &:focus,
+  &.ant-input-focused {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+}
+
+// Same treatment for the affix wrapper so nz-input-group-sized inputs match.
+.ant-input-affix-wrapper {
+  min-height: 44px;
+  padding: 0.25rem 0.75rem;
+  border-radius: 10px !important;
+  border: 1px solid rgba(148, 163, 184, 0.42) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary) 45%, transparent) !important;
+  }
+
+  &:focus-within,
+  &.ant-input-affix-wrapper-focused {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent) !important;
+  }
+
+  .ant-input {
+    min-height: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+
+    &:focus,
+    &.ant-input-focused {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+  }
 }
 
 .admin .ant-input:focus,
@@ -623,45 +853,134 @@ nz-input-group.password-input{
   box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.2) !important;
 }
 
-// Select
+// Select — global, modernised default (matches nz-input visual language)
 nz-select {
-  height: 36px;
+  display: block;
+  width: 100%;
+  min-height: 44px;
+
   nz-select-top-control {
     height: 100%;
   }
 }
+
 .ant-select {
   width: 100%;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--on-surface);
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  height: 44px !important;
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-  border-radius: 6px;
-  height: 100%;
+  min-height: 44px;
+  padding: 0.35rem 0.85rem !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(148, 163, 184, 0.42) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-item,
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector .ant-select-selection-placeholder {
+  line-height: 42px !important;
+}
+
+.ant-select-multiple:not(.ant-select-customize-input) .ant-select-selector {
+  min-height: 44px;
+  padding: 0.3rem 0.6rem !important;
+}
+
+.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):hover .ant-select-selector {
+  border-color: color-mix(in srgb, var(--primary) 45%, transparent) !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input) .ant-select-selector:focus-within {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent) !important;
+}
+
+.ant-select-disabled .ant-select-selector {
+  background: color-mix(in srgb, var(--on-surface) 4%, #fff) !important;
+  color: color-mix(in srgb, var(--on-surface) 55%, #fff) !important;
 }
 
 .ant-select-selection-placeholder {
-  font-weight: 300;
-  font-size: 12px;
+  font-weight: 400;
+  font-size: 0.88rem;
+  color: color-mix(in srgb, var(--on-surface) 55%, #fff);
 }
 
 .ant-select-selection-item {
-  font-weight: 300;
-  font-size: 12px;
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: var(--on-surface);
 }
 
 .ant-select-item-option-content {
-  font-weight: 300;
+  font-weight: 500;
+  font-size: 0.88rem;
 }
 
+.ant-select-arrow {
+  color: color-mix(in srgb, var(--on-surface) 55%, #fff);
+}
+
+// Multi-select pills
 .ant-select-multiple .ant-select-selection-item {
   align-items: center;
-  height: 20px;
+  height: 26px;
+  padding: 0 0.55rem 0 0.65rem;
+  background: color-mix(in srgb, var(--primary) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+  border-radius: 999px;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.78rem;
+
+  .ant-select-selection-item-remove {
+    color: color-mix(in srgb, var(--primary) 70%, transparent);
+    margin-left: 0.35rem;
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
 }
 
 .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
   display: flex;
   align-items: center;
+}
+
+// Dropdown panel
+.ant-select-dropdown {
+  padding: 0.35rem;
+  border-radius: 12px !important;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow: 0 20px 40px -18px rgba(15, 23, 42, 0.22), 0 8px 18px -10px rgba(15, 23, 42, 0.1) !important;
+}
+
+.ant-select-item {
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.88rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background: color-mix(in srgb, var(--primary) 8%, #fff) !important;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background: color-mix(in srgb, var(--primary) 12%, #fff) !important;
+  color: var(--primary) !important;
+  font-weight: 600;
 }
 
 .admin,
@@ -695,12 +1014,6 @@ nz-select {
   }
 }
 
-.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: rgba(255, 255, 255, 1) !important;
-  .anticon {
-    color: #4a4a4a;
-  }
-}
 
 .cdk-overlay-container {
   .admin-time-pick {
@@ -875,9 +1188,6 @@ nz-switch:has(.ant-switch-small) {
     width: 32px;
     border-radius: 50%;
     aspect-ratio: 1;
-    :focus{
-
-    }
   }
 }
 
@@ -925,6 +1235,12 @@ nz-switch:has(.ant-switch-small) {
   width: 36px;
 }
 
+/* Tailwind preflight sets `img { display: block; }`, but Ant image preview
+   uses inline-image centering logic. Restore Ant behavior only for preview. */
+.ant-image-preview-img {
+  display: inline-block !important;
+}
+
 // Carousel
 .slick-list,
 .slick-track,
@@ -946,13 +1262,9 @@ nz-switch:has(.ant-switch-small) {
 }
 
 .student-diagonal-gradient {
-  background: linear-gradient(
-    to top right,
-    #561abd,
-    #8555fd
-  ); /* Customize the colors */
-  color: white; /* Optional: Change the text color for better visibility */
-  border: none; /* Optional: Remove borders */
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
   box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.06);
   transition: all 0.6s ease;
 }
@@ -996,8 +1308,8 @@ nz-switch:has(.ant-switch-small) {
 
 .student .chart-center,
 .student-chart.chart-center {
-  background-color: #8555fd18;
-  color: #8555fd;
+  background-color: rgba(0, 74, 198, 0.08);
+  color: $student-primary;
 }
 
 .admin .chart-center, .admin-chart.chart-center {
@@ -1053,6 +1365,36 @@ nz-switch:has(.ant-switch-small) {
   border-color: $admin-primary !important;
 }
 
-.simplebar-placeholder{
-  //height: 100%;
+/* ===========================================================================
+   Router outlet transition stage
+   --------------------------------------------------------------------------
+   `.route-stage` hosts the Angular router-outlet with the @routeAnimations
+   trigger. During a transition both the outgoing and incoming pages exist
+   simultaneously (absolute-positioned), so we need a stable positioning
+   context and horizontal overflow clipping to hide the slide-off area.
+   =========================================================================== */
+.route-stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.route-stage--inner {
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-stage,
+  .route-stage--inner {
+    /* Honour user motion preference — kills the slide in-between. */
+    transition: none !important;
+  }
+
+  .route-stage > *,
+  .route-stage--inner > * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }

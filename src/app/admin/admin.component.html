@@ -28,16 +28,16 @@
       </div>
       <div class="user-info d-flex align-items-center">
         <div class="d-md-flex d-none flex-column align-items-end">
-          <p class="font-12 font-500">{{ globalService?.userDetails?.name || '-' }}</p>
-          <p class="font-10 font-400">{{ globalService?.userDetails?.email || '-' }}</p>
+          <p class="font-12 font-500">{{ globalService.userDetails?.name || '-' }}</p>
+          <p class="font-10 font-400">{{ globalService.userDetails?.email || '-' }}</p>
         </div>
         <div
           class="user-icon-div cursor-pointer"
           [routerLink]="['/', 'admin', 'admins']"
         >
-          @if(globalService?.userDetails?.imageUrl){
-            <img [src]="globalService?.userDetails?.imageUrl">
-          } @else if(globalService?.userDetails?.isSuperAdmin) {
+          @if(globalService.userDetails?.imageUrl){
+            <img [src]="globalService.userDetails?.imageUrl">
+          } @else if(globalService.userDetails?.isSuperAdmin) {
             <img src="https://cdn-icons-png.flaticon.com/512/1624/1624453.png">
           } @else {
             <span class="font-16 text-white" nz-icon nzType="user" nzTheme="outline"></span>
@@ -61,9 +61,9 @@
         class="admin-diagonal-gradient padding-lg"
         [style]="isCollapsed ? 'display:none;' : ''"
       >
-        <h1 class="font-24 font-600 mb-1 text-white">{{ globalService?.userDetails?.name?.split(' ')[0] || '-' }}</h1>
-        <p class="font-10 font-300 text-white">Admin ID: {{ globalService?.userDetails?.adminId || '-' }}</p>
-        <p class="font-10 font-300 text-white">Role: {{ globalService?.userDetails?.role }}</p>
+        <h1 class="font-24 font-600 mb-1 text-white">{{ globalService.userDetails?.name?.split(' ')[0] || '-' }}</h1>
+        <p class="font-10 font-300 text-white">Admin ID: {{ globalService.userDetails?.adminId || '-' }}</p>
+        <p class="font-10 font-300 text-white">Role: {{ globalService.userDetails?.role }}</p>
       </div>
       <ul
         nz-menu
@@ -191,7 +191,9 @@
             style="position: relative"
             class="ant-col-xs-24 ant-col-xl-22 ant-col-xxl-20"
           >
-            <router-outlet></router-outlet>
+            <div class="route-stage route-stage--inner" [@routeAnimations]="getRouteState(outlet)">
+              <router-outlet #outlet="outlet"></router-outlet>
+            </div>
           </section>
         </section>
       </ngx-simplebar>

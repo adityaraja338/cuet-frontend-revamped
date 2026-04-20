@@ -28,12 +28,12 @@
       </div>
       <div class="user-info d-flex align-items-center">
         <div class="d-md-flex d-none flex-column align-items-end">
-          <p class="font-12 font-500">{{ globalService?.userDetails?.name || '-' }}</p>
-          <p class="font-10 font-400">{{ globalService?.userDetails?.email || '-' }}</p>
+          <p class="font-12 font-500">{{ globalService.userDetails?.name || '-' }}</p>
+          <p class="font-10 font-400">{{ globalService.userDetails?.email || '-' }}</p>
         </div>
         <div class="user-icon-div" [routerLink]="['/', 'student', 'account']">
-          @if(globalService?.userDetails?.imageUrl){
-            <img [src]="globalService?.userDetails?.imageUrl" alt="">
+          @if(globalService.userDetails?.imageUrl){
+            <img [src]="globalService.userDetails?.imageUrl" alt="">
           } @else {
             <span class="font-16 text-white" nz-icon nzType="user" nzTheme="outline"></span>
           }
@@ -159,7 +159,9 @@
       >
         <section class="ant-row ant-row-center">
           <section class="ant-col-xs-24 ant-col-xl-22 ant-col-xxl-20">
-            <router-outlet></router-outlet>
+            <div class="route-stage route-stage--inner" [@routeAnimations]="getRouteState(outlet)">
+              <router-outlet #outlet="outlet"></router-outlet>
+            </div>
           </section>
         </section>
       </ngx-simplebar>

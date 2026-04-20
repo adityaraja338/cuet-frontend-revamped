@@ -110,32 +110,32 @@
               <li
                 class="tiny-li"
                 nz-menu-item
-                [nzDisabled]="!globalService?.userDetails?.permissions?.edit_student_batch"
-                (click)="globalService?.userDetails?.permissions?.edit_student_batch ? onOpenChangeBatchModal(student?.id, student?.name) : null"
+                [nzDisabled]="!globalService.userDetails?.permissions?.edit_student_batch"
+                (click)="globalService.userDetails?.permissions?.edit_student_batch ? onOpenChangeBatchModal(student?.id, student?.name) : null"
               >
                 <span class="m-l-5">Change Batch</span>
               </li>
               <li
                 class="tiny-li"
                 nz-menu-item
-                [nzDisabled]="!globalService?.userDetails?.permissions?.edit_student"
-                (click)="globalService?.userDetails?.permissions?.edit_student ? onOpenEditStudentModal(student) : null"
+                [nzDisabled]="!globalService.userDetails?.permissions?.edit_student"
+                (click)="globalService.userDetails?.permissions?.edit_student ? onOpenEditStudentModal(student) : null"
               >
                 <span class="m-l-5">Edit</span>
               </li>
               <li
                 class="tiny-li"
                 nz-menu-item
-                [nzDisabled]="!globalService?.userDetails?.permissions?.clear_student_batch"
-                (click)="globalService?.userDetails?.permissions?.clear_student_batch ? onOpenDeleteBatchModal(student?.id, student?.name) : null"
+                [nzDisabled]="!globalService.userDetails?.permissions?.clear_student_batch"
+                (click)="globalService.userDetails?.permissions?.clear_student_batch ? onOpenDeleteBatchModal(student?.id, student?.name) : null"
               >
                 <span class="m-l-5">Clear Batch</span>
               </li>
               <li
                 class="tiny-li"
                 nz-menu-item
-                [nzDisabled]="!globalService?.userDetails?.permissions?.delete_student"
-                (click)="globalService?.userDetails?.permissions?.delete_student ? onOpenDeleteStudentModal(student?.id, student?.name) : null"
+                [nzDisabled]="!globalService.userDetails?.permissions?.delete_student"
+                (click)="globalService.userDetails?.permissions?.delete_student ? onOpenDeleteStudentModal(student?.id, student?.name) : null"
               >
                 <span class="m-l-5 text-red">Delete</span>
               </li>

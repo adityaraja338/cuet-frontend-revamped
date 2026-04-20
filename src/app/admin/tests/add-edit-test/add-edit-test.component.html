@@ -65,8 +65,8 @@
       </div>
 
       @if (
-        testForm?.get("testType")?.value === "live" ||
-        testForm?.get("testType")?.value === "mock"
+        testForm.get("testType")?.value === "live" ||
+        testForm.get("testType")?.value === "mock"
       ) {
         <!--   Subject Name   -->
         <div class="col-12 mb-3">
@@ -113,7 +113,7 @@
                     [nzMaxTagCount]="1"
                   >
                     <ng-container
-                      *ngFor="let tag of testForm?.get('topics')?.value"
+                      *ngFor="let tag of testForm.get('topics')?.value"
                     >
                       <nz-option
                         class="admin-option"
@@ -129,7 +129,7 @@
         </div>
       }
 
-      @if (testForm?.get("testType")?.value === "topic") {
+      @if (testForm.get("testType")?.value === "topic") {
         <!--   Subject   -->
         <div class="col-12 mb-3">
           <div class="row align-items-center">
@@ -181,7 +181,7 @@
                   >
                     <ng-container *ngFor="let topic of topics">
                       @if (
-                        topic?.subjectId === testForm?.get("subjectId")?.value
+                        topic?.subjectId === testForm.get("subjectId")?.value
                       ) {
                         <nz-option
                           [nzLabel]="topic?.name"
@@ -248,7 +248,7 @@
         </div>
       </div>
 
-      @if (testForm?.get("testType")?.value === "live") {
+      @if (testForm.get("testType")?.value === "live") {
         <!--   Start Time   -->
         <div class="col-12 mb-3">
           <div class="row align-items-center">
@@ -344,8 +344,8 @@
       </div>
 
       @if (
-        testForm?.get("testType")?.value === "live" &&
-        !testForm?.get("isFree")?.value
+        testForm.get("testType")?.value === "live" &&
+        !testForm.get("isFree")?.value
       ) {
         <!--   Batch ID   -->
         <div class="col-12">
@@ -456,7 +456,7 @@
                   </p>
                   <p
                     *ngIf="
-                      (!isEditMode && questions.controls?.length !== 1) ||
+                      (!isEditMode && questions.controls.length !== 1) ||
                       (isEditMode &&
                         question?.get('questionId')?.value === null)
                     "

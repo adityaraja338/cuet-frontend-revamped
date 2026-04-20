@@ -114,11 +114,11 @@
                         class="tiny-li"
                         nz-menu-item
                         [nzDisabled]="
-                          !globalService?.userDetails?.permissions
+                          !globalService.userDetails?.permissions
                             ?.edit_material
                         "
                         (click)="
-                          globalService?.userDetails?.permissions?.edit_material
+                          globalService.userDetails?.permissions?.edit_material
                             ? onOpenMaterialForm(material)
                             : null
                         "
@@ -129,11 +129,11 @@
                         class="tiny-li"
                         nz-menu-item
                         [nzDisabled]="
-                          !globalService?.userDetails?.permissions
+                          !globalService.userDetails?.permissions
                             ?.delete_material
                         "
                         (click)="
-                          globalService?.userDetails?.permissions
+                          globalService.userDetails?.permissions
                             ?.delete_material
                             ? onOpenDeleteModal(material?.id, 'material')
                             : null
@@ -185,7 +185,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
-            *ngIf="globalService?.userDetails?.permissions?.create_test"
+            *ngIf="globalService.userDetails?.permissions?.create_test"
           >
             <button
               nz-button
@@ -263,11 +263,11 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions
+                        !globalService.userDetails?.permissions
                           ?.edit_topic_test
                       "
                       [routerLink]="
-                        globalService?.userDetails?.permissions?.edit_topic_test
+                        globalService.userDetails?.permissions?.edit_topic_test
                           ? ['/', 'admin', 'tests', 'edit-topic', test?.id]
                           : []
                       "
@@ -278,11 +278,11 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions
+                        !globalService.userDetails?.permissions
                           ?.change_test_type
                       "
                       (click)="
-                        globalService?.userDetails?.permissions
+                        globalService.userDetails?.permissions
                           ?.change_test_type
                           ? onChangeType(test?.id, 'topic')
                           : null
@@ -296,10 +296,10 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions?.delete_test
+                        !globalService.userDetails?.permissions?.delete_test
                       "
                       (click)="
-                        globalService?.userDetails?.permissions?.delete_test
+                        globalService.userDetails?.permissions?.delete_test
                           ? onOpenDeleteModal(test?.id, 'test')
                           : null
                       "

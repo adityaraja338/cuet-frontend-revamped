@@ -6,24 +6,36 @@ import { adminAuthGuard } from './shared/guards/admin-auth.guard';
 import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: LandingPageComponent },
-  { path: 'login', component: AuthComponent },
+  {
+    path: '',
+    pathMatch: 'full',
+    component: LandingPageComponent,
+    data: { animation: 'Landing' },
+  },
+  { path: 'login', component: AuthComponent, data: { animation: 'Login' } },
   {
     path: 'student',
     loadChildren: () =>
       import('./student/student.module').then((m) => m.StudentModule),
     canActivate: [studentAuthGuard],
+    data: { animation: 'Student' },
   },
   {
     path: 'admin',
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
     canActivate: [adminAuthGuard],
+    data: { animation: 'Admin' },
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled',
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

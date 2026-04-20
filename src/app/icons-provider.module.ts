@@ -7,6 +7,15 @@ import {
   FormOutline,
   DashboardOutline,
   PlusOutline,
+  ArrowRightOutline,
+  ReadOutline,
+  BankOutline,
+  FileDoneOutline,
+  PlaySquareOutline,
+  BookOutline,
+  BulbOutline,
+  RiseOutline,
+  CheckCircleOutline,
 } from '@ant-design/icons-angular/icons';
 
 const icons = [
@@ -15,6 +24,15 @@ const icons = [
   DashboardOutline,
   FormOutline,
   PlusOutline,
+  ArrowRightOutline,
+  ReadOutline,
+  BankOutline,
+  FileDoneOutline,
+  PlaySquareOutline,
+  BookOutline,
+  BulbOutline,
+  RiseOutline,
+  CheckCircleOutline,
 ];
 
 @NgModule({

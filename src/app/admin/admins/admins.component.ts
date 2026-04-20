@@ -692,7 +692,7 @@ export class AdminsComponent implements OnInit {
   }
 
   onSaveFeaturePrice() {
-    if (this.featurePriceInput?.length === 0 || +this.featurePriceInput < 0) {
+    if (this.featurePriceInput.length === 0 || +this.featurePriceInput < 0) {
       this.message.error('Please enter a valid price!');
       return;
     }

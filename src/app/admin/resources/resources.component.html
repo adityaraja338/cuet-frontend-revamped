@@ -30,7 +30,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
-            *ngIf="globalService?.userDetails?.permissions?.create_subject"
+            *ngIf="globalService.userDetails?.permissions?.create_subject"
           >
             <button
               nz-button
@@ -91,10 +91,10 @@
                         class="tiny-li"
                         nz-menu-item
                         [nzDisabled]="
-                          !globalService?.userDetails?.permissions?.edit_subject
+                          !globalService.userDetails?.permissions?.edit_subject
                         "
                         (click)="
-                          globalService?.userDetails?.permissions?.edit_subject
+                          globalService.userDetails?.permissions?.edit_subject
                             ? onOpenSubjectModal(subject)
                             : null
                         "
@@ -105,11 +105,11 @@
                         class="tiny-li"
                         nz-menu-item
                         [nzDisabled]="
-                          !globalService?.userDetails?.permissions
+                          !globalService.userDetails?.permissions
                             ?.delete_subject
                         "
                         (click)="
-                          globalService?.userDetails?.permissions
+                          globalService.userDetails?.permissions
                             ?.delete_subject
                             ? onOpenDeleteModal(subject?.id, 'subject')
                             : null
@@ -176,11 +176,11 @@
                           class="tiny-li"
                           nz-menu-item
                           [nzDisabled]="
-                            !globalService?.userDetails?.permissions
+                            !globalService.userDetails?.permissions
                               ?.edit_subject
                           "
                           (click)="
-                            globalService?.userDetails?.permissions
+                            globalService.userDetails?.permissions
                               ?.edit_subject
                               ? onOpenSubjectModal(subject)
                               : null
@@ -192,11 +192,11 @@
                           class="tiny-li"
                           nz-menu-item
                           [nzDisabled]="
-                            !globalService?.userDetails?.permissions
+                            !globalService.userDetails?.permissions
                               ?.delete_subject
                           "
                           (click)="
-                            globalService?.userDetails?.permissions
+                            globalService.userDetails?.permissions
                               ?.delete_subject
                               ? onOpenDeleteModal(subject?.id, 'subject')
                               : null
@@ -248,7 +248,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
-            *ngIf="globalService?.userDetails?.permissions?.create_video_link"
+            *ngIf="globalService.userDetails?.permissions?.create_video_link"
           >
             <button
               nz-button
@@ -328,11 +328,11 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions
+                        !globalService.userDetails?.permissions
                           ?.edit_video_link
                       "
                       (click)="
-                        globalService?.userDetails?.permissions?.edit_video_link
+                        globalService.userDetails?.permissions?.edit_video_link
                           ? onOpenVideoModal(video)
                           : null
                       "
@@ -343,11 +343,11 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions
+                        !globalService.userDetails?.permissions
                           ?.delete_video_link
                       "
                       (click)="
-                        globalService?.userDetails?.permissions
+                        globalService.userDetails?.permissions
                           ?.delete_video_link
                           ? onOpenDeleteModal(video?.id, 'video link')
                           : null
@@ -406,7 +406,7 @@
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
           >
-            @if (globalService?.userDetails?.permisisons?.create_newspaper) {
+            @if (globalService.userDetails?.permisisons?.create_newspaper) {
               <button
                 nz-button
                 class="btn-a-primary w-100"
@@ -491,12 +491,12 @@
                       class="tiny-li"
                       nz-menu-item
                       (click)="
-                        globalService?.userDetails?.permissions?.edit_newspaper
+                        globalService.userDetails?.permissions?.edit_newspaper
                           ? onOpenNewspaperModal(newspaper)
                           : null
                       "
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions?.edit_newspaper
+                        !globalService.userDetails?.permissions?.edit_newspaper
                       "
                     >
                       <span class="m-l-5">Edit</span>
@@ -505,11 +505,11 @@
                       class="tiny-li"
                       nz-menu-item
                       [nzDisabled]="
-                        !globalService?.userDetails?.permissions
+                        !globalService.userDetails?.permissions
                           ?.delete_newspaper
                       "
                       (click)="
-                        globalService?.userDetails?.permissions
+                        globalService.userDetails?.permissions
                           ?.delete_newspaper
                           ? onOpenDeleteModal(newspaper?.id, 'newspaper')
                           : null
@@ -560,7 +560,7 @@
           </div>
           <div
             class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
-            *ngIf="globalService?.userDetails?.permissions?.create_pyq"
+            *ngIf="globalService.userDetails?.permissions?.create_pyq"
           >
             <button
               nz-button
@@ -643,10 +643,10 @@
                         class="tiny-li"
                         nz-menu-item
                         [nzDisabled]="
-                          !globalService?.userDetails?.permissions?.edit_pyq
+                          !globalService.userDetails?.permissions?.edit_pyq
                         "
                         (click)="
-                          globalService?.userDetails?.permissions?.edit_pyq
+                          globalService.userDetails?.permissions?.edit_pyq
                             ? onOpenPyqModal(pyq)
                             : null
                         "
@@ -657,10 +657,10 @@
                         class="tiny-li"
                         nz-menu-item
                         [nzDisabled]="
-                          !globalService?.userDetails?.permissions?.delete_pyq
+                          !globalService.userDetails?.permissions?.delete_pyq
                         "
                         (click)="
-                          globalService?.userDetails?.permissions?.delete_pyq
+                          globalService.userDetails?.permissions?.delete_pyq
                             ? onOpenDeleteModal(pyq?.id, 'pyq')
                             : null
                         "

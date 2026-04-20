@@ -46,12 +46,12 @@
   }
 }
 
-@include student-color("primary", #8555FD);
-@include student-color("secondary", #C1B2FF);
-@include student-color("light", #E4E0FA);
+@include student-color("primary", #004ac6);
+@include student-color("secondary", #2563eb);
+@include student-color("light", #eef2ff);
 
-@include student-color("gold", #FFD700);
+@include student-color("gold", #ffb000); // Softer Gold
 
-@include admin-color("primary", #13AAFF);
-@include admin-color("secondary", #A6DFFF);
-@include admin-color("light", #DEF3FF);
+@include admin-color("primary", #0284c7); // Muted Sky Blue
+@include admin-color("secondary", #7dd3fc);
+@include admin-color("light", #f0f9ff);

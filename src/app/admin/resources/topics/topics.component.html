@@ -30,7 +30,7 @@
     </div>
     <div
       class="col-md-3 col-xl-3 mt-md-0 mt-3 d-flex justify-content-end"
-      *ngIf="globalService?.userDetails?.permissions?.create_topic"
+      *ngIf="globalService.userDetails?.permissions?.create_topic"
     >
       <button
         nz-button
@@ -100,10 +100,10 @@
                   class="tiny-li"
                   nz-menu-item
                   [nzDisabled]="
-                    !globalService?.userDetails?.permissions?.edit_topic
+                    !globalService.userDetails?.permissions?.edit_topic
                   "
                   (click)="
-                    globalService?.userDetails?.permissions?.edit_topic
+                    globalService.userDetails?.permissions?.edit_topic
                       ? onOpenEditModal(topic)
                       : null
                   "
@@ -114,10 +114,10 @@
                   class="tiny-li"
                   nz-menu-item
                   [nzDisabled]="
-                    !globalService?.userDetails?.permissions?.delete_topic
+                    !globalService.userDetails?.permissions?.delete_topic
                   "
                   (click)="
-                    globalService?.userDetails?.permissions?.delete_topic
+                    globalService.userDetails?.permissions?.delete_topic
                       ? onOpenDeleteModal(topic)
                       : null
                   "

@@ -1,199 +1,247 @@
-<nz-layout class="app-layout admin">
-  <nz-header>
-    <div class="app-header row mx-0 align-items-center justify-content-between">
-      <div class="d-flex align-items-center">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <span class="trigger" nz-icon>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
-              fill="none"
-            >
-              <path
-                d="M3.75 15H21.25M3.75 7.5H26.25M3.75 22.5H26.25"
-                stroke="#101828"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-        </span>
-        <div class="d-flex flex-column align-items-start">
-          <p class="font-16 font-500">Cuet Corner</p>
-          <p class="font-10 font-400">Welcomes You!</p>
-        </div>
-      </div>
-      <div class="user-info d-flex align-items-center">
-        <div class="d-md-flex d-none flex-column align-items-end">
-          <p class="font-12 font-500">{{ globalService.userDetails?.name || '-' }}</p>
-          <p class="font-10 font-400">{{ globalService.userDetails?.email || '-' }}</p>
-        </div>
-        <div
-          class="user-icon-div cursor-pointer"
-          [routerLink]="['/', 'admin', 'admins']"
+<nz-layout class="app-layout admin admin-shell">
+  <nz-header class="shell-header">
+    <div class="shell-header__inner">
+      <div class="shell-header__left">
+        <button
+          type="button"
+          class="shell-trigger"
+          (click)="isCollapsed = !isCollapsed"
+          [attr.aria-label]="isCollapsed ? 'Open navigation menu' : 'Close navigation menu'"
         >
-          @if(globalService.userDetails?.imageUrl){
-            <img [src]="globalService.userDetails?.imageUrl">
-          } @else if(globalService.userDetails?.isSuperAdmin) {
-            <img src="https://cdn-icons-png.flaticon.com/512/1624/1624453.png">
+          <span nz-icon nzType="menu" nzTheme="outline"></span>
+        </button>
+
+        <a class="shell-brand" routerLink="/admin/home" aria-label="Open admin home">
+          <span class="shell-brand__mark material-symbols-outlined" aria-hidden="true">hub</span>
+          <span class="shell-brand__copy">
+            <span class="shell-brand__name">CUET Corner</span>
+            <span class="shell-brand__sub">Admin workspace</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="shell-header__right">
+        <a
+          class="shell-user-button inline-flex min-w-0 max-w-[min(22rem,46vw)] items-center gap-3 rounded-xl px-2 py-1.5 no-underline transition hover:bg-sky-500/5 focus-visible:bg-sky-500/5 max-sm:h-10 max-sm:w-10 max-sm:max-w-10 max-sm:justify-center max-sm:rounded-full max-sm:p-0.5"
+          [routerLink]="['/', 'admin', 'admins']"
+          aria-label="Open admins page"
+        >
+          <span class="shell-user-button__copy flex min-w-0 flex-col items-end gap-0.5 text-right leading-tight max-sm:hidden">
+            <span class="shell-user-button__name max-w-56 truncate font-headline text-[0.88rem] font-bold tracking-[-0.01em] text-slate-900">
+              {{ globalService.userDetails?.name || '-' }}
+            </span>
+            <span class="shell-user-button__email max-w-56 truncate font-body text-[0.72rem] font-medium text-slate-500">
+              {{ globalService.userDetails?.email || '-' }}
+            </span>
+          </span>
+
+          <span class="shell-avatar inline-flex h-9 w-9 min-w-9 items-center justify-center overflow-hidden rounded-full bg-[var(--shell-profile-gradient)] text-white max-sm:h-8 max-sm:w-8 max-sm:min-w-8">
+          @if (globalService.userDetails?.imageUrl) {
+            <img
+              class="h-full w-full object-cover"
+              [src]="globalService.userDetails?.imageUrl"
+              alt="Admin profile image"
+            />
+          } @else if (globalService.userDetails?.isSuperAdmin) {
+            <img
+              class="h-full w-full object-cover"
+              src="https://cdn-icons-png.flaticon.com/512/1624/1624453.png"
+              alt="Super admin profile image"
+            />
           } @else {
-            <span class="font-16 text-white" nz-icon nzType="user" nzTheme="outline"></span>
+            <span class="font-headline text-sm font-bold uppercase leading-none tracking-[-0.01em]">
+              {{ globalService.userDetails?.name?.charAt(0) || 'A' }}
+            </span>
           }
-        </div>
+          </span>
+        </a>
       </div>
     </div>
   </nz-header>
-  <nz-layout>
+
+  <nz-layout class="shell-body">
+    <button
+      type="button"
+      class="shell-backdrop"
+      [class.is-open]="!isCollapsed"
+      (click)="isCollapsed = true"
+      aria-label="Close sidebar"
+    ></button>
+
     <nz-sider
-      class="menu-sidebar"
+      class="menu-sidebar shell-sider"
       nzCollapsible
-      nzWidth="256px"
+      nzWidth="288px"
       nzBreakpoint="lg"
       [(nzCollapsed)]="isCollapsed"
       [nzTrigger]="null"
       [style]="isCollapsed ? 'max-width: 0px; width: 0px; min-width:0px;' : ''"
     >
-      <div
-        id="side-info-box"
-        class="admin-diagonal-gradient padding-lg"
-        [style]="isCollapsed ? 'display:none;' : ''"
-      >
-        <h1 class="font-24 font-600 mb-1 text-white">{{ globalService.userDetails?.name?.split(' ')[0] || '-' }}</h1>
-        <p class="font-10 font-300 text-white">Admin ID: {{ globalService.userDetails?.adminId || '-' }}</p>
-        <p class="font-10 font-300 text-white">Role: {{ globalService.userDetails?.role }}</p>
-      </div>
-      <ul
-        nz-menu
-        nzTheme="light"
-        nzMode="inline"
-        [nzInlineCollapsed]="isCollapsed"
-      >
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Home' : ''"
-          nzSelected
-          nzMatchRouter="/admin/home"
-          routerLink="/admin/home"
+      <div class="shell-sider__inner">
+        <div
+          id="side-info-box"
+          class="shell-profile-card"
+          [style]="isCollapsed ? 'display:none;' : ''"
         >
-          <span nz-icon nzType="home"></span>
-          <span>Home</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Resources' : ''"
-          nzSelected
-          nzMatchRouter="/admin/resources"
-          routerLink="/admin/resources"
-        >
-          <span nz-icon nzType="read"></span>
-          <span>Resources</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Tests' : ''"
-          nzSelected
-          nzMatchRouter="/admin/tests"
-          routerLink="/admin/tests"
-        >
-          <span nz-icon nzType="project"></span>
-          <span>Tests</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Batches' : ''"
-          nzSelected
-          nzMatchRouter="/admin/batches"
-          routerLink="/admin/batches"
-        >
-          <span nz-icon nzType="group"></span>
-          <span>Batches</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Students' : ''"
-          nzSelected
-          nzMatchRouter="/admin/students"
-          routerLink="/admin/students"
-        >
-          <span nz-icon nzType="usergroup-add"></span>
-          <span>Students</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Events & Noti\'s' : ''"
-          nzSelected
-          nzMatchRouter="/admin/events-and-notifications"
-          routerLink="/admin/events-and-notifications"
-        >
-          <span nz-icon nzType="bell" nzTheme="outline"></span>
-          <span>Events & Notifications</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Admins' : ''"
-          nzSelected
-          nzMatchRouter="/admin/admins"
-          routerLink="/admin/admins"
-        >
-          <span nz-icon>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 48 48"
-              fill="none"
+          <div class="shell-profile-card__head">
+            <h1 class="shell-profile-card__name">
+              {{ globalService.userDetails?.name?.split(' ')[0] || '-' }}
+            </h1>
+            <p class="shell-profile-card__subtitle">Admin profile</p>
+          </div>
+
+          <dl class="shell-profile-card__facts">
+            <div class="shell-profile-card__fact">
+              <dt>Admin ID</dt>
+              <dd>{{ globalService.userDetails?.adminId || '-' }}</dd>
+            </div>
+            <div class="shell-profile-card__fact">
+              <dt>Role</dt>
+              <dd>{{ globalService.userDetails?.role || '-' }}</dd>
+            </div>
+            <div class="shell-profile-card__fact">
+              <dt>Level</dt>
+              <dd>{{ globalService.userDetails?.isSuperAdmin ? 'Super Admin' : 'Admin' }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="shell-menu-block">
+          <p *ngIf="!isCollapsed" class="shell-menu-label">Navigation</p>
+
+          <ul
+            nz-menu
+            nzTheme="light"
+            nzMode="inline"
+            class="shell-menu"
+            [nzInlineCollapsed]="isCollapsed"
+          >
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Home' : ''"
+              nzSelected
+              nzMatchRouter="/admin/home"
+              routerLink="/admin/home"
             >
-              <path
-                d="M32 42V38C32 35.8783 31.1571 33.8434 29.6569 32.3431C28.1566 30.8429 26.1217 30 24 30H10C7.87827 30 5.84344 30.8429 4.34315 32.3431C2.84285 33.8434 2 35.8783 2 38V42M34 22L38 26L46 18M25 14C25 18.4183 21.4183 22 17 22C12.5817 22 9 18.4183 9 14C9 9.58172 12.5817 6 17 6C21.4183 6 25 9.58172 25 14Z"
-                stroke="#1E1E1E"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          <span>Admins</span>
-        </li>
-      </ul>
-      <div *ngIf="!isCollapsed" class="d-flex justify-content-center px-4 mt-4">
-        <button
-          nz-button
-          class="btn-a-secondary w-100"
-          (click)="isLogoutModal = true"
-        >
-          Logout
-        </button>
+              <span nz-icon nzType="home"></span>
+              <span>Home</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Resources' : ''"
+              nzSelected
+              nzMatchRouter="/admin/resources"
+              routerLink="/admin/resources"
+            >
+              <span nz-icon nzType="read"></span>
+              <span>Resources</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Tests' : ''"
+              nzSelected
+              nzMatchRouter="/admin/tests"
+              routerLink="/admin/tests"
+            >
+              <span nz-icon nzType="project"></span>
+              <span>Tests</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Batches' : ''"
+              nzSelected
+              nzMatchRouter="/admin/batches"
+              routerLink="/admin/batches"
+            >
+              <span nz-icon nzType="group"></span>
+              <span>Batches</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Students' : ''"
+              nzSelected
+              nzMatchRouter="/admin/students"
+              routerLink="/admin/students"
+            >
+              <span nz-icon nzType="usergroup-add"></span>
+              <span>Students</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Events & Noti\'s' : ''"
+              nzSelected
+              nzMatchRouter="/admin/events-and-notifications"
+              routerLink="/admin/events-and-notifications"
+            >
+              <span nz-icon nzType="bell" nzTheme="outline"></span>
+              <span>Events & Notifications</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Admins' : ''"
+              nzSelected
+              nzMatchRouter="/admin/admins"
+              routerLink="/admin/admins"
+            >
+              <span nz-icon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 48 48"
+                  fill="none"
+                >
+                  <path
+                    d="M32 42V38C32 35.8783 31.1571 33.8434 29.6569 32.3431C28.1566 30.8429 26.1217 30 24 30H10C7.87827 30 5.84344 30.8429 4.34315 32.3431C2.84285 33.8434 2 35.8783 2 38V42M34 22L38 26L46 18M25 14C25 18.4183 21.4183 22 17 22C12.5817 22 9 18.4183 9 14C9 9.58172 12.5817 6 17 6C21.4183 6 25 9.58172 25 14Z"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <span>Admins</span>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="!isCollapsed" class="shell-logout">
+          <button
+            nz-button
+            class="btn-a-secondary shell-logout-btn"
+            (click)="isLogoutModal = true"
+          >
+            <span nz-icon nzType="logout" nzTheme="outline"></span>
+            Logout
+          </button>
+        </div>
       </div>
     </nz-sider>
 
-    <nz-content>
-      <ngx-simplebar
-        [options]="{}"
-        style="overflow-y: auto; max-height: calc(100vh - 64px); padding: 24px"
-      >
-        <section class="ant-row ant-row-center">
-          <section
-            style="position: relative"
-            class="ant-col-xs-24 ant-col-xl-22 ant-col-xxl-20"
-          >
-            <div class="route-stage route-stage--inner" [@routeAnimations]="getRouteState(outlet)">
-              <router-outlet #outlet="outlet"></router-outlet>
-            </div>
+    <nz-content class="shell-content">
+      <ngx-simplebar class="shell-scroll" [options]="{}">
+        <section class="shell-canvas">
+          <section class="shell-content-frame">
+            <router-outlet></router-outlet>
           </section>
         </section>
       </ngx-simplebar>

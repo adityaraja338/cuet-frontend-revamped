@@ -1366,35 +1366,43 @@ nz-switch:has(.ant-switch-small) {
 }
 
 /* ===========================================================================
-   Router outlet transition stage
+   Router View Transitions
    --------------------------------------------------------------------------
-   `.route-stage` hosts the Angular router-outlet with the @routeAnimations
-   trigger. During a transition both the outgoing and incoming pages exist
-   simultaneously (absolute-positioned), so we need a stable positioning
-   context and horizontal overflow clipping to hide the slide-off area.
+   Angular Router's native View Transitions integration is enabled in
+   `RouterModule.forRoot(..., { enableViewTransitions: true })`.
+   Per Angular's docs, transition pseudo-elements must be styled globally.
    =========================================================================== */
-.route-stage {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
+@keyframes route-view-old {
+  to {
+    opacity: 0;
+    // transform: translate3d(0, 0px, 0);
+  }
 }
 
-.route-stage--inner {
-  min-height: 0;
+@keyframes route-view-new {
+  from {
+    opacity: 0.7;
+    // transform: translate3d(0, 4px, 0);
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 250ms;
+  // animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: -ua-view-transition-fade-out, route-view-old;
+}
+
+::view-transition-new(root) {
+  animation-name: -ua-view-transition-fade-in, route-view-new;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .route-stage,
-  .route-stage--inner {
-    /* Honour user motion preference — kills the slide in-between. */
-    transition: none !important;
-  }
-
-  .route-stage > *,
-  .route-stage--inner > * {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
     animation: none !important;
-    transition: none !important;
-    transform: none !important;
   }
 }

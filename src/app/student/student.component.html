@@ -1,167 +1,207 @@
-<nz-layout class="app-layout student">
-  <nz-header>
-    <div class="app-header row mx-0 align-items-center justify-content-between">
-      <div class="d-flex align-items-center">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <span class="trigger" nz-icon>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
-              fill="none"
-            >
-              <path
-                d="M3.75 15H21.25M3.75 7.5H26.25M3.75 22.5H26.25"
-                stroke="#101828"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+<nz-layout class="app-layout student student-shell">
+  <nz-header class="shell-header">
+    <div class="shell-header__inner">
+      <div class="shell-header__left">
+        <button
+          type="button"
+          class="shell-trigger"
+          (click)="isCollapsed = !isCollapsed"
+          [attr.aria-label]="isCollapsed ? 'Open navigation menu' : 'Close navigation menu'"
+        >
+          <span nz-icon nzType="menu" nzTheme="outline"></span>
+        </button>
+
+        <a class="shell-brand" routerLink="/student/home" aria-label="Open student home">
+          <span class="shell-brand__mark material-symbols-outlined" aria-hidden="true">hub</span>
+          <span class="shell-brand__copy">
+            <span class="shell-brand__name">CUET Corner</span>
+            <span class="shell-brand__sub">Student workspace</span>
           </span>
-        </span>
-        <div class="d-flex flex-column align-items-start">
-          <p class="font-16 font-500">Cuet Corner</p>
-          <p class="font-10 font-400">Welcomes You!</p>
-        </div>
+        </a>
       </div>
-      <div class="user-info d-flex align-items-center">
-        <div class="d-md-flex d-none flex-column align-items-end">
-          <p class="font-12 font-500">{{ globalService.userDetails?.name || '-' }}</p>
-          <p class="font-10 font-400">{{ globalService.userDetails?.email || '-' }}</p>
-        </div>
-        <div class="user-icon-div" [routerLink]="['/', 'student', 'account']">
-          @if(globalService.userDetails?.imageUrl){
-            <img [src]="globalService.userDetails?.imageUrl" alt="">
-          } @else {
-            <span class="font-16 text-white" nz-icon nzType="user" nzTheme="outline"></span>
-          }
-        </div>
+
+      <div class="shell-header__right">
+        <a
+          class="shell-user-button inline-flex min-w-0 max-w-[min(22rem,46vw)] items-center gap-3 rounded-xl px-2 py-1.5 no-underline transition hover:bg-blue-600/5 focus-visible:bg-blue-600/5 max-sm:h-10 max-sm:w-10 max-sm:max-w-10 max-sm:justify-center max-sm:rounded-full max-sm:p-0.5"
+          [routerLink]="['/', 'student', 'account']"
+          aria-label="Open student account"
+        >
+          <span class="shell-user-button__copy flex min-w-0 flex-col items-end gap-0.5 text-right leading-tight max-sm:hidden">
+            <span class="shell-user-button__name max-w-56 truncate font-headline text-[0.88rem] font-bold tracking-[-0.01em] text-slate-900">
+              {{ globalService.userDetails?.name || '-' }}
+            </span>
+            <span class="shell-user-button__email max-w-56 truncate font-body text-[0.72rem] font-medium text-slate-500">
+              {{ globalService.userDetails?.email || '-' }}
+            </span>
+          </span>
+
+          <span class="shell-avatar inline-flex h-9 w-9 min-w-9 items-center justify-center overflow-hidden rounded-full bg-[var(--shell-profile-gradient)] text-white max-sm:h-8 max-sm:w-8 max-sm:min-w-8">
+            @if (globalService.userDetails?.imageUrl) {
+              <img
+                class="h-full w-full object-cover"
+                [src]="globalService.userDetails?.imageUrl"
+                alt="Student profile image"
+              />
+            } @else {
+              <span class="font-headline text-sm font-bold uppercase leading-none tracking-[-0.01em]">
+                {{ globalService.userDetails?.name?.charAt(0) || 'S' }}
+              </span>
+            }
+          </span>
+        </a>
       </div>
     </div>
   </nz-header>
-  <nz-layout>
+
+  <nz-layout class="shell-body">
+    <button
+      type="button"
+      class="shell-backdrop"
+      [class.is-open]="!isCollapsed"
+      (click)="isCollapsed = true"
+      aria-label="Close sidebar"
+    ></button>
+
     <nz-sider
-      class="menu-sidebar"
+      class="menu-sidebar shell-sider"
       nzCollapsible
-      nzWidth="256px"
+      nzWidth="288px"
       nzBreakpoint="lg"
       [(nzCollapsed)]="isCollapsed"
       [nzTrigger]="null"
       [style]="isCollapsed ? 'max-width: 0px; width: 0px; min-width:0px;' : ''"
     >
-      <div
-        id="side-info-box"
-        class="student-diagonal-gradient padding-lg"
-        [style]="isCollapsed ? 'display:none;' : ''"
-      >
-        <h1 class="font-24 font-600 mb-1 text-white">
-          {{ globalService.userDetails?.name?.split(" ")[0] || "-" }}
-        </h1>
-        <p class="font-10 font-300 text-white">
-          Student ID: {{ globalService.userDetails?.id }}
-        </p>
-        <p class="font-10 font-300 text-white">
-          Batch:
-          {{
-            globalService.userDetails?.batchId
-              ? globalService.userDetails?.batchName
-              : "- (Un-enrolled)"
-          }}
-        </p>
-        <p class="font-10 font-300 text-white">
-          Plan: {{ globalService.userDetails?.plan }}
-        </p>
-      </div>
-      <ul
-        nz-menu
-        nzTheme="light"
-        nzMode="inline"
-        [nzInlineCollapsed]="isCollapsed"
-      >
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Home' : ''"
-          nzSelected
-          nzMatchRouter="/student/home"
-          routerLink="/student/home"
+      <div class="shell-sider__inner">
+        <div
+          id="side-info-box"
+          class="shell-profile-card"
+          [style]="isCollapsed ? 'display:none;' : ''"
         >
-          <span nz-icon nzType="home"></span>
-          <span>Home</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Resources' : ''"
-          nzSelected
-          nzMatchRouter="/student/resources"
-          routerLink="/student/resources"
-        >
-          <span nz-icon nzType="read"></span>
-          <span>Resources</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'Tests' : ''"
-          nzSelected
-          nzMatchRouter="/student/tests"
-          routerLink="/student/tests"
-        >
-          <span nz-icon nzType="project"></span>
-          <span>Tests</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'My Performances' : ''"
-          nzSelected
-          nzMatchRouter="/student/performances"
-          routerLink="/student/performances"
-        >
-          <span nz-icon nzType="line-chart"></span>
-          <span>My Performances</span>
-        </li>
-        <li
-          nz-menu-item
-          nz-tooltip
-          nzTooltipPlacement="right"
-          [nzTooltipTitle]="isCollapsed ? 'My Account' : ''"
-          nzSelected
-          nzMatchRouter="/student/account"
-          routerLink="/student/account"
-        >
-          <span nz-icon nzType="user"></span>
-          <span>My Account</span>
-        </li>
-      </ul>
-      <div *ngIf="!isCollapsed" class="d-flex justify-content-center px-4 mt-4">
-        <button
-          nz-button
-          class="btn-secondary w-100"
-          (click)="isLogoutModal = true"
-        >
-          Logout
-        </button>
+          <div class="shell-profile-card__head">
+            <h1 class="shell-profile-card__name">
+              {{ globalService.userDetails?.name?.split(' ')[0] || '-' }}
+            </h1>
+            <p class="shell-profile-card__subtitle">Student profile</p>
+          </div>
+
+          <dl class="shell-profile-card__facts">
+            <div class="shell-profile-card__fact">
+              <dt>Student ID</dt>
+              <dd>{{ globalService.userDetails?.id || '-' }}</dd>
+            </div>
+            <div class="shell-profile-card__fact">
+              <dt>Batch</dt>
+              <dd>
+                {{
+                  globalService.userDetails?.batchId
+                    ? globalService.userDetails?.batchName
+                    : '- (Un-enrolled)'
+                }}
+              </dd>
+            </div>
+            <div class="shell-profile-card__fact">
+              <dt>Plan</dt>
+              <dd>{{ globalService.userDetails?.plan || '-' }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="shell-menu-block">
+          <p *ngIf="!isCollapsed" class="shell-menu-label">Navigation</p>
+
+          <ul
+            nz-menu
+            nzTheme="light"
+            nzMode="inline"
+            class="shell-menu"
+            [nzInlineCollapsed]="isCollapsed"
+          >
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Home' : ''"
+              nzSelected
+              nzMatchRouter="/student/home"
+              routerLink="/student/home"
+            >
+              <span nz-icon nzType="home"></span>
+              <span>Home</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Resources' : ''"
+              nzSelected
+              nzMatchRouter="/student/resources"
+              routerLink="/student/resources"
+            >
+              <span nz-icon nzType="read"></span>
+              <span>Resources</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'Tests' : ''"
+              nzSelected
+              nzMatchRouter="/student/tests"
+              routerLink="/student/tests"
+            >
+              <span nz-icon nzType="project"></span>
+              <span>Tests</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'My Performances' : ''"
+              nzSelected
+              nzMatchRouter="/student/performances"
+              routerLink="/student/performances"
+            >
+              <span nz-icon nzType="line-chart"></span>
+              <span>My Performances</span>
+            </li>
+            <li
+              nz-menu-item
+              class="shell-menu-item"
+              nz-tooltip
+              nzTooltipPlacement="right"
+              [nzTooltipTitle]="isCollapsed ? 'My Account' : ''"
+              nzSelected
+              nzMatchRouter="/student/account"
+              routerLink="/student/account"
+            >
+              <span nz-icon nzType="user"></span>
+              <span>My Account</span>
+            </li>
+          </ul>
+        </div>
+
+        <div *ngIf="!isCollapsed" class="shell-logout">
+          <button
+            nz-button
+            class="btn-secondary shell-logout-btn"
+            (click)="isLogoutModal = true"
+          >
+            <span nz-icon nzType="logout" nzTheme="outline"></span>
+            Logout
+          </button>
+        </div>
       </div>
     </nz-sider>
 
-    <nz-content>
-      <ngx-simplebar
-        [options]="{}"
-        style="overflow-y: auto; max-height: calc(100vh - 64px); padding: 24px"
-      >
-        <section class="ant-row ant-row-center">
-          <section class="ant-col-xs-24 ant-col-xl-22 ant-col-xxl-20">
-            <div class="route-stage route-stage--inner" [@routeAnimations]="getRouteState(outlet)">
-              <router-outlet #outlet="outlet"></router-outlet>
-            </div>
+    <nz-content class="shell-content">
+      <ngx-simplebar class="shell-scroll" [options]="{}">
+        <section class="shell-canvas">
+          <section class="shell-content-frame">
+            <router-outlet></router-outlet>
           </section>
         </section>
       </ngx-simplebar>

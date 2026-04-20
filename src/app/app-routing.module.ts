@@ -10,28 +10,26 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     component: LandingPageComponent,
-    data: { animation: 'Landing' },
   },
-  { path: 'login', component: AuthComponent, data: { animation: 'Login' } },
+  { path: 'login', component: AuthComponent },
   {
     path: 'student',
     loadChildren: () =>
       import('./student/student.module').then((m) => m.StudentModule),
     canActivate: [studentAuthGuard],
-    data: { animation: 'Student' },
   },
   {
     path: 'admin',
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
     canActivate: [adminAuthGuard],
-    data: { animation: 'Admin' },
   },
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
+      enableViewTransitions: true,
       scrollPositionRestoration: 'enabled',
       anchorScrolling: 'enabled',
     }),

@@ -172,7 +172,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (event) {
       event.preventDefault();
     }
-    this.router.navigate(['/'], { state: { back: true } });
+    this.router.navigate(['/']);
   }
 
   changeGoogleAccount(): void {

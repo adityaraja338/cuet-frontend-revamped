@@ -2,10 +2,10 @@
 @use "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-@import url("./assets/scss/font-face.scss");
-@import url("./assets/scss/font-variables.scss");
-// @import url("./assets/scss/layouting.css");
-@import url("./assets/scss/colors.scss");
+@import "./assets/scss/font-face.scss";
+@import "./assets/scss/font-variables.scss";
+// @import "./assets/scss/layouting.css";
+@import "./assets/scss/colors.scss";
 @import "ng-zorro-antd/ng-zorro-antd.min.css";
 
 @theme {
@@ -534,6 +534,130 @@ button.ant-btn.btn-a-secondary {
 
 .ant-collapse-content > .ant-collapse-content-box {
   padding: 0;
+}
+
+// Pagination - Modern Rounded SaaS
+.ant-pagination {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  &-item,
+  &-prev,
+  &-next,
+  &-jump-prev,
+  &-jump-next {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important; // PERFECTLY ROUND
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+    a {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: normal !important;
+      color: #64748b !important;
+      font-family: var(--font-headline), "Manrope", sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none !important;
+    }
+
+    .ant-pagination-item-link {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      line-height: normal !important;
+      background: transparent !important;
+      border: none !important;
+      color: #64748b !important;
+      font-size: 0.95rem;
+      text-decoration: none !important;
+    }
+
+    &:hover:not(.ant-pagination-item-active):not(.ant-pagination-disabled) {
+      background: rgba(241, 245, 249, 0.6) !important; // Very subtle slate-100
+      transform: translateY(-2px);
+      
+      a, .ant-pagination-item-link { 
+        color: #1e293b !important; // slate-800
+        text-decoration: none !important;
+      }
+    }
+  }
+
+  &-item-active {
+    background: var(--primary) !important;
+    // Heavy, soft, spread out glow shadow matching modern SaaS references
+    box-shadow: 0 12px 24px -6px rgba(0, 74, 198, 0.45), 0 4px 10px -2px rgba(0, 74, 198, 0.2) !important;
+
+    a {
+      color: #ffffff !important;
+    }
+
+    &:hover {
+      background: var(--primary-container) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px -6px rgba(0, 74, 198, 0.45), 0 4px 10px -2px rgba(0, 74, 198, 0.2) !important;
+    }
+  }
+  
+  &-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none !important;
+      background: transparent !important;
+    }
+  }
+
+  &-options {
+    margin-left: 1rem !important;
+    display: inline-flex !important;
+
+    .ant-select-selector {
+      border-radius: 12px !important;
+      height: 40px !important;
+      display: flex;
+      align-items: center;
+      background: transparent !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: none !important;
+      transition: all 0.3s ease !important;
+      
+      .ant-select-selection-item {
+        font-family: var(--font-headline), "Manrope", sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #475569 !important;
+      }
+
+      &:hover {
+        border-color: #cbd5e1 !important;
+        background: #f8fafc !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px -4px rgba(0,0,0,0.05) !important;
+      }
+    }
+  }
 }
 
 //Table

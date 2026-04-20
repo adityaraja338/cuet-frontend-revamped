@@ -1,0 +1,32 @@
+@for (item of items; track item) {
+  <div class="skel skel--{{ variant }}">
+    @if (variant === 'subject-row') {
+      <div class="skel__icon"></div>
+      <div class="skel__lines">
+        <div class="skel__line skel__line--title"></div>
+        <div class="skel__line skel__line--meta"></div>
+      </div>
+      <div class="skel__chevron"></div>
+    }
+    @if (variant === 'topic-row') {
+      <div class="skel__dot"></div>
+      <div class="skel__line skel__line--topic"></div>
+      <div class="skel__badge"></div>
+    }
+    @if (variant === 'card') {
+      <div class="skel__card-icon"></div>
+      <div class="skel__lines">
+        <div class="skel__line skel__line--title"></div>
+        <div class="skel__line skel__line--meta"></div>
+      </div>
+    }
+    @if (variant === 'list-row') {
+      <div class="skel__list-icon"></div>
+      <div class="skel__lines">
+        <div class="skel__line skel__line--title"></div>
+        <div class="skel__line skel__line--meta"></div>
+      </div>
+      <div class="skel__badge"></div>
+    }
+  </div>
+}

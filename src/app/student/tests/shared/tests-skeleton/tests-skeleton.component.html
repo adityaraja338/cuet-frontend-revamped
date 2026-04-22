@@ -1,0 +1,33 @@
+@for (item of items; track item) {
+  <div class="tskel tskel--{{ variant }}">
+    @if (variant === 'table-row') {
+      <div class="tskel__cell tskel__cell--index"></div>
+      <div class="tskel__cell tskel__cell--name"></div>
+      <div class="tskel__cell tskel__cell--num"></div>
+      <div class="tskel__cell tskel__cell--pill"></div>
+      <div class="tskel__cell tskel__cell--num"></div>
+      <div class="tskel__cell tskel__cell--action"></div>
+    }
+    @if (variant === 'topic-row') {
+      <div class="tskel__cell tskel__cell--index"></div>
+      <div class="tskel__cell tskel__cell--name"></div>
+      <div class="tskel__cell tskel__cell--chip"></div>
+      <div class="tskel__cell tskel__cell--num"></div>
+      <div class="tskel__cell tskel__cell--pill"></div>
+      <div class="tskel__cell tskel__cell--action"></div>
+    }
+    @if (variant === 'question') {
+      <div class="tskel__lines">
+        <div class="tskel__line tskel__line--meta"></div>
+        <div class="tskel__line tskel__line--q"></div>
+        <div class="tskel__line tskel__line--q2"></div>
+      </div>
+      <div class="tskel__options">
+        <div class="tskel__option"></div>
+        <div class="tskel__option"></div>
+        <div class="tskel__option"></div>
+        <div class="tskel__option"></div>
+      </div>
+    }
+  </div>
+}

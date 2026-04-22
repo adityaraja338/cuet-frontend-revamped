@@ -86,36 +86,6 @@
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Tabs — scoped overrides (3 tabs, auto width)
-// ─────────────────────────────────────────────────────────────────────────────
-
-.tests-tabs.ant-tabs,
-.tests-tabs ::ng-deep .ant-tabs-tab {
-  width: auto !important;
-}
-
-.tests-tabs ::ng-deep .ant-tabs-tab {
-  padding: 0.35rem 1rem 0.75rem !important;
-
-  .ant-tabs-tab-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--tests-text-muted);
-  }
-
-  &.ant-tabs-tab-active .ant-tabs-tab-btn {
-    color: var(--tests-accent) !important;
-  }
-}
-
-.tests-tabs ::ng-deep .ant-tabs-ink-bar {
-  background: var(--tests-accent) !important;
-  height: 3px !important;
-  border-radius: 3px;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // Toolbar (Topic-wise search + filter)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -162,108 +132,6 @@
 // Table shell — card-like container with tonal surfaces, no 1px borders
 // ─────────────────────────────────────────────────────────────────────────────
 
-.tests-table-shell {
-  background: var(--tests-surface);
-  border-radius: 1rem;
-  box-shadow: var(--tests-shadow);
-  padding: 0.5rem;
-  overflow: hidden;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Table styling overrides
-// ─────────────────────────────────────────────────────────────────────────────
-
-.tests-table ::ng-deep .ant-table {
-  background: transparent;
-  border-radius: 0.75rem;
-  overflow: hidden;
-}
-
-.tests-table ::ng-deep .ant-table-thead > tr > th {
-  background: var(--tests-surface-muted) !important;
-  color: var(--tests-text-muted) !important;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.85rem 1rem !important;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-
-  &::before {
-    display: none !important;
-  }
-}
-
-.tests-table ::ng-deep .ant-table-tbody > tr > td {
-  padding: 0.9rem 1rem !important;
-  background: var(--tests-surface);
-  transition: background 0.18s ease;
-  font-size: 0.88rem;
-  color: var(--tests-text);
-  vertical-align: middle;
-}
-
-.tests-table ::ng-deep .ant-table-tbody > tr:nth-child(even) > td {
-  background: var(--tests-surface-muted);
-}
-
-.tests-table ::ng-deep .ant-table-tbody > tr:hover > td {
-  background: color-mix(in oklab, var(--tests-accent) 6%, var(--tests-surface)) !important;
-}
-
-.tests-table ::ng-deep .ant-table-tbody > tr:focus-within > td {
-  background: color-mix(in oklab, var(--tests-accent) 8%, var(--tests-surface)) !important;
-}
-
-// Remove default cell dividers for the tonal, no-line look.
-.tests-table ::ng-deep .ant-table-container {
-  &::before,
-  &::after {
-    display: none !important;
-  }
-}
-
-// ── Row cells ───────────────────────────────────────────────────────────
-
-.tests-row__index {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  color: var(--tests-text-soft);
-  font-size: 0.8rem;
-}
-
-.tests-row__name {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 0;
-}
-
-.tests-row__name-text {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: var(--tests-text);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-}
-
-.tests-row__mobile-meta {
-  display: none;
-  font-size: 0.72rem;
-  color: var(--tests-text-muted);
-}
-
-.tests-row__num {
-  font-variant-numeric: tabular-nums;
-  font-size: 0.85rem;
-  color: var(--tests-text);
-}
-
 // ── Access pill ─────────────────────────────────────────────────────────
 
 .tests-pill {
@@ -290,7 +158,7 @@
 
 // ── Start button ────────────────────────────────────────────────────────
 
-.tests-row__start.ant-btn {
+.cuet-table-row__start.ant-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -328,93 +196,19 @@
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Empty / error states
-// ─────────────────────────────────────────────────────────────────────────────
-
-.tests-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 3.5rem 1rem;
-  text-align: center;
-  color: var(--tests-text-muted);
-}
-
-.tests-empty__icon {
-  font-size: 2.4rem;
-  color: var(--tests-text-soft);
-  font-variation-settings: 'FILL' 0, 'wght' 300;
-}
-
-.tests-empty__title {
-  font-family: 'Manrope', sans-serif;
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: var(--tests-text);
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-
-.tests-empty__subtitle {
-  font-size: 0.82rem;
-  color: var(--tests-text-muted);
-  max-width: 34ch;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.tests-empty__cta.ant-btn {
-  margin-top: 0.5rem;
-  height: 2.25rem;
-  padding: 0 1.1rem;
-  border-radius: 0.6rem;
-  background: var(--tests-accent);
-  color: #ffffff;
-  border: none;
-  font-weight: 600;
-  box-shadow: 0 6px 16px -8px rgba(0, 74, 198, 0.45);
-  transition: background 0.18s ease;
-
-  &:hover {
-    background: var(--tests-accent-strong);
-  }
-}
-
-.tests-empty--error .tests-empty__icon {
-  color: #ef4444;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // Pagination total label
 // ─────────────────────────────────────────────────────────────────────────────
 
-.tests-total-label {
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--tests-text-muted);
-
-  &--empty {
-    color: var(--tests-text-soft);
-  }
-
-  b {
-    font-weight: 700;
-    color: var(--tests-text);
-  }
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
-// Mobile row-card fallback
+// Mobile row-card fallback (tests layout: index | name+meta | action)
 // ─────────────────────────────────────────────────────────────────────────────
 
 @media (max-width: 640px) {
-  .tests-table ::ng-deep .ant-table-thead {
+  .tests-page nz-table ::ng-deep .ant-table-thead {
     display: none;
   }
 
-  .tests-table ::ng-deep .ant-table-tbody > tr {
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr {
     display: grid !important;
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
@@ -428,13 +222,13 @@
     box-shadow: 0 12px 32px rgba(25, 28, 30, 0.06);
   }
 
-  .tests-table ::ng-deep .ant-table-tbody > tr > td {
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td {
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
   }
 
-  .tests-table ::ng-deep .ant-table-tbody > tr > td:nth-child(1) {
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td:nth-child(1) {
     grid-area: idx;
     align-self: center;
     width: 1.75rem;
@@ -449,30 +243,30 @@
     font-size: 0.75rem;
   }
 
-  .tests-table ::ng-deep .ant-table-tbody > tr > td:nth-child(2) {
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td:nth-child(2) {
     grid-area: name;
     text-align: left !important;
   }
 
-  .tests-table ::ng-deep .ant-table-tbody > tr > td:nth-child(3),
-  .tests-table ::ng-deep .ant-table-tbody > tr > td:nth-child(4),
-  .tests-table ::ng-deep .ant-table-tbody > tr > td:nth-child(5) {
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td:nth-child(3),
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td:nth-child(4),
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td:nth-child(5) {
     display: none;
   }
 
-  .tests-table ::ng-deep .ant-table-tbody > tr > td:nth-child(6) {
+  .tests-page nz-table ::ng-deep .ant-table-tbody > tr > td:nth-child(6) {
     grid-area: action;
     align-self: center;
     text-align: right !important;
   }
 
-  .tests-row__mobile-meta {
+  .tests-page .cuet-table-row__mobile-meta {
     display: inline-flex;
     grid-area: meta;
   }
 
-  .tests-table ::ng-deep .ant-table-container::before,
-  .tests-table ::ng-deep .ant-table-container::after {
+  .tests-page nz-table ::ng-deep .ant-table-container::before,
+  .tests-page nz-table ::ng-deep .ant-table-container::after {
     display: none !important;
   }
 }

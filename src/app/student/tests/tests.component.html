@@ -13,97 +13,96 @@
 
   <!-- ───────────────────────────  Tabs  ─────────────────────────── -->
   <nz-tabs
-    class="tests-tabs"
     [(nzSelectedIndex)]="currentTabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
     <!-- ────────────  Recorded Tests  ──────────── -->
     <nz-tab nzTitle="Recorded Tests">
       <ng-template nz-tab>
-        <div class="tests-table-shell">
+        <div class="cuet-table-shell">
           @if (isRecordedLoading) {
             <app-tests-skeleton variant="table-row" [count]="5"></app-tests-skeleton>
           } @else if (isRecordedError) {
-            <div class="tests-empty tests-empty--error">
-              <span class="tests-empty__icon material-symbols-outlined">error</span>
-              <p class="tests-empty__title">Couldn't load recorded tests</p>
-              <p class="tests-empty__subtitle">
+            <div class="cuet-table-empty cuet-table-empty--error">
+              <span class="cuet-table-empty__icon material-symbols-outlined">error</span>
+              <p class="cuet-table-empty__title">Couldn't load recorded tests</p>
+              <p class="cuet-table-empty__subtitle">
                 Please check your connection and try again.
               </p>
               <button
                 nz-button
-                class="tests-empty__cta"
+                class="cuet-table-empty__cta"
                 (click)="getRecordedAndMockTests()"
               >
                 Retry
               </button>
             </div>
           } @else if (isRecordedEmpty) {
-            <div class="tests-empty">
-              <span class="tests-empty__icon material-symbols-outlined">play_circle</span>
-              <p class="tests-empty__title">No recorded tests yet</p>
-              <p class="tests-empty__subtitle">
+            <div class="cuet-table-empty">
+              <span class="cuet-table-empty__icon material-symbols-outlined">smart_display</span>
+              <p class="cuet-table-empty__title">No recorded tests yet</p>
+              <p class="cuet-table-empty__subtitle">
                 Recorded tests will appear here once they're published.
               </p>
             </div>
           } @else {
             <nz-table
-              class="tests-table"
               [nzData]="recordedTests"
               [nzShowPagination]="false"
-              [nzScroll]="{ x: '720px' }"
+              [nzScroll]="{ x: 'auto' }"
             >
               <thead>
                 <tr>
-                  <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-                  <th [nzWidth]="'220px'">Name</th>
-                  <th class="text-center" [nzWidth]="'96px'">Questions</th>
-                  <th class="text-center" [nzWidth]="'96px'">Access</th>
-                  <th class="text-center" [nzWidth]="'120px'">Duration</th>
-                  <th class="text-center" [nzWidth]="'120px'"></th>
+                  <th class="text-center text-nowrap">Sl. No.</th>
+                  <th class="text-nowrap">Name</th>
+                  <th class="text-center text-nowrap">Questions</th>
+                  <th class="text-center text-nowrap">Access</th>
+                  <th class="text-center text-nowrap">Duration</th>
+                  <th class="text-center text-nowrap"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  *ngFor="let test of recordedTests; let i = index"
-                  class="tests-row"
-                >
-                  <td class="text-center tests-row__index">{{ i + 1 }}</td>
-                  <td class="tests-row__name">
-                    <span class="tests-row__name-text">{{ test?.name }}</span>
-                    <span class="tests-row__mobile-meta">
-                      {{ test?.totalQuestions }} Qs ·
-                      {{ Math.floor(test?.duration / 60) }}h
-                      {{ test?.duration % 60 }}m
-                    </span>
-                  </td>
-                  <td class="text-center tests-row__num">
-                    {{ test?.totalQuestions }}
-                  </td>
-                  <td class="text-center">
-                    <span
-                      class="tests-pill"
-                      [class.tests-pill--free]="test?.isFree"
-                      [class.tests-pill--paid]="!test?.isFree"
-                    >
-                      {{ test?.isFree ? "Free" : "Paid" }}
-                    </span>
-                  </td>
-                  <td class="text-center tests-row__num">
-                    {{ Math.floor(test?.duration / 60) }} hr
-                    {{ test?.duration % 60 }} min
-                  </td>
-                  <td class="text-center">
-                    <button
-                      nz-button
-                      class="tests-row__start"
-                      (click)="onClickStartTest(test, 'recorded')"
-                    >
-                      Start
-                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-                    </button>
-                  </td>
-                </tr>
+                @for (test of recordedTests; track test.id; let i = $index) {
+                  <tr
+                    class="cuet-table-row"
+                  >
+                    <td class="text-center cuet-table-row__index text-nowrap">{{ i + 1 }}</td>
+                    <td class="cuet-table-row__name text-nowrap">
+                      <span class="cuet-table-row__name-text">{{ test?.name }}</span>
+                      <span class="cuet-table-row__mobile-meta">
+                        {{ test?.totalQuestions }} Qs ·
+                        {{ Math.floor(test?.duration / 60) }}h
+                        {{ test?.duration % 60 }}m
+                      </span>
+                    </td>
+                    <td class="text-center cuet-table-row__num">
+                      {{ test?.totalQuestions }}
+                    </td>
+                    <td class="text-center">
+                      <span
+                        class="tests-pill"
+                        [class.tests-pill--free]="test?.isFree"
+                        [class.tests-pill--paid]="!test?.isFree"
+                      >
+                        {{ test?.isFree ? "Free" : "Paid" }}
+                      </span>
+                    </td>
+                    <td class="text-center cuet-table-row__num text-nowrap">
+                      {{ Math.floor(test?.duration / 60) }} hr
+                      {{ test?.duration % 60 }} min
+                    </td>
+                    <td class="text-center">
+                      <button
+                        nz-button
+                        class="cuet-table-row__start"
+                        (click)="onClickStartTest(test, 'recorded')"
+                      >
+                        Start
+                        <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                      </button>
+                    </td>
+                  </tr>
+                }
               </tbody>
             </nz-table>
           }
@@ -114,64 +113,63 @@
     <!-- ────────────  Mock Tests  ──────────── -->
     <nz-tab nzTitle="Mock Tests">
       <ng-template nz-tab>
-        <div class="tests-table-shell">
+        <div class="cuet-table-shell">
           @if (isMockLoading) {
             <app-tests-skeleton variant="table-row" [count]="5"></app-tests-skeleton>
           } @else if (isMockError) {
-            <div class="tests-empty tests-empty--error">
-              <span class="tests-empty__icon material-symbols-outlined">error</span>
-              <p class="tests-empty__title">Couldn't load mock tests</p>
-              <p class="tests-empty__subtitle">
+            <div class="cuet-table-empty cuet-table-empty--error">
+              <span class="cuet-table-empty__icon material-symbols-outlined">error</span>
+              <p class="cuet-table-empty__title">Couldn't load mock tests</p>
+              <p class="cuet-table-empty__subtitle">
                 Please check your connection and try again.
               </p>
               <button
                 nz-button
-                class="tests-empty__cta"
+                class="cuet-table-empty__cta"
                 (click)="getRecordedAndMockTests()"
               >
                 Retry
               </button>
             </div>
           } @else if (isMockEmpty) {
-            <div class="tests-empty">
-              <span class="tests-empty__icon material-symbols-outlined">quiz</span>
-              <p class="tests-empty__title">No mock tests yet</p>
-              <p class="tests-empty__subtitle">
+            <div class="cuet-table-empty">
+              <span class="cuet-table-empty__icon material-symbols-outlined">assignment</span>
+              <p class="cuet-table-empty__title">No mock tests yet</p>
+              <p class="cuet-table-empty__subtitle">
                 Mock tests will appear here once they're published.
               </p>
             </div>
           } @else {
             <nz-table
-              class="tests-table"
               [nzData]="mockTests"
               [nzShowPagination]="false"
-              [nzScroll]="{ x: '720px' }"
+              [nzScroll]="{ x: 'auto' }"
             >
               <thead>
                 <tr>
-                  <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-                  <th [nzWidth]="'220px'">Name</th>
-                  <th class="text-center" [nzWidth]="'96px'">Questions</th>
-                  <th class="text-center" [nzWidth]="'96px'">Access</th>
-                  <th class="text-center" [nzWidth]="'120px'">Duration</th>
-                  <th class="text-center" [nzWidth]="'120px'"></th>
+                  <th class="text-center text-nowrap">Sl. No.</th>
+                  <th>Name</th>
+                  <th class="text-center text-nowrap">Questions</th>
+                  <th class="text-center text-nowrap">Access</th>
+                  <th class="text-center text-nowrap">Duration</th>
+                  <th class="text-center text-nowrap"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   *ngFor="let test of mockTests; let i = index"
-                  class="tests-row"
+                  class="cuet-table-row"
                 >
-                  <td class="text-center tests-row__index">{{ i + 1 }}</td>
-                  <td class="tests-row__name">
-                    <span class="tests-row__name-text">{{ test?.name }}</span>
-                    <span class="tests-row__mobile-meta">
+                  <td class="text-center cuet-table-row__index">{{ i + 1 }}</td>
+                  <td class="cuet-table-row__name text-nowrap">
+                    <span class="cuet-table-row__name-text">{{ test?.name }}</span>
+                    <span class="cuet-table-row__mobile-meta">
                       {{ test?.totalQuestions }} Qs ·
                       {{ Math.floor(test?.duration / 60) }}h
                       {{ test?.duration % 60 }}m
                     </span>
                   </td>
-                  <td class="text-center tests-row__num">
+                  <td class="text-center cuet-table-row__num">
                     {{ test?.totalQuestions }}
                   </td>
                   <td class="text-center">
@@ -183,14 +181,14 @@
                       {{ test?.isFree ? "Free" : "Paid" }}
                     </span>
                   </td>
-                  <td class="text-center tests-row__num">
+                  <td class="text-center cuet-table-row__num text-nowrap">
                     {{ Math.floor(test?.duration / 60) }} hr
                     {{ test?.duration % 60 }} min
                   </td>
                   <td class="text-center">
                     <button
                       nz-button
-                      class="tests-row__start"
+                      class="cuet-table-row__start"
                       (click)="onClickStartTest(test, 'mock')"
                     >
                       Start
@@ -256,35 +254,34 @@
           </nz-select>
         </div>
 
-        <div class="tests-table-shell">
+        <div class="cuet-table-shell">
           @if (isTopicLoading) {
             <app-tests-skeleton variant="topic-row" [count]="5"></app-tests-skeleton>
           } @else if (isTopicError) {
-            <div class="tests-empty tests-empty--error">
-              <span class="tests-empty__icon material-symbols-outlined">error</span>
-              <p class="tests-empty__title">Couldn't load topic tests</p>
-              <p class="tests-empty__subtitle">
+            <div class="cuet-table-empty cuet-table-empty--error">
+              <span class="cuet-table-empty__icon material-symbols-outlined">error</span>
+              <p class="cuet-table-empty__title">Couldn't load topic tests</p>
+              <p class="cuet-table-empty__subtitle">
                 Please check your connection and try again.
               </p>
               <button
                 nz-button
-                class="tests-empty__cta"
+                class="cuet-table-empty__cta"
                 (click)="getTopicTests()"
               >
                 Retry
               </button>
             </div>
           } @else if (isTopicEmpty) {
-            <div class="tests-empty">
-              <span class="tests-empty__icon material-symbols-outlined">filter_list_off</span>
-              <p class="tests-empty__title">No topic tests found</p>
-              <p class="tests-empty__subtitle">
+            <div class="cuet-table-empty">
+              <span class="cuet-table-empty__icon material-symbols-outlined">manage_search</span>
+              <p class="cuet-table-empty__title">No topic tests found</p>
+              <p class="cuet-table-empty__subtitle">
                 Try adjusting your search or topic filter.
               </p>
             </div>
           } @else {
             <nz-table
-              class="tests-table"
               [nzData]="topicTests"
               [nzShowPagination]="true"
               [nzFrontPagination]="false"
@@ -295,33 +292,33 @@
               [nzShowTotal]="printTopicTotalCount"
               (nzPageIndexChange)="this.topicIndex = $event; this.getTopicTests()"
               (nzPageSizeChange)="this.topicLimit = $event; this.getTopicTests()"
-              [nzScroll]="{ x: '720px' }"
+              [nzScroll]="{ x: 'auto' }"
             >
               <thead>
                 <tr>
-                  <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-                  <th [nzWidth]="'220px'">Name</th>
-                  <th class="text-center" [nzWidth]="'96px'">Questions</th>
-                  <th class="text-center" [nzWidth]="'96px'">Access</th>
-                  <th class="text-center" [nzWidth]="'120px'">Duration</th>
-                  <th class="text-center" [nzWidth]="'120px'"></th>
+                  <th class="text-center text-nowrap">Sl. No.</th>
+                  <th class="text-nowrap">Name</th>
+                  <th class="text-center text-nowrap">Questions</th>
+                  <th class="text-center text-nowrap">Access</th>
+                  <th class="text-center text-nowrap">Duration</th>
+                  <th class="text-center text-nowrap"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   *ngFor="let test of topicTests; let i = index"
-                  class="tests-row"
+                  class="cuet-table-row"
                 >
-                  <td class="text-center tests-row__index">{{ i + 1 }}</td>
-                  <td class="tests-row__name">
-                    <span class="tests-row__name-text">{{ test?.name }}</span>
-                    <span class="tests-row__mobile-meta">
+                  <td class="text-center cuet-table-row__index">{{ i + 1 }}</td>
+                  <td class="cuet-table-row__name text-nowrap">
+                    <span class="cuet-table-row__name-text">{{ test?.name }}</span>
+                    <span class="cuet-table-row__mobile-meta">
                       {{ test?.totalQuestions }} Qs ·
                       {{ Math.floor(test?.duration / 60) }}h
                       {{ test?.duration % 60 }}m
                     </span>
                   </td>
-                  <td class="text-center tests-row__num">
+                  <td class="text-center cuet-table-row__num">
                     {{ test?.totalQuestions }}
                   </td>
                   <td class="text-center">
@@ -333,14 +330,14 @@
                       {{ test?.isFree ? "Free" : "Paid" }}
                     </span>
                   </td>
-                  <td class="text-center tests-row__num">
+                  <td class="text-center cuet-table-row__num text-nowrap">
                     {{ Math.floor(test?.duration / 60) }} hr
                     {{ test?.duration % 60 }} min
                   </td>
                   <td class="text-center">
                     <button
                       nz-button
-                      class="tests-row__start"
+                      class="cuet-table-row__start"
                       (click)="onClickStartTest(test, 'topic')"
                     >
                       Start
@@ -355,11 +352,11 @@
           <ng-template #printTopicTotalCount>
             <div
               *ngIf="topicCount === 0"
-              class="tests-total-label tests-total-label--empty"
+              class="cuet-table-total-label cuet-table-total-label--empty"
             >
               No Results
             </div>
-            <div *ngIf="topicCount !== 0" class="tests-total-label">
+            <div *ngIf="topicCount !== 0" class="cuet-table-total-label">
               <b>{{ topicCount }}</b> Results
             </div>
           </ng-template>
@@ -378,29 +375,33 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="tests-modal__head">
-      <span class="tests-modal__icon tests-modal__icon--warn material-symbols-outlined">lock</span>
-      <h2 class="tests-modal__title">Subscription required</h2>
-    </div>
-    <p class="tests-modal__body">
-      This test is part of a premium plan. Subscribe to unlock full access to the
-      test library.
-    </p>
-    <div class="tests-modal__actions">
-      <button
-        nz-button
-        class="tests-modal__btn tests-modal__btn--ghost"
-        (click)="onModalClose()"
-      >
-        Not now
-      </button>
-      <button
-        nz-button
-        class="tests-modal__btn tests-modal__btn--primary"
-        [routerLink]="['/', 'student', 'account']"
-      >
-        Subscribe
-      </button>
+    <div class="cuet-modal-pad">
+      <div class="tests-modal__head">
+        <span class="tests-modal__icon tests-modal__icon--warn material-symbols-outlined"
+          >lock</span
+        >
+        <h2 class="tests-modal__title">Subscription required</h2>
+      </div>
+      <p class="tests-modal__body">
+        This test is part of a premium plan. Subscribe to unlock full access to the
+        test library.
+      </p>
+      <div class="tests-modal__actions">
+        <button
+          nz-button
+          class="tests-modal__btn tests-modal__btn--ghost"
+          (click)="onModalClose()"
+        >
+          Not now
+        </button>
+        <button
+          nz-button
+          class="tests-modal__btn tests-modal__btn--primary"
+          [routerLink]="['/', 'student', 'account']"
+        >
+          Subscribe
+        </button>
+      </div>
     </div>
   </ng-container>
 </nz-modal>
@@ -414,83 +415,87 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="tests-modal__head">
-      <span class="tests-modal__icon tests-modal__icon--primary material-symbols-outlined">play_arrow</span>
-      <h2 class="tests-modal__title">Start this test?</h2>
-    </div>
-
-    <div class="tests-modal__grid">
-      <div class="tests-modal__field">
-        <p class="tests-modal__label">Time allotted</p>
-        <p class="tests-modal__value">
-          {{ Math.floor(selectedTest?.duration / 60) }} hr
-          {{ selectedTest?.duration % 60 }} min
-        </p>
+    <div class="cuet-modal-pad">
+      <div class="tests-modal__head">
+        <span class="tests-modal__icon tests-modal__icon--primary material-symbols-outlined"
+          >play_arrow</span
+        >
+        <h2 class="tests-modal__title">Start this test?</h2>
       </div>
 
-      @if (selectedTestType !== 'topic') {
+      <div class="tests-modal__grid">
         <div class="tests-modal__field">
-          <p class="tests-modal__label">Subject</p>
-          <p class="tests-modal__value">{{ selectedTest?.subject ?? '-' }}</p>
-        </div>
-      } @else {
-        <div class="tests-modal__field">
-          <p class="tests-modal__label">Topic</p>
-          <p class="tests-modal__value">{{ selectedTest?.name ?? '-' }}</p>
-        </div>
-      }
-
-      <div class="tests-modal__field">
-        <p class="tests-modal__label">Total questions</p>
-        <p class="tests-modal__value">{{ selectedTest?.totalQuestions ?? '-' }}</p>
-      </div>
-
-      <div class="tests-modal__field">
-        <p class="tests-modal__label">Test type</p>
-        <p class="tests-modal__value">{{ (selectedTestType | titlecase) ?? '-' }}</p>
-      </div>
-
-      @if (selectedTestType !== 'topic') {
-        <div class="tests-modal__field tests-modal__field--full">
-          <p class="tests-modal__label">Topics</p>
-          <p class="tests-modal__value tests-modal__value--soft">
-            {{ selectedTest?.topic?.join(', ') }}
+          <p class="tests-modal__label">Time allotted</p>
+          <p class="tests-modal__value">
+            {{ Math.floor(selectedTest?.duration / 60) }} hr
+            {{ selectedTest?.duration % 60 }} min
           </p>
         </div>
-      }
-    </div>
 
-    <div class="tests-modal__notes">
-      <p class="tests-modal__notes-title">Before you begin</p>
-      <ul class="tests-modal__notes-list">
-        <li>You'll have {{ selectedTest?.duration }} minutes to complete the test.</li>
-        <li>No submissions allowed after the timer expires.</li>
-        <li>The test cannot be paused once started.</li>
-      </ul>
-    </div>
+        @if (selectedTestType !== 'topic') {
+          <div class="tests-modal__field">
+            <p class="tests-modal__label">Subject</p>
+            <p class="tests-modal__value">{{ selectedTest?.subject ?? '-' }}</p>
+          </div>
+        } @else {
+          <div class="tests-modal__field">
+            <p class="tests-modal__label">Topic</p>
+            <p class="tests-modal__value">{{ selectedTest?.name ?? '-' }}</p>
+          </div>
+        }
 
-    <div class="tests-modal__actions">
-      <button
-        nz-button
-        class="tests-modal__btn tests-modal__btn--ghost"
-        (click)="onModalClose()"
-      >
-        Cancel
-      </button>
-      <button
-        nz-button
-        class="tests-modal__btn tests-modal__btn--primary"
-        [routerLink]="[
-          '/',
-          'student',
-          'tests',
-          'attempt',
-          selectedTestType,
-          selectedTest?.id
-        ]"
-      >
-        Start test
-      </button>
+        <div class="tests-modal__field">
+          <p class="tests-modal__label">Total questions</p>
+          <p class="tests-modal__value">{{ selectedTest?.totalQuestions ?? '-' }}</p>
+        </div>
+
+        <div class="tests-modal__field">
+          <p class="tests-modal__label">Test type</p>
+          <p class="tests-modal__value">{{ (selectedTestType | titlecase) ?? '-' }}</p>
+        </div>
+
+        @if (selectedTestType !== 'topic') {
+          <div class="tests-modal__field tests-modal__field--full">
+            <p class="tests-modal__label">Topics</p>
+            <p class="tests-modal__value tests-modal__value--soft">
+              {{ selectedTest?.topic?.join(', ') }}
+            </p>
+          </div>
+        }
+      </div>
+
+      <div class="tests-modal__notes">
+        <p class="tests-modal__notes-title">Before you begin</p>
+        <ul class="tests-modal__notes-list">
+          <li>You'll have {{ selectedTest?.duration }} minutes to complete the test.</li>
+          <li>No submissions allowed after the timer expires.</li>
+          <li>The test cannot be paused once started.</li>
+        </ul>
+      </div>
+
+      <div class="tests-modal__actions">
+        <button
+          nz-button
+          class="tests-modal__btn tests-modal__btn--ghost"
+          (click)="onModalClose()"
+        >
+          Cancel
+        </button>
+        <button
+          nz-button
+          class="tests-modal__btn tests-modal__btn--primary"
+          [routerLink]="[
+            '/',
+            'student',
+            'tests',
+            'attempt',
+            selectedTestType,
+            selectedTest?.id
+          ]"
+        >
+          Start test
+        </button>
+      </div>
     </div>
   </ng-container>
 </nz-modal>
@@ -505,36 +510,40 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="tests-modal__head">
-      <span class="tests-modal__icon tests-modal__icon--amber material-symbols-outlined">pending_actions</span>
-      <h2 class="tests-modal__title">You have a pending test</h2>
-    </div>
-    <p class="tests-modal__body">
-      You left a <b>{{ pendingTestDetails?.testType }}</b> test unfinished. Continue
-      where you left off or submit it now to free up a new attempt.
-    </p>
-    <div class="tests-modal__actions">
-      <button
-        nz-button
-        class="tests-modal__btn tests-modal__btn--ghost"
-        (click)="submitPendingTest()"
-      >
-        Submit
-      </button>
-      <button
-        nz-button
-        class="tests-modal__btn tests-modal__btn--primary"
-        [routerLink]="[
-          '/',
-          'student',
-          'tests',
-          'attempt',
-          pendingTestDetails?.testType,
-          pendingTestDetails?.testId
-        ]"
-      >
-        Continue
-      </button>
+    <div class="cuet-modal-pad">
+      <div class="tests-modal__head">
+        <span class="tests-modal__icon tests-modal__icon--amber material-symbols-outlined"
+          >pending_actions</span
+        >
+        <h2 class="tests-modal__title">You have a pending test</h2>
+      </div>
+      <p class="tests-modal__body">
+        You left a <b>{{ pendingTestDetails?.testType }}</b> test unfinished. Continue
+        where you left off or submit it now to free up a new attempt.
+      </p>
+      <div class="tests-modal__actions">
+        <button
+          nz-button
+          class="tests-modal__btn tests-modal__btn--ghost"
+          (click)="submitPendingTest()"
+        >
+          Submit
+        </button>
+        <button
+          nz-button
+          class="tests-modal__btn tests-modal__btn--primary"
+          [routerLink]="[
+            '/',
+            'student',
+            'tests',
+            'attempt',
+            pendingTestDetails?.testType,
+            pendingTestDetails?.testId
+          ]"
+        >
+          Continue
+        </button>
+      </div>
     </div>
   </ng-container>
 </nz-modal>

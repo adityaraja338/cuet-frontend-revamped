@@ -65,14 +65,15 @@ export class ResourcesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getSubjects();
-    this.loadMockVideoLinks();
-    this.loadMockNewspapers();
-    this.loadMockPYQs();
+    this.getVideoLinks();
+    this.getNewspapers();
+    this.getPYQs();
 
     this.searchNewspaperSubject
       .pipe(debounceTime(this.debounceTimeMs), takeUntil(this.destroy$))
       .subscribe((value) => {
         this.searchNewspaper = value;
+        this.newspaperPageIndex = 1;
         this.getNewspapers();
       });
 
@@ -80,6 +81,7 @@ export class ResourcesComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(this.debounceTimeMs), takeUntil(this.destroy$))
       .subscribe((value) => {
         this.searchVideo = value;
+        this.videosPageIndex = 1;
         this.getVideoLinks();
       });
   }
@@ -223,270 +225,78 @@ export class ResourcesComponent implements OnInit, OnDestroy {
 
   // ── Videos ────────────────────────────────────────────────────────────────
 
-  private mockVideoData = [
-    {
-      id: 1,
-      name: 'Introduction to Physics',
-      url: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
-      length: 3600,
-      subject: 'Physics',
-      isFree: true,
-    },
-    {
-      id: 2,
-      name: 'Chemistry Basics - Atomic Structure',
-      url: 'https://youtube.com/watch?v=jNQXAC9IVRw',
-      length: 4200,
-      subject: 'Chemistry',
-      isFree: true,
-    },
-    {
-      id: 3,
-      name: 'Advanced Organic Chemistry',
-      url: null,
-      length: 5400,
-      subject: 'Chemistry',
-      isFree: false,
-    },
-    {
-      id: 4,
-      name: 'Biology: Cell Structure and Function',
-      url: 'https://youtube.com/watch?v=mQxP-qAWxOI',
-      length: 3800,
-      subject: 'Biology',
-      isFree: true,
-    },
-    {
-      id: 5,
-      name: 'Mathematics: Calculus Fundamentals',
-      url: null,
-      length: 4500,
-      subject: 'Mathematics',
-      isFree: false,
-    },
-    {
-      id: 6,
-      name: 'English Literature: Shakespeare',
-      url: 'https://youtube.com/watch?v=9bZkp7q19f0',
-      length: 2800,
-      subject: 'English',
-      isFree: true,
-    },
-    {
-      id: 7,
-      name: 'History of India: Medieval Period',
-      url: 'https://youtube.com/watch?v=RILEVcWXMF4',
-      length: 3600,
-      subject: 'History',
-      isFree: false,
-    },
-    {
-      id: 8,
-      name: 'Geography: World Map and Capitals',
-      url: 'https://youtube.com/watch?v=VrDEy_6Zhec',
-      length: 2400,
-      subject: 'Geography',
-      isFree: true,
-    },
-    {
-      id: 9,
-      name: 'Economics: Microeconomics Basics',
-      url: 'https://youtube.com/watch?v=lIB0aGosFvU',
-      length: 3200,
-      subject: 'Economics',
-      isFree: true,
-    },
-    {
-      id: 10,
-      name: 'Political Science: Constitutional Law',
-      url: null,
-      length: 4800,
-      subject: 'Political Science',
-      isFree: false,
-    },
-  ];
-
-  private loadMockVideoLinks(): void {
-    setTimeout(() => {
-      this.videosState = {
-        status: 'loaded',
-        data: {
-          items: this.mockVideoData.slice(0, this.videosPageSize),
-          total: this.mockVideoData.length,
-        },
-      };
-    }, 500);
-  }
-
-  getVideoLinks(event?: any): void {
-    if (event) {
-      this.videosPageIndex = event.pageIndex ?? this.videosPageIndex;
-      this.videosPageSize = event.pageSize ?? this.videosPageSize;
+  getVideoLinks(event?: { pageIndex?: number; pageSize?: number }): void {
+    if (event?.pageIndex != null) {
+      this.videosPageIndex = event.pageIndex;
+    }
+    if (event?.pageSize != null) {
+      this.videosPageSize = event.pageSize;
     }
 
-    const params: any = { page: this.videosPageIndex, limit: this.videosPageSize };
-    if (this.searchVideo) params['search'] = this.searchVideo;
+    const params: Record<string, string | number> = {
+      page: this.videosPageIndex,
+      limit: this.videosPageSize,
+    };
+    if (this.searchVideo) {
+      params['search'] = this.searchVideo;
+    }
 
     this.videosState = { status: 'loading' };
-    setTimeout(() => {
-      let filtered = this.mockVideoData;
-      if (this.searchVideo) {
-        const term = this.searchVideo.toLowerCase();
-        filtered = filtered.filter(v =>
-          v.name.toLowerCase().includes(term) ||
-          v.subject?.toLowerCase().includes(term)
-        );
-      }
-
-      const start = (this.videosPageIndex - 1) * this.videosPageSize;
-      const end = start + this.videosPageSize;
-      this.videosState = {
-        status: 'loaded',
-        data: {
-          items: filtered.slice(start, end),
-          total: filtered.length,
-        },
-      };
-    }, 300);
+    this.http.getVideoLinks(params).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (res: any) => {
+        const items = res?.data?.videos ?? res?.data?.videoLinks ?? [];
+        const total = Number(res?.data?.total ?? 0);
+        this.videosState = { status: 'loaded', data: { items, total } };
+      },
+      error: (error: any) => {
+        this.videosState = { status: 'loaded', data: { items: [], total: 0 } };
+        this.message?.error(error?.error?.message ?? 'Failed to load videos');
+      },
+    });
   }
 
   onSearchVideoLinks(value: string): void {
     this.searchVideoSubject.next(value);
   }
 
-  onViewVideo(id: number): void {
-    console.log('Video viewed:', id);
+  onViewVideo(_id: number): void {
+    // Reserved for analytics / future deep links
   }
 
   // ── Newspapers ────────────────────────────────────────────────────────────
 
-  private mockNewspaperData = [
-    {
-      id: 1,
-      name: 'The Times of India',
-      url: 'https://timesofindia.indiatimes.com',
-      date: new Date(2026, 3, 20),
-      isFree: true,
-    },
-    {
-      id: 2,
-      name: 'The Hindu',
-      url: 'https://thehindu.com',
-      date: new Date(2026, 3, 19),
-      isFree: true,
-    },
-    {
-      id: 3,
-      name: 'India Today',
-      url: null,
-      date: new Date(2026, 3, 18),
-      isFree: false,
-    },
-    {
-      id: 4,
-      name: 'The Indian Express',
-      url: 'https://indianexpress.com',
-      date: new Date(2026, 3, 17),
-      isFree: true,
-    },
-    {
-      id: 5,
-      name: 'Hindustan Times',
-      url: null,
-      date: new Date(2026, 3, 16),
-      isFree: false,
-    },
-    {
-      id: 6,
-      name: 'Deccan Chronicle',
-      url: 'https://deccanchronicle.com',
-      date: new Date(2026, 3, 15),
-      isFree: true,
-    },
-    {
-      id: 7,
-      name: 'The Telegraph',
-      url: 'https://telegraphindia.com',
-      date: new Date(2026, 3, 14),
-      isFree: true,
-    },
-    {
-      id: 8,
-      name: 'Dainik Jagran',
-      url: null,
-      date: new Date(2026, 3, 13),
-      isFree: false,
-    },
-    {
-      id: 9,
-      name: 'DNA India',
-      url: 'https://dnaindia.com',
-      date: new Date(2026, 3, 12),
-      isFree: true,
-    },
-    {
-      id: 10,
-      name: 'The Tribune',
-      url: 'https://tribuneindia.com',
-      date: new Date(2026, 3, 11),
-      isFree: true,
-    },
-  ];
-
-  private loadMockNewspapers(): void {
-    setTimeout(() => {
-      this.newspapersState = {
-        status: 'loaded',
-        data: {
-          items: this.mockNewspaperData.slice(0, this.newspaperPageSize),
-          total: this.mockNewspaperData.length,
-        },
-      };
-    }, 500);
-  }
-
-  getNewspapers(event?: any): void {
-    if (event) {
-      this.newspaperPageIndex = event.pageIndex ?? this.newspaperPageIndex;
-      this.newspaperPageSize = event.pageSize ?? this.newspaperPageSize;
+  getNewspapers(event?: { pageIndex?: number; pageSize?: number }): void {
+    if (event?.pageIndex != null) {
+      this.newspaperPageIndex = event.pageIndex;
+    }
+    if (event?.pageSize != null) {
+      this.newspaperPageSize = event.pageSize;
     }
 
-    const params: any = { page: this.newspaperPageIndex, limit: this.newspaperPageSize };
-    if (this.searchNewspaper) params['search'] = this.searchNewspaper;
-
+    const params: Record<string, string | number> = {
+      page: this.newspaperPageIndex,
+      limit: this.newspaperPageSize,
+    };
+    if (this.searchNewspaper) {
+      params['search'] = this.searchNewspaper;
+    }
     if (this.searchNewspaperDate) {
-      const d = this.searchNewspaperDate;
-      params['date'] = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const d = this.searchNewspaperDate as Date;
+      params['date'] = d instanceof Date ? d.toISOString() : String(this.searchNewspaperDate);
     }
 
     this.newspapersState = { status: 'loading' };
-    setTimeout(() => {
-      let filtered = this.mockNewspaperData;
-
-      if (this.searchNewspaper) {
-        const term = this.searchNewspaper.toLowerCase();
-        filtered = filtered.filter(n => n.name.toLowerCase().includes(term));
-      }
-
-      if (this.searchNewspaperDate) {
-        const d = this.searchNewspaperDate;
-        const filterDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-        filtered = filtered.filter(n => {
-          const nDate = new Date(n.date.getFullYear(), n.date.getMonth(), n.date.getDate());
-          return nDate.getTime() === filterDate.getTime();
-        });
-      }
-
-      const start = (this.newspaperPageIndex - 1) * this.newspaperPageSize;
-      const end = start + this.newspaperPageSize;
-      this.newspapersState = {
-        status: 'loaded',
-        data: {
-          items: filtered.slice(start, end),
-          total: filtered.length,
-        },
-      };
-    }, 300);
+    this.http.getNewspapers(params).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (res: any) => {
+        const items = res?.data?.newspapers ?? [];
+        const total = Number(res?.data?.total ?? 0);
+        this.newspapersState = { status: 'loaded', data: { items, total } };
+      },
+      error: (error: any) => {
+        this.newspapersState = { status: 'loaded', data: { items: [], total: 0 } };
+        this.message?.error(error?.error?.message ?? 'Failed to load newspapers');
+      },
+    });
   }
 
   onSearchNewspaper(value: string): void {
@@ -495,70 +305,19 @@ export class ResourcesComponent implements OnInit, OnDestroy {
 
   // ── PYQs ─────────────────────────────────────────────────────────────────
 
-  private mockPYQsData = [
-    {
-      id: 1,
-      name: 'CUET 2024 - Physics (Session 1)',
-      url: 'https://example.com/pyq/cuet-2024-physics-1.pdf',
-    },
-    {
-      id: 2,
-      name: 'CUET 2024 - Chemistry (Session 1)',
-      url: 'https://example.com/pyq/cuet-2024-chemistry-1.pdf',
-    },
-    {
-      id: 3,
-      name: 'CUET 2024 - Biology (Session 1)',
-      url: null,
-    },
-    {
-      id: 4,
-      name: 'CUET 2024 - Mathematics (Session 1)',
-      url: 'https://example.com/pyq/cuet-2024-maths-1.pdf',
-    },
-    {
-      id: 5,
-      name: 'CUET 2024 - English (Session 1)',
-      url: null,
-    },
-    {
-      id: 6,
-      name: 'CUET 2023 - Physics (Full Paper)',
-      url: 'https://example.com/pyq/cuet-2023-physics.pdf',
-    },
-    {
-      id: 7,
-      name: 'CUET 2023 - Chemistry (Full Paper)',
-      url: 'https://example.com/pyq/cuet-2023-chemistry.pdf',
-    },
-    {
-      id: 8,
-      name: 'CUET 2023 - Biology (Full Paper)',
-      url: 'https://example.com/pyq/cuet-2023-biology.pdf',
-    },
-    {
-      id: 9,
-      name: 'CUET 2023 - Mathematics (Full Paper)',
-      url: null,
-    },
-    {
-      id: 10,
-      name: 'CUET 2022 - General Test',
-      url: 'https://example.com/pyq/cuet-2022-general.pdf',
-    },
-  ];
-
-  private loadMockPYQs(): void {
-    setTimeout(() => {
-      this.pyqsState = { status: 'loaded', data: this.mockPYQsData };
-    }, 500);
-  }
-
   getPYQs(): void {
     this.pyqsState = { status: 'loading' };
-    setTimeout(() => {
-      this.pyqsState = { status: 'loaded', data: this.mockPYQsData };
-    }, 300);
+    this.http.getPYQs().pipe(takeUntil(this.destroy$)).subscribe({
+      next: (res: any) => {
+        const raw = res?.data;
+        const list = Array.isArray(raw) ? raw : raw?.pyqs ?? [];
+        this.pyqsState = { status: 'loaded', data: list };
+      },
+      error: (error: any) => {
+        this.pyqsState = { status: 'loaded', data: [] };
+        this.message?.error(error?.error?.message ?? 'Failed to load PYQs');
+      },
+    });
   }
 
   // ── Modals ────────────────────────────────────────────────────────────────

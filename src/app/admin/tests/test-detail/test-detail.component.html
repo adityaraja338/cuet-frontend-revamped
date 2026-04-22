@@ -274,6 +274,7 @@
   (nzOnCancel)="onModalClose()"
 >
   <ng-container *nzModalContent>
+    <div class="cuet-modal-pad">
     <p class="font-20 font-500">Questions</p>
     @if(questions.length > 0){
       <div class="row">
@@ -294,5 +295,6 @@
         nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
       ></nz-empty>
     }
+    </div>
   </ng-container>
 </nz-modal>

@@ -16,7 +16,7 @@ export class PerformancesComponent implements OnInit {
   isLeaderboardVisible = false;
   isShowAnswer = false;
   selectedPerformance: any;
-  leaderboardData: any;
+  leaderboardData: any[] = [];
 
   tabIndex = 0;
 
@@ -30,16 +30,26 @@ export class PerformancesComponent implements OnInit {
     [
       {
         data: [0, 0, 0],
-        backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
-        borderWidth: 4,
-        borderRadius: 12,
+        // Correct / Incorrect / Unattempted
+        backgroundColor: ['#22c55e', '#fb7185', '#e2e8f0'],
+        borderWidth: 0,
+        hoverOffset: 4,
       },
     ];
 
   public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
-    responsive: false,
-    radius: 48,
-    cutout: '78%',
+    responsive: true,
+    maintainAspectRatio: true,
+    radius: '92%',
+    cutout: '74%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+        padding: 10,
+        cornerRadius: 8,
+      },
+    },
   };
 
   constructor(
@@ -214,7 +224,7 @@ export class PerformancesComponent implements OnInit {
 
     this.http.getTestLeaderboard(data).subscribe({
       next: (res: any) => {
-        this.leaderboardData = res?.data;
+        this.leaderboardData = Array.isArray(res?.data) ? res.data : [];
       },
       error: (error: any) => {
         console.log(error);
@@ -227,6 +237,7 @@ export class PerformancesComponent implements OnInit {
     this.isLeaderboardVisible = false;
     this.isPerformanceModal = false;
     this.isShowAnswer = false;
+    this.leaderboardData = [];
     this.selectedPerformance = null;
   }
 }

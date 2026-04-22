@@ -101,6 +101,19 @@ $admin-primary: #0284c7;
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --ambient-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06);
 
+  /* Premium data tables (ng-zorro nz-table / .ant-table) */
+  --cuet-table-accent: var(--primary);
+  --cuet-table-accent-strong: #003ea8;
+  --cuet-table-accent-soft: rgba(0, 74, 198, 0.1);
+  --cuet-table-accent-softer: rgba(0, 74, 198, 0.06);
+  --cuet-table-surface: #ffffff;
+  --cuet-table-surface-muted: #f8fafc;
+  --cuet-table-surface-dim: #eef2f7;
+  --cuet-table-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
+  --cuet-table-text: #0f172a;
+  --cuet-table-text-muted: #64748b;
+  --cuet-table-text-soft: #94a3b8;
+
   --glass-bg: rgba(247, 249, 251, 0.8);
   --glass-border: rgba(255, 255, 255, 0.3);
   --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
@@ -467,27 +480,52 @@ button.ant-btn.btn-a-secondary {
   cursor: auto;
 }
 
-// Tabs
-.ant-tabs-tab {
-  padding: 0 !important;
-  width: 50%;
-  //justify-content: center;
-}
-
-.ant-tabs-tab-btn {
-  padding: 0 16px 8px !important;
-  font-weight: 300;
-  width: 100%;
-}
-
+// Tabs — ng-zorro line tabs (replaces legacy 50% width + light tab labels)
 .ant-tabs > .ant-tabs-nav {
-  margin: 0 0 16px 0;
+  margin: 0 0 1rem;
+}
+
+.ant-tabs-nav .ant-tabs-tab {
+  width: auto !important;
+  padding: 0.5rem 1rem 0.5rem !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab .ant-tabs-tab-btn {
+  width: auto !important;
+  min-width: 0;
+  padding: 0 !important;
+  justify-content: center;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--cuet-table-text-muted, #64748b);
+  transition: color 0.15s ease;
+}
+
+.ant-tabs-nav .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: var(--cuet-table-text, #0f172a);
+}
+
+.ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary) !important;
+}
+
+.admin .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: $admin-primary !important;
+}
+
+.ant-tabs-ink-bar {
+  height: 3px !important;
+  border-radius: 3px;
+  background: var(--primary) !important;
+}
+
+.admin .ant-tabs-ink-bar {
+  background: $admin-primary !important;
 }
 
 .admin {
-  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
   .ant-menu-light .ant-menu-item:hover,
-  .ant-tabs-tab:hover,
   .ant-menu-item-selected {
     color: $admin-primary !important;
   }
@@ -497,10 +535,6 @@ button.ant-btn.btn-a-secondary {
   .ant-menu-inline .ant-menu-item::after {
     border-right: 3px solid $admin-primary;
   }
-}
-
-.admin .ant-tabs-ink-bar {
-  background-color: $admin-primary !important;
 }
 
 // Collapse
@@ -660,8 +694,11 @@ button.ant-btn.btn-a-secondary {
   }
 }
 
-//Table
-.ant-table-thead
+// ─────────────────────────────────────────────────────────────────────────────
+// Data tables — ng-zorro nz-table (replaces legacy flat .ant-table + solid headers)
+// ─────────────────────────────────────────────────────────────────────────────
+
+nz-table .ant-table-thead
   > tr
   > th:not(:last-child):not(.ant-table-selection-column):not(
     .ant-table-row-expand-icon-cell
@@ -669,64 +706,190 @@ button.ant-btn.btn-a-secondary {
   display: none !important;
 }
 
-.ant-table-thead > tr > th,
-.ant-table-tbody > tr > td {
-  padding: 8px 12px;
-  font-size: 12px;
+nz-table .ant-table {
+  background: transparent;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
-.ant-table-thead > tr > th {
+nz-table .ant-table-thead > tr > th {
+  background: var(--cuet-table-surface-muted) !important;
+  color: var(--cuet-table-text-muted) !important;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.85rem 1rem !important;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+nz-table .ant-table-thead > tr > th::before {
+  display: none !important;
+}
+
+nz-table .ant-table-thead > tr > th,
+nz-table .ant-table-tbody > tr > td {
+  &.nz-disable-td {
+    display: none;
+  }
+}
+
+nz-table .ant-table-tbody > tr > td {
+  padding: 0.9rem 1rem !important;
+  background: var(--cuet-table-surface);
+  transition: background 0.18s ease;
+  font-size: 14px;
   font-weight: 400;
-}
-
-.ant-table-tbody > tr:hover {
-  cursor: pointer;
-}
-
-.ant-table-tbody > tr:not(:first-child) {
-  height: 36px;
-}
-
-.ant-table-tbody > tr > td {
-  font-weight: 300;
-  //transition: font-weight 0.6s;
-}
-
-.ant-table-tbody > tr:hover > td {
-  font-weight: 400;
-}
-
-.ant-table thead > tr > th:first-child {
-  border-top-left-radius: 6px !important;
-  border-bottom-left-radius: 6px !important;
-}
-
-.ant-table thead > tr > th:last-child {
-  border-top-right-radius: 6px !important;
-  border-bottom-right-radius: 6px !important;
-}
-
-.ant-table-tbody > tr.ant-table-row:hover > td:first-child {
-  border-top-left-radius: 6px !important;
-  border-bottom-left-radius: 6px !important;
-}
-.ant-table-tbody > tr.ant-table-row:hover > td:last-child {
-  border-top-right-radius: 6px !important;
-  border-bottom-right-radius: 6px !important;
-}
-
-.ant-table-tbody > tr > td {
+  color: var(--cuet-table-text);
+  vertical-align: middle;
   border: none;
 }
 
-.student .ant-table thead > tr > th {
-  background: #561abd;
-  color: #fff;
+nz-table .ant-table-tbody > tr:nth-child(even) > td {
+  background: var(--cuet-table-surface-muted);
 }
 
-.admin .ant-table thead > tr > th {
-  background: #008cff;
-  color: #fff;
+nz-table .ant-table-tbody > tr:hover > td {
+  background: color-mix(in oklab, var(--cuet-table-accent) 6%, var(--cuet-table-surface)) !important;
+  font-weight: 500;
+}
+
+nz-table .ant-table-tbody > tr:focus-within > td {
+  background: color-mix(in oklab, var(--cuet-table-accent) 8%, var(--cuet-table-surface)) !important;
+}
+
+nz-table .ant-table-container::before,
+nz-table .ant-table-container::after {
+  display: none !important;
+}
+
+nz-table .ant-table-tbody > tr {
+  height: auto !important;
+}
+
+nz-table .ant-table-tbody > tr:hover {
+  cursor: pointer;
+}
+
+nz-table .ant-pagination {
+  margin: 0.75rem 0.35rem 0.25rem !important;
+}
+
+nz-table .ant-pagination-total-text {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--cuet-table-text-muted);
+}
+
+/* Optional card frame around a table (tests / performances tabs) */
+.cuet-table-shell {
+  background: var(--cuet-table-surface);
+  border-radius: 1rem;
+  // box-shadow: var(--cuet-table-shadow);
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+/* Row cell helpers (shared by student tests, performances, etc.) */
+.cuet-table-row__index {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--cuet-table-text-soft);
+  font-size: 0.8rem;
+}
+
+.cuet-table-row__name-text {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--cuet-table-text);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.cuet-table-row__mobile-meta {
+  display: none;
+  font-size: 0.72rem;
+  color: var(--cuet-table-text-muted);
+}
+
+.cuet-table-row__num {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--cuet-table-text);
+}
+
+.cuet-table-total-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--cuet-table-text-muted);
+
+  &--empty {
+    color: var(--cuet-table-text-soft);
+  }
+
+  b {
+    font-weight: 700;
+    color: var(--cuet-table-text);
+  }
+}
+
+.cuet-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--cuet-table-text-muted);
+}
+
+.cuet-table-empty__icon {
+  font-size: 2.25rem;
+  color: var(--cuet-table-text-soft);
+  font-variation-settings: "FILL" 0, "wght" 300;
+}
+
+.cuet-table-empty__title {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cuet-table-text);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.cuet-table-empty__subtitle {
+  font-size: 0.82rem;
+  color: var(--cuet-table-text-muted);
+  max-width: 34ch;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cuet-table-empty--error .cuet-table-empty__icon {
+  color: #ef4444;
+}
+
+.cuet-table-empty__cta.ant-btn {
+  margin-top: 0.5rem;
+  height: 2.25rem;
+  padding: 0 1.1rem;
+  border-radius: 0.65rem;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 6px 16px -8px rgba(0, 74, 198, 0.45);
+  transition: background 0.18s ease;
+
+  &:hover {
+    background: #003ea8;
+  }
 }
 
 // Breadcrumb
@@ -1430,11 +1593,57 @@ nz-switch:has(.ant-switch-small) {
 
 // Modal
 .ant-modal-content {
-  border-radius: 12px;
+  border-radius: 20px !important;
+  overflow: hidden;
 }
 
 .ant-modal-close-x {
   width: 36px;
+}
+
+/* Modal body: opt-in padding + premium scrollbars */
+.ant-modal-body {
+  padding: 0 !important;
+  border-radius: 16px;
+}
+
+.ant-modal-body > :first-child:not(.cuet-modal-pad):not(.cuet-modal-no-pad) {
+  padding: 1.25rem;
+}
+
+.cuet-modal-pad {
+  padding: 1.25rem;
+}
+
+.cuet-modal-no-pad {
+  padding: 0 !important;
+}
+
+/* SimpleBar (ngx-simplebar) — subtle modern scrollbar */
+.simplebar-content {
+  padding: 0 !important;
+}
+
+.simplebar-track.simplebar-vertical {
+  width: 10px;
+}
+.simplebar-scrollbar:before {
+  background: rgba(100, 116, 139, 0.45);
+  border-radius: 999px;
+}
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  left: 2px;
+  right: 2px;
+}
+.simplebar-track.simplebar-horizontal {
+  height: 10px;
+}
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
+  top: 2px;
+  bottom: 2px;
+}
+.simplebar-scrollbar.simplebar-visible:before {
+  opacity: 1;
 }
 
 /* Tailwind preflight sets `img { display: block; }`, but Ant image preview

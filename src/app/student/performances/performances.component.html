@@ -1,674 +1,1067 @@
-<nz-breadcrumb nzSeparator=">">
-  <nz-breadcrumb-item>My Performances</nz-breadcrumb-item>
-</nz-breadcrumb>
-<nz-card nzBorderless nzHoverable>
+<section class="performances-page">
+  <nz-breadcrumb nzSeparator=">">
+    <nz-breadcrumb-item>My Performances</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
   <nz-tabs
     [(nzSelectedIndex)]="tabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
     <nz-tab nzTitle="Live Tests">
       <ng-template nz-tab>
-        <nz-table
-          [nzLoading]="isLiveLoading"
-          [nzData]="livePerformances"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzShowPagination]="true"
-          [nzTotal]="totalLiveCount"
-          [nzPageIndex]="livePageIndex"
-          [nzPageSize]="livePageSize"
-          [nzNoResult]="customNoData"
-          [nzShowTotal]="printLiveCount"
-          [nzScroll]="{ x: '640px' }"
-          (nzPageIndexChange)="livePageIndex = $event; getLivePerformances()"
-          (nzPageSizeChange)="livePageSize = $event; getLivePerformances()"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Name</th>
-              <th class="text-center" [nzWidth]="'64px'">Attempted</th>
-              <th class="text-center" [nzWidth]="'64px'">Date</th>
-              <th class="text-center" [nzWidth]="'64px'">Score</th>
-              <th class="text-center" [nzWidth]="'64px'">Score %</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let performance of livePerformances; let i = index"
-              (click)="onClickPerformance(performance)"
-              class="cursor-pointer"
+        <div class="cuet-table-shell">
+          @if (!isLiveLoading && !livePerformances.length) {
+            <ng-container [ngTemplateOutlet]="liveEmpty"></ng-container>
+          } @else {
+            <nz-table
+              [nzLoading]="isLiveLoading"
+              [nzData]="livePerformances"
+              [nzFrontPagination]="false"
+              [nzShowSizeChanger]="true"
+              [nzShowPagination]="true"
+              [nzTotal]="totalLiveCount"
+              [nzPageIndex]="livePageIndex"
+              [nzPageSize]="livePageSize"
+              [nzNoResult]="liveEmpty"
+              [nzShowTotal]="printLiveCount"
+              [nzScroll]="{ x: 'auto' }"
+              (nzPageIndexChange)="
+                livePageIndex = $event; getLivePerformances()
+              "
+              (nzPageSizeChange)="livePageSize = $event; getLivePerformances()"
             >
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.testName }}</td>
-              <td class="text-center">
-                {{ performance?.correct + performance?.incorrect }} /
-                {{
-                  performance?.correct +
-                    performance?.incorrect +
-                    performance?.unattempted
-                }}
-              </td>
-              <td class="text-center">
-                {{
-                  (performance?.testItem?.startTime | date: "dd MMM yy") ?? "-"
-                }}
-              </td>
-              <td class="text-center text-primary font-500">
-                {{ performance.scoreObtained }} / {{ performance.totalScore }}
-              </td>
-              <td class="text-center">
-                {{
-                  ((performance.scoreObtained / performance.totalScore) * 100
-                    | number: ".0-2") ?? "-"
-                }}
-                %
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #customNoData>
-          <img
-            class="mt-3"
-            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            alt=""
-          />
-          <p class="font-16 font-300 mt-3">No Performances Found!</p>
-        </ng-template>
+              <thead>
+                <tr>
+                  <th class="text-center text-nowrap" [nzWidth]="'56px'">
+                    Sl. No.
+                  </th>
+                  <th class="text-nowrap" [nzWidth]="'200px'">Name</th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Attempted
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Date
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Score
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Score %
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let performance of livePerformances; let i = index"
+                  (click)="onClickPerformance(performance)"
+                  class="cuet-table-row cursor-pointer"
+                >
+                  <td class="text-center cuet-table-row__index text-nowrap">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="text-nowrap">
+                    <span class="cuet-table-row__name-text">{{
+                      performance?.testName
+                    }}</span>
+                    <span class="cuet-table-row__mobile-meta text-nowrap">
+                      {{ performance?.correct + performance?.incorrect }} /
+                      {{
+                        performance?.correct +
+                          performance?.incorrect +
+                          performance?.unattempted
+                      }}
+                      ·
+                      {{
+                        (performance?.testItem?.startTime
+                          | date: "dd MMM yy") ?? "-"
+                      }}
+                    </span>
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.correct + performance?.incorrect }} /
+                    {{
+                      performance?.correct +
+                        performance?.incorrect +
+                        performance?.unattempted
+                    }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{
+                      (performance?.testItem?.startTime | date: "dd MMM yy") ??
+                        "-"
+                    }}
+                  </td>
+                  <td
+                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                  >
+                    {{ performance.scoreObtained }} /
+                    {{ performance.totalScore }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    @if (performance.totalScore) {
+                      {{
+                        (performance.scoreObtained / performance.totalScore) *
+                          100 | number: ".0-2"
+                      }}%
+                    } @else {
+                      -
+                    }
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+        </div>
         <ng-template #printLiveCount>
-          <div *ngIf="!totalLiveCount" class="font-weight-normal">
-            No Results Found
+          <div
+            *ngIf="!totalLiveCount"
+            class="cuet-table-total-label cuet-table-total-label--empty"
+          >
+            No results
           </div>
-          <div *ngIf="totalLiveCount" class="font-weight-normal">
-            <b>{{ totalLiveCount }}</b> Results Found
+          <div *ngIf="totalLiveCount" class="cuet-table-total-label">
+            <b>{{ totalLiveCount }}</b> results
           </div>
         </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Recorded Tests">
       <ng-template nz-tab>
-        <nz-table
-          [nzLoading]="isRecordedLoading"
-          [nzData]="recordedPerformances"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzShowPagination]="true"
-          [nzTotal]="totalRecordedCount"
-          [nzPageIndex]="recordedPageIndex"
-          [nzPageSize]="recordedPageSize"
-          [nzNoResult]="customNoData"
-          [nzShowTotal]="printRecordedCount"
-          [nzScroll]="{ x: '640px' }"
-          (nzPageIndexChange)="
-            recordedPageIndex = $event; getRecordedPerformances()
-          "
-          (nzPageSizeChange)="
-            recordedPageSize = $event; getRecordedPerformances()
-          "
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Name</th>
-              <th class="text-center" [nzWidth]="'64px'">Attempted</th>
-              <th class="text-center" [nzWidth]="'64px'">Date</th>
-              <th class="text-center" [nzWidth]="'64px'">Score</th>
-              <th class="text-center" [nzWidth]="'64px'">Score %</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let performance of recordedPerformances; let i = index"
-              (click)="onClickPerformance(performance)"
-              class="cursor-pointer"
+        <div class="cuet-table-shell">
+          @if (!isRecordedLoading && !recordedPerformances.length) {
+            <ng-container [ngTemplateOutlet]="recordedEmpty"></ng-container>
+          } @else {
+            <nz-table
+              [nzLoading]="isRecordedLoading"
+              [nzData]="recordedPerformances"
+              [nzFrontPagination]="false"
+              [nzShowSizeChanger]="true"
+              [nzShowPagination]="true"
+              [nzTotal]="totalRecordedCount"
+              [nzPageIndex]="recordedPageIndex"
+              [nzPageSize]="recordedPageSize"
+              [nzNoResult]="recordedEmpty"
+              [nzShowTotal]="printRecordedCount"
+              [nzScroll]="{ x: 'auto' }"
+              (nzPageIndexChange)="
+                recordedPageIndex = $event; getRecordedPerformances()
+              "
+              (nzPageSizeChange)="
+                recordedPageSize = $event; getRecordedPerformances()
+              "
             >
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.testName }}</td>
-              <td class="text-center">
-                {{ performance?.correct + performance?.incorrect }} /
-                {{
-                  performance?.correct +
-                    performance?.incorrect +
-                    performance?.unattempted
-                }}
-              </td>
-              <td class="text-center">
-                {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
-              </td>
-              <td class="text-center text-primary font-500">
-                {{ performance.scoreObtained }} / {{ performance.totalScore }}
-              </td>
-              <td class="text-center">
-                {{
-                  (performance.scoreObtained / performance.totalScore) * 100
-                    | number: ".0-2"
-                }}
-                %
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #customNoData>
-          <img
-            class="mt-3"
-            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            alt=""
-          />
-          <p class="font-16 font-300 mt-3">No Performances Found!</p>
-        </ng-template>
+              <thead>
+                <tr>
+                  <th class="text-center text-nowrap" [nzWidth]="'56px'">
+                    Sl. No.
+                  </th>
+                  <th class="text-nowrap" [nzWidth]="'200px'">Name</th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Attempted
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Date
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Score
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Score %
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let performance of recordedPerformances;
+                    let i = index
+                  "
+                  (click)="onClickPerformance(performance)"
+                  class="cuet-table-row cursor-pointer"
+                >
+                  <td class="text-center cuet-table-row__index text-nowrap">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="text-nowrap">
+                    <span class="cuet-table-row__name-text">{{
+                      performance?.testName
+                    }}</span>
+                    <span class="cuet-table-row__mobile-meta text-nowrap">
+                      {{ performance?.correct + performance?.incorrect }} /
+                      {{
+                        performance?.correct +
+                          performance?.incorrect +
+                          performance?.unattempted
+                      }}
+                      ·
+                      {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
+                    </span>
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.correct + performance?.incorrect }} /
+                    {{
+                      performance?.correct +
+                        performance?.incorrect +
+                        performance?.unattempted
+                    }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
+                  </td>
+                  <td
+                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                  >
+                    {{ performance.scoreObtained }} /
+                    {{ performance.totalScore }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    @if (performance.totalScore) {
+                      {{
+                        (performance.scoreObtained / performance.totalScore) *
+                          100 | number: ".0-2"
+                      }}%
+                    } @else {
+                      -
+                    }
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+        </div>
         <ng-template #printRecordedCount>
-          <div *ngIf="!totalRecordedCount" class="font-weight-normal">
-            No Results Found
+          <div
+            *ngIf="!totalRecordedCount"
+            class="cuet-table-total-label cuet-table-total-label--empty"
+          >
+            No results
           </div>
-          <div *ngIf="totalRecordedCount" class="font-weight-normal">
-            <b>{{ totalRecordedCount }}</b> Results Found
+          <div *ngIf="totalRecordedCount" class="cuet-table-total-label">
+            <b>{{ totalRecordedCount }}</b> results
           </div>
         </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Mock Tests">
       <ng-template nz-tab>
-        <nz-table
-          [nzLoading]="isMockLoading"
-          [nzData]="mockPerformances"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzShowPagination]="true"
-          [nzTotal]="totalMockCount"
-          [nzPageIndex]="mockPageIndex"
-          [nzPageSize]="mockPageSize"
-          [nzNoResult]="customNoData"
-          [nzShowTotal]="printMockCount"
-          [nzScroll]="{ x: '640px' }"
-          (nzPageIndexChange)="mockPageIndex = $event; getMockPerformances()"
-          (nzPageSizeChange)="mockPageSize = $event; getMockPerformances()"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Name</th>
-              <th class="text-center" [nzWidth]="'64px'">Attempted</th>
-              <th class="text-center" [nzWidth]="'64px'">Date</th>
-              <th class="text-center" [nzWidth]="'64px'">Score</th>
-              <th class="text-center" [nzWidth]="'64px'">Score %</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let performance of mockPerformances; let i = index"
-              (click)="onClickPerformance(performance)"
-              class="cursor-pointer"
+        <div class="cuet-table-shell">
+          @if (!isMockLoading && !mockPerformances.length) {
+            <ng-container [ngTemplateOutlet]="mockEmpty"></ng-container>
+          } @else {
+            <nz-table
+              [nzLoading]="isMockLoading"
+              [nzData]="mockPerformances"
+              [nzFrontPagination]="false"
+              [nzShowSizeChanger]="true"
+              [nzShowPagination]="true"
+              [nzTotal]="totalMockCount"
+              [nzPageIndex]="mockPageIndex"
+              [nzPageSize]="mockPageSize"
+              [nzNoResult]="mockEmpty"
+              [nzShowTotal]="printMockCount"
+              [nzScroll]="{ x: 'auto' }"
+              (nzPageIndexChange)="
+                mockPageIndex = $event; getMockPerformances()
+              "
+              (nzPageSizeChange)="mockPageSize = $event; getMockPerformances()"
             >
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.testName }}</td>
-              <td class="text-center">
-                {{ performance?.correct + performance?.incorrect }} /
-                {{
-                  performance?.correct +
-                    performance?.incorrect +
-                    performance?.unattempted
-                }}
-              </td>
-              <td class="text-center">
-                {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
-              </td>
-              <td class="text-center text-primary font-500">
-                {{ performance.scoreObtained }} / {{ performance.totalScore }}
-              </td>
-              <td class="text-center">
-                {{
-                  (performance.scoreObtained / performance.totalScore) * 100
-                    | number: ".0-2"
-                }}
-                %
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #customNoData>
-          <img
-            class="mt-3"
-            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            alt=""
-          />
-          <p class="font-16 font-300 mt-3">No Performances Found!</p>
-        </ng-template>
+              <thead>
+                <tr>
+                  <th class="text-center text-nowrap" [nzWidth]="'56px'">
+                    Sl. No.
+                  </th>
+                  <th class="text-nowrap" [nzWidth]="'200px'">Name</th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Attempted
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Date
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Score
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Score %
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let performance of mockPerformances; let i = index"
+                  (click)="onClickPerformance(performance)"
+                  class="cuet-table-row cursor-pointer"
+                >
+                  <td class="text-center cuet-table-row__index text-nowrap">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="text-nowrap">
+                    <span class="cuet-table-row__name-text">{{
+                      performance?.testName
+                    }}</span>
+                    <span class="cuet-table-row__mobile-meta text-nowrap">
+                      {{ performance?.correct + performance?.incorrect }} /
+                      {{
+                        performance?.correct +
+                          performance?.incorrect +
+                          performance?.unattempted
+                      }}
+                      ·
+                      {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
+                    </span>
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.correct + performance?.incorrect }} /
+                    {{
+                      performance?.correct +
+                        performance?.incorrect +
+                        performance?.unattempted
+                    }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
+                  </td>
+                  <td
+                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                  >
+                    {{ performance.scoreObtained }} /
+                    {{ performance.totalScore }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    @if (performance.totalScore) {
+                      {{
+                        (performance.scoreObtained / performance.totalScore) *
+                          100 | number: ".0-2"
+                      }}%
+                    } @else {
+                      -
+                    }
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+        </div>
         <ng-template #printMockCount>
-          <div *ngIf="!totalMockCount" class="font-weight-normal">
-            No Results Found
+          <div
+            *ngIf="!totalMockCount"
+            class="cuet-table-total-label cuet-table-total-label--empty"
+          >
+            No results
           </div>
-          <div *ngIf="totalMockCount" class="font-weight-normal">
-            <b>{{ totalMockCount }}</b> Results Found
+          <div *ngIf="totalMockCount" class="cuet-table-total-label">
+            <b>{{ totalMockCount }}</b> results
           </div>
         </ng-template>
       </ng-template>
     </nz-tab>
     <nz-tab nzTitle="Topic-wise Tests">
       <ng-template nz-tab>
-        <nz-table
-          [nzLoading]="isTopicLoading"
-          [nzData]="topicPerformances"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzShowPagination]="true"
-          [nzTotal]="totalTopicCount"
-          [nzPageIndex]="topicPageIndex"
-          [nzPageSize]="topicPageSize"
-          [nzNoResult]="customNoData"
-          [nzShowTotal]="printTopicCount"
-          [nzScroll]="{ x: '640px' }"
-          (nzPageIndexChange)="topicPageIndex = $event; getTopicPerformances()"
-          (nzPageSizeChange)="topicPageSize = $event; getTopicPerformances()"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Name</th>
-              <th class="text-center" [nzWidth]="'64px'">Attempted</th>
-              <th class="text-center" [nzWidth]="'64px'">Date</th>
-              <th class="text-center" [nzWidth]="'64px'">Score</th>
-              <th class="text-center" [nzWidth]="'64px'">Score %</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let performance of topicPerformances; let i = index"
-              (click)="onClickPerformance(performance)"
-              class="cursor-pointer"
+        <div class="cuet-table-shell">
+          @if (!isTopicLoading && !topicPerformances.length) {
+            <ng-container [ngTemplateOutlet]="topicEmpty"></ng-container>
+          } @else {
+            <nz-table
+              [nzLoading]="isTopicLoading"
+              [nzData]="topicPerformances"
+              [nzFrontPagination]="false"
+              [nzShowSizeChanger]="true"
+              [nzShowPagination]="true"
+              [nzTotal]="totalTopicCount"
+              [nzPageIndex]="topicPageIndex"
+              [nzPageSize]="topicPageSize"
+              [nzNoResult]="topicEmpty"
+              [nzShowTotal]="printTopicCount"
+              [nzScroll]="{ x: 'auto' }"
+              (nzPageIndexChange)="
+                topicPageIndex = $event; getTopicPerformances()
+              "
+              (nzPageSizeChange)="
+                topicPageSize = $event; getTopicPerformances()
+              "
             >
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ performance?.testName }}</td>
-              <td class="text-center">
-                {{ performance?.correct + performance?.incorrect }} /
-                {{
-                  performance?.correct +
-                    performance?.incorrect +
-                    performance?.unattempted
-                }}
-              </td>
-              <td class="text-center">
-                {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
-              </td>
-              <td class="text-center text-primary font-500">
-                {{ performance.scoreObtained }} / {{ performance.totalScore }}
-              </td>
-              <td class="text-center">
-                {{
-                  (performance.scoreObtained / performance.totalScore) * 100
-                    | number: ".0-2"
-                }}
-                %
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #customNoData>
-          <img
-            class="mt-3"
-            src="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            alt=""
-          />
-          <p class="font-16 font-300 mt-3">No Performances Found!</p>
-        </ng-template>
+              <thead>
+                <tr>
+                  <th class="text-center text-nowrap" [nzWidth]="'56px'">
+                    Sl. No.
+                  </th>
+                  <th class="text-nowrap" [nzWidth]="'200px'">Name</th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Attempted
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Date
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'100px'">
+                    Score
+                  </th>
+                  <th class="text-center text-nowrap" [nzWidth]="'88px'">
+                    Score %
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let performance of topicPerformances; let i = index"
+                  (click)="onClickPerformance(performance)"
+                  class="cuet-table-row cursor-pointer"
+                >
+                  <td class="text-center cuet-table-row__index text-nowrap">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="text-nowrap">
+                    <span class="cuet-table-row__name-text">{{
+                      performance?.testName
+                    }}</span>
+                    <span class="cuet-table-row__mobile-meta text-nowrap">
+                      {{ performance?.correct + performance?.incorrect }} /
+                      {{
+                        performance?.correct +
+                          performance?.incorrect +
+                          performance?.unattempted
+                      }}
+                      ·
+                      {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
+                    </span>
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.correct + performance?.incorrect }} /
+                    {{
+                      performance?.correct +
+                        performance?.incorrect +
+                        performance?.unattempted
+                    }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
+                  </td>
+                  <td
+                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                  >
+                    {{ performance.scoreObtained }} /
+                    {{ performance.totalScore }}
+                  </td>
+                  <td class="text-center cuet-table-row__num text-nowrap">
+                    @if (performance.totalScore) {
+                      {{
+                        (performance.scoreObtained / performance.totalScore) *
+                          100 | number: ".0-2"
+                      }}%
+                    } @else {
+                      -
+                    }
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+        </div>
         <ng-template #printTopicCount>
-          <div *ngIf="!totalTopicCount" class="font-weight-normal">
-            No Results Found
+          <div
+            *ngIf="!totalTopicCount"
+            class="cuet-table-total-label cuet-table-total-label--empty"
+          >
+            No results
           </div>
-          <div *ngIf="totalTopicCount" class="font-weight-normal">
-            <b>{{ totalTopicCount }}</b> Results Found
+          <div *ngIf="totalTopicCount" class="cuet-table-total-label">
+            <b>{{ totalTopicCount }}</b> results
           </div>
         </ng-template>
       </ng-template>
     </nz-tab>
   </nz-tabs>
-</nz-card>
 
-<nz-modal
-  [(nzVisible)]="isPerformanceModal"
-  [nzMaskClosable]="true"
-  [nzFooter]="null"
-  (nzOnCancel)="onModalClose()"
-  nzCentered
->
-  <ng-container *nzModalContent>
-    <p class="font-20 font-400">Test Performance Details</p>
-    <div class="d-flex align-items-end mt-4">
-      <div>
-        <p class="font-12 font-400">Total Score</p>
-        <p class="font-20 font-600 text-primary">
-          {{ selectedPerformance?.scoreObtained }}
-          /
-          {{ selectedPerformance?.totalScore }}
-        </p>
-      </div>
-      @if (
-        selectedPerformance?.previousScoreObtained &&
-        selectedPerformance?.previousTotalScore
-      ) {
-        <div class="ml-5">
-          <p class="font-12 font-400 text-aa">Previous Score</p>
-          <p class="font-20 font-500 text-aa">
-            {{ selectedPerformance?.previousScoreObtained }}
-            /
-            {{ selectedPerformance?.previousTotalScore }}
-          </p>
-        </div>
-      }
+  <ng-template #liveEmpty>
+    <div class="cuet-table-empty">
+      <span class="cuet-table-empty__icon material-symbols-outlined">bolt</span>
+      <p class="cuet-table-empty__title">No live test attempts yet</p>
+      <p class="cuet-table-empty__subtitle">
+        Start a live test to see your score and accuracy here.
+      </p>
     </div>
+  </ng-template>
 
-    <nz-divider nzText="Performance Metrics" nzOrientation="left"></nz-divider>
-
-    <div class="row">
-      <div class="col-md-8 order-md-0 order-1">
-        <div class="row align-items-center">
-          <div class="col-10 font-14 font-400">Total No. of Questions</div>
-          <div class="col-2 font-14 font-600 text-primary">
-            :
-            {{
-              selectedPerformance?.correct +
-                selectedPerformance?.incorrect +
-                selectedPerformance?.unattempted
-            }}
-          </div>
-        </div>
-        <div class="row align-items-center mt-1">
-          <div class="col-10 font-14 font-400">No. of Questions Attempted</div>
-          <div class="col-2 font-14 font-600 text-primary">
-            :
-            {{ selectedPerformance?.correct + selectedPerformance?.incorrect }}
-          </div>
-        </div>
-        <div class="row align-items-center mt-1">
-          <div class="col-10 font-14 font-400">
-            No. of Questions Un-attempted
-          </div>
-          <div class="col-2 font-14 font-600 text-primary">
-            :
-            {{ selectedPerformance?.unattempted }}
-          </div>
-        </div>
-        <div class="row align-items-center mt-1">
-          <div class="col-10 font-14 font-400">No. of Correct Answers</div>
-          <div class="col-2 font-14 font-600 text-primary">
-            :
-            {{ selectedPerformance?.correct }}
-          </div>
-        </div>
-        <div class="row align-items-center mt-1">
-          <div class="col-10 font-14 font-400">No. of Incorrect Answers</div>
-          <div class="col-2 font-14 font-600 text-primary">
-            :
-            {{ selectedPerformance?.incorrect }}
-          </div>
-        </div>
-
-        <p class="font-16 font-500 mt-3">
-          Accuracy :
-          <span class="font-600 text-primary"
-            >{{
-              (selectedPerformance?.scoreObtained /
-                selectedPerformance?.totalScore) *
-                100 | number: ".2-2"
-            }}
-            %</span
-          >
-          <span
-            class="ml-2 text-aa font-12 font-400"
-            *ngIf="selectedPerformance?.scoreDifference"
-            >{{ selectedPerformance?.scoreDifference }} %</span
-          >
-        </p>
-      </div>
-      <div class="col-md-4 order-md-1 order-0">
-        <div
-          class="chart-div d-flex justify-content-center mt-md-1 mt-0 mb-md-0 mb-3"
-        >
-          <canvas
-            baseChart
-            [labels]="doughnutChartLabels"
-            [datasets]="performanceChartDatasets"
-            [options]="doughnutChartOptions"
-            [legend]="false"
-            [type]="'doughnut'"
-            height="96"
-            width="96"
-          >
-          </canvas>
-          <div class="student-chart chart-center">
-            {{ selectedPerformance?.grade || "-" }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <p class="font-14 font-300 text-4a mt-2">
-      <span class="font-500 text-primary">Remark :</span>
-      {{ selectedPerformance?.remark }}
-    </p>
-
-    <nz-divider nzText="Test Details" nzOrientation="left"></nz-divider>
-
-    <div class="row align-items-center">
-      <div class="col-4 font-14 font-400">Test Name</div>
-      <div class="col-8 font-14 font-500 text-primary">
-        :
-        <span class="ml-2">
-          {{ selectedPerformance?.testName }}
-        </span>
-      </div>
-    </div>
-    <div class="row align-items-center mt-1">
-      <div class="col-4 font-14 font-400">Date</div>
-      <div class="col-8 font-14 font-500 text-primary">
-        :
-        <span class="ml-2">
-          {{
-            (selectedPerformance?.testItem?.startTime | date: "dd MMM yyyy") ??
-              "-"
-          }}
-        </span>
-      </div>
-    </div>
-    <div class="row align-items-center mt-1">
-      <div class="col-4 font-14 font-400">Start Time</div>
-      <div class="col-8 font-14 font-500 text-primary">
-        :
-        <span class="ml-2">
-          {{
-            (selectedPerformance?.testItem?.startTime | date: "hh:mm a") ?? "-"
-          }}
-        </span>
-      </div>
-    </div>
-    <div class="row align-items-center mt-1">
-      <div class="col-4 font-14 font-400">End Time</div>
-      <div class="col-8 font-14 font-500 text-primary">
-        :
-        <span class="ml-2">
-          {{
-            (selectedPerformance?.testItem?.endTime | date: "hh:mm a") ?? "-"
-          }}
-        </span>
-      </div>
-    </div>
-    @if (selectedPerformance?.testType !== "topic") {
-      <div class="row align-items-center mt-1">
-        <div class="col-4 font-14 font-400">Topics</div>
-        <div class="col-8 font-14 font-500 text-primary">
-          :
-          <span class="ml-2">
-            {{ selectedPerformance?.testTopics?.join(", ") }}
-          </span>
-        </div>
-      </div>
-    } @else {
-      <div class="row align-items-center mt-1">
-        <div class="col-4 font-14 font-400">Topic Name</div>
-        <div class="col-8 font-14 font-500 text-primary">
-          :
-          <span class="ml-2">
-            {{ selectedPerformance?.topicName }}
-          </span>
-        </div>
-      </div>
-    }
-    <div class="row align-items-center mt-1">
-      <div class="col-4 font-14 font-400">Test Type</div>
-      <div class="col-8 font-14 font-500 text-primary">
-        :
-        <span class="ml-2">
-          {{ selectedPerformance?.testType | titlecase }}
-        </span>
-      </div>
-    </div>
-
-    <div class="d-flex flex-wrap justify-content-center mt-4">
-      @if(selectedPerformance?.showAnswers) {
-        <button
-          nz-button
-          class="btn-secondary mr-3"
-          (click)="isShowAnswer = !isShowAnswer"
-        >
-          {{ isShowAnswer ? "Hide" : "Show" }} Answers
-        </button>
-      }
-      <button nz-button class="btn-primary" (click)="getTestLeaderboard()">
-        View Leaderboard
-      </button>
-    </div>
-
-    @if (isShowAnswer) {
-      <div id="test-answers">
-        @for (
-          question of selectedPerformance.questions;
-          track question;
-          let i = $index
-        ) {
-          <p class="font-12 font-font-400 mt-3">Question {{ i + 1 }}:</p>
-          <pre class="font-16 font-400 mw-100 text-wrap mb-1">
-          {{ question?.question ?? "-" }}
-        </pre
-          >
-          <p class="font-14 font-400">
-            Correct Option: {{ question?.correctOption ?? "-" }}
-            @if (question?.correctOption === question?.answerChosen) {
-              <span class="text-primary text-500"> (Your Answer) </span>
-            }
-          </p>
-          <p class="font-14 font-300">
-            Incorrect Option 1: {{ question?.option2 ?? "-" }}
-            @if (question?.option2 === question?.answerChosen) {
-              <span class="text-red font-500"> (Your Answer) </span>
-            }
-          </p>
-          <p class="font-14 font-300">
-            Incorrect Option 2: {{ question?.option3 ?? "-" }}
-            @if (question?.option3 === question?.answerChosen) {
-              <span class="text-red font-500"> (Your Answer) </span>
-            }
-          </p>
-          <p class="font-14 font-300">
-            Incorrect Option 3: {{ question?.option4 ?? "-" }}
-            @if (question?.option4 === question?.answerChosen) {
-              <span class="text-red font-500"> (Your Answer) </span>
-            }
-          </p>
-          @if (question?.option5) {
-            <p class="font-14 font-300">
-              Incorrect Option 4: {{ question?.option5 ?? "-" }}
-              @if (question?.option5 === question?.answerChosen) {
-                <span class="text-red font-500"> (Your Answer) </span>
-              }
-            </p>
-          }
-        }
-      </div>
-    }
-
-    <div id="test-leaderboard" class="mt-3" *ngIf="isLeaderboardVisible">
-      <div
-        class="leaderboard-header student-diagonal-gradient ant-row align-items-center justify-content-between px-2"
+  <ng-template #recordedEmpty>
+    <div class="cuet-table-empty">
+      <span class="cuet-table-empty__icon material-symbols-outlined"
+        >smart_display</span
       >
-        <div class="ant-col-5 text-center">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g clip-path="url(#clip0_1380_471)">
-              <path
-                d="M8.16782 5.54177C8.16782 6.18518 7.64457 6.70843 7.00115 6.70843C6.35774 6.70843 5.83449 6.18518 5.83449 5.54177C5.83449 4.89835 6.35774 4.3751 7.00115 4.3751C7.64457 4.3751 8.16782 4.89835 8.16782 5.54177ZM12.3491 4.79335C12.2097 4.54193 12.0242 4.34943 11.8136 4.21293C11.438 3.97027 11.2379 3.52402 11.3371 3.08827C11.3937 2.83802 11.3902 2.56502 11.3091 2.28268C11.1656 1.7816 10.7572 1.37327 10.2562 1.22977C9.97382 1.14868 9.70082 1.14518 9.45115 1.20177C9.01482 1.30093 8.56857 1.10143 8.3259 0.725182C8.18998 0.514599 7.9969 0.329098 7.74607 0.189682C7.2899 -0.0629017 6.71299 -0.0629017 6.25682 0.189682C6.0054 0.329098 5.8129 0.514599 5.67699 0.725182C5.43432 1.10085 4.98807 1.30093 4.55174 1.20177C4.30207 1.14518 4.02907 1.14868 3.74674 1.22977C3.24565 1.37327 2.83732 1.7816 2.69382 2.28268C2.61274 2.56502 2.60924 2.8386 2.66582 3.08827C2.76499 3.5246 2.5649 3.97085 2.18924 4.21293C1.97807 4.34885 1.79315 4.54193 1.65374 4.79335C1.52599 5.02318 1.46415 5.28452 1.46532 5.54527C1.46415 5.80602 1.52657 6.06677 1.65374 6.29718C1.79315 6.5486 1.97865 6.7411 2.18924 6.8776C2.5649 7.12027 2.76499 7.56652 2.66582 8.00227C2.60924 8.25252 2.61274 8.52552 2.69382 8.80844C2.83732 9.30952 3.24565 9.71785 3.74674 9.86135C4.02907 9.94244 4.30207 9.94594 4.55174 9.88935C4.98807 9.79018 5.43432 9.98969 5.67699 10.3659C5.8129 10.5765 6.0054 10.762 6.25682 10.9014C6.71299 11.154 7.29049 11.154 7.74607 10.9014C7.99749 10.762 8.18998 10.5765 8.3259 10.3659C8.56857 9.99027 9.01482 9.79018 9.45115 9.88935C9.70082 9.94594 9.97382 9.94244 10.2562 9.86135C10.7572 9.71785 11.1656 9.30952 11.3091 8.80844C11.3902 8.5261 11.3937 8.25252 11.3371 8.00227C11.2379 7.56593 11.438 7.11968 11.8136 6.8776C12.0248 6.74168 12.2097 6.5486 12.3491 6.29718C12.4769 6.06735 12.5387 5.80602 12.5376 5.54527C12.5387 5.28452 12.4763 5.02377 12.3491 4.79335ZM6.99474 7.87627C5.7079 7.87627 4.6614 6.82977 4.6614 5.54293C4.6614 4.2561 5.7079 3.2096 6.99474 3.2096C8.28157 3.2096 9.32807 4.2561 9.32807 5.54293C9.32807 6.82977 8.28157 7.87627 6.99474 7.87627ZM4.72674 11.0438C4.30324 11.1266 3.85407 11.1056 3.42532 10.9825C2.59524 10.7445 1.9209 10.1093 1.62807 9.30252L0.207654 10.7229C0.0950707 10.8361 0.0233207 10.986 0.00582069 11.1459C-0.0367626 11.5349 0.244404 11.8861 0.633487 11.9287L1.92907 12.0722L2.07199 13.3625C2.08832 13.5282 2.1624 13.6787 2.27557 13.7919C2.34965 13.8659 2.44007 13.9237 2.54215 13.9593C2.80115 14.052 3.09107 13.9849 3.2789 13.7924L5.36199 11.7094C5.11232 11.5233 4.8994 11.301 4.72615 11.0444L4.72674 11.0438ZM13.9971 11.1453C13.9796 10.986 13.9078 10.8355 13.7952 10.7224L12.3748 9.30194C12.082 10.1087 11.4071 10.7445 10.5776 10.9819C10.1482 11.1044 9.70023 11.1254 9.27615 11.0432C9.10348 11.2999 8.88999 11.5221 8.64032 11.7082L10.7234 13.7913C10.9118 13.9838 11.2017 14.0509 11.4601 13.9581C11.5622 13.9225 11.6526 13.8648 11.7267 13.7907C11.8399 13.6775 11.914 13.5264 11.9303 13.3614L12.0732 12.071L13.3688 11.9275C13.7579 11.8844 14.0391 11.5338 13.9965 11.1447L13.9971 11.1453Z"
-                fill="white"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_1380_471">
-                <rect
-                  width="14"
-                  height="14"
-                  class="leaderboard-badge"
-                  transform="translate(0.000854492)"
-                />
-              </clipPath>
-            </defs>
-          </svg>
-          {{ "Rank" }}
-        </div>
-        <!-- Incremented index to start from 1 -->
-        <div class="ant-col-14 px-2">{{ "Name" }}</div>
-        <div class="ant-col-5 text-center">{{ "Score %" }}</div>
-      </div>
-      @for (data of leaderboardData; let i = $index; track i) {
-        <div class="ranks" [class]="'rank-' + (i + 1)">
-          <div class="ant-row align-items-center justify-content-between px-2">
-            <div class="ant-col-5 text-center">
-              <svg
-                *ngIf="i < 3"
-                class="leaderboard-icon mr-2"
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g clip-path="url(#clip0_1380_471)">
-                  <path
-                    d="M8.16782 5.54177C8.16782 6.18518 7.64457 6.70843 7.00115 6.70843C6.35774 6.70843 5.83449 6.18518 5.83449 5.54177C5.83449 4.89835 6.35774 4.3751 7.00115 4.3751C7.64457 4.3751 8.16782 4.89835 8.16782 5.54177ZM12.3491 4.79335C12.2097 4.54193 12.0242 4.34943 11.8136 4.21293C11.438 3.97027 11.2379 3.52402 11.3371 3.08827C11.3937 2.83802 11.3902 2.56502 11.3091 2.28268C11.1656 1.7816 10.7572 1.37327 10.2562 1.22977C9.97382 1.14868 9.70082 1.14518 9.45115 1.20177C9.01482 1.30093 8.56857 1.10143 8.3259 0.725182C8.18998 0.514599 7.9969 0.329098 7.74607 0.189682C7.2899 -0.0629017 6.71299 -0.0629017 6.25682 0.189682C6.0054 0.329098 5.8129 0.514599 5.67699 0.725182C5.43432 1.10085 4.98807 1.30093 4.55174 1.20177C4.30207 1.14518 4.02907 1.14868 3.74674 1.22977C3.24565 1.37327 2.83732 1.7816 2.69382 2.28268C2.61274 2.56502 2.60924 2.8386 2.66582 3.08827C2.76499 3.5246 2.5649 3.97085 2.18924 4.21293C1.97807 4.34885 1.79315 4.54193 1.65374 4.79335C1.52599 5.02318 1.46415 5.28452 1.46532 5.54527C1.46415 5.80602 1.52657 6.06677 1.65374 6.29718C1.79315 6.5486 1.97865 6.7411 2.18924 6.8776C2.5649 7.12027 2.76499 7.56652 2.66582 8.00227C2.60924 8.25252 2.61274 8.52552 2.69382 8.80844C2.83732 9.30952 3.24565 9.71785 3.74674 9.86135C4.02907 9.94244 4.30207 9.94594 4.55174 9.88935C4.98807 9.79018 5.43432 9.98969 5.67699 10.3659C5.8129 10.5765 6.0054 10.762 6.25682 10.9014C6.71299 11.154 7.29049 11.154 7.74607 10.9014C7.99749 10.762 8.18998 10.5765 8.3259 10.3659C8.56857 9.99027 9.01482 9.79018 9.45115 9.88935C9.70082 9.94594 9.97382 9.94244 10.2562 9.86135C10.7572 9.71785 11.1656 9.30952 11.3091 8.80844C11.3902 8.5261 11.3937 8.25252 11.3371 8.00227C11.2379 7.56593 11.438 7.11968 11.8136 6.8776C12.0248 6.74168 12.2097 6.5486 12.3491 6.29718C12.4769 6.06735 12.5387 5.80602 12.5376 5.54527C12.5387 5.28452 12.4763 5.02377 12.3491 4.79335ZM6.99474 7.87627C5.7079 7.87627 4.6614 6.82977 4.6614 5.54293C4.6614 4.2561 5.7079 3.2096 6.99474 3.2096C8.28157 3.2096 9.32807 4.2561 9.32807 5.54293C9.32807 6.82977 8.28157 7.87627 6.99474 7.87627ZM4.72674 11.0438C4.30324 11.1266 3.85407 11.1056 3.42532 10.9825C2.59524 10.7445 1.9209 10.1093 1.62807 9.30252L0.207654 10.7229C0.0950707 10.8361 0.0233207 10.986 0.00582069 11.1459C-0.0367626 11.5349 0.244404 11.8861 0.633487 11.9287L1.92907 12.0722L2.07199 13.3625C2.08832 13.5282 2.1624 13.6787 2.27557 13.7919C2.34965 13.8659 2.44007 13.9237 2.54215 13.9593C2.80115 14.052 3.09107 13.9849 3.2789 13.7924L5.36199 11.7094C5.11232 11.5233 4.8994 11.301 4.72615 11.0444L4.72674 11.0438ZM13.9971 11.1453C13.9796 10.986 13.9078 10.8355 13.7952 10.7224L12.3748 9.30194C12.082 10.1087 11.4071 10.7445 10.5776 10.9819C10.1482 11.1044 9.70023 11.1254 9.27615 11.0432C9.10348 11.2999 8.88999 11.5221 8.64032 11.7082L10.7234 13.7913C10.9118 13.9838 11.2017 14.0509 11.4601 13.9581C11.5622 13.9225 11.6526 13.8648 11.7267 13.7907C11.8399 13.6775 11.914 13.5264 11.9303 13.3614L12.0732 12.071L13.3688 11.9275C13.7579 11.8844 14.0391 11.5338 13.9965 11.1447L13.9971 11.1453Z"
-                    fill="white"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1380_471">
-                    <rect
-                      width="14"
-                      height="14"
-                      class="leaderboard-badge"
-                      transform="translate(0.000854492)"
-                    />
-                  </clipPath>
-                </defs>
-              </svg>
-              {{ i + 1 }}
+      <p class="cuet-table-empty__title">No recorded test attempts yet</p>
+      <p class="cuet-table-empty__subtitle">
+        Your recorded test performances will appear after you complete one.
+      </p>
+    </div>
+  </ng-template>
+
+  <ng-template #mockEmpty>
+    <div class="cuet-table-empty">
+      <span class="cuet-table-empty__icon material-symbols-outlined"
+        >assignment</span
+      >
+      <p class="cuet-table-empty__title">No mock test attempts yet</p>
+      <p class="cuet-table-empty__subtitle">
+        Take a mock test to benchmark your preparation.
+      </p>
+    </div>
+  </ng-template>
+
+  <ng-template #topicEmpty>
+    <div class="cuet-table-empty">
+      <span class="cuet-table-empty__icon material-symbols-outlined"
+        >manage_search</span
+      >
+      <p class="cuet-table-empty__title">No topic-wise performances yet</p>
+      <p class="cuet-table-empty__subtitle">
+        Attempt a topic-wise test to track progress by topic.
+      </p>
+    </div>
+  </ng-template>
+
+  <nz-modal
+    [(nzVisible)]="isPerformanceModal"
+    [nzMaskClosable]="true"
+    [nzFooter]="null"
+    (nzOnCancel)="onModalClose()"
+    nzCentered
+    [nzWidth]="760"
+  >
+    <ng-container *nzModalContent>
+      <div class="perf-modal cuet-modal-pad">
+        <ngx-simplebar class="perf-modal__body">
+          <header class="perf-modal__head">
+            <div class="perf-modal__icon" aria-hidden="true">
+              <span class="material-symbols-outlined">insights</span>
             </div>
-            <!-- Incremented index to start from 1 -->
-            <div class="ant-col-14 px-2">{{ data?.studentName }}</div>
-            <div class="ant-col-5 text-center">
-              {{
-                (data?.scoreObtained / data?.totalScore) * 100 | number: ".2-2"
-              }}
-              %
+            <div class="perf-modal__head-copy">
+              <p class="perf-modal__eyebrow">Performance breakdown</p>
+              <h2 class="perf-modal__title">
+                {{ selectedPerformance?.testName }}
+              </h2>
+              <p class="perf-modal__meta">
+                {{ selectedPerformance?.testType | titlecase }}
+                @if (selectedPerformance?.testItem?.startTime) {
+                  <span class="perf-modal__meta-sep">·</span>
+                  {{
+                    selectedPerformance?.testItem?.startTime
+                      | date: "EEE, dd MMM yyyy"
+                  }}
+                }
+              </p>
+            </div>
+          </header>
+
+          @let perfPct =
+            selectedPerformance?.totalScore
+              ? (selectedPerformance?.scoreObtained / selectedPerformance?.totalScore) *
+                100
+              : null;
+
+          <div class="perf-modal__stat-grid">
+            <div
+              class="perf-modal__stat perf-modal__stat--hero perf-modal__stat--brand"
+              [class.is-good]="(perfPct ?? 0) >= 70"
+              [class.is-neutral]="(perfPct ?? 0) >= 40 && (perfPct ?? 0) < 70"
+              [class.is-low]="(perfPct ?? 0) < 40"
+            >
+              <p class="perf-modal__stat-label">Score obtained</p>
+              <p class="perf-modal__stat-value">
+                {{ selectedPerformance?.scoreObtained }}
+                <span class="perf-modal__stat-denom"
+                  >/ {{ selectedPerformance?.totalScore }}</span
+                >
+              </p>
+            </div>
+            @if (selectedPerformance?.totalScore) {
+              <div
+                class="perf-modal__stat perf-modal__stat--brand"
+                [class.is-good]="(perfPct ?? 0) >= 70"
+                [class.is-neutral]="(perfPct ?? 0) >= 40 && (perfPct ?? 0) < 70"
+                [class.is-low]="(perfPct ?? 0) < 40"
+              >
+                <p class="perf-modal__stat-label">Percentage</p>
+                <p
+                  class="perf-modal__stat-value perf-modal__stat-value--accent"
+                >
+                  {{ (perfPct ?? 0) | number: "1.0-2" }}%
+                </p>
+              </div>
+            }
+            @if (
+              selectedPerformance?.previousScoreObtained &&
+              selectedPerformance?.previousTotalScore
+            ) {
+              <div class="perf-modal__stat perf-modal__stat--soft">
+                <p class="perf-modal__stat-label">Previous attempt</p>
+                <p class="perf-modal__stat-value">
+                  {{ selectedPerformance?.previousScoreObtained }}
+                  <span class="perf-modal__stat-denom"
+                    >/ {{ selectedPerformance?.previousTotalScore }}</span
+                  >
+                </p>
+              </div>
+            }
+          </div>
+
+          <div class="perf-modal__dist">
+            <section class="perf-modal__panel perf-modal__panel--grow">
+              <h3 class="perf-modal__section-title">Answer distribution</h3>
+
+              <div class="perf-modal__dist-grid">
+                <div class="perf-modal__kpi perf-modal__kpi--attempted">
+                  <p class="perf-modal__kpi-label">Attempted</p>
+                  <p class="perf-modal__kpi-value">
+                    {{
+                      selectedPerformance?.correct +
+                        selectedPerformance?.incorrect
+                    }}
+                    <span class="perf-modal__kpi-denom"
+                      >/
+                      {{
+                        selectedPerformance?.correct +
+                          selectedPerformance?.incorrect +
+                          selectedPerformance?.unattempted
+                      }}</span
+                    >
+                  </p>
+                </div>
+                <div class="perf-modal__kpi perf-modal__kpi--correct">
+                  <p class="perf-modal__kpi-label">Correct</p>
+                  <p class="perf-modal__kpi-value perf-modal__kpi-value--good">
+                    {{ selectedPerformance?.correct }}
+                  </p>
+                </div>
+                <div class="perf-modal__kpi perf-modal__kpi--incorrect">
+                  <p class="perf-modal__kpi-label">Incorrect</p>
+                  <p class="perf-modal__kpi-value perf-modal__kpi-value--bad">
+                    {{ selectedPerformance?.incorrect }}
+                  </p>
+                </div>
+                <div class="perf-modal__kpi perf-modal__kpi--unattempted">
+                  <p class="perf-modal__kpi-label">Unattempted</p>
+                  <p class="perf-modal__kpi-value">
+                    {{ selectedPerformance?.unattempted }}
+                  </p>
+                </div>
+              </div>
+
+              @let totalQ =
+                selectedPerformance?.correct +
+                selectedPerformance?.incorrect +
+                selectedPerformance?.unattempted;
+              <div
+                class="perf-modal__stack"
+                aria-label="Answer distribution bar"
+              >
+                <div
+                  class="perf-modal__stack-seg perf-modal__stack-seg--good"
+                  nz-tooltip
+                  [nzTooltipTitle]="'Correct: ' + (selectedPerformance?.correct ?? 0)"
+                  [style.width.%]="
+                    totalQ ? (selectedPerformance?.correct / totalQ) * 100 : 0
+                  "
+                ></div>
+                <div
+                  class="perf-modal__stack-seg perf-modal__stack-seg--bad"
+                  nz-tooltip
+                  [nzTooltipTitle]="'Incorrect: ' + (selectedPerformance?.incorrect ?? 0)"
+                  [style.width.%]="
+                    totalQ ? (selectedPerformance?.incorrect / totalQ) * 100 : 0
+                  "
+                ></div>
+                <div
+                  class="perf-modal__stack-seg perf-modal__stack-seg--neutral"
+                  nz-tooltip
+                  [nzTooltipTitle]="'Unattempted: ' + (selectedPerformance?.unattempted ?? 0)"
+                  [style.width.%]="
+                    totalQ
+                      ? (selectedPerformance?.unattempted / totalQ) * 100
+                      : 0
+                  "
+                ></div>
+              </div>
+
+              @if (selectedPerformance?.totalScore) {
+                <div class="perf-modal__accuracy">
+                  <span class="perf-modal__accuracy-label">Accuracy</span>
+                  <span class="perf-modal__accuracy-value">
+                    {{
+                      (selectedPerformance?.scoreObtained /
+                        selectedPerformance?.totalScore) *
+                        100 | number: "1.0-2"
+                    }}%
+                  </span>
+                  @if (selectedPerformance?.scoreDifference) {
+                    <span class="perf-modal__accuracy-delta"
+                      >{{ selectedPerformance?.scoreDifference }}%</span
+                    >
+                  }
+                </div>
+              }
+            </section>
+
+            <aside class="perf-modal__donut" aria-label="Grade chart">
+              <div class="perf-modal__donut-card">
+                <p class="perf-modal__donut-title">Grade</p>
+                <div class="perf-modal__chart-wrap">
+                  <canvas
+                    baseChart
+                    [labels]="doughnutChartLabels"
+                    [datasets]="performanceChartDatasets"
+                    [options]="doughnutChartOptions"
+                    [legend]="false"
+                    [type]="'doughnut'"
+                    height="128"
+                    width="128"
+                  >
+                  </canvas>
+                  <div class="perf-modal__grade">
+                    {{ selectedPerformance?.grade || "—" }}
+                  </div>
+                </div>
+                <p class="perf-modal__donut-sub">
+                  Correct / Incorrect / Unattempted
+                </p>
+              </div>
+            </aside>
+          </div>
+
+          @if (selectedPerformance?.remark) {
+            <div class="perf-modal__remark">
+              <h3 class="perf-modal__section-title">Remark</h3>
+              <p class="perf-modal__remark-body">
+                {{ selectedPerformance?.remark }}
+              </p>
+            </div>
+          }
+
+          <section class="perf-modal__panel">
+            <h3 class="perf-modal__section-title">Session details</h3>
+            <dl class="perf-modal__dl">
+              <div class="perf-modal__dl-row">
+                <dt>Test name</dt>
+                <dd>{{ selectedPerformance?.testName }}</dd>
+              </div>
+              <div class="perf-modal__dl-row">
+                <dt>Date</dt>
+                <dd>
+                  {{
+                    (selectedPerformance?.testItem?.startTime
+                      | date: "dd MMM yyyy") ?? "—"
+                  }}
+                </dd>
+              </div>
+              <div class="perf-modal__dl-row">
+                <dt>Started</dt>
+                <dd>
+                  {{
+                    (selectedPerformance?.testItem?.startTime
+                      | date: "hh:mm a") ?? "—"
+                  }}
+                </dd>
+              </div>
+              <div class="perf-modal__dl-row">
+                <dt>Ended</dt>
+                <dd>
+                  {{
+                    (selectedPerformance?.testItem?.endTime
+                      | date: "hh:mm a") ?? "—"
+                  }}
+                </dd>
+              </div>
+              @if (selectedPerformance?.testType !== "topic") {
+                <div class="perf-modal__dl-row">
+                  <dt>Topics</dt>
+                  <dd>{{ selectedPerformance?.testTopics?.join(", ") }}</dd>
+                </div>
+              } @else {
+                <div class="perf-modal__dl-row">
+                  <dt>Topic</dt>
+                  <dd>{{ selectedPerformance?.topicName }}</dd>
+                </div>
+              }
+              <div class="perf-modal__dl-row">
+                <dt>Test type</dt>
+                <dd>{{ selectedPerformance?.testType | titlecase }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="perf-modal__deepdive">
+            <p class="perf-modal__deepdive-title">Deep dive</p>
+            <p class="perf-modal__deepdive-subtitle">
+              Answers and leaderboard are kept below so your scorecard stays
+              clean.
+            </p>
+
+            @if (isShowAnswer) {
+              <div id="test-answers" class="perf-modal__answers">
+                @for (
+                  question of selectedPerformance.questions;
+                  track question;
+                  let i = $index
+                ) {
+                  <article class="perf-modal__answer-card">
+                    <p class="perf-modal__answer-index">Question {{ i + 1 }}</p>
+                    <pre class="perf-modal__answer-stem">{{
+                      question?.question ?? "—"
+                    }}</pre>
+                    <ul class="perf-modal__answer-options">
+                      <li
+                        class="perf-modal__opt perf-modal__opt--correct"
+                        [class.perf-modal__opt--yours]="
+                          question?.correctOption === question?.answerChosen
+                        "
+                      >
+                        <span class="perf-modal__opt-label"
+                          >Correct option</span
+                        >
+                        <span class="perf-modal__opt-value">{{
+                          question?.correctOption ?? "—"
+                        }}</span>
+                        @if (
+                          question?.correctOption === question?.answerChosen
+                        ) {
+                          <span class="perf-modal__pill perf-modal__pill--ok"
+                            >Your answer</span
+                          >
+                        }
+                      </li>
+                      <li
+                        class="perf-modal__opt"
+                        [class.perf-modal__opt--yours]="
+                          question?.option2 === question?.answerChosen
+                        "
+                      >
+                        <span class="perf-modal__opt-label"
+                          >Other choice 1</span
+                        >
+                        <span class="perf-modal__opt-value">{{
+                          question?.option2 ?? "—"
+                        }}</span>
+                        @if (question?.option2 === question?.answerChosen) {
+                          <span class="perf-modal__pill perf-modal__pill--bad"
+                            >Your answer</span
+                          >
+                        }
+                      </li>
+                      <li
+                        class="perf-modal__opt"
+                        [class.perf-modal__opt--yours]="
+                          question?.option3 === question?.answerChosen
+                        "
+                      >
+                        <span class="perf-modal__opt-label"
+                          >Other choice 2</span
+                        >
+                        <span class="perf-modal__opt-value">{{
+                          question?.option3 ?? "—"
+                        }}</span>
+                        @if (question?.option3 === question?.answerChosen) {
+                          <span class="perf-modal__pill perf-modal__pill--bad"
+                            >Your answer</span
+                          >
+                        }
+                      </li>
+                      <li
+                        class="perf-modal__opt"
+                        [class.perf-modal__opt--yours]="
+                          question?.option4 === question?.answerChosen
+                        "
+                      >
+                        <span class="perf-modal__opt-label"
+                          >Other choice 3</span
+                        >
+                        <span class="perf-modal__opt-value">{{
+                          question?.option4 ?? "—"
+                        }}</span>
+                        @if (question?.option4 === question?.answerChosen) {
+                          <span class="perf-modal__pill perf-modal__pill--bad"
+                            >Your answer</span
+                          >
+                        }
+                      </li>
+                      @if (question?.option5) {
+                        <li
+                          class="perf-modal__opt"
+                          [class.perf-modal__opt--yours]="
+                            question?.option5 === question?.answerChosen
+                          "
+                        >
+                          <span class="perf-modal__opt-label"
+                            >Other choice 4</span
+                          >
+                          <span class="perf-modal__opt-value">{{
+                            question?.option5 ?? "—"
+                          }}</span>
+                          @if (question?.option5 === question?.answerChosen) {
+                            <span class="perf-modal__pill perf-modal__pill--bad"
+                              >Your answer</span
+                            >
+                          }
+                        </li>
+                      }
+                    </ul>
+                  </article>
+                }
+              </div>
+            }
+
+            <div
+              id="test-leaderboard"
+              class="perf-modal__leaderboard"
+              *ngIf="isLeaderboardVisible"
+            >
+              @if (leaderboardData.length) {
+                <div class="perf-lb">
+                  <div class="leaderboard-podium">
+                    @for (
+                      data of leaderboardData | slice: 0 : 3;
+                      track data;
+                      let i = $index
+                    ) {
+                      @let scorePct =
+                        data?.totalScore
+                          ? ((data?.scoreObtained / data?.totalScore) * 100
+                            | number: "1.0-1")
+                          : null;
+                      <article
+                        class="podium-card"
+                        [class.podium-card--gold]="i === 0"
+                        [class.podium-card--silver]="i === 1"
+                        [class.podium-card--bronze]="i === 2"
+                      >
+                        <div class="podium-card__top">
+                          <span class="podium-card__rank">#{{ i + 1 }}</span>
+                          <span
+                            class="podium-card__medal material-symbols-outlined"
+                            aria-hidden="true"
+                          >
+                            workspace_premium
+                          </span>
+                        </div>
+
+                        <div class="podium-card__avatar" aria-hidden="true">
+                          @if (i === 0) {
+                            <span class="material-symbols-outlined"
+                              >military_tech</span
+                            >
+                          } @else {
+                            <span>{{
+                              data?.studentName?.charAt(0) || "?"
+                            }}</span>
+                          }
+                        </div>
+
+                        <div class="podium-card__body">
+                          <p class="podium-card__name">
+                            {{ data?.studentName ?? "-" }}
+                          </p>
+                          <p class="podium-card__score">
+                            {{ scorePct ?? "-" }}%
+                          </p>
+                          <div class="podium-card__meter">
+                            <div
+                              class="podium-card__meter-fill"
+                              [style.width.%]="scorePct ?? 0"
+                            ></div>
+                          </div>
+                        </div>
+                      </article>
+                    }
+                  </div>
+
+                  @if (leaderboardData.length > 3) {
+                    <div class="leaderboard-list-head">
+                      <p class="leaderboard-list-head__title">More rankings</p>
+                      <p class="leaderboard-list-head__meta">
+                        {{ leaderboardData.length }} students
+                      </p>
+                    </div>
+
+                    <ngx-simplebar class="leaderboard-scroll">
+                      <ul class="leader-list">
+                        @for (
+                          data of leaderboardData | slice: 3;
+                          track data;
+                          let i = $index
+                        ) {
+                          @let scorePct =
+                            data?.totalScore
+                              ? ((data?.scoreObtained / data?.totalScore) * 100
+                                | number: "1.0-1")
+                              : null;
+                          <li class="leader-row">
+                            <div class="leader-row__lead">
+                              <span class="leader-row__rank">{{ i + 4 }}</span>
+                              <div
+                                class="leader-row__avatar"
+                                aria-hidden="true"
+                              >
+                                <span>{{
+                                  data?.studentName?.charAt(0) || "?"
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="leader-row__main">
+                              <div class="leader-row__topline">
+                                <p class="leader-row__name">
+                                  {{ data?.studentName ?? "-" }}
+                                </p>
+                                <span class="leader-row__pill"
+                                  >{{ scorePct ?? "-" }}%</span
+                                >
+                              </div>
+                              <p class="leader-row__score">Overall score</p>
+                            </div>
+                          </li>
+                        }
+                      </ul>
+                    </ngx-simplebar>
+                  }
+                </div>
+              } @else {
+                <div class="perf-modal__empty">
+                  <span class="material-symbols-outlined" aria-hidden="true"
+                    >leaderboard</span
+                  >
+                  <p>No leaderboard data yet.</p>
+                </div>
+              }
+            </div>
+          </section>
+
+          <div class="perf-modal__footer">
+            <button
+              nz-button
+              type="button"
+              class="perf-modal__btn perf-modal__btn--ghost"
+              (click)="onModalClose()"
+            >
+              Close
+            </button>
+
+            <div class="perf-modal__footer-right">
+              @if (selectedPerformance?.showAnswers) {
+                <button
+                  nz-button
+                  type="button"
+                  class="perf-modal__btn perf-modal__btn--ghost"
+                  (click)="isShowAnswer = !isShowAnswer"
+                >
+                  {{ isShowAnswer ? "Hide" : "Show" }} answers
+                </button>
+              }
+              <button
+                nz-button
+                type="button"
+                class="perf-modal__btn perf-modal__btn--primary"
+                (click)="getTestLeaderboard()"
+              >
+                {{ isLeaderboardVisible ? "Hide" : "View" }} leaderboard
+              </button>
             </div>
           </div>
-        </div>
-      } @empty {
-        <nz-empty
-          class="mt-3"
-          [nzNotFoundImage]="
-            'https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg'
-          "
-        ></nz-empty>
-      }
-    </div>
-  </ng-container>
-</nz-modal>
+        </ngx-simplebar>
+      </div>
+    </ng-container>
+  </nz-modal>
+</section>

@@ -460,6 +460,7 @@
   (nzOnCancel)="handleCloseModal()"
 >
   <ng-container *nzModalContent>
+    <div class="cuet-modal-pad">
     <section id="best-students-modal" *ngIf="modalName == 'best-students'">
       <p class="font-16 font-400 mb-3">Top 10 Performing Students</p>
       <nz-table
@@ -572,5 +573,6 @@
         </button>
       </div>
     </section>
+    </div>
   </ng-container>
 </nz-modal>

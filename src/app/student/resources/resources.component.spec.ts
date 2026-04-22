@@ -28,7 +28,7 @@ const mockHttp = {
     ]
   })),
   getTopics: jasmine.createSpy('getTopics').and.returnValue(of(defaultTopicsResponse)),
-  getVideoLinks: jasmine.createSpy('getVideoLinks').and.returnValue(of({ data: { videoLinks: [], total: 0 } })),
+  getVideoLinks: jasmine.createSpy('getVideoLinks').and.returnValue(of({ data: { videos: [], total: 0 } })),
   getNewspapers: jasmine.createSpy('getNewspapers').and.returnValue(of({ data: { newspapers: [], total: 0 } })),
   getPYQs: jasmine.createSpy('getPYQs').and.returnValue(of({ data: [] })),
   checkUnfinishedTest: jasmine.createSpy('checkUnfinishedTest').and.returnValue(of({ data: null })),

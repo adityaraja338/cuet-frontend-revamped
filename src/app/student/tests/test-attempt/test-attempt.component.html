@@ -298,34 +298,38 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="exam-modal__head">
-      <span class="exam-modal__icon exam-modal__icon--warn material-symbols-outlined">help</span>
-      <h2 class="exam-modal__title">Submit this test?</h2>
-    </div>
-    <p class="exam-modal__body">
-      You've answered <b>{{ answeredCount }}</b> of <b>{{ totalCount }}</b> questions
-      @if (unattemptedCount > 0) {
-        and <b>{{ unattemptedCount }}</b> are still unanswered.
-      } @else {
-        — all questions answered.
-      }
-      You won't be able to make changes after submission.
-    </p>
-    <div class="exam-modal__actions">
-      <button
-        nz-button
-        class="exam-modal__btn exam-modal__btn--ghost"
-        (click)="isSubmitModal = false"
-      >
-        Review more
-      </button>
-      <button
-        nz-button
-        class="exam-modal__btn exam-modal__btn--primary"
-        (click)="postSubmitTest(); isSubmitModal = false"
-      >
-        Submit test
-      </button>
+    <div class="cuet-modal-pad">
+      <div class="exam-modal__head">
+        <span class="exam-modal__icon exam-modal__icon--warn material-symbols-outlined"
+          >help</span
+        >
+        <h2 class="exam-modal__title">Submit this test?</h2>
+      </div>
+      <p class="exam-modal__body">
+        You've answered <b>{{ answeredCount }}</b> of <b>{{ totalCount }}</b> questions
+        @if (unattemptedCount > 0) {
+          and <b>{{ unattemptedCount }}</b> are still unanswered.
+        } @else {
+          — all questions answered.
+        }
+        You won't be able to make changes after submission.
+      </p>
+      <div class="exam-modal__actions">
+        <button
+          nz-button
+          class="exam-modal__btn exam-modal__btn--ghost"
+          (click)="isSubmitModal = false"
+        >
+          Review more
+        </button>
+        <button
+          nz-button
+          class="exam-modal__btn exam-modal__btn--primary"
+          (click)="postSubmitTest(); isSubmitModal = false"
+        >
+          Submit test
+        </button>
+      </div>
     </div>
   </ng-container>
 </nz-modal>
@@ -340,6 +344,7 @@
   nzCentered
 >
   <ng-container *nzModalContent>
+    <div class="cuet-modal-pad">
     <div class="exam-modal__head">
       <span class="exam-modal__icon exam-modal__icon--primary material-symbols-outlined">trophy</span>
       <h2 class="exam-modal__title">Performance details</h2>
@@ -489,5 +494,6 @@
         }
       </div>
     }
+    </div>
   </ng-container>
 </nz-modal>

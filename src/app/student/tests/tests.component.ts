@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpService } from '../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, debounceTime } from 'rxjs';
+import { BehaviorSubject, Subject, debounceTime, takeUntil } from 'rxjs';
+
+export type AsyncState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'loaded'; data: T }
+  | { status: 'error'; message: string };
 
 @Component({
   standalone: false,
@@ -10,11 +16,12 @@ import { BehaviorSubject, debounceTime } from 'rxjs';
   templateUrl: './tests.component.html',
   styleUrl: './tests.component.scss',
 })
-export class TestsComponent implements OnInit {
+export class TestsComponent implements OnInit, OnDestroy {
   readonly debounceTimeMs = 400;
 
-  recordedTests: any;
-  mockTests: any;
+  recordedTestsState: AsyncState<any[]> = { status: 'idle' };
+  mockTestsState: AsyncState<any[]> = { status: 'idle' };
+  topicTestsState: AsyncState<any[]> = { status: 'idle' };
 
   currentTabIndex = 0;
 
@@ -26,13 +33,18 @@ export class TestsComponent implements OnInit {
   isPendingTest = false;
   pendingTestDetails: any;
 
-  topicTests: any[] = [];
-  topicCount!: number;
+  topicCount = 0;
   topicIndex: number = 1;
   topicLimit: number = 10;
   topicSearch: string = '';
   topicSubject = new BehaviorSubject<string>('');
   topicIdFilter!: number;
+
+  topicsIndex: number = 1;
+  topics: any[] = [];
+  topicSearchSubject = new BehaviorSubject<string>('');
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private http: HttpService,
@@ -43,44 +55,64 @@ export class TestsComponent implements OnInit {
 
   ngOnInit() {
     this.getRecordedAndMockTests();
+    this.getTopicTests();
 
     this.topicSubject
-      .pipe(debounceTime(this.debounceTimeMs))
+      .pipe(debounceTime(this.debounceTimeMs), takeUntil(this.destroy$))
       .subscribe((searchValue: string) => {
         this.topicSearch = searchValue;
+        this.topicIndex = 1;
         this.getTopicTests();
       });
 
     this.topicSearchSubject
-      .pipe(debounceTime(this.debounceTimeMs))
+      .pipe(debounceTime(this.debounceTimeMs), takeUntil(this.destroy$))
       .subscribe((searchValue: string) => {
         this.topicsIndex = 1;
         this.topics = [];
         this.getAllTopics(searchValue);
       });
 
-    this.route.queryParams.subscribe((params) => {
-      const tabIndex = params['tab'];
-      if (
-        tabIndex !== undefined &&
-        !isNaN(tabIndex) &&
-        tabIndex >= 0 &&
-        tabIndex < 3
-      ) {
-        this.currentTabIndex = Number(tabIndex);
-      }
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        const tabIndex = params['tab'];
+        if (
+          tabIndex !== undefined &&
+          !isNaN(tabIndex) &&
+          tabIndex >= 0 &&
+          tabIndex < 3
+        ) {
+          this.currentTabIndex = Number(tabIndex);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getRecordedAndMockTests() {
+    this.recordedTestsState = { status: 'loading' };
+    this.mockTestsState = { status: 'loading' };
     this.http.getRecordedAndMockTests().subscribe({
       next: (res: any) => {
-        this.recordedTests = res?.data?.recordedTests;
-        this.mockTests = res?.data?.mockTests;
+        this.recordedTestsState = {
+          status: 'loaded',
+          data: res?.data?.recordedTests ?? [],
+        };
+        this.mockTestsState = {
+          status: 'loaded',
+          data: res?.data?.mockTests ?? [],
+        };
       },
       error: (error: any) => {
         console.log(error);
-        this.message.error(error?.error?.message);
+        const msg = error?.error?.message ?? 'Failed to load tests';
+        this.recordedTestsState = { status: 'error', message: msg };
+        this.mockTestsState = { status: 'error', message: msg };
+        this.message.error(msg);
       },
     });
   }
@@ -95,21 +127,24 @@ export class TestsComponent implements OnInit {
       data.topicId = this.topicIdFilter;
     }
 
+    this.topicTestsState = { status: 'loading' };
     this.http.getAllTopicTests(data).subscribe({
       next: (res: any) => {
-        this.topicTests = res?.data?.topicTests;
-        this.topicCount = res?.data?.total;
+        this.topicTestsState = {
+          status: 'loaded',
+          data: res?.data?.topicTests ?? [],
+        };
+        this.topicCount = res?.data?.total ?? 0;
       },
       error: (error: any) => {
         console.log(error);
-        this.message.error(error?.error?.message);
+        const msg = error?.error?.message ?? 'Failed to load topic tests';
+        this.topicTestsState = { status: 'error', message: msg };
+        this.message.error(msg);
       },
     });
   }
 
-  topicsIndex: number = 1;
-  topics: any[] = [];
-  topicSearchSubject = new BehaviorSubject<string>('');
   getAllTopics(search?: string) {
     const data: any = {};
 
@@ -137,7 +172,6 @@ export class TestsComponent implements OnInit {
   onClickStartTest(test: any, testType: string) {
     this.http.checkUnfinishedTest().subscribe({
       next: (res: any) => {
-        // this.notifications = res?.data;
         if (!res?.data) {
           if (!test?.canAttempt) {
             this.isInvalidModal = true;
@@ -180,7 +214,7 @@ export class TestsComponent implements OnInit {
   onTabChange(index: number): void {
     this.router.navigate([], {
       queryParams: { tab: index },
-      queryParamsHandling: 'merge', // Keep the existing query params
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -190,6 +224,65 @@ export class TestsComponent implements OnInit {
     this.isInvalidModal = false;
     this.isPendingTest = false;
     this.pendingTestDetails = undefined;
+  }
+
+  // ── Derived getters for template compatibility ──────────────────────────
+
+  get recordedTests(): any[] {
+    return this.recordedTestsState.status === 'loaded'
+      ? this.recordedTestsState.data
+      : [];
+  }
+
+  get mockTests(): any[] {
+    return this.mockTestsState.status === 'loaded'
+      ? this.mockTestsState.data
+      : [];
+  }
+
+  get topicTests(): any[] {
+    return this.topicTestsState.status === 'loaded'
+      ? this.topicTestsState.data
+      : [];
+  }
+
+  get isRecordedLoading(): boolean {
+    return this.recordedTestsState.status === 'loading';
+  }
+  get isRecordedError(): boolean {
+    return this.recordedTestsState.status === 'error';
+  }
+  get isRecordedEmpty(): boolean {
+    return (
+      this.recordedTestsState.status === 'loaded' &&
+      this.recordedTestsState.data.length === 0
+    );
+  }
+
+  get isMockLoading(): boolean {
+    return this.mockTestsState.status === 'loading';
+  }
+  get isMockError(): boolean {
+    return this.mockTestsState.status === 'error';
+  }
+  get isMockEmpty(): boolean {
+    return (
+      this.mockTestsState.status === 'loaded' &&
+      this.mockTestsState.data.length === 0
+    );
+  }
+
+  get isTopicLoading(): boolean {
+    return this.topicTestsState.status === 'loading';
+  }
+  get isTopicError(): boolean {
+    return this.topicTestsState.status === 'error';
+  }
+  get isTopicEmpty(): boolean {
+    return (
+      this.topicTestsState.status === 'loaded' &&
+      this.topicTestsState.data.length === 0
+    );
   }
 
   protected readonly Math = Math;

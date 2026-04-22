@@ -1,475 +1,729 @@
-<nz-breadcrumb nzSeparator=">">
-  <nz-breadcrumb-item class="cursor-pointe">Resources</nz-breadcrumb-item>
-</nz-breadcrumb>
-<nz-card nzHoverable nzBorderless>
-  <nz-tabs>
-    <nz-tab nzTitle="Subjects">
+<div class="res-page">
+
+  <!-- ── Page header ──────────────────────────────────────────────────── -->
+  <header class="res-hero">
+    <div class="res-hero__copy">
+      <p class="res-hero__eyebrow">Study Hub</p>
+      <h1 class="res-hero__title">Resources</h1>
+      <p class="res-hero__subtitle">
+        Browse subjects, notes, videos, newspapers and previous year questions.
+      </p>
+    </div>
+  </header>
+
+  <!-- ── Tabs ─────────────────────────────────────────────────────────── -->
+  <nz-tabs class="res-tabs">
+
+    <!-- ════════════════ STUDY MATERIALS TAB ════════════════ -->
+    <nz-tab nzTitle="Study Materials">
       <ng-template nz-tab>
-        @if(nonDomainSubjects.length || domainSubjects.length){
-          <div class="ant-row mx-n1">
-            <!-- Subject list -->
-            <div class="ant-col-xs-24 ant-col-lg-10 ant-col-xl-9 p-1">
-              <!-- Non Domain Subjects -->
-              <div id="subjects-container" class="ant-row mx-n1">
-                <div
-                  class="ant-col-xs-24 ant-col-md-12 ant-col-lg-24 ant-col-xl-24 p-1"
-                  *ngFor="let subject of nonDomainSubjects"
-                >
+
+        <!-- ── Subjects accordion ──────────────────────────────────────────── -->
+        <nz-spin [nzSpinning]="isSubjectsLoading">
+          <div class="res-accordion" id="subjects-accordion">
+
+            @if (nonDomainSubjects.length || domainSubjects.length) {
+
+              <!-- General subjects -->
+              @for (subject of nonDomainSubjects; track subject?.id) {
+                @if(subject.topic > 0){
                   <div
-                    class="subject d-flex align-items-center cursor-pointer"
-                    [class.subject--active]="selectedSubjectId === subject?.id"
-                    (click)="selectSubject(subject)"
+                    class="res-acc-subject"
+                    [class.res-acc-subject--open]="selectedSubjectId === subject?.id"
+                    [id]="'acc-subject-' + subject?.id"
                   >
-                    <div class="mr-2">
-                      <div class="subject-icon student-diagonal-gradient">
-                        <img
-                          [src]="subject?.iconUrl"
-                          [imgFallback]="
-                            'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
-                          "
-                          alt=""
-                        />
+                    <div
+                      class="res-acc-subject__header"
+                      (click)="toggleSubject(subject)"
+                      role="button"
+                      tabindex="0"
+                      (keydown.enter)="toggleSubject(subject)"
+                      (keydown.space)="$event.preventDefault(); toggleSubject(subject)"
+                      [attr.aria-expanded]="selectedSubjectId === subject?.id"
+                    >
+                      <div class="res-content-card__icon res-content-card__icon--subject">
+                        <span class="material-symbols-outlined">book_5</span>
                       </div>
+                      <div class="res-acc-subject__copy">
+                        <p class="res-acc-subject__name">{{ subject?.name | uppercase}}</p>
+                        <span class="res-acc-subject__meta">
+                          <span class="material-symbols-outlined" style="font-size:0.72rem">menu_book</span>
+                          {{ subject?.topic ?? 0 }} topics
+                        </span>
+                      </div>
+                      <span class="res-acc-subject__chevron material-symbols-outlined">expand_more</span>
                     </div>
-                    <div class="flex-grow-1">
-                      <p class="text-primary font-16 font-500 mb-1">
-                        {{ subject.name }}
-                      </p>
-                      <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-          @if (domainSubjects.length) {
-            <!-- Domain Subjects       -->
-            <nz-divider
-              nzOrientation="left"
-              nzText="Domain Subjects"
-            ></nz-divider>
-            <div id="domain-subjects-container" class="ant-row mx-n1">
-              <div
-                class="ant-col-xs-24 ant-col-md-12 ant-col-lg-24 ant-col-xl-24 p-1"
-                *ngFor="let subject of domainSubjects"
-              >
-                <div
-                  class="subject d-flex align-items-center cursor-pointer"
-                  [class.subject--active]="selectedSubjectId === subject?.id"
-                  (click)="selectSubject(subject)"
-                >
-                  <div class="mr-2">
-                    <div class="subject-icon student-diagonal-gradient">
-                      <img
-                        [src]="subject?.iconUrl"
-                        [imgFallback]="
-                        'https://img.icons8.com/?size=100&id=37814&format=png&color=FFFFFF'
-                      "
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <p class="text-primary font-16 font-500 mb-1">
-                      {{ subject.name }}
-                    </p>
-                    <p class="font-10 font-500">Topics: {{ subject?.topic }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
-            </div>
-
-            <!-- Topics panel -->
-            <div class="ant-col-xs-24 ant-col-lg-14 ant-col-xl-15 p-1">
-              <nz-card nzBorderless class="resources-topics">
-                <div class="d-flex align-items-center justify-content-between">
-                  <div>
-                    <p class="font-12 font-500 mb-1 text-8a">Selected subject</p>
-                    <p class="font-16 font-600 text-primary mb-0">
-                      {{ selectedSubjectName || '—' }}
-                    </p>
-                  </div>
-
-                  <button
-                    nz-button
-                    class="btn-primary"
-                    [disabled]="!selectedSubjectId"
-                    (click)="selectedSubjectId ? onClickSubject(selectedSubjectId) : null"
-                  >
-                    Open
-                  </button>
-                </div>
-
-                <nz-divider class="my-2"></nz-divider>
-
-                <nz-spin [nzSpinning]="isTopicsLoading">
-                  @if (topicGroups.length) {
-                    <ngx-simplebar class="resources-topics__scroll">
-                      <div class="resources-topics__groups">
-                        @for (group of topicGroups; track group.title) {
-                          <div class="resources-topics__group">
-                            <p class="resources-topics__group-title">{{ group.title }}</p>
-                            <ul class="resources-topics__list">
-                              @for (topic of group.topics; track topic) {
-                                <li class="resources-topics__item">
-                                  <span class="resources-topics__dot"></span>
-                                  <span class="resources-topics__name">{{ topic?.name ?? '-' }}</span>
-                                  <span class="resources-topics__meta">Materials: {{ topic?.material ?? 0 }}</span>
-                                </li>
+                    @if (selectedSubjectId === subject?.id) {
+                      <div class="res-acc-subject__body">
+                        <nz-spin [nzSpinning]="isTopicsLoading">
+                          @if (topicGroups.length) {
+                            <div class="res-acc-groups">
+                              @for (group of topicGroups; track group.title) {
+                                <div class="res-acc-group">
+                                  <p class="res-acc-group__title">{{ group.title }}</p>
+                                  <div class="res-acc-topics">
+                                    @for (topic of group.topics; track topic?.id) {
+                                      <div
+                                        class="res-acc-topic"
+                                        [class.res-acc-topic--open]="selectedTopicId === topic?.id"
+                                        [id]="'acc-topic-' + topic?.id"
+                                      >
+                                        <div
+                                          class="res-acc-topic__header"
+                                          (click)="selectTopic(topic)"
+                                          role="button"
+                                          tabindex="0"
+                                          (keydown.enter)="selectTopic(topic)"
+                                          (keydown.space)="$event.preventDefault(); selectTopic(topic)"
+                                          [attr.aria-expanded]="selectedTopicId === topic?.id"
+                                        >
+                                          <span class="res-acc-topic__dot"></span>
+                                          <span class="res-acc-topic__name">{{ topic?.name ?? '—' }}</span>
+                                          <span class="res-acc-topic__badge">{{ topic?.material ?? 0 }} notes</span>
+                                          <span class="res-acc-topic__chevron material-symbols-outlined">expand_more</span>
+                                        </div>
+                                        @if (selectedTopicId === topic?.id) {
+                                          <app-resource-topic-panel
+                                            [topicId]="selectedTopicId!"
+                                            [topicName]="selectedTopicName ?? ''"
+                                            (startTest)="onClickStartTest($event.test, $event.testType)"
+                                            (invalidAccess)="isInvalidModal = true"
+                                          ></app-resource-topic-panel>
+                                        }
+                                      </div>
+                                    }
+                                  </div>
+                                </div>
                               }
-                            </ul>
-                          </div>
-                        }
+                            </div>
+                          } @else if (!isTopicsLoading) {
+                            <div class="res-empty res-empty--sm">
+                              <span class="res-empty__icon material-symbols-outlined">folder_open</span>
+                              <p class="res-empty__title">No topics yet</p>
+                              <p class="res-empty__subtitle">No topics available for this subject.</p>
+                            </div>
+                          }
+                        </nz-spin>
                       </div>
-                    </ngx-simplebar>
-                  } @else {
-                    <nz-empty
-                      nzNotFoundContent="No topics found for this subject"
-                      class="pb-2"
-                    ></nz-empty>
+                    }
+                  </div><!-- /res-acc-subject -->
+                }
+              }
+
+              <!-- Domain subjects -->
+              @if (domainSubjects.length) {
+                <div class="res-acc-divider">
+                  <span class="res-acc-divider__label">Domain Subjects</span>
+                </div>
+                @for (subject of domainSubjects; track subject?.id) {
+                  @if(subject.topic > 0){
+                    <div
+                      class="res-acc-subject"
+                      [class.res-acc-subject--open]="selectedSubjectId === subject?.id"
+                      [id]="'acc-domain-subject-' + subject?.id"
+                    >
+                      <div
+                        class="res-acc-subject__header"
+                        (click)="toggleSubject(subject)"
+                        role="button"
+                        tabindex="0"
+                        (keydown.enter)="toggleSubject(subject)"
+                        (keydown.space)="$event.preventDefault(); toggleSubject(subject)"
+                        [attr.aria-expanded]="selectedSubjectId === subject?.id"
+                      >
+                        <div class="res-content-card__icon res-content-card__icon--subject">
+                          <span class="material-symbols-outlined">book_5</span>
+                        </div>
+                        <div class="res-acc-subject__copy">
+                          <p class="res-acc-subject__name">{{ subject?.name }}</p>
+                          <span class="res-acc-subject__meta">
+                            <span class="material-symbols-outlined" style="font-size:0.72rem">menu_book</span>
+                            {{ subject?.topic ?? 0 }} topics
+                          </span>
+                        </div>
+                        <span class="res-acc-subject__domain-badge">Domain</span>
+                        <span class="res-acc-subject__chevron material-symbols-outlined">expand_more</span>
+                      </div>
+
+                      @if (selectedSubjectId === subject?.id) {
+                        <div class="res-acc-subject__body">
+                          <nz-spin [nzSpinning]="isTopicsLoading">
+                            @if (topicGroups.length) {
+                              <div class="res-acc-groups">
+                                @for (group of topicGroups; track group.title) {
+                                  <div class="res-acc-group">
+                                    <p class="res-acc-group__title">{{ group.title }}</p>
+                                    <div class="res-acc-topics">
+                                      @for (topic of group.topics; track topic?.id) {
+                                        <div
+                                          class="res-acc-topic"
+                                          [class.res-acc-topic--open]="selectedTopicId === topic?.id"
+                                          [id]="'acc-domain-topic-' + topic?.id"
+                                        >
+                                          <div
+                                            class="res-acc-topic__header"
+                                            (click)="selectTopic(topic)"
+                                            role="button"
+                                            tabindex="0"
+                                            (keydown.enter)="selectTopic(topic)"
+                                            (keydown.space)="$event.preventDefault(); selectTopic(topic)"
+                                            [attr.aria-expanded]="selectedTopicId === topic?.id"
+                                          >
+                                            <span class="res-acc-topic__dot"></span>
+                                            <span class="res-acc-topic__name">{{ topic?.name ?? '—' }}</span>
+                                            <span class="res-acc-topic__badge">{{ topic?.material ?? 0 }} notes</span>
+                                            <span class="res-acc-topic__chevron material-symbols-outlined">expand_more</span>
+                                          </div>
+                                          @if (selectedTopicId === topic?.id) {
+                                            <app-resource-topic-panel
+                                              [topicId]="selectedTopicId!"
+                                              [topicName]="selectedTopicName ?? ''"
+                                              (startTest)="onClickStartTest($event.test, $event.testType)"
+                                              (invalidAccess)="isInvalidModal = true"
+                                            ></app-resource-topic-panel>
+                                          }
+                                        </div>
+                                      }
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            } @else if (!isTopicsLoading) {
+                              <div class="res-empty res-empty--sm">
+                                <span class="res-empty__icon material-symbols-outlined">folder_open</span>
+                                <p class="res-empty__title">No topics yet</p>
+                              </div>
+                            }
+                          </nz-spin>
+                        </div>
+                      }
+                    </div><!-- /res-acc-subject (domain) -->
                   }
-                </nz-spin>
-              </nz-card>
-            </div>
-          </div>
-        } @else {
-          <nz-empty
-            nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            nzNotFoundContent="No Subjects Found"
-            class="pb-4"
-          ></nz-empty>
-        }
+                }
+              }
+
+            } @else if (!isSubjectsLoading) {
+              <div class="res-empty" style="padding: 4rem 1rem;">
+                <span class="res-empty__icon material-symbols-outlined">inventory_2</span>
+                <p class="res-empty__title">No subjects found</p>
+                <p class="res-empty__subtitle">Subjects will appear here once they are available.</p>
+              </div>
+            }
+
+          </div><!-- /res-accordion -->
+        </nz-spin>
+
       </ng-template>
-    </nz-tab>
+    </nz-tab><!-- /Subjects tab -->
+
+    <!-- ════════════════ VIDEOS TAB ════════════════ -->
     <nz-tab nzTitle="Videos">
       <ng-template nz-tab>
-        <p class="font-12 font-500 mb-2">Search Video</p>
-        <div class="row align-items-center">
-          <div class="col-md-4 mb-3">
+        <!-- Filter bar -->
+        <p class="text-[13px] font-bold !mb-1">Filters</p>
+        <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <nz-input-group [nzPrefix]="videoSearchPfx" class="res-filter__search" nzSize="large">
+            <ng-template #videoSearchPfx>
+              <span class="material-symbols-outlined res-filter__pfx-icon">search</span>
+            </ng-template>
             <input
               #videoSearchInput
               nz-input
               type="text"
-              class="mr-3"
-              placeholder="Search"
+              placeholder="Search videos…"
               (input)="onSearchVideoLinks(videoSearchInput.value)"
+              id="video-search-input"
             />
-          </div>
+          </nz-input-group>
         </div>
-        <nz-table
-          [nzData]="videoLinks"
-          [nzShowPagination]="true"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzTotal]="totalVideos"
-          [nzPageIndex]="videosPageIndex"
-          [nzPageSize]="videosPageSize"
-          [nzShowTotal]="printVideoTotalCount"
-          (nzQueryParams)="videoLinks[0] ? getVideoLinks($event) : ''"
-          [nzScroll]="{ x: '640px' }"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Video Name</th>
-              <th class="text-center" [nzWidth]="'100px'">Subject</th>
-              <th class="text-center" [nzWidth]="'100px'">Length</th>
-              <th class="text-center" [nzWidth]="'64px'">Type</th>
-              <th class="text-center" [nzWidth]="'80px'">Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let video of videoLinks; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ video.name }}</td>
-              <td class="text-center">{{ video.subject }}</td>
-              <td class="text-center">
-                {{ Math.floor(video.length / 60) }} hr
-                {{ video.length % 60 }} min
-              </td>
-              <td
-                class="text-center font-600"
-                [class]="video?.isFree ? 'text-free' : 'text-paid'"
-              >
-                {{ video?.isFree ? "Free" : "Paid" }}
-              </td>
-              <td class="text-center">
-                <a
-                  *ngIf="video?.url !== null"
+
+        <nz-divider></nz-divider>
+
+        <!-- Video cards -->
+        <nz-spin [nzSpinning]="isVideosLoading">
+          @if (videoLinks.length) {
+            <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3" id="videos-grid">
+              @for (video of videoLinks; track video?.id) {
+
+                <!-- Video with URL -->
+                @if(video?.url !== null) {
+                  <a
                   target="_blank"
-                  [href]="
-                    video?.url?.startsWith('https://') ||
-                    video?.url?.startsWith('http://')
-                      ? video?.url
-                      : 'https://' + video?.url
-                  "
+                  [href]="video?.url?.startsWith('https://') || video?.url?.startsWith('http://')
+                    ? video?.url
+                    : 'https://' + video?.url"
                   (click)="onViewVideo(video?.id)"
-                  >Click Here</a
+                  class="res-content-card"
+                  [id]="'video-card-' + video?.id"
                 >
-                <a *ngIf="video?.url === null" (click)="isInvalidModal = true">
-                  Click Here
+                  <div class="res-content-card__icon res-content-card__icon--video"><span class="material-symbols-outlined">play_circle</span>
+                  </div>
+                  <div class="res-content-card__body">
+                    <p class="res-content-card__name">{{ video?.name }}</p>
+                    <div class="res-content-card__meta">
+                      @if (video?.subject) {
+                        <span class="res-content-card__chip">{{ video?.subject }}</span>
+                      }
+                      <span class="res-content-card__stat">
+                        <span class="material-symbols-outlined" style="font-size:0.75rem">schedule</span>
+                        {{ Math.floor(video?.length / 60) }}h {{ video?.length % 60 }}m
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    class="res-content-card__badge"
+                    [class.res-content-card__badge--free]="video?.isFree"
+                    [class.res-content-card__badge--paid]="!video?.isFree"
+                  >
+                    {{ video?.isFree ? 'Free' : 'Paid' }}
+                  </span>
                 </a>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #printVideoTotalCount>
-          <div
-            *ngIf="totalVideos === 0"
-            class="result-not-found font-weight-normal"
-          >
-            No Results Found
-          </div>
-          <div
-            *ngIf="totalVideos !== 0"
-            class="result-not-found font-weight-normal"
-          >
-            <b>{{ totalVideos }}</b> Results Found
-          </div>
-        </ng-template>
+                }
+
+                <!-- Video locked -->
+                <div
+                  *ngIf="video?.url === null"
+                  class="res-content-card"
+                  (click)="isInvalidModal = true"
+                  style="cursor:pointer"
+                  [id]="'video-locked-' + video?.id"
+                >
+                  <div class="res-content-card__icon res-content-card__icon--locked">
+                    <span class="material-symbols-outlined">lock</span>
+                  </div>
+                  <div class="res-content-card__body">
+                    <p class="res-content-card__name">{{ video?.name }}</p>
+                    <div class="res-content-card__meta">
+                      @if (video?.subject) {
+                        <span class="res-content-card__chip">{{ video?.subject }}</span>
+                      }
+                      <span class="res-content-card__stat">
+                        <span class="material-symbols-outlined" style="font-size:0.75rem">schedule</span>
+                        {{ Math.floor(video?.length / 60) }}h {{ video?.length % 60 }}m
+                      </span>
+                    </div>
+                  </div>
+                  <span class="res-content-card__badge res-content-card__badge--paid">Paid</span>
+                </div>
+
+              }
+            </div>
+
+            <!-- Pagination -->
+            <div class="app-pagination-row">
+              <span class="app-pagination-row__count">
+                @if (totalVideos === 0) { No results }
+                @else { <b>{{ totalVideos }}</b> videos }
+              </span>
+              <nz-pagination
+                [nzPageIndex]="videosPageIndex"
+                [nzTotal]="totalVideos"
+                [nzPageSize]="videosPageSize"
+                [nzShowSizeChanger]="false"
+                (nzPageIndexChange)="getVideoLinks({ pageIndex: $event, pageSize: videosPageSize })"
+              ></nz-pagination>
+              <nz-select
+                class="app-pagination-row__size"
+                [ngModel]="videosPageSize"
+                (ngModelChange)="getVideoLinks({ pageIndex: 1, pageSize: $event })"
+              >
+                @for (size of pageSizeOptions; track size) {
+                  <nz-option [nzValue]="size" [nzLabel]="size + ' / page'"></nz-option>
+                }
+              </nz-select>
+            </div>
+          } @else if (!isVideosLoading) {
+            <div class="res-empty" style="padding: 3.5rem 1rem;">
+              <span class="res-empty__icon material-symbols-outlined">smart_display</span>
+              <p class="res-empty__title">No videos found</p>
+              <p class="res-empty__subtitle">Try adjusting your search or check back later.</p>
+            </div>
+          }
+        </nz-spin>
       </ng-template>
-    </nz-tab>
+    </nz-tab><!-- /Videos tab -->
+
+    <!-- ════════════════ NEWSPAPERS TAB ════════════════ -->
     <nz-tab nzTitle="Newspapers">
       <ng-template nz-tab>
-        <p class="font-12 font-500 mb-2">Search Newspaper</p>
-        <div class="row mb-md-0 mb-4">
-          <div class="col-md-4 mb-3">
+        <!-- Filter bar -->
+        <p class="text-[13px] font-bold !mb-1">Filters</p>
+        <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <nz-input-group [nzPrefix]="newspaperSearchPfx" class="res-filter__search" nzSize="large">
+            <ng-template #newspaperSearchPfx>
+              <span class="material-symbols-outlined res-filter__pfx-icon">search</span>
+            </ng-template>
             <input
               #newspaperSearchInput
               nz-input
               type="text"
-              class="mr-3"
-              placeholder="Search"
+              placeholder="Search newspapers…"
               (input)="onSearchNewspaper(newspaperSearchInput.value)"
+              id="newspaper-search-input"
             />
-          </div>
-          <div class="col-md-4">
-            <nz-date-picker
-              [(ngModel)]="searchNewspaperDate"
-              (ngModelChange)="getNewspapers()"
-              nzFormat="dd MMM yyyy"
-            ></nz-date-picker>
-          </div>
+          </nz-input-group>
+          <nz-date-picker
+            class="w-full"
+            [(ngModel)]="searchNewspaperDate"
+            (ngModelChange)="getNewspapers()"
+            nzFormat="dd MMM yyyy"
+            nzPlaceHolder="Filter by date"
+            id="newspaper-date-picker"
+          ></nz-date-picker>
         </div>
-        <nz-table
-          [nzData]="newspapers"
-          [nzShowPagination]="true"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzTotal]="totalNewspaper"
-          [nzPageIndex]="newspaperPageIndex"
-          [nzPageSize]="newspaperPageSize"
-          [nzShowTotal]="printNewspaperTotalCount"
-          (nzQueryParams)="newspapers[0] ? getNewspapers($event) : ''"
-          [nzScroll]="{ x: '640px' }"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Newspaper Name</th>
-              <th class="text-center" [nzWidth]="'100px'">Date</th>
-              <th class="text-center" [nzWidth]="'64px'">Type</th>
-              <th class="text-center" [nzWidth]="'80px'">Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let newspaper of newspapers; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ newspaper?.name }}</td>
-              <td class="text-center">
-                {{ newspaper?.date | date: "dd MMM yyyy" }}
-              </td>
-              <td
-                class="text-center font-600"
-                [class]="newspaper?.isFree ? 'text-free' : 'text-paid'"
-              >
-                {{ newspaper?.isFree ? "Free" : "Paid" }}
-              </td>
-              <td class="text-center">
-                <a
-                  *ngIf="newspaper?.url !== null"
-                  target="_blank"
-                  [href]="
-                    newspaper?.url?.startsWith('https://') ||
-                    newspaper?.url?.startsWith('http://')
+        <nz-divider></nz-divider>
+
+        <!-- Newspaper cards -->
+        <nz-spin [nzSpinning]="isNewspapersLoading">
+          @if (newspapers.length) {
+            <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3" id="newspapers-grid">
+              @for (newspaper of newspapers; track newspaper?.id) {
+
+                @if(newspaper?.url !== null) {
+                  <!-- Newspaper with URL -->
+                  <a
+                    target="_blank"
+                    [href]="newspaper?.url?.startsWith('https://') || newspaper?.url?.startsWith('http://')
                       ? newspaper?.url
-                      : 'https://' + newspaper?.url
-                  "
-                  >Click Here</a
-                >
-                <a
-                  *ngIf="newspaper?.url === null"
-                  (click)="isInvalidModal = true"
-                >
-                  Click Here
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #printNewspaperTotalCount>
-          <div
-            *ngIf="totalNewspaper === 0"
-            class="result-not-found font-weight-normal"
-          >
-            No Results Found
-          </div>
-          <div
-            *ngIf="totalNewspaper !== 0"
-            class="result-not-found font-weight-normal"
-          >
-            <b>{{ totalNewspaper }}</b> Results Found
-          </div>
-        </ng-template>
+                      : 'https://' + newspaper?.url"
+                    class="res-content-card"
+                    [id]="'newspaper-card-' + newspaper?.id"
+                  >
+                    <div class="res-content-card__icon res-content-card__icon--newspaper">
+                      <span class="material-symbols-outlined">newspaper</span>
+                    </div>
+                    <div class="res-content-card__body">
+                      <p class="res-content-card__name">{{ newspaper?.name }}</p>
+                      <div class="res-content-card__meta">
+                        <span class="res-content-card__stat">
+                          <span class="material-symbols-outlined" style="font-size:0.75rem">calendar_today</span>
+                          {{ newspaper?.date | date: 'dd MMM yyyy' }}
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      class="res-content-card__badge"
+                      [class.res-content-card__badge--free]="newspaper?.isFree"
+                      [class.res-content-card__badge--paid]="!newspaper?.isFree"
+                    >
+                      {{ newspaper?.isFree ? 'Free' : 'Paid' }}
+                    </span>
+                  </a>
+                } @else {
+                  <!-- Newspaper locked -->
+                  <div
+                    class="res-content-card"
+                    (click)="isInvalidModal = true"
+                    style="cursor:pointer"
+                    [id]="'newspaper-locked-' + newspaper?.id"
+                  >
+                    <div class="res-content-card__icon res-content-card__icon--locked">
+                      <span class="material-symbols-outlined">lock</span>
+                    </div>
+                    <div class="res-content-card__body">
+                      <p class="res-content-card__name">{{ newspaper?.name }}</p>
+                      <div class="res-content-card__meta">
+                        <span class="res-content-card__stat">
+                          <span class="material-symbols-outlined" style="font-size:0.75rem">calendar_today</span>
+                          {{ newspaper?.date | date: 'dd MMM yyyy' }}
+                        </span>
+                      </div>
+                    </div>
+                    <span class="res-content-card__badge res-content-card__badge--paid">Paid</span>
+                  </div>
+                }
+              }
+            </div>
+
+            <!-- Pagination -->
+            <div class="app-pagination-row">
+              <span class="app-pagination-row__count">
+                @if (totalNewspaper === 0) { No results }
+                @else { <b>{{ totalNewspaper }}</b> newspapers }
+              </span>
+              <nz-pagination
+                [nzPageIndex]="newspaperPageIndex"
+                [nzTotal]="totalNewspaper"
+                [nzPageSize]="newspaperPageSize"
+                [nzShowSizeChanger]="false"
+                (nzPageIndexChange)="getNewspapers({ pageIndex: $event, pageSize: newspaperPageSize })"
+              ></nz-pagination>
+              <nz-select
+                class="app-pagination-row__size"
+                [ngModel]="newspaperPageSize"
+                (ngModelChange)="getNewspapers({ pageIndex: 1, pageSize: $event })"
+              >
+                @for (size of pageSizeOptions; track size) {
+                  <nz-option [nzValue]="size" [nzLabel]="size + ' / page'"></nz-option>
+                }
+              </nz-select>
+            </div>
+          } @else if (!isNewspapersLoading) {
+            <div class="res-empty" style="padding: 3.5rem 1rem;">
+              <span class="res-empty__icon material-symbols-outlined">newspaper</span>
+              <p class="res-empty__title">No newspapers found</p>
+              <p class="res-empty__subtitle">Try adjusting your search or date filter.</p>
+            </div>
+          }
+        </nz-spin>
       </ng-template>
-    </nz-tab>
+    </nz-tab><!-- /Newspapers tab -->
+
+    <!-- ════════════════ PYQs TAB ════════════════ -->
     <nz-tab nzTitle="PYQs">
       <ng-template nz-tab>
-        @if(pyqs.length){
-          <div id="pyq-container" class="ant-row mx-n1">
-            <div
-              class="ant-col-xs-24 ant-col-md-12 ant-col-xl-8 p-1"
-              *ngFor="let pyq of pyqs"
-            >
-              <a
-                *ngIf="pyq?.url"
-                target="_blank"
-                [href]="
-                pyq?.url?.startsWith('https://') ||
-                pyq?.url?.startsWith('http://')
-                  ? pyq?.url
-                  : 'https://' + pyq?.url
-              "
-                class="text-decoration-none"
-              >
-                <div class="subject d-flex align-items-center cursor-pointer" >
-                  <div class="mr-2">
-                    <div class="subject-icon student-diagonal-gradient">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <g clip-path="url(#clip0_1305_208)">
-                          <path
-                            d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
-                            fill="white"
-                          />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_1305_208">
-                            <rect width="24" height="24" fill="white" />
-                          </clipPath>
-                        </defs>
-                      </svg>
+        <nz-spin [nzSpinning]="isPYQsLoading">
+          @if (pyqs.length) {
+            <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3" id="pyq-grid">
+              @for (pyq of pyqs; track pyq?.id) {
+                @if(pyq?.url){
+                  <!-- PYQ with URL -->
+                  <a
+                    target="_blank"
+                    [href]="pyq?.url?.startsWith('https://') || pyq?.url?.startsWith('http://')
+                    ? pyq?.url
+                    : 'https://' + pyq?.url"
+                    class="res-content-card"
+                    [id]="'pyq-card-' + pyq?.id"
+                  >
+                    <div class="res-content-card__icon res-content-card__icon--pyq">
+                      <span class="material-symbols-outlined">history_edu</span>
                     </div>
-                  </div>
-                  <div class="flex-grow-1">
-                    <p class="text-primary font-16 font-400">
-                      {{ pyq.name }}
-                    </p>
-                  </div>
-                </div>
-              </a>
-              <a
-                *ngIf="!pyq?.url"
-                (click)="isInvalidModal = true"
-                class="text-decoration-none"
-              >
-                <div class="subject ant-row ant-row-middle">
-                  <div class="ant-col-xl-6 ant-col-5">
-                    <div class="subject-icon student-diagonal-gradient">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <g clip-path="url(#clip0_1305_208)">
-                          <path
-                            d="M14.953 6.46598C15.177 7.73698 14.572 9.00798 13.447 9.62898C13 9.87498 13 9.94698 13 9.99998C13 10.553 12.553 11 12 11C11.447 11 11 10.553 11 9.99998C11 8.69198 12.038 8.12098 12.481 7.87698C12.77 7.71698 13.076 7.34198 12.983 6.81198C12.914 6.41898 12.581 6.08598 12.19 6.01798C11.88 5.95998 11.587 6.03898 11.358 6.23398C11.13 6.42398 11 6.70398 11 7.00098C11 7.55398 10.553 8.00098 10 8.00098C9.44701 8.00098 9.00001 7.55398 9.00001 7.00098C9.00001 6.11198 9.39101 5.27398 10.072 4.70198C10.753 4.12998 11.65 3.88698 12.536 4.04898C13.746 4.25998 14.741 5.25398 14.953 6.46598ZM12 12C11.172 12 10.5 12.672 10.5 13.5C10.5 14.328 11.172 15 12 15C12.828 15 13.5 14.328 13.5 13.5C13.5 12.672 12.828 12 12 12ZM21 8.99998C21 11.589 19.882 14.054 17.932 15.764C16.686 16.856 16 18.276 16 19.762V20.31C16 22.345 14.345 24 12.31 24H11.691C9.65601 24 8.00101 22.345 8.00101 20.31V20.15C8.00101 18.484 7.24401 16.862 5.86901 15.584C3.72001 13.583 2.70201 10.755 3.07601 7.82198C3.59001 3.78098 6.90401 0.516983 10.956 0.0589828C13.517 -0.226017 16.086 0.581983 17.994 2.28798C19.904 3.99398 21 6.44098 21 9.00098V8.99998ZM14 20.31V20H9.99801C9.99801 20.05 10 20.1 10 20.149V20.309C10 21.241 10.759 21.999 11.69 21.999H12.309C13.241 21.999 13.999 21.24 13.999 20.309L14 20.31ZM19 8.99998C19 7.00898 18.147 5.10498 16.662 3.77798C15.362 2.61698 13.733 1.99998 12.008 1.99998C11.735 1.99998 11.458 2.01498 11.181 2.04698C8.03401 2.40198 5.45901 4.93798 5.06001 8.07398C4.76801 10.359 5.56001 12.562 7.23101 14.119C8.43201 15.235 9.26901 16.569 9.68901 18H14.237C14.615 16.599 15.436 15.291 16.614 14.26C18.131 12.93 19 11.013 19 8.99998Z"
-                            fill="white"
-                          />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_1305_208">
-                            <rect width="24" height="24" fill="white" />
-                          </clipPath>
-                        </defs>
-                      </svg>
+                    <div class="res-content-card__body">
+                      <p class="res-content-card__name">{{ pyq?.name }}</p>
+                      <div class="res-content-card__meta">
+                      <span class="res-content-card__stat">
+                        <span class="material-symbols-outlined" style="font-size:0.75rem">quiz</span>
+                        Previous Year Questions
+                      </span>
+                      </div>
                     </div>
+                    <span class="res-content-card__badge res-content-card__badge--free">Free</span>
+                  </a>
+                } @else {
+                  <!-- PYQ locked -->
+                  <div
+                    class="res-content-card"
+                    (click)="isInvalidModal = true"
+                    style="cursor:pointer"
+                    [id]="'pyq-locked-' + pyq?.id"
+                  >
+                    <div class="res-content-card__icon res-content-card__icon--locked">
+                      <span class="material-symbols-outlined">lock</span>
+                    </div>
+                    <div class="res-content-card__body">
+                      <p class="res-content-card__name">{{ pyq?.name }}</p>
+                      <div class="res-content-card__meta">
+                      <span class="res-content-card__stat">
+                        <span class="material-symbols-outlined" style="font-size:0.75rem">quiz</span>
+                        Previous Year Questions
+                      </span>
+                      </div>
+                    </div>
+                    <span class="res-content-card__badge res-content-card__badge--paid">Paid</span>
                   </div>
-                  <div class="ant-col-xl-18 ant-col-19">
-                    <p class="text-primary font-16 font-400">
-                      {{ pyq.name }}
-                    </p>
-                  </div>
-                </div>
-              </a>
+                }
+              }
             </div>
-          </div>
-        } @else {
-          <nz-empty
-            nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-            nzNotFoundContent="No PYQs Found"
-            class="pb-4"
-          ></nz-empty>
-        }
+          } @else if (!isPYQsLoading) {
+            <div class="res-empty" style="padding: 3.5rem 1rem;">
+              <span class="res-empty__icon material-symbols-outlined">history_edu</span>
+              <p class="res-empty__title">No PYQs available</p>
+              <p class="res-empty__subtitle">Previous year questions will appear here once uploaded.</p>
+            </div>
+          }
+        </nz-spin>
 
       </ng-template>
-    </nz-tab>
-  </nz-tabs>
-</nz-card>
+    </nz-tab><!-- /PYQs tab -->
 
+  </nz-tabs>
+</div><!-- /res-page -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- Modals                                                                    -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- Invalid Access modal -->
 <nz-modal
   [(nzVisible)]="isInvalidModal"
   [nzMaskClosable]="true"
   [nzFooter]="null"
+  [nzWidth]="420"
+  nzCentered
   (nzOnCancel)="isInvalidModal = false"
+  id="invalid-access-modal"
 >
   <ng-container *nzModalContent>
-    <div class="d-flex align-items-center font-24 font-500">
-      <svg
-        class="mr-2"
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 32 32"
-        fill="none"
-      >
-        <path
-          d="M16 22.6665C16.3778 22.6665 16.6945 22.5387 16.95 22.2832C17.2056 22.0276 17.3333 21.7109 17.3333 21.3332C17.3333 20.9554 17.2056 20.6387 16.95 20.3832C16.6945 20.1276 16.3778 19.9998 16 19.9998C15.6222 19.9998 15.3056 20.1276 15.05 20.3832C14.7945 20.6387 14.6667 20.9554 14.6667 21.3332C14.6667 21.7109 14.7945 22.0276 15.05 22.2832C15.3056 22.5387 15.6222 22.6665 16 22.6665ZM14.6667 17.3332H17.3333V9.33317H14.6667V17.3332ZM16 29.3332C14.1556 29.3332 12.4222 28.9832 10.8 28.2832C9.17778 27.5832 7.76667 26.6332 6.56667 25.4332C5.36667 24.2332 4.41667 22.8221 3.71667 21.1998C3.01667 19.5776 2.66667 17.8443 2.66667 15.9998C2.66667 14.1554 3.01667 12.4221 3.71667 10.7998C4.41667 9.17762 5.36667 7.7665 6.56667 6.5665C7.76667 5.3665 9.17778 4.4165 10.8 3.7165C12.4222 3.0165 14.1556 2.6665 16 2.6665C17.8444 2.6665 19.5778 3.0165 21.2 3.7165C22.8222 4.4165 24.2333 5.3665 25.4333 6.5665C26.6333 7.7665 27.5833 9.17762 28.2833 10.7998C28.9833 12.4221 29.3333 14.1554 29.3333 15.9998C29.3333 17.8443 28.9833 19.5776 28.2833 21.1998C27.5833 22.8221 26.6333 24.2332 25.4333 25.4332C24.2333 26.6332 22.8222 27.5832 21.2 28.2832C19.5778 28.9832 17.8444 29.3332 16 29.3332Z"
-          fill="#8555FD"
-        />
-      </svg>
-      Error!
+    <div class="res-modal">
+      <div class="res-modal__head">
+        <span class="res-modal__icon res-modal__icon--error material-symbols-outlined">
+          info
+        </span>
+        <div>
+          <p class="res-modal__title">Access Restricted</p>
+          <p class="res-modal__subtitle">This resource requires a subscription.</p>
+        </div>
+      </div>
+
+      <div class="res-modal__body">
+        <p style="font-size:0.84rem; color:var(--res-text-muted); line-height:1.55;">
+          You do not have access to this content. A valid subscription is required to
+          unlock this material, video, or paper.
+        </p>
+      </div>
+
+      <div class="res-modal__actions">
+        <button
+          nz-button
+          type="button"
+          class="btn-secondary modal-btn"
+          (click)="isInvalidModal = false"
+          id="invalid-modal-cancel-btn"
+        >
+          Cancel
+        </button>
+        <button
+          nz-button
+          class="btn-primary modal-btn"
+          [routerLink]="['/', 'student', 'account']"
+          id="invalid-modal-subscribe-btn"
+        >
+          Subscribe now
+          <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+        </button>
+      </div>
     </div>
-    <p class="mt-3 font-16 font-400">Invalid Access</p>
-    <p class="mt-1 font-12 font-300">
-      You do not have access to this video/newspaper. Please ensure you have a
-      valid subscription to proceed.
-    </p>
-    <p class="mt-3 font-16 font-400">Would you like to subscribe now?</p>
-    <div class="d-flex justify-content-start mt-2 pt-2">
-      <button
-        nz-button
-        type="button"
-        class="bg-transparent border-primary text-primary mr-4 mb-1"
-        (click)="isInvalidModal = false"
-      >
-        Cancel
-      </button>
-      <button
-        nz-button
-        class="btn-primary mb-1 mr-2"
-        [routerLink]="['/', 'student', 'account']"
-      >
-        Subscribe
-      </button>
+  </ng-container>
+</nz-modal>
+
+<!-- Start Test modal -->
+<nz-modal
+  [(nzVisible)]="isStartTestModal"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  [nzWidth]="460"
+  nzCentered
+  (nzOnCancel)="isStartTestModal = false"
+  id="start-test-modal"
+>
+  <ng-container *nzModalContent>
+    <div class="res-modal">
+      <div class="res-modal__head">
+        <span class="res-modal__icon res-modal__icon--info material-symbols-outlined">
+          quiz
+        </span>
+        <div>
+          <p class="res-modal__title">Start Test</p>
+          <p class="res-modal__subtitle">Review the details before you begin.</p>
+        </div>
+      </div>
+
+      <dl class="res-modal__facts">
+        <div class="res-modal__fact res-modal__facts--full" style="grid-column:1/-1">
+          <dt>Test Name</dt>
+          <dd>{{ selectedTest?.name ?? '—' }}</dd>
+        </div>
+        <div class="res-modal__fact">
+          <dt>Topic</dt>
+          <dd>{{ selectedTest?.topic?.name || selectedTopicName || '—' }}</dd>
+        </div>
+        <div class="res-modal__fact">
+          <dt>Type</dt>
+          <dd>{{ selectedTestType | titlecase }}</dd>
+        </div>
+        <div class="res-modal__fact">
+          <dt>Duration</dt>
+          <dd>{{ Math.floor(selectedTest?.duration / 60) }}h {{ selectedTest?.duration % 60 }}m</dd>
+        </div>
+        <div class="res-modal__fact">
+          <dt>Questions</dt>
+          <dd>{{ selectedTest?.totalQuestions ?? '—' }}</dd>
+        </div>
+      </dl>
+
+      <div class="res-modal__note">
+        <p class="res-modal__note-title">Before you start</p>
+        <ul>
+          <li>You will have {{ selectedTest?.duration }} minutes to complete the test.</li>
+          <li>No answer submissions are allowed after the time limit expires.</li>
+          <li>The test cannot be paused or resumed once started.</li>
+        </ul>
+      </div>
+
+      <div class="res-modal__actions">
+        <button
+          nz-button
+          type="button"
+          class="btn-secondary modal-btn"
+          (click)="isStartTestModal = false"
+          id="start-test-cancel-btn"
+        >
+          Cancel
+        </button>
+        <button
+          nz-button
+          class="btn-primary modal-btn"
+          [routerLink]="['/', 'student', 'tests', 'attempt', selectedTestType, selectedTest?.id]"
+          id="start-test-confirm-btn"
+        >
+          Start Test
+          <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>
+
+<!-- Pending Test modal -->
+<nz-modal
+  [(nzVisible)]="isPendingTest"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+  [nzWidth]="400"
+  nzCentered
+  (nzOnCancel)="onModalClose()"
+  id="pending-test-modal"
+>
+  <ng-container *nzModalContent>
+    <div class="res-modal">
+      <div class="res-modal__head">
+        <span class="res-modal__icon res-modal__icon--warn material-symbols-outlined">
+          hourglass_top
+        </span>
+        <div>
+          <p class="res-modal__title">Unfinished Test</p>
+          <p class="res-modal__subtitle">You have a pending {{ pendingTestDetails?.testType }} test.</p>
+        </div>
+      </div>
+
+      <div class="res-modal__body">
+        <p style="font-size:0.84rem; color:var(--res-text-muted); line-height:1.55;">
+          Would you like to continue where you left off, or submit what you've done so far?
+        </p>
+      </div>
+
+      <div class="res-modal__actions">
+        <button
+          nz-button
+          type="button"
+          class="btn-secondary modal-btn"
+          (click)="submitPendingTest()"
+          id="pending-test-submit-btn"
+        >
+          Submit
+        </button>
+        <button
+          nz-button
+          class="btn-primary modal-btn"
+          [routerLink]="['/', 'student', 'tests', 'attempt', pendingTestDetails?.testType, pendingTestDetails?.testId]"
+          id="pending-test-continue-btn"
+        >
+          Continue
+          <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+        </button>
+      </div>
     </div>
   </ng-container>
 </nz-modal>

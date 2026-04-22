@@ -6,6 +6,8 @@ import { TestsComponent } from './tests.component';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { IconsProviderModule } from '../../icons-provider.module';
 import { TestAttemptComponent } from './test-attempt/test-attempt.component';
+import { TestsSkeletonComponent } from './shared/tests-skeleton/tests-skeleton.component';
+import { ExamTopbarComponent } from './shared/exam-topbar/exam-topbar.component';
 import { FormsModule } from '@angular/forms';
 import {
   BaseChartDirective,
@@ -23,7 +25,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [TestsComponent, TestAttemptComponent],
+  declarations: [
+    TestsComponent,
+    TestAttemptComponent,
+    TestsSkeletonComponent,
+    ExamTopbarComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

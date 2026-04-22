@@ -2,10 +2,10 @@
 @use "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-@import "./assets/scss/font-face.scss";
-@import "./assets/scss/font-variables.scss";
+@import url("./assets/scss/font-face.scss");
+@import url("./assets/scss/font-variables.scss");
 // @import "./assets/scss/layouting.css";
-@import "./assets/scss/colors.scss";
+@import url("./assets/scss/colors.scss");
 @import "ng-zorro-antd/ng-zorro-antd.min.css";
 
 @theme {
@@ -93,19 +93,19 @@ $admin-primary: #0284c7;
 
   --secondary-container: #d0e1fb;
   --on-secondary-container: #54647a;
-  
+
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --ambient-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06);
-  
+
   --glass-bg: rgba(247, 249, 251, 0.8);
   --glass-border: rgba(255, 255, 255, 0.3);
   --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
-  --indigo-mesh: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                 radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+  --indigo-mesh: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
+                 radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%),
                  radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
   /* Light marketing hero — used by landing parallax mesh (falls back to --indigo-mesh if unset) */
   --landing-hero-mesh:
@@ -595,8 +595,8 @@ button.ant-btn.btn-a-secondary {
     &:hover:not(.ant-pagination-item-active):not(.ant-pagination-disabled) {
       background: rgba(241, 245, 249, 0.6) !important; // Very subtle slate-100
       transform: translateY(-2px);
-      
-      a, .ant-pagination-item-link { 
+
+      a, .ant-pagination-item-link {
         color: #1e293b !important; // slate-800
         text-decoration: none !important;
       }
@@ -618,11 +618,11 @@ button.ant-btn.btn-a-secondary {
       box-shadow: 0 16px 32px -6px rgba(0, 74, 198, 0.45), 0 4px 10px -2px rgba(0, 74, 198, 0.2) !important;
     }
   }
-  
+
   &-disabled {
     opacity: 0.3;
     cursor: not-allowed;
-    
+
     &:hover {
       transform: none !important;
       background: transparent !important;
@@ -642,7 +642,7 @@ button.ant-btn.btn-a-secondary {
       border: 1px solid #e2e8f0 !important;
       box-shadow: none !important;
       transition: all 0.3s ease !important;
-      
+
       .ant-select-selection-item {
         font-family: var(--font-headline), "Manrope", sans-serif;
         font-weight: 600;
@@ -956,24 +956,45 @@ nz-input-group.password-input{
 }
 
 .ant-picker-input > input {
-  font-weight: 300;
-  font-size: 12px;
+  font-size: 0.9rem !important;
+  font-weight: 400;
+  color: var(--on-surface);
+
+  &::placeholder {
+    font-size: 0.9rem !important;
+    color: color-mix(in srgb, var(--on-surface) 50%, #fff);
+    font-weight: 400;
+  }
 }
 
 .ant-picker {
-  height: 36px;
+  min-height: 44px;
   width: 100%;
-  border-radius: 6px;
-  border: 1px solid #d9d9d9;
+  padding: 0.35rem 0.85rem;
+  border-radius: 10px !important;
+  border: 1px solid rgba(148, 163, 184, 0.42) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary) 45%, transparent) !important;
+  }
+
+  &:focus-within {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent) !important;
+  }
 }
 
 .admin .ant-picker:hover,
 .admin-form .ant-picker:hover {
-  border-color: $admin-primary;
+  border-color: $admin-primary !important;
 }
 
 .admin .ant-picker:focus-within,
 .admin-form .ant-picker:focus-within {
+  border-color: $admin-primary !important;
   box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.2) !important;
 }
 
@@ -1324,6 +1345,63 @@ nz-switch:has(.ant-switch-small) {
       border-color: #00a3ff;
       box-shadow: 0 0 0 2px rgba(0, 163, 255, 0.50);
     }
+  }
+}
+
+// ── Reusable 3-region pagination row ────────────────────────────────────────
+// Anchors total count (left), pagination (center), and page-size changer
+// (right). Regions stay pinned independent of which siblings are present.
+// Use on a wrapper holding: `.app-pagination-row__count` (optional) +
+// `<nz-pagination>` (with nzShowSizeChanger true|false).
+.app-pagination-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+
+  > .app-pagination-row__count {
+    grid-column: 1;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    color: var(--on-surface-variant, #64748b);
+    gap: 0.25rem;
+
+    b { color: var(--on-surface, #0f172a); }
+  }
+
+  > nz-pagination {
+    grid-column: 2;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+  }
+
+  > nz-pagination .ant-pagination {
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  > .app-pagination-row__size {
+    grid-column: 3;
+    justify-self: end;
+    min-width: 110px;
+    width: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-pagination-row {
+    grid-template-columns: 1fr;
+    row-gap: 0.5rem;
+
+    > .app-pagination-row__count { grid-column: 1; justify-self: start; }
+    > nz-pagination              { grid-column: 1; justify-self: stretch; }
+    > .app-pagination-row__size  { grid-column: 1; justify-self: stretch; width: 100%; }
   }
 }
 

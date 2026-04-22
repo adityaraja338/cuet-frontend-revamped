@@ -106,7 +106,8 @@
               "buildTarget": "cuet-frontend-revamped:build:production"
             },
             "development": {
-              "buildTarget": "cuet-frontend-revamped:build:development"
+              "buildTarget": "cuet-frontend-revamped:build:development",
+              "prebundle": false
             }
           },
           "defaultConfiguration": "development"

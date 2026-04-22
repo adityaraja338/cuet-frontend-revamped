@@ -1,10 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpService } from '../../../shared/services/http.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzRadioComponent } from 'ng-zorro-antd/radio';
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
 
 @Component({
   standalone: false,
@@ -18,15 +26,23 @@ export class TestAttemptComponent implements OnInit {
   testItemDetails: any;
   questions: any;
 
-  isSubmitModal = false;
+  currentSlideIndex = 0;
+  paletteDrawerOpen = false;
 
+  isSubmitModal = false;
   isPerformanceModal = false;
+
+  @ViewChild('questionCarousel') questionCarousel: NzCarouselComponent | undefined;
+  @ViewChild('mobileQuestionCarousel') mobileQuestionCarousel:
+    | NzCarouselComponent
+    | undefined;
 
   constructor(
     private http: HttpService,
     private message: NzMessageService,
     private router: Router,
     private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
   ) {}
 
   ngOnInit() {
@@ -53,8 +69,6 @@ export class TestAttemptComponent implements OnInit {
       return;
     }
 
-    // console.log(testId, testType, url);
-
     const data: any = {
       testId,
       testType,
@@ -63,7 +77,9 @@ export class TestAttemptComponent implements OnInit {
     this.http.postStartTest(data).subscribe({
       next: (res: any) => {
         this.testItemDetails = res?.data;
-        this.countdownTime = new Date(res?.data?.stopTime).getTime();
+        if (isPlatformBrowser(this.platformId)) {
+          this.countdownTime = new Date(res?.data?.stopTime).getTime();
+        }
         this.getQuestions();
       },
       error: (error: any) => {
@@ -99,18 +115,14 @@ export class TestAttemptComponent implements OnInit {
     index: number,
   ): void {
     if (this.questions[index].submittedAnswer === selectedOption) {
-      // Clear the answer if the same option is clicked
       this.questions[index].submittedAnswer = null;
-
-      this.postSubmitAnswer(questionId, index, null); // Reset selection
+      this.postSubmitAnswer(questionId, index, null);
     } else {
-      // Set the selected option if a different one is clicked
       this.questions[index].submittedAnswer = selectedOption;
       this.postSubmitAnswer(questionId, index, selectedOption);
     }
   }
 
-  @ViewChild('radioSelect') radioSelect: NzRadioComponent | undefined;
   postSubmitAnswer(questionId: number, index: number, value: string | null) {
     const data: any = {
       answerValue: value,
@@ -122,16 +134,6 @@ export class TestAttemptComponent implements OnInit {
 
     this.questions[index].submittedAnswer = value;
 
-    // if (this.questions[index]?.submittedAnswer === value) {
-    //   this.questions[index].submittedAnswer = null;
-    //   data.answerValue = null;
-    // } else {
-    //   this.questions[index].submittedAnswer = value;
-    // }
-
-    console.log('value', value);
-    console.log('index', this.questions[index]?.submittedAnswer);
-
     this.http.postSubmitAnswer(data).subscribe({
       next: (res: any) => {
         this.message.success('Successful! Answer submitted!');
@@ -139,7 +141,6 @@ export class TestAttemptComponent implements OnInit {
       error: (error: any) => {
         console.log(error);
         this.message?.error(error?.error?.message);
-        // this.router.navigate(['/', 'student', 'home']);
       },
     });
   }
@@ -147,6 +148,31 @@ export class TestAttemptComponent implements OnInit {
   onMarkForReview(index: number) {
     this.questions[index]['markForReview'] =
       !this.questions[index]['markForReview'];
+  }
+
+  onSlideChange(event: { from: number; to: number }) {
+    this.currentSlideIndex = event?.to ?? 0;
+  }
+
+  goToQuestion(index: number) {
+    this.currentSlideIndex = index;
+    this.questionCarousel?.goTo(index);
+    this.mobileQuestionCarousel?.goTo(index);
+    this.paletteDrawerOpen = false;
+  }
+
+  goPrev() {
+    this.questionCarousel?.pre();
+    this.mobileQuestionCarousel?.pre();
+  }
+
+  goNext() {
+    this.questionCarousel?.next();
+    this.mobileQuestionCarousel?.next();
+  }
+
+  onCountdownFinish() {
+    this.postSubmitTest();
   }
 
   postSubmitTest() {
@@ -159,7 +185,6 @@ export class TestAttemptComponent implements OnInit {
     this.http.postSubmitTest(data).subscribe({
       next: (res: any) => {
         this.message.success('Successful! Test submitted!');
-        // this.router.navigate(['/', 'student', 'home']);
         this.getPerformanceDetails(res?.data);
       },
       error: (error: any) => {
@@ -179,7 +204,7 @@ export class TestAttemptComponent implements OnInit {
     [
       {
         data: [0, 0, 0],
-        backgroundColor: ['#8555FD', '#C1B2FF', '#E4E0FA'],
+        backgroundColor: ['#004ac6', '#7c3aed', '#cbd5f5'],
         borderWidth: 4,
         borderRadius: 12,
       },
@@ -246,5 +271,52 @@ export class TestAttemptComponent implements OnInit {
     this.isPerformanceModal = false;
     this.isLeaderboardVisible = false;
     this.router.navigate(['/', 'student', 'home']);
+  }
+
+  // ── Derived getters ────────────────────────────────────────────────
+
+  get totalCount(): number {
+    return this.questions?.length ?? 0;
+  }
+
+  get answeredCount(): number {
+    if (!this.questions) return 0;
+    return this.questions.filter(
+      (q: any) => q?.submittedAnswer !== null && q?.submittedAnswer !== undefined,
+    ).length;
+  }
+
+  get reviewCount(): number {
+    if (!this.questions) return 0;
+    return this.questions.filter((q: any) => q?.markForReview === true).length;
+  }
+
+  get unattemptedCount(): number {
+    return Math.max(0, this.totalCount - this.answeredCount);
+  }
+
+  get progressPercent(): number {
+    if (!this.totalCount) return 0;
+    return Math.round((this.answeredCount / this.totalCount) * 100);
+  }
+
+  // ── Keyboard navigation ───────────────────────────────────────────
+
+  @HostListener('document:keydown.arrowleft', ['$event'])
+  onArrowLeft(event: Event) {
+    if (this.isSubmitModal || this.isPerformanceModal) return;
+    const target = event.target as HTMLElement | null;
+    if (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) return;
+    event.preventDefault();
+    this.goPrev();
+  }
+
+  @HostListener('document:keydown.arrowright', ['$event'])
+  onArrowRight(event: Event) {
+    if (this.isSubmitModal || this.isPerformanceModal) return;
+    const target = event.target as HTMLElement | null;
+    if (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) return;
+    event.preventDefault();
+    this.goNext();
   }
 }

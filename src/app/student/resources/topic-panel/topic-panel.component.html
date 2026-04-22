@@ -2,7 +2,7 @@
 <div class="panel">
 
   <p class="panel__section-head">
-    <span class="material-symbols-outlined">article</span>
+    <span class="material-symbols-outlined">lab_profile</span>
     Study Materials
   </p>
 
@@ -25,7 +25,7 @@
               [id]="'panel-material-' + material?.id"
             >
               <div class="panel__material-icon">
-                <span class="material-symbols-outlined">article</span>
+                <span class="material-symbols-outlined">lab_profile</span>
               </div>
               <div class="panel__material-body">
                 <p class="panel__material-name">{{ material?.name }}</p>
@@ -76,7 +76,7 @@
 
   <!-- ── Tests section ──────────────────────────────────────────────────── -->
   <p class="panel__section-head panel__section-head--mt">
-    <span class="material-symbols-outlined">quiz</span>
+    <span class="material-symbols-outlined">content_paste</span>
     Topic Tests
   </p>
 
@@ -86,18 +86,6 @@
 
   @if (testsState.status === 'loaded') {
     @if (testsState.data.items.length) {
-      <!-- Search bar -->
-      <div class="panel__search-bar">
-        <input
-          #testSearch
-          nz-input
-          type="text"
-          placeholder="Search tests…"
-          (input)="onSearchChange(testSearch.value)"
-          [id]="'panel-test-search-' + topicId"
-        />
-      </div>
-
       <nz-spin [nzSpinning]="isTestsReloading">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
           @for (test of testsState.data.items; track test?.id) {
@@ -107,7 +95,7 @@
               [id]="'panel-test-' + test?.id"
             >
               <div class="panel__test-icon">
-                <span class="material-symbols-outlined">quiz</span>
+                <span class="material-symbols-outlined">content_paste</span>
               </div>
               <div class="panel__test-body">
                 <p class="panel__test-name">{{ test?.name }}</p>
@@ -138,7 +126,7 @@
       </nz-spin>
 
       @if (testsState.data.total > pageSize) {
-        <div class="panel__pagination mt-3">
+        <div class="app-pagination-row mt-3">
           <nz-pagination
             [nzPageIndex]="pageIndex"
             [nzTotal]="testsState.data.total"

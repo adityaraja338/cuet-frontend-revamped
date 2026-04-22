@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpService } from '../../shared/services/http.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 
 export type AsyncState<T> =
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'loaded'; data: T }
   | { status: 'error'; message: string };
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpService } from '../../shared/services/http.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject, debounceTime, takeUntil, forkJoin, finalize } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -18,55 +18,40 @@ import { Subject, debounceTime, takeUntil, forkJoin, finalize } from 'rxjs';
 })
 export class ResourcesComponent implements OnInit, OnDestroy {
   readonly debounceTimeMs = 400;
+  readonly pageSizeOptions = [10, 20, 30, 50];
 
-  nonDomainSubjects: any[] = [];
-  domainSubjects: any[] = [];
-  videoLinks: any[] = [];
-  newspapers: any[] = [];
-  pyqs: any[] = [];
+  // ── Subjects + Topics state ──────────────────────────────────────────────
+  subjectsState: AsyncState<{ nonDomain: any[]; domain: any[] }> = { status: 'idle' };
+  topicsState: AsyncState<any[]> = { status: 'idle' };
 
-  // Subjects -> Topics (inline, no forced navigation)
   selectedSubjectId: number | null = null;
   selectedSubjectName: string | null = null;
-  subjectTopics: any[] = [];
-  isTopicsLoading = false;
-  isSubjectsLoading = false;
-  isVideosLoading = false;
-  isNewspapersLoading = false;
-  isPYQsLoading = false;
-
-  // Topic -> Materials + Tests (inline)
   selectedTopicId: number | null = null;
   selectedTopicName: string | null = null;
-  selectedTopicChapterName: string | null = null;
 
-  isTopicDetailsLoading = false;
-  topicMaterials: any[] = [];
+  // ── Videos state ────────────────────────────────────────────────────────
+  videosState: AsyncState<{ items: any[]; total: number }> = { status: 'idle' };
+  videosPageIndex = 1;
+  videosPageSize = 30;
+  searchVideo = '';
+  private readonly searchVideoSubject = new Subject<string>();
 
-  searchTopicTest = '';
-  topicTests: any[] = [];
-  topicTestsPageIndex = 1;
-  topicTestsPageSize = 10;
-  totalTopicTests = 0;
-
-  searchNewspaper: string = '';
-  searchNewspaperSubject = new Subject<string>();
+  // ── Newspapers state ─────────────────────────────────────────────────────
+  newspapersState: AsyncState<{ items: any[]; total: number }> = { status: 'idle' };
+  newspaperPageIndex = 1;
+  newspaperPageSize = 30;
+  searchNewspaper = '';
   searchNewspaperDate: any;
-  totalNewspaper: number = 0;
-  newspaperPageIndex: number = 1;
-  newspaperPageSize: number = 30;
+  private readonly searchNewspaperSubject = new Subject<string>();
 
-  searchVideo: string = '';
-  searchVideoSubject = new Subject<string>();
-  totalVideos: number = 0;
-  videosPageIndex: number = 1;
-  videosPageSize: number = 30;
+  // ── PYQs state ───────────────────────────────────────────────────────────
+  pyqsState: AsyncState<any[]> = { status: 'idle' };
 
-  isInvalidModal: boolean = false;
+  // ── Modals ───────────────────────────────────────────────────────────────
+  isInvalidModal = false;
   isStartTestModal = false;
   selectedTest: any;
   selectedTestType: any;
-
   isPendingTest = false;
   pendingTestDetails: any;
 
@@ -74,41 +59,29 @@ export class ResourcesComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private http: HttpService,
-    private message: NzMessageService,
+    private readonly http: HttpService,
+    private readonly message: NzMessageService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getSubjects();
-    this.getVideoLinks();
-    this.getNewspapers();
-    this.getPYQs();
+    this.loadMockVideoLinks();
+    this.loadMockNewspapers();
+    this.loadMockPYQs();
 
     this.searchNewspaperSubject
-      .pipe(debounceTime(this.debounceTimeMs))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((searchValue) => {
-        this.searchNewspaper = searchValue;
+      .pipe(debounceTime(this.debounceTimeMs), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.searchNewspaper = value;
         this.getNewspapers();
       });
 
     this.searchVideoSubject
-      .pipe(debounceTime(this.debounceTimeMs))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((searchValue) => {
-        this.searchVideo = searchValue;
+      .pipe(debounceTime(this.debounceTimeMs), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.searchVideo = value;
         this.getVideoLinks();
       });
-
-    // If route contains a subjectId, load its topics inline (while keeping nested routes as fallback)
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      const raw = params.get('subjectId');
-      const subjectId = raw ? Number(raw) : null;
-      if (subjectId && !Number.isNaN(subjectId)) {
-        this.selectSubjectById(subjectId);
-      }
-    });
   }
 
   ngOnDestroy(): void {
@@ -116,224 +89,482 @@ export class ResourcesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getSubjects() {
-    this.isSubjectsLoading = true;
-    this.http.getSubjects().pipe(finalize(() => this.isSubjectsLoading = false)).subscribe({
-      next: (res: any) => {
-        this.nonDomainSubjects =
-          res?.data?.filter((item: any) => item['isDomain'] === false) ?? [];
-        this.domainSubjects =
-          res?.data?.filter((item: any) => item['isDomain'] === true) ?? [];
+  // ── Subjects ─────────────────────────────────────────────────────────────
 
-        // Auto-select first subject for better UX on first visit
-        if (!this.selectedSubjectId) {
-          const first = this.nonDomainSubjects?.[0] ?? this.domainSubjects?.[0];
-          if (first?.id) this.selectSubject(first);
-        }
+  getSubjects(): void {
+    this.subjectsState = { status: 'loading' };
+    this.http.getSubjects().pipe(takeUntil(this.destroy$)).subscribe({
+      next: (res: any) => {
+        this.subjectsState = {
+          status: 'loaded',
+          data: {
+            nonDomain: res?.data?.filter((s: any) => s['isDomain'] === false) ?? [],
+            domain: res?.data?.filter((s: any) => s['isDomain'] === true) ?? [],
+          },
+        };
       },
       error: (error: any) => {
-        console.log(error);
+        this.subjectsState = { status: 'error', message: error?.error?.message ?? 'Failed to load subjects' };
         this.message?.error(error?.error?.message);
       },
     });
   }
 
-  selectSubject(subject: any) {
-    const subjectId = Number(subject?.id);
-    if (!subjectId || Number.isNaN(subjectId)) return;
+  toggleSubject(subject: any): void {
+    const id = Number(subject?.id);
+    if (!id || Number.isNaN(id)) return;
 
-    this.selectedSubjectId = subjectId;
-    this.selectedSubjectName = subject?.name ?? null;
-    this.loadTopicsForSubject(subjectId);
-  }
-
-  /**
-   * Toggle a subject open/closed in the accordion.
-   * Clicking the same subject a second time collapses it.
-   */
-  toggleSubject(subject: any) {
-    const subjectId = Number(subject?.id);
-    if (!subjectId || Number.isNaN(subjectId)) return;
-
-    if (this.selectedSubjectId === subjectId) {
-      // Collapse
+    if (this.selectedSubjectId === id) {
       this.selectedSubjectId = null;
       this.selectedSubjectName = null;
-      this.subjectTopics = [];
+      this.topicsState = { status: 'idle' };
       this.clearSelectedTopic();
     } else {
-      this.selectSubject(subject);
+      this.selectedSubjectId = id;
+      this.selectedSubjectName = subject?.name ?? null;
+      this.clearSelectedTopic();
+      this.loadTopicsForSubject(id);
     }
   }
 
-  selectSubjectById(subjectId: number) {
-    // If we already have subjects, try to set a name; otherwise just load topics
-    const all = [...(this.nonDomainSubjects ?? []), ...(this.domainSubjects ?? [])];
-    const found = all.find((s) => Number(s?.id) === Number(subjectId));
-    this.selectedSubjectId = subjectId;
-    this.selectedSubjectName = found?.name ?? this.selectedSubjectName;
-    this.loadTopicsForSubject(subjectId);
-  }
-
-  private loadTopicsForSubject(subjectId: number) {
-    this.isTopicsLoading = true;
-    this.subjectTopics = [];
-    this.clearSelectedTopic();
-
-    this.http.getTopics({ subjectId }).subscribe({
+  private loadTopicsForSubject(subjectId: number): void {
+    this.topicsState = { status: 'loading' };
+    this.http.getTopics({ subjectId }).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
-        this.subjectTopics = res?.data?.topics ?? [];
+        const rawTopics: any[] = res?.data?.topics ?? [];
+        const topics = rawTopics.filter((t) => this.topicShownInResourcesAccordion(t));
+        this.topicsState = { status: 'loaded', data: topics };
         this.selectedSubjectName = res?.data?.subjectName ?? this.selectedSubjectName;
-        this.isTopicsLoading = false;
       },
       error: (error: any) => {
-        console.log(error);
+        this.topicsState = { status: 'error', message: error?.error?.message ?? 'Failed to load topics' };
         this.message?.error(error?.error?.message);
-        this.isTopicsLoading = false;
       },
     });
   }
 
-  selectTopic(topic: any) {
-    const topicId = Number(topic?.id);
-    if (!topicId || Number.isNaN(topicId)) return;
+  private topicShownInResourcesAccordion(topic: any): boolean {
+    const id = Number(topic?.id);
+    if (!id || Number.isNaN(id)) return false;
+    if ((topic?.material ?? 0) > 0) return true;
+    // const tt = topic?.topicTest;
+    // if (typeof tt === 'number' && Number.isInteger(tt)) {
+    //   return tt > 0;
+    // }
+    return true;
+  }
 
-    // Toggle off if clicking the same topic again
-    if (this.selectedTopicId === topicId) {
+  selectTopic(topic: any): void {
+    const id = Number(topic?.id);
+    if (!id || Number.isNaN(id)) return;
+
+    if (this.selectedTopicId === id) {
       this.clearSelectedTopic();
       return;
     }
 
-    this.selectedTopicId = topicId;
+    this.selectedTopicId = id;
     this.selectedTopicName = topic?.name ?? null;
-    this.selectedTopicChapterName =
-      topic?.chapter?.name ??
-      topic?.chapterName ??
-      topic?.chapter_title ??
-      topic?.chapterTitle ??
-      null;
-
-    this.topicTestsPageIndex = 1;
-    this.searchTopicTest = '';
-    this.loadTopicDetails();
   }
 
-  private clearSelectedTopic() {
+  private clearSelectedTopic(): void {
     this.selectedTopicId = null;
     this.selectedTopicName = null;
-    this.selectedTopicChapterName = null;
-    this.isTopicDetailsLoading = false;
-    this.topicMaterials = [];
-    this.topicTests = [];
-    this.totalTopicTests = 0;
-    this.searchTopicTest = '';
-    this.topicTestsPageIndex = 1;
     this.onModalClose();
   }
 
-  private loadTopicDetails() {
-    if (!this.selectedTopicId) return;
-    this.isTopicDetailsLoading = true;
-    this.topicMaterials = [];
-    this.topicTests = [];
-    this.totalTopicTests = 0;
+  // ── Derived state getters ─────────────────────────────────────────────
 
-    // Load both in parallel and wait for both to finish before hiding the spinner
-    forkJoin({
-      materials: this.http.getMaterials({ topicId: this.selectedTopicId }),
-      tests: this.http.getTopicTests({
-        topicId: this.selectedTopicId,
-        page: this.topicTestsPageIndex,
-        limit: this.topicTestsPageSize
-      })
-    })
-    .pipe(finalize(() => this.isTopicDetailsLoading = false))
-    .subscribe({
-      next: (res: any) => {
-        // Handle materials
-        const matData = res.materials?.data;
-        this.topicMaterials = matData?.materials ?? [];
-        this.selectedSubjectName = matData?.subjectName ?? this.selectedSubjectName;
-        this.selectedSubjectId = matData?.subjectId ?? this.selectedSubjectId;
-        this.selectedTopicName = matData?.topicName ?? this.selectedTopicName;
-
-        // Handle tests
-        const testData = res.tests?.data;
-        this.topicTests = testData?.tests ?? [];
-        this.totalTopicTests = testData?.total ?? 0;
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      }
-    });
+  get isSubjectsLoading(): boolean { return this.subjectsState.status === 'loading'; }
+  get nonDomainSubjects(): any[] {
+    return this.subjectsState.status === 'loaded' ? this.subjectsState.data.nonDomain : [];
+  }
+  get domainSubjects(): any[] {
+    return this.subjectsState.status === 'loaded' ? this.subjectsState.data.domain : [];
   }
 
-  private getTopicMaterials() {
-    if (!this.selectedTopicId) return;
-    this.http.getMaterials({ topicId: this.selectedTopicId }).subscribe({
-      next: (res: any) => {
-        this.topicMaterials = res?.data?.materials ?? [];
-        this.selectedSubjectName = res?.data?.subjectName ?? this.selectedSubjectName;
-        this.selectedSubjectId = res?.data?.subjectId ?? this.selectedSubjectId;
-        this.selectedTopicName = res?.data?.topicName ?? this.selectedTopicName;
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
+  get isTopicsLoading(): boolean { return this.topicsState.status === 'loading'; }
+
+  get isVideosLoading(): boolean { return this.videosState.status === 'loading'; }
+  get videoLinks(): any[] {
+    return this.videosState.status === 'loaded' ? this.videosState.data.items : [];
+  }
+  get totalVideos(): number {
+    return this.videosState.status === 'loaded' ? this.videosState.data.total : 0;
   }
 
-  getTopicTests(event?: any) {
-    if (!this.selectedTopicId) return;
+  get isNewspapersLoading(): boolean { return this.newspapersState.status === 'loading'; }
+  get newspapers(): any[] {
+    return this.newspapersState.status === 'loaded' ? this.newspapersState.data.items : [];
+  }
+  get totalNewspaper(): number {
+    return this.newspapersState.status === 'loaded' ? this.newspapersState.data.total : 0;
+  }
 
-    const data: any = {
-      topicId: this.selectedTopicId,
-      page: this.topicTestsPageIndex,
-      limit: this.topicTestsPageSize,
-    };
+  get isPYQsLoading(): boolean { return this.pyqsState.status === 'loading'; }
+  get pyqs(): any[] {
+    return this.pyqsState.status === 'loaded' ? this.pyqsState.data : [];
+  }
 
+  get topicGroups(): Array<{ title: string; topics: any[] }> {
+    const items = this.topicsState.status === 'loaded' ? this.topicsState.data : [];
+    const groups = new Map<string, any[]>();
+
+    for (const t of items) {
+      const title =
+        t?.chapter?.name ?? t?.chapterName ?? t?.chapter_title ?? t?.chapterTitle ?? 'Topics';
+      const list = groups.get(title) ?? [];
+      list.push(t);
+      groups.set(title, list);
+    }
+
+    return Array.from(groups.entries()).map(([title, topics]) => ({ title, topics }));
+  }
+
+  // ── Videos ────────────────────────────────────────────────────────────────
+
+  private mockVideoData = [
+    {
+      id: 1,
+      name: 'Introduction to Physics',
+      url: 'https://youtube.com/watch?v=dQw4w9WgXcQ',
+      length: 3600,
+      subject: 'Physics',
+      isFree: true,
+    },
+    {
+      id: 2,
+      name: 'Chemistry Basics - Atomic Structure',
+      url: 'https://youtube.com/watch?v=jNQXAC9IVRw',
+      length: 4200,
+      subject: 'Chemistry',
+      isFree: true,
+    },
+    {
+      id: 3,
+      name: 'Advanced Organic Chemistry',
+      url: null,
+      length: 5400,
+      subject: 'Chemistry',
+      isFree: false,
+    },
+    {
+      id: 4,
+      name: 'Biology: Cell Structure and Function',
+      url: 'https://youtube.com/watch?v=mQxP-qAWxOI',
+      length: 3800,
+      subject: 'Biology',
+      isFree: true,
+    },
+    {
+      id: 5,
+      name: 'Mathematics: Calculus Fundamentals',
+      url: null,
+      length: 4500,
+      subject: 'Mathematics',
+      isFree: false,
+    },
+    {
+      id: 6,
+      name: 'English Literature: Shakespeare',
+      url: 'https://youtube.com/watch?v=9bZkp7q19f0',
+      length: 2800,
+      subject: 'English',
+      isFree: true,
+    },
+    {
+      id: 7,
+      name: 'History of India: Medieval Period',
+      url: 'https://youtube.com/watch?v=RILEVcWXMF4',
+      length: 3600,
+      subject: 'History',
+      isFree: false,
+    },
+    {
+      id: 8,
+      name: 'Geography: World Map and Capitals',
+      url: 'https://youtube.com/watch?v=VrDEy_6Zhec',
+      length: 2400,
+      subject: 'Geography',
+      isFree: true,
+    },
+    {
+      id: 9,
+      name: 'Economics: Microeconomics Basics',
+      url: 'https://youtube.com/watch?v=lIB0aGosFvU',
+      length: 3200,
+      subject: 'Economics',
+      isFree: true,
+    },
+    {
+      id: 10,
+      name: 'Political Science: Constitutional Law',
+      url: null,
+      length: 4800,
+      subject: 'Political Science',
+      isFree: false,
+    },
+  ];
+
+  private loadMockVideoLinks(): void {
+    setTimeout(() => {
+      this.videosState = {
+        status: 'loaded',
+        data: {
+          items: this.mockVideoData.slice(0, this.videosPageSize),
+          total: this.mockVideoData.length,
+        },
+      };
+    }, 500);
+  }
+
+  getVideoLinks(event?: any): void {
     if (event) {
-      data['page'] = event?.pageIndex;
-      data['limit'] = event?.pageSize;
-      this.topicTestsPageIndex = event?.pageIndex ?? this.topicTestsPageIndex;
-      this.topicTestsPageSize = event?.pageSize ?? this.topicTestsPageSize;
-
-      // When explicitly triggered by pagination, show the spinner
-      this.isTopicDetailsLoading = true;
+      this.videosPageIndex = event.pageIndex ?? this.videosPageIndex;
+      this.videosPageSize = event.pageSize ?? this.videosPageSize;
     }
 
-    if (this.searchTopicTest) {
-      data['search'] = this.searchTopicTest;
+    const params: any = { page: this.videosPageIndex, limit: this.videosPageSize };
+    if (this.searchVideo) params['search'] = this.searchVideo;
+
+    this.videosState = { status: 'loading' };
+    setTimeout(() => {
+      let filtered = this.mockVideoData;
+      if (this.searchVideo) {
+        const term = this.searchVideo.toLowerCase();
+        filtered = filtered.filter(v =>
+          v.name.toLowerCase().includes(term) ||
+          v.subject?.toLowerCase().includes(term)
+        );
+      }
+
+      const start = (this.videosPageIndex - 1) * this.videosPageSize;
+      const end = start + this.videosPageSize;
+      this.videosState = {
+        status: 'loaded',
+        data: {
+          items: filtered.slice(start, end),
+          total: filtered.length,
+        },
+      };
+    }, 300);
+  }
+
+  onSearchVideoLinks(value: string): void {
+    this.searchVideoSubject.next(value);
+  }
+
+  onViewVideo(id: number): void {
+    console.log('Video viewed:', id);
+  }
+
+  // ── Newspapers ────────────────────────────────────────────────────────────
+
+  private mockNewspaperData = [
+    {
+      id: 1,
+      name: 'The Times of India',
+      url: 'https://timesofindia.indiatimes.com',
+      date: new Date(2026, 3, 20),
+      isFree: true,
+    },
+    {
+      id: 2,
+      name: 'The Hindu',
+      url: 'https://thehindu.com',
+      date: new Date(2026, 3, 19),
+      isFree: true,
+    },
+    {
+      id: 3,
+      name: 'India Today',
+      url: null,
+      date: new Date(2026, 3, 18),
+      isFree: false,
+    },
+    {
+      id: 4,
+      name: 'The Indian Express',
+      url: 'https://indianexpress.com',
+      date: new Date(2026, 3, 17),
+      isFree: true,
+    },
+    {
+      id: 5,
+      name: 'Hindustan Times',
+      url: null,
+      date: new Date(2026, 3, 16),
+      isFree: false,
+    },
+    {
+      id: 6,
+      name: 'Deccan Chronicle',
+      url: 'https://deccanchronicle.com',
+      date: new Date(2026, 3, 15),
+      isFree: true,
+    },
+    {
+      id: 7,
+      name: 'The Telegraph',
+      url: 'https://telegraphindia.com',
+      date: new Date(2026, 3, 14),
+      isFree: true,
+    },
+    {
+      id: 8,
+      name: 'Dainik Jagran',
+      url: null,
+      date: new Date(2026, 3, 13),
+      isFree: false,
+    },
+    {
+      id: 9,
+      name: 'DNA India',
+      url: 'https://dnaindia.com',
+      date: new Date(2026, 3, 12),
+      isFree: true,
+    },
+    {
+      id: 10,
+      name: 'The Tribune',
+      url: 'https://tribuneindia.com',
+      date: new Date(2026, 3, 11),
+      isFree: true,
+    },
+  ];
+
+  private loadMockNewspapers(): void {
+    setTimeout(() => {
+      this.newspapersState = {
+        status: 'loaded',
+        data: {
+          items: this.mockNewspaperData.slice(0, this.newspaperPageSize),
+          total: this.mockNewspaperData.length,
+        },
+      };
+    }, 500);
+  }
+
+  getNewspapers(event?: any): void {
+    if (event) {
+      this.newspaperPageIndex = event.pageIndex ?? this.newspaperPageIndex;
+      this.newspaperPageSize = event.pageSize ?? this.newspaperPageSize;
     }
 
-    this.http.getTopicTests(data).pipe(finalize(() => this.isTopicDetailsLoading = false)).subscribe({
-      next: (res: any) => {
-        this.topicTests = res?.data?.tests ?? [];
-        this.totalTopicTests = res?.data?.total ?? 0;
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
+    const params: any = { page: this.newspaperPageIndex, limit: this.newspaperPageSize };
+    if (this.searchNewspaper) params['search'] = this.searchNewspaper;
+
+    if (this.searchNewspaperDate) {
+      const d = this.searchNewspaperDate;
+      params['date'] = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    this.newspapersState = { status: 'loading' };
+    setTimeout(() => {
+      let filtered = this.mockNewspaperData;
+
+      if (this.searchNewspaper) {
+        const term = this.searchNewspaper.toLowerCase();
+        filtered = filtered.filter(n => n.name.toLowerCase().includes(term));
+      }
+
+      if (this.searchNewspaperDate) {
+        const d = this.searchNewspaperDate;
+        const filterDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        filtered = filtered.filter(n => {
+          const nDate = new Date(n.date.getFullYear(), n.date.getMonth(), n.date.getDate());
+          return nDate.getTime() === filterDate.getTime();
+        });
+      }
+
+      const start = (this.newspaperPageIndex - 1) * this.newspaperPageSize;
+      const end = start + this.newspaperPageSize;
+      this.newspapersState = {
+        status: 'loaded',
+        data: {
+          items: filtered.slice(start, end),
+          total: filtered.length,
+        },
+      };
+    }, 300);
   }
 
-  onReadMaterial(id: number) {
-    this.http.postLogAccess({ itemId: id, itemType: 'material' }).subscribe({
-      next: () => {
-        // Nothing to do
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
+  onSearchNewspaper(value: string): void {
+    this.searchNewspaperSubject.next(value);
   }
 
-  onClickStartTest(test: any, testType: string) {
-    this.http.checkUnfinishedTest().subscribe({
+  // ── PYQs ─────────────────────────────────────────────────────────────────
+
+  private mockPYQsData = [
+    {
+      id: 1,
+      name: 'CUET 2024 - Physics (Session 1)',
+      url: 'https://example.com/pyq/cuet-2024-physics-1.pdf',
+    },
+    {
+      id: 2,
+      name: 'CUET 2024 - Chemistry (Session 1)',
+      url: 'https://example.com/pyq/cuet-2024-chemistry-1.pdf',
+    },
+    {
+      id: 3,
+      name: 'CUET 2024 - Biology (Session 1)',
+      url: null,
+    },
+    {
+      id: 4,
+      name: 'CUET 2024 - Mathematics (Session 1)',
+      url: 'https://example.com/pyq/cuet-2024-maths-1.pdf',
+    },
+    {
+      id: 5,
+      name: 'CUET 2024 - English (Session 1)',
+      url: null,
+    },
+    {
+      id: 6,
+      name: 'CUET 2023 - Physics (Full Paper)',
+      url: 'https://example.com/pyq/cuet-2023-physics.pdf',
+    },
+    {
+      id: 7,
+      name: 'CUET 2023 - Chemistry (Full Paper)',
+      url: 'https://example.com/pyq/cuet-2023-chemistry.pdf',
+    },
+    {
+      id: 8,
+      name: 'CUET 2023 - Biology (Full Paper)',
+      url: 'https://example.com/pyq/cuet-2023-biology.pdf',
+    },
+    {
+      id: 9,
+      name: 'CUET 2023 - Mathematics (Full Paper)',
+      url: null,
+    },
+    {
+      id: 10,
+      name: 'CUET 2022 - General Test',
+      url: 'https://example.com/pyq/cuet-2022-general.pdf',
+    },
+  ];
+
+  private loadMockPYQs(): void {
+    setTimeout(() => {
+      this.pyqsState = { status: 'loaded', data: this.mockPYQsData };
+    }, 500);
+  }
+
+  getPYQs(): void {
+    this.pyqsState = { status: 'loading' };
+    setTimeout(() => {
+      this.pyqsState = { status: 'loaded', data: this.mockPYQsData };
+    }, 300);
+  }
+
+  // ── Modals ────────────────────────────────────────────────────────────────
+
+  onClickStartTest(test: any, testType: string): void {
+    this.http.checkUnfinishedTest().pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         if (!res?.data) {
           if (!test?.canAttempt) {
@@ -349,165 +580,33 @@ export class ResourcesComponent implements OnInit, OnDestroy {
         }
       },
       error: (error: any) => {
-        console.log(error);
         this.message?.error(error?.error?.message);
       },
     });
   }
 
-  submitPendingTest() {
-    const data: any = {
+  submitPendingTest(): void {
+    const data = {
       testId: this.pendingTestDetails?.testId,
       testItemId: this.pendingTestDetails?.testItemId,
       testType: this.pendingTestDetails?.testType,
     };
-
-    this.http.postSubmitTest(data).subscribe({
+    this.http.postSubmitTest(data).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
         this.message.success('Successful! Test submitted!');
         this.onModalClose();
       },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
+      error: (error: any) => this.message?.error(error?.error?.message),
     });
   }
 
-  onModalClose() {
+  onModalClose(): void {
     this.selectedTest = undefined;
     this.selectedTestType = undefined;
     this.isStartTestModal = false;
     this.isInvalidModal = false;
     this.isPendingTest = false;
     this.pendingTestDetails = undefined;
-  }
-
-  get topicGroups(): Array<{ title: string; topics: any[] }> {
-    const items = this.subjectTopics ?? [];
-    const groups = new Map<string, any[]>();
-
-    for (const t of items) {
-      const title =
-        t?.chapter?.name ??
-        t?.chapterName ??
-        t?.chapter_title ??
-        t?.chapterTitle ??
-        'Topics';
-      const list = groups.get(title) ?? [];
-      list.push(t);
-      groups.set(title, list);
-    }
-
-    return Array.from(groups.entries()).map(([title, topics]) => ({ title, topics }));
-  }
-
-  getVideoLinks(event?: any) {
-    const data: any = {
-      page: this.videosPageIndex,
-      limit: this.videosPageSize,
-    };
-
-    if (event) {
-      data['page'] = event.pageIndex;
-      data['limit'] = event.pageSize;
-    }
-
-    if (this.searchVideo) {
-      data['search'] = this.searchVideo;
-    }
-
-    this.isVideosLoading = true;
-    this.http.getVideoLinks(data).pipe(finalize(() => this.isVideosLoading = false)).subscribe({
-      next: (res: any) => {
-        // Temporary Mock Data for UI Work
-        this.videoLinks = [
-          { id: 101, name: 'CUET UG General Test - Comprehensive Strategy & Practice', url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', subject: 'General Test', length: 145, isFree: true },
-          { id: 102, name: 'Quantitative Aptitude Masterclass: Number Systems', url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', subject: 'Mathematics', length: 85, isFree: true },
-          { id: 103, name: 'Logical Reasoning Mock Test Analysis (Locked)', url: null, subject: 'Logical Reasoning', length: 120, isFree: false },
-          { id: 104, name: 'Physics Chapter 1: Electric Charges and Fields', url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', subject: 'Physics', length: 55, isFree: false }
-        ];
-        this.totalVideos = 4;
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
-  }
-
-  onSearchVideoLinks(searchValue: string) {
-    this.searchVideoSubject.next(searchValue);
-  }
-
-  getNewspapers(event?: any) {
-    const data: any = {
-      page: this.newspaperPageIndex,
-      limit: this.newspaperPageSize,
-    };
-
-    if (event) {
-      data['page'] = event.pageIndex;
-      data['limit'] = event.pageSize;
-    }
-
-    if (this.searchNewspaper) {
-      data['search'] = this.searchNewspaper;
-    }
-
-    if (this.searchNewspaperDate) {
-      const date = this.searchNewspaperDate;
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-      const day = String(date.getDate()).padStart(2, '0');
-      data['date'] = `${year}-${month}-${day}`;
-    }
-
-    this.isNewspapersLoading = true;
-    this.http.getNewspapers(data).pipe(finalize(() => this.isNewspapersLoading = false)).subscribe({
-      next: (res: any) => {
-        this.newspapers = res?.data?.newspapers ?? [];
-        this.totalNewspaper = res?.data?.total ?? 0;
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
-  }
-
-  onSearchNewspaper(searchValue: string) {
-    this.searchNewspaperSubject.next(searchValue);
-  }
-
-  getPYQs() {
-    this.isPYQsLoading = true;
-    this.http.getPYQs().pipe(finalize(() => this.isPYQsLoading = false)).subscribe({
-      next: (res: any) => {
-        this.pyqs = res?.data ?? [];
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
-  }
-
-  onClickSubject(subjectId: number) {
-    // Keep nested route available, but current redesign prefers inline rendering.
-    this.router.navigate(['/student/resources', subjectId]);
-  }
-
-  onViewVideo(id: number) {
-    this.http.postLogAccess({ itemId: id, itemType: 'video' }).subscribe({
-      next: (res: any) => {
-        // Nothing to do
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.message?.error(error?.error?.message);
-      },
-    });
   }
 
   protected readonly Math = Math;

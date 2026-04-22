@@ -21,6 +21,8 @@ export class DashboardComponent implements OnInit {
 
   today = new Date();
 
+  leaderboardData: any[] = [];
+
   // Doughnut
   doughnutChartLabels: string[] = [
     '# of Correct',
@@ -233,11 +235,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  leaderboardData: any[] = [];
   getLeaderboard() {
     this.http.getLeaderboard().subscribe({
       next: (res: any) => {
-        this.leaderboardData = res?.data?.leaderboard;
+        this.leaderboardData = res?.data?.leaderboard ?? [];
       },
       error: (error: any) => {
         console.log(error);

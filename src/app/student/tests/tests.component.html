@@ -1,268 +1,402 @@
-<nz-breadcrumb nzSeparator=">">
-  <nz-breadcrumb-item>Tests</nz-breadcrumb-item>
-</nz-breadcrumb>
-<nz-card nzBorderless nzHoverable>
+<section class="tests-page">
+  <!-- ───────────────────────────  Hero  ─────────────────────────── -->
+  <header class="tests-hero">
+    <div class="tests-hero__copy">
+      <p class="tests-hero__eyebrow">Tests</p>
+      <h1 class="tests-hero__title">Practice & Mock Tests</h1>
+      <p class="tests-hero__subtitle">
+        Sharpen your timing, track accuracy, and prepare with recorded, mock, and
+        topic-wise tests curated for CUET.
+      </p>
+    </div>
+  </header>
+
+  <!-- ───────────────────────────  Tabs  ─────────────────────────── -->
   <nz-tabs
+    class="tests-tabs"
     [(nzSelectedIndex)]="currentTabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
+    <!-- ────────────  Recorded Tests  ──────────── -->
     <nz-tab nzTitle="Recorded Tests">
       <ng-template nz-tab>
-        <nz-table
-          [nzData]="recordedTests"
-          [nzShowPagination]="false"
-          [nzScroll]="{ x: '640px' }"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Name</th>
-              <th class="text-center" [nzWidth]="'64px'">Questions</th>
-              <th class="text-center" [nzWidth]="'64px'">Type</th>
-              <th class="text-center" [nzWidth]="'84px'">Duration</th>
-              <th class="text-center" [nzWidth]="'84px'"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let test of recordedTests; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test?.name }}</td>
-              <td class="text-center">
-                {{ test?.totalQuestions }}
-              </td>
-              <td
-                class="text-center font-600"
-                [class]="test?.isFree ? 'text-free' : 'text-paid'"
-              >
-                {{ test?.isFree ? "Free" : "Paid" }}
-              </td>
-              <td class="text-center">
-                {{ Math.floor(test?.duration / 60) }} hr
-                {{ test?.duration % 60 }} min
-              </td>
-              <td class="text-center">
-                <button
-                  nz-button
-                  class="start-test-btn"
-                  (click)="onClickStartTest(test, 'recorded')"
-                >
-                  Start Test
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </ng-template>
-    </nz-tab>
-    <nz-tab nzTitle="Mock Tests">
-      <ng-template nz-tab>
-        <nz-table
-          [nzData]="mockTests"
-          [nzShowPagination]="false"
-          [nzScroll]="{ x: '640px' }"
-        >
-          <thead>
-            <tr>
-              <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-              <th [nzWidth]="'160px'">Name</th>
-              <th class="text-center" [nzWidth]="'64px'">Questions</th>
-              <th class="text-center" [nzWidth]="'64px'">Type</th>
-              <th class="text-center" [nzWidth]="'84px'">Duration</th>
-              <th class="text-center" [nzWidth]="'84px'"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let test of mockTests; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ test?.name }}</td>
-              <td class="text-center">
-                {{ test?.totalQuestions }}
-              </td>
-              <td
-                class="text-center font-600"
-                [class]="test?.isFree ? 'text-free' : 'text-paid'"
-              >
-                {{ test?.isFree ? "Free" : "Paid" }}
-              </td>
-              <td class="text-center">
-                {{ Math.floor(test?.duration / 60) }} hr
-                {{ test?.duration % 60 }} min
-              </td>
-              <td class="text-center">
-                <button
-                  nz-button
-                  class="start-test-btn"
-                  (click)="onClickStartTest(test, 'mock')"
-                >
-                  Start Test
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </ng-template>
-    </nz-tab>
-    <nz-tab nzTitle="Topic-wise Tests">
-      <ng-template nz-tab>
-        <div class="row mb-3">
-          <div class="col-md-4 col-xl-3">
-            <nz-input-group
-              [nzPrefix]="prefixIcon"
-              [nzSuffix]="suffixIcon"
-              class="search-input"
-            >
-              <input
-                #testSearchInput
-                nz-input
-                type="text"
-                class="mr-3"
-                placeholder="Search"
-                (input)="topicSubject.next(testSearchInput.value)"
-              />
-            </nz-input-group>
-            <ng-template #prefixIcon>
-              <span nz-icon nzType="search" class="font-12 text-light"></span>
-            </ng-template>
-            <ng-template #suffixIcon>
-              @if(testSearchInput.value.length > 0) {
-                <span
-                  nz-icon
-                  nzType="close"
-                  nzTheme="outline"
-                  class="font-12 text-light cursor-pointer"
-                  (click)="testSearchInput.value = ''; topicSubject.next('')"
-                ></span>
-              }
-            </ng-template>
-          </div>
-          <div class="col-md-4 col-xl-3">
-            <nz-select
-              [(ngModel)]="topicIdFilter"
-              (ngModelChange)="getTopicTests()"
-              (nzScrollToBottom)="getAllTopics()"
-              (nzOnSearch)="topicSearchSubject.next($event)"
-              [nzShowArrow]="true"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select Topic"
-            >
-              <nz-option *ngFor="let topic of topics" [nzLabel]="topic?.name" [nzValue]="topic?.id"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-
-        <nz-table
-          [nzData]="topicTests"
-          [nzShowPagination]="true"
-          [nzFrontPagination]="false"
-          [nzShowSizeChanger]="true"
-          [nzTotal]="topicCount"
-          [nzPageIndex]="topicIndex"
-          [nzPageSize]="topicLimit"
-          [nzShowTotal]="printTopicTotalCount"
-          (nzPageIndexChange)="this.topicIndex = $event; this.getTopicTests()"
-          (nzPageSizeChange)="this.topicLimit = $event; this.getTopicTests()"
-          [nzScroll]="{ x: '640px' }"
-        >
-          <thead>
-          <tr>
-            <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
-            <th [nzWidth]="'160px'">Name</th>
-            <th class="text-center" [nzWidth]="'64px'">Questions</th>
-            <th class="text-center" [nzWidth]="'64px'">Type</th>
-            <th class="text-center" [nzWidth]="'84px'">Duration</th>
-            <th class="text-center" [nzWidth]="'84px'"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let test of topicTests; let i = index">
-            <td class="text-center">{{ i + 1 }}</td>
-            <td>{{ test?.name }}</td>
-            <td class="text-center">
-              {{ test?.totalQuestions }}
-            </td>
-            <td
-              class="text-center font-600"
-              [class]="test?.isFree ? 'text-free' : 'text-paid'"
-            >
-              {{ test?.isFree ? "Free" : "Paid" }}
-            </td>
-            <td class="text-center">
-              {{ Math.floor(test?.duration / 60) }} hr
-              {{ test?.duration % 60 }} min
-            </td>
-            <td class="text-center">
+        <div class="tests-table-shell">
+          @if (isRecordedLoading) {
+            <app-tests-skeleton variant="table-row" [count]="5"></app-tests-skeleton>
+          } @else if (isRecordedError) {
+            <div class="tests-empty tests-empty--error">
+              <span class="tests-empty__icon material-symbols-outlined">error</span>
+              <p class="tests-empty__title">Couldn't load recorded tests</p>
+              <p class="tests-empty__subtitle">
+                Please check your connection and try again.
+              </p>
               <button
                 nz-button
-                class="start-test-btn"
-                (click)="onClickStartTest(test, 'topic')"
+                class="tests-empty__cta"
+                (click)="getRecordedAndMockTests()"
               >
-                Start Test
+                Retry
               </button>
-            </td>
-          </tr>
-          </tbody>
-        </nz-table>
-        <ng-template #printTopicTotalCount>
-          <div
-            *ngIf="topicCount === 0"
-            class="result-not-found font-weight-normal"
+            </div>
+          } @else if (isRecordedEmpty) {
+            <div class="tests-empty">
+              <span class="tests-empty__icon material-symbols-outlined">play_circle</span>
+              <p class="tests-empty__title">No recorded tests yet</p>
+              <p class="tests-empty__subtitle">
+                Recorded tests will appear here once they're published.
+              </p>
+            </div>
+          } @else {
+            <nz-table
+              class="tests-table"
+              [nzData]="recordedTests"
+              [nzShowPagination]="false"
+              [nzScroll]="{ x: '720px' }"
+            >
+              <thead>
+                <tr>
+                  <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+                  <th [nzWidth]="'220px'">Name</th>
+                  <th class="text-center" [nzWidth]="'96px'">Questions</th>
+                  <th class="text-center" [nzWidth]="'96px'">Access</th>
+                  <th class="text-center" [nzWidth]="'120px'">Duration</th>
+                  <th class="text-center" [nzWidth]="'120px'"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let test of recordedTests; let i = index"
+                  class="tests-row"
+                >
+                  <td class="text-center tests-row__index">{{ i + 1 }}</td>
+                  <td class="tests-row__name">
+                    <span class="tests-row__name-text">{{ test?.name }}</span>
+                    <span class="tests-row__mobile-meta">
+                      {{ test?.totalQuestions }} Qs ·
+                      {{ Math.floor(test?.duration / 60) }}h
+                      {{ test?.duration % 60 }}m
+                    </span>
+                  </td>
+                  <td class="text-center tests-row__num">
+                    {{ test?.totalQuestions }}
+                  </td>
+                  <td class="text-center">
+                    <span
+                      class="tests-pill"
+                      [class.tests-pill--free]="test?.isFree"
+                      [class.tests-pill--paid]="!test?.isFree"
+                    >
+                      {{ test?.isFree ? "Free" : "Paid" }}
+                    </span>
+                  </td>
+                  <td class="text-center tests-row__num">
+                    {{ Math.floor(test?.duration / 60) }} hr
+                    {{ test?.duration % 60 }} min
+                  </td>
+                  <td class="text-center">
+                    <button
+                      nz-button
+                      class="tests-row__start"
+                      (click)="onClickStartTest(test, 'recorded')"
+                    >
+                      Start
+                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+        </div>
+      </ng-template>
+    </nz-tab>
+
+    <!-- ────────────  Mock Tests  ──────────── -->
+    <nz-tab nzTitle="Mock Tests">
+      <ng-template nz-tab>
+        <div class="tests-table-shell">
+          @if (isMockLoading) {
+            <app-tests-skeleton variant="table-row" [count]="5"></app-tests-skeleton>
+          } @else if (isMockError) {
+            <div class="tests-empty tests-empty--error">
+              <span class="tests-empty__icon material-symbols-outlined">error</span>
+              <p class="tests-empty__title">Couldn't load mock tests</p>
+              <p class="tests-empty__subtitle">
+                Please check your connection and try again.
+              </p>
+              <button
+                nz-button
+                class="tests-empty__cta"
+                (click)="getRecordedAndMockTests()"
+              >
+                Retry
+              </button>
+            </div>
+          } @else if (isMockEmpty) {
+            <div class="tests-empty">
+              <span class="tests-empty__icon material-symbols-outlined">quiz</span>
+              <p class="tests-empty__title">No mock tests yet</p>
+              <p class="tests-empty__subtitle">
+                Mock tests will appear here once they're published.
+              </p>
+            </div>
+          } @else {
+            <nz-table
+              class="tests-table"
+              [nzData]="mockTests"
+              [nzShowPagination]="false"
+              [nzScroll]="{ x: '720px' }"
+            >
+              <thead>
+                <tr>
+                  <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+                  <th [nzWidth]="'220px'">Name</th>
+                  <th class="text-center" [nzWidth]="'96px'">Questions</th>
+                  <th class="text-center" [nzWidth]="'96px'">Access</th>
+                  <th class="text-center" [nzWidth]="'120px'">Duration</th>
+                  <th class="text-center" [nzWidth]="'120px'"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let test of mockTests; let i = index"
+                  class="tests-row"
+                >
+                  <td class="text-center tests-row__index">{{ i + 1 }}</td>
+                  <td class="tests-row__name">
+                    <span class="tests-row__name-text">{{ test?.name }}</span>
+                    <span class="tests-row__mobile-meta">
+                      {{ test?.totalQuestions }} Qs ·
+                      {{ Math.floor(test?.duration / 60) }}h
+                      {{ test?.duration % 60 }}m
+                    </span>
+                  </td>
+                  <td class="text-center tests-row__num">
+                    {{ test?.totalQuestions }}
+                  </td>
+                  <td class="text-center">
+                    <span
+                      class="tests-pill"
+                      [class.tests-pill--free]="test?.isFree"
+                      [class.tests-pill--paid]="!test?.isFree"
+                    >
+                      {{ test?.isFree ? "Free" : "Paid" }}
+                    </span>
+                  </td>
+                  <td class="text-center tests-row__num">
+                    {{ Math.floor(test?.duration / 60) }} hr
+                    {{ test?.duration % 60 }} min
+                  </td>
+                  <td class="text-center">
+                    <button
+                      nz-button
+                      class="tests-row__start"
+                      (click)="onClickStartTest(test, 'mock')"
+                    >
+                      Start
+                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+        </div>
+      </ng-template>
+    </nz-tab>
+
+    <!-- ────────────  Topic-wise Tests  ──────────── -->
+    <nz-tab nzTitle="Topic-wise Tests">
+      <ng-template nz-tab>
+        <div class="tests-toolbar">
+          <nz-input-group
+            [nzPrefix]="prefixIcon"
+            [nzSuffix]="suffixIcon"
+            class="tests-toolbar__search"
           >
-            No Results Found
-          </div>
-          <div
-            *ngIf="topicCount !== 0"
-            class="result-not-found font-weight-normal"
+            <input
+              #testSearchInput
+              nz-input
+              type="text"
+              placeholder="Search tests"
+              (input)="topicSubject.next(testSearchInput.value)"
+            />
+          </nz-input-group>
+          <ng-template #prefixIcon>
+            <span nz-icon nzType="search" class="tests-toolbar__icon"></span>
+          </ng-template>
+          <ng-template #suffixIcon>
+            @if (testSearchInput.value.length > 0) {
+              <span
+                nz-icon
+                nzType="close"
+                nzTheme="outline"
+                class="tests-toolbar__icon tests-toolbar__icon--clear"
+                (click)="testSearchInput.value = ''; topicSubject.next('')"
+              ></span>
+            }
+          </ng-template>
+
+          <nz-select
+            class="tests-toolbar__filter"
+            [(ngModel)]="topicIdFilter"
+            (ngModelChange)="topicIndex = 1; getTopicTests()"
+            (nzScrollToBottom)="getAllTopics()"
+            (nzOnSearch)="topicSearchSubject.next($event)"
+            [nzShowArrow]="true"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Filter by topic"
           >
-            <b>{{ topicCount }}</b> Results Found
-          </div>
-        </ng-template>
+            <nz-option
+              *ngFor="let topic of topics"
+              [nzLabel]="topic?.name"
+              [nzValue]="topic?.id"
+            ></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="tests-table-shell">
+          @if (isTopicLoading) {
+            <app-tests-skeleton variant="topic-row" [count]="5"></app-tests-skeleton>
+          } @else if (isTopicError) {
+            <div class="tests-empty tests-empty--error">
+              <span class="tests-empty__icon material-symbols-outlined">error</span>
+              <p class="tests-empty__title">Couldn't load topic tests</p>
+              <p class="tests-empty__subtitle">
+                Please check your connection and try again.
+              </p>
+              <button
+                nz-button
+                class="tests-empty__cta"
+                (click)="getTopicTests()"
+              >
+                Retry
+              </button>
+            </div>
+          } @else if (isTopicEmpty) {
+            <div class="tests-empty">
+              <span class="tests-empty__icon material-symbols-outlined">filter_list_off</span>
+              <p class="tests-empty__title">No topic tests found</p>
+              <p class="tests-empty__subtitle">
+                Try adjusting your search or topic filter.
+              </p>
+            </div>
+          } @else {
+            <nz-table
+              class="tests-table"
+              [nzData]="topicTests"
+              [nzShowPagination]="true"
+              [nzFrontPagination]="false"
+              [nzShowSizeChanger]="true"
+              [nzTotal]="topicCount"
+              [nzPageIndex]="topicIndex"
+              [nzPageSize]="topicLimit"
+              [nzShowTotal]="printTopicTotalCount"
+              (nzPageIndexChange)="this.topicIndex = $event; this.getTopicTests()"
+              (nzPageSizeChange)="this.topicLimit = $event; this.getTopicTests()"
+              [nzScroll]="{ x: '720px' }"
+            >
+              <thead>
+                <tr>
+                  <th class="text-center" [nzWidth]="'56px'">Sl. No.</th>
+                  <th [nzWidth]="'220px'">Name</th>
+                  <th class="text-center" [nzWidth]="'96px'">Questions</th>
+                  <th class="text-center" [nzWidth]="'96px'">Access</th>
+                  <th class="text-center" [nzWidth]="'120px'">Duration</th>
+                  <th class="text-center" [nzWidth]="'120px'"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let test of topicTests; let i = index"
+                  class="tests-row"
+                >
+                  <td class="text-center tests-row__index">{{ i + 1 }}</td>
+                  <td class="tests-row__name">
+                    <span class="tests-row__name-text">{{ test?.name }}</span>
+                    <span class="tests-row__mobile-meta">
+                      {{ test?.totalQuestions }} Qs ·
+                      {{ Math.floor(test?.duration / 60) }}h
+                      {{ test?.duration % 60 }}m
+                    </span>
+                  </td>
+                  <td class="text-center tests-row__num">
+                    {{ test?.totalQuestions }}
+                  </td>
+                  <td class="text-center">
+                    <span
+                      class="tests-pill"
+                      [class.tests-pill--free]="test?.isFree"
+                      [class.tests-pill--paid]="!test?.isFree"
+                    >
+                      {{ test?.isFree ? "Free" : "Paid" }}
+                    </span>
+                  </td>
+                  <td class="text-center tests-row__num">
+                    {{ Math.floor(test?.duration / 60) }} hr
+                    {{ test?.duration % 60 }} min
+                  </td>
+                  <td class="text-center">
+                    <button
+                      nz-button
+                      class="tests-row__start"
+                      (click)="onClickStartTest(test, 'topic')"
+                    >
+                      Start
+                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          }
+
+          <ng-template #printTopicTotalCount>
+            <div
+              *ngIf="topicCount === 0"
+              class="tests-total-label tests-total-label--empty"
+            >
+              No Results
+            </div>
+            <div *ngIf="topicCount !== 0" class="tests-total-label">
+              <b>{{ topicCount }}</b> Results
+            </div>
+          </ng-template>
+        </div>
       </ng-template>
     </nz-tab>
   </nz-tabs>
-</nz-card>
+</section>
 
+<!-- ─────────────────────────  Invalid Access Modal  ───────────────────────── -->
 <nz-modal
   [(nzVisible)]="isInvalidModal"
   [nzMaskClosable]="true"
   [nzFooter]="null"
   (nzOnCancel)="onModalClose()"
+  nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="d-flex align-items-center font-24 font-500">
-      <svg
-        class="mr-2"
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 32 32"
-        fill="none"
-      >
-        <path
-          d="M16 22.6665C16.3778 22.6665 16.6945 22.5387 16.95 22.2832C17.2056 22.0276 17.3333 21.7109 17.3333 21.3332C17.3333 20.9554 17.2056 20.6387 16.95 20.3832C16.6945 20.1276 16.3778 19.9998 16 19.9998C15.6222 19.9998 15.3056 20.1276 15.05 20.3832C14.7945 20.6387 14.6667 20.9554 14.6667 21.3332C14.6667 21.7109 14.7945 22.0276 15.05 22.2832C15.3056 22.5387 15.6222 22.6665 16 22.6665ZM14.6667 17.3332H17.3333V9.33317H14.6667V17.3332ZM16 29.3332C14.1556 29.3332 12.4222 28.9832 10.8 28.2832C9.17778 27.5832 7.76667 26.6332 6.56667 25.4332C5.36667 24.2332 4.41667 22.8221 3.71667 21.1998C3.01667 19.5776 2.66667 17.8443 2.66667 15.9998C2.66667 14.1554 3.01667 12.4221 3.71667 10.7998C4.41667 9.17762 5.36667 7.7665 6.56667 6.5665C7.76667 5.3665 9.17778 4.4165 10.8 3.7165C12.4222 3.0165 14.1556 2.6665 16 2.6665C17.8444 2.6665 19.5778 3.0165 21.2 3.7165C22.8222 4.4165 24.2333 5.3665 25.4333 6.5665C26.6333 7.7665 27.5833 9.17762 28.2833 10.7998C28.9833 12.4221 29.3333 14.1554 29.3333 15.9998C29.3333 17.8443 28.9833 19.5776 28.2833 21.1998C27.5833 22.8221 26.6333 24.2332 25.4333 25.4332C24.2333 26.6332 22.8222 27.5832 21.2 28.2832C19.5778 28.9832 17.8444 29.3332 16 29.3332Z"
-          fill="#8555FD"
-        />
-      </svg>
-      Error!
+    <div class="tests-modal__head">
+      <span class="tests-modal__icon tests-modal__icon--warn material-symbols-outlined">lock</span>
+      <h2 class="tests-modal__title">Subscription required</h2>
     </div>
-    <p class="mt-3 font-16 font-400">Invalid Access</p>
-    <p class="mt-1 font-12 font-300">
-      You do not have access to this test. Please ensure you have a valid
-      subscription to proceed.
+    <p class="tests-modal__body">
+      This test is part of a premium plan. Subscribe to unlock full access to the
+      test library.
     </p>
-    <p class="mt-3 font-16 font-400">Would you like to subscribe now?</p>
-    <div class="d-flex justify-content-start mt-2 pt-2">
+    <div class="tests-modal__actions">
       <button
         nz-button
-        type="button"
-        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        class="tests-modal__btn tests-modal__btn--ghost"
         (click)="onModalClose()"
       >
-        Cancel
+        Not now
       </button>
       <button
         nz-button
-        class="modal-btn btn-primary mb-1 mr-2"
+        class="tests-modal__btn tests-modal__btn--primary"
         [routerLink]="['/', 'student', 'account']"
       >
         Subscribe
@@ -271,6 +405,7 @@
   </ng-container>
 </nz-modal>
 
+<!-- ─────────────────────────  Start Test Modal  ───────────────────────── -->
 <nz-modal
   [(nzVisible)]="isStartTestModal"
   [nzMaskClosable]="true"
@@ -279,138 +414,124 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="d-flex align-items-center font-24 font-500">
-      <svg
-        class="mr-2"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-      >
-        <path
-          d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-          stroke="#8555FD"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      Start Test!
+    <div class="tests-modal__head">
+      <span class="tests-modal__icon tests-modal__icon--primary material-symbols-outlined">play_arrow</span>
+      <h2 class="tests-modal__title">Start this test?</h2>
     </div>
-    <p class="mt-3 font-16 font-400 mb-3">Test Details</p>
 
-    <div class="row">
-      <div class="col-md-6">
-        <p class="font-12 text-2a">Time Alloted</p>
-        <p class="font-16 text-primary">
+    <div class="tests-modal__grid">
+      <div class="tests-modal__field">
+        <p class="tests-modal__label">Time allotted</p>
+        <p class="tests-modal__value">
           {{ Math.floor(selectedTest?.duration / 60) }} hr
           {{ selectedTest?.duration % 60 }} min
         </p>
       </div>
 
-      @if(selectedTestType !== 'topic') {
-        <div class="col-md-6 mt-md-0 mt-2">
-          <p class="font-12 text-2a">Subject</p>
-          <p class="font-16 text-primary">
-            {{ selectedTest?.subject ?? '-' }}
-          </p>
+      @if (selectedTestType !== 'topic') {
+        <div class="tests-modal__field">
+          <p class="tests-modal__label">Subject</p>
+          <p class="tests-modal__value">{{ selectedTest?.subject ?? '-' }}</p>
         </div>
       } @else {
-        <div class="col-md-6 mt-md-0 mt-2">
-          <p class="font-12 text-2a">Topic</p>
-          <p class="font-16 text-primary">
-            {{ selectedTest?.name ?? '-' }}
-          </p>
+        <div class="tests-modal__field">
+          <p class="tests-modal__label">Topic</p>
+          <p class="tests-modal__value">{{ selectedTest?.name ?? '-' }}</p>
         </div>
       }
 
-      <div class="col-md-6 mt-2">
-        <p class="font-12 text-2a">Total Questions</p>
-        <p class="font-16 text-primary">
-          {{ selectedTest?.totalQuestions ?? '-' }}
-        </p>
+      <div class="tests-modal__field">
+        <p class="tests-modal__label">Total questions</p>
+        <p class="tests-modal__value">{{ selectedTest?.totalQuestions ?? '-' }}</p>
       </div>
 
-      <div class="col-md-6 mt-2">
-        <p class="font-12 text-2a">Test Type</p>
-        <p class="font-16 text-primary">
-          {{ (selectedTestType | titlecase) ?? '-' }}
-        </p>
+      <div class="tests-modal__field">
+        <p class="tests-modal__label">Test type</p>
+        <p class="tests-modal__value">{{ (selectedTestType | titlecase) ?? '-' }}</p>
       </div>
 
-      @if(selectedTestType !== 'topic') {
-        <div class="col-12 mt-2">
-          <p class="font-12 text-2a">Topics</p>
-          <p class="font-16 text-primary">
+      @if (selectedTestType !== 'topic') {
+        <div class="tests-modal__field tests-modal__field--full">
+          <p class="tests-modal__label">Topics</p>
+          <p class="tests-modal__value tests-modal__value--soft">
             {{ selectedTest?.topic?.join(', ') }}
           </p>
         </div>
       }
     </div>
 
-    <p class="mt-3 font-16 font-500">
-      Attention! Once you click "Start Test" you will have:
-    </p>
-    <ul class="mt-1">
-      <li class="ml-3 font-12 font-300">{{ selectedTest?.duration }} minutes to complete the test.</li>
-      <li class="ml-3 font-12 font-300">
-        No answer submissions allowed after the time limit expires.
-      </li>
-      <li class="ml-3 font-12 font-300">
-        No pausing or resuming the test once started.
-      </li>
-    </ul>
-    <div class="d-flex justify-content-start mt-2 pt-2">
+    <div class="tests-modal__notes">
+      <p class="tests-modal__notes-title">Before you begin</p>
+      <ul class="tests-modal__notes-list">
+        <li>You'll have {{ selectedTest?.duration }} minutes to complete the test.</li>
+        <li>No submissions allowed after the timer expires.</li>
+        <li>The test cannot be paused once started.</li>
+      </ul>
+    </div>
+
+    <div class="tests-modal__actions">
       <button
         nz-button
-        type="button"
-        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        class="tests-modal__btn tests-modal__btn--ghost"
         (click)="onModalClose()"
       >
         Cancel
       </button>
       <button
         nz-button
-        class="modal-btn btn-primary mb-1 mr-2"
-        [routerLink]="['/', 'student', 'tests', 'attempt', selectedTestType, selectedTest?.id]"
+        class="tests-modal__btn tests-modal__btn--primary"
+        [routerLink]="[
+          '/',
+          'student',
+          'tests',
+          'attempt',
+          selectedTestType,
+          selectedTest?.id
+        ]"
       >
-        Start Test
+        Start test
       </button>
     </div>
   </ng-container>
 </nz-modal>
 
+<!-- ─────────────────────────  Pending Test Modal  ───────────────────────── -->
 <nz-modal
   [(nzVisible)]="isPendingTest"
   [nzMaskClosable]="true"
   [nzFooter]="null"
   (nzOnCancel)="onModalClose()"
-  [nzWidth]="360"
+  [nzWidth]="400"
+  nzCentered
 >
   <ng-container *nzModalContent>
-    <p class="font-16 font-400"> Continue or Submit Pending Test </p>
-
-    <p class="mt-3 font-12 font-400">
-      You have a pending {{ pendingTestDetails?.testType }} test!
+    <div class="tests-modal__head">
+      <span class="tests-modal__icon tests-modal__icon--amber material-symbols-outlined">pending_actions</span>
+      <h2 class="tests-modal__title">You have a pending test</h2>
+    </div>
+    <p class="tests-modal__body">
+      You left a <b>{{ pendingTestDetails?.testType }}</b> test unfinished. Continue
+      where you left off or submit it now to free up a new attempt.
     </p>
-    <p class="font-14 font-400">
-      Do you want to continue or submit the test?
-    </p>
-
-    <div class="d-flex justify-content-start mt-2 pt-2">
+    <div class="tests-modal__actions">
       <button
         nz-button
-        type="button"
-        class="modal-btn bg-transparent border-primary text-primary mr-4 mb-1"
+        class="tests-modal__btn tests-modal__btn--ghost"
         (click)="submitPendingTest()"
       >
         Submit
       </button>
       <button
         nz-button
-        class="modal-btn btn-primary mb-1 mr-2"
-        [routerLink]="['/', 'student', 'tests','attempt', pendingTestDetails?.testType, pendingTestDetails?.testId]"
+        class="tests-modal__btn tests-modal__btn--primary"
+        [routerLink]="[
+          '/',
+          'student',
+          'tests',
+          'attempt',
+          pendingTestDetails?.testType,
+          pendingTestDetails?.testId
+        ]"
       >
         Continue
       </button>

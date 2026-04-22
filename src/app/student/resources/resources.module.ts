@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -26,6 +26,7 @@ const routes: Routes = [
     NgZorroAntdModule,
     FormsModule,
     ImageFallbackDirective,
+    NgOptimizedImage
   ],
   exports: [ResourcesComponent],
 })

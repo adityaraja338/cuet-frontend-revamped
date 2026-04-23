@@ -8,7 +8,7 @@ import { GlobalService } from '../../../shared/services/global.service';
   standalone: false,
   selector: 'app-topics',
   templateUrl: './topics.component.html',
-  styleUrl: './topics.component.scss',
+  styleUrl: './topics.component.css',
 })
 export class TopicsComponent implements OnInit {
   subjectName: string | undefined = 'Topic';

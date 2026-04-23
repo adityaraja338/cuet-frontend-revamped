@@ -25,7 +25,7 @@ export type AuthMode = 'student' | 'admin';
   standalone: false,
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss',
+  styleUrl: './auth.component.css',
 })
 export class AuthComponent implements OnInit, OnDestroy {
   registrationForm: FormGroup;

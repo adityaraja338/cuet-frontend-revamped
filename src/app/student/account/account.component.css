@@ -1,0 +1,110 @@
+.enroll-text {
+  color: #3A3A3A;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 64px */
+}
+.enroll-text span {
+  color: #8555FD;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+}
+
+.upgrade-text {
+  color: #3A3A3A;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 64px */
+}
+.upgrade-text span {
+  color: #8555FD;
+  font-size: 56px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+}
+
+.thank-you-text {
+  color: #3A3A3A;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 64px */
+}
+.thank-you-text span {
+  color: #8555FD;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+}
+
+.enroll-btn {
+  padding: 0px 24px;
+  height: 42px;
+  font-size: 16px;
+  font-weight: 300;
+  border-radius: 8px;
+  background: linear-gradient(88deg, #561ABD 0%, #8555FD 100%);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .account-batch-modal .batch {
+  position: relative;
+}
+::ng-deep .account-batch-modal .batch .batch-container {
+  width: 100%;
+  padding: 1rem;
+  z-index: 999;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  height: 72px;
+  overflow: hidden;
+  transition: height 0.5s ease-in-out;
+}
+::ng-deep .account-batch-modal .batch .batch-container .payment-selection {
+  max-height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+::ng-deep .account-batch-modal .batch .batch-details {
+  position: relative;
+  margin-top: -7%;
+  z-index: 998;
+  transition: 0.6s;
+  width: calc(100% - 24px);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border: none;
+}
+::ng-deep .account-batch-modal .batch .batch-details nz-collapse {
+  display: none;
+}
+::ng-deep .account-batch-modal .batch:hover .batch-container {
+  border: 1px solid rgba(133, 85, 253, 0.12);
+  height: auto;
+  overflow: auto;
+}
+::ng-deep .account-batch-modal .batch:hover .batch-container .payment-selection {
+  max-height: fit-content; /* Adjust based on the content size */
+  margin: -4px;
+  padding: 4px;
+  opacity: 1;
+}
+::ng-deep .account-batch-modal .batch:hover .batch-details {
+  margin-top: 0;
+  z-index: 999;
+  background-color: rgba(133, 85, 253, 0.06);
+}
+::ng-deep .account-batch-modal .batch:hover .batch-details nz-collapse {
+  display: block;
+}

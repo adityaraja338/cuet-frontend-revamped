@@ -14,7 +14,7 @@ export type AsyncState<T> =
   standalone: false,
   selector: 'app-tests',
   templateUrl: './tests.component.html',
-  styleUrl: './tests.component.scss',
+  styleUrl: './tests.component.css',
 })
 export class TestsComponent implements OnInit, OnDestroy {
   readonly debounceTimeMs = 400;

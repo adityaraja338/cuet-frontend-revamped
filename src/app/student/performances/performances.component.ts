@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: false,
   selector: 'app-performances',
   templateUrl: './performances.component.html',
-  styleUrl: './performances.component.scss',
+  styleUrl: './performances.component.css',
 })
 export class PerformancesComponent implements OnInit {
   isPerformanceModal = false;

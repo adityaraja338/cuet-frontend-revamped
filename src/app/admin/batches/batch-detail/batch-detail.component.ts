@@ -16,7 +16,7 @@ import { GlobalService } from '../../../shared/services/global.service';
   standalone: false,
   selector: 'app-batch-detail',
   templateUrl: './batch-detail.component.html',
-  styleUrl: './batch-detail.component.scss',
+  styleUrl: './batch-detail.component.css',
 })
 export class BatchDetailComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;

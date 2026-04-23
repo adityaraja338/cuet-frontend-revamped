@@ -16,7 +16,7 @@ import { GlobalService } from '../../../shared/services/global.service';
   standalone: false,
   selector: 'app-student-detail',
   templateUrl: './student-detail.component.html',
-  styleUrl: './student-detail.component.scss',
+  styleUrl: './student-detail.component.css',
 })
 export class StudentDetailComponent implements OnInit {
   studentPerformanceData: any = [];

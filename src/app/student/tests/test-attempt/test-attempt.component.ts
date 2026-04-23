@@ -18,7 +18,7 @@ import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
   standalone: false,
   selector: 'app-test-attempt',
   templateUrl: './test-attempt.component.html',
-  styleUrl: './test-attempt.component.scss',
+  styleUrl: './test-attempt.component.css',
 })
 export class TestAttemptComponent implements OnInit {
   countdownTime: any;

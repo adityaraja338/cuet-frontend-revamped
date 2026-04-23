@@ -14,7 +14,7 @@ import { GlobalService } from '../../shared/services/global.service';
   standalone: false,
   selector: 'app-students',
   templateUrl: './students.component.html',
-  styleUrl: './students.component.scss',
+  styleUrl: './students.component.css',
 })
 export class StudentsComponent implements OnInit {
   students: any;

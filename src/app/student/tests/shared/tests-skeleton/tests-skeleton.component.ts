@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
   standalone: false,
   selector: 'app-tests-skeleton',
   templateUrl: './tests-skeleton.component.html',
-  styleUrl: './tests-skeleton.component.scss',
+  styleUrl: './tests-skeleton.component.css',
 })
 export class TestsSkeletonComponent {
   @Input() variant: 'table-row' | 'topic-row' | 'question' = 'table-row';

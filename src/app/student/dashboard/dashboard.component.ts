@@ -9,7 +9,7 @@ import { GlobalService } from '../../shared/services/global.service';
   standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
   previous = [];

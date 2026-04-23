@@ -1,0 +1,22 @@
+#topics-container .topic {
+  background-color: rgba(133, 85, 253, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  transition: all 0.6s;
+}
+#topics-container .topic .topic-icon {
+  height: 44px;
+  aspect-ratio: 1;
+  border-radius: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#topics-container .topic .topic-icon img {
+  height: 52%;
+  width: auto;
+}
+#topics-container .topic:hover {
+  background-color: rgba(133, 85, 253, 0.12);
+  box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.06);
+}

@@ -6,7 +6,7 @@ import { GlobalService } from '../shared/services/global.service';
   standalone: false,
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss',
+  styleUrl: './admin.component.css',
 })
 export class AdminComponent {
   isCollapsed = false;

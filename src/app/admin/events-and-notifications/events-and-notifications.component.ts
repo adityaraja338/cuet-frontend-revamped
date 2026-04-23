@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   standalone: false,
   selector: 'app-events-and-notifications',
   templateUrl: './events-and-notifications.component.html',
-  styleUrl: './events-and-notifications.component.scss',
+  styleUrl: './events-and-notifications.component.css',
 })
 export class EventsAndNotificationsComponent implements OnInit {
   events: any = [];

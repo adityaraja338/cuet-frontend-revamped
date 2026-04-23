@@ -14,7 +14,7 @@ import { GlobalService } from '../../shared/services/global.service';
   standalone: false,
   selector: 'app-batches',
   templateUrl: './batches.component.html',
-  styleUrl: './batches.component.scss',
+  styleUrl: './batches.component.css',
 })
 export class BatchesComponent implements OnInit {
   batches: any;

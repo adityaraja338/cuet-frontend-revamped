@@ -1,0 +1,250 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  --topbar-accent: #004ac6;
+  --topbar-accent-strong: #003ea8;
+  --topbar-accent-soft: rgba(0, 74, 198, 0.10);
+  --topbar-text: #0f172a;
+  --topbar-muted: #64748b;
+  --topbar-soft: #94a3b8;
+  --topbar-surface: rgba(247, 249, 251, 0.82);
+  --topbar-track: rgba(148, 163, 184, 0.28);
+  --topbar-warn: #b45309;
+  --topbar-warn-soft: rgba(180, 83, 9, 0.12);
+  --topbar-danger: #ba1a1a;
+  --topbar-danger-soft: rgba(186, 26, 26, 0.10);
+}
+
+.exam-topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1rem 1.4rem;
+  padding: 0.85rem 1.2rem;
+  background: var(--topbar-surface);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-radius: 0.9rem;
+  box-shadow: 0 12px 32px rgba(25, 28, 30, 0.06);
+  font-family: "Inter", sans-serif;
+  color: var(--topbar-text);
+}
+
+.exam-topbar__lead {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.exam-topbar__eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--topbar-accent);
+  margin: 0;
+}
+
+.exam-topbar__title {
+  font-family: "Manrope", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--topbar-text);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exam-topbar__meta {
+  font-size: 0.72rem;
+  color: var(--topbar-muted);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.exam-topbar__meta-index,
+.exam-topbar__meta-total {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  color: var(--topbar-text);
+}
+
+.exam-topbar__progress {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.exam-topbar__progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--topbar-track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.exam-topbar__progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, var(--topbar-accent) 0%, #2563eb 100%);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.exam-topbar__progress-label {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--topbar-text);
+  font-variant-numeric: tabular-nums;
+  width: 3ch;
+  text-align: right;
+}
+
+.exam-topbar__timer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.7rem;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1.5px var(--topbar-track);
+  min-width: 6.5rem;
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.exam-topbar__timer-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--topbar-soft);
+}
+
+.exam-topbar__timer-value {
+  font-family: "Manrope", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--topbar-text);
+}
+.exam-topbar__timer-value--placeholder {
+  color: var(--topbar-soft);
+}
+
+.exam-topbar__timer-value ::ng-deep .ant-statistic-content {
+  font-size: inherit !important;
+  font-family: inherit !important;
+  color: inherit !important;
+}
+
+.exam-topbar__timer-value ::ng-deep .ant-statistic-content-value {
+  font-size: inherit !important;
+  font-family: inherit !important;
+  font-weight: 800 !important;
+  color: inherit !important;
+}
+
+.exam-topbar__timer--warn {
+  background: var(--topbar-warn-soft);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--topbar-warn) 32%, transparent);
+  color: var(--topbar-warn);
+}
+.exam-topbar__timer--warn .exam-topbar__timer-label {
+  color: var(--topbar-warn);
+}
+.exam-topbar__timer--warn .exam-topbar__timer-value {
+  color: var(--topbar-warn);
+}
+
+.exam-topbar__timer--danger {
+  background: var(--topbar-danger-soft);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--topbar-danger) 36%, transparent);
+  color: var(--topbar-danger);
+  animation: topbar-pulse 1.4s ease-in-out infinite;
+}
+.exam-topbar__timer--danger .exam-topbar__timer-label {
+  color: var(--topbar-danger);
+}
+.exam-topbar__timer--danger .exam-topbar__timer-value {
+  color: var(--topbar-danger);
+}
+
+@keyframes topbar-pulse {
+  0%, 100% {
+    box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--topbar-danger) 36%, transparent), 0 0 0 0 rgba(186, 26, 26, 0);
+  }
+  50% {
+    box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--topbar-danger) 46%, transparent), 0 0 0 6px rgba(186, 26, 26, 0.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .exam-topbar__timer--danger {
+    animation: none;
+  }
+}
+.exam-topbar__palette-btn {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  background: var(--topbar-accent-soft);
+  color: var(--topbar-accent);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.6rem;
+  font-family: "Inter", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.exam-topbar__palette-btn:hover {
+  background: color-mix(in oklab, var(--topbar-accent) 18%, transparent);
+}
+.exam-topbar__palette-btn:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--topbar-accent) 40%, transparent);
+  outline-offset: 2px;
+}
+.exam-topbar__palette-btn .anticon {
+  font-size: 0.85rem;
+}
+
+@media (max-width: 1023px) {
+  .exam-topbar {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas: "lead timer palette" "progress progress progress";
+    padding: 0.75rem 1rem;
+    gap: 0.65rem 0.9rem;
+  }
+  .exam-topbar__lead {
+    grid-area: lead;
+  }
+  .exam-topbar__progress {
+    grid-area: progress;
+  }
+  .exam-topbar__timer {
+    grid-area: timer;
+    min-width: 5.5rem;
+  }
+  .exam-topbar__palette-btn {
+    grid-area: palette;
+    display: inline-flex;
+  }
+}
+@media (max-width: 480px) {
+  .exam-topbar__palette-btn span:not(.anticon) {
+    display: none;
+  }
+  .exam-topbar__palette-btn {
+    padding: 0.45rem 0.55rem;
+  }
+}

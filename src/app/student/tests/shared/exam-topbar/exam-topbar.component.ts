@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: false,
   selector: 'app-exam-topbar',
   templateUrl: './exam-topbar.component.html',
-  styleUrl: './exam-topbar.component.scss',
+  styleUrl: './exam-topbar.component.css',
 })
 export class ExamTopbarComponent {
   @Input() title: string = 'Test';

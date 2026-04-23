@@ -1,0 +1,47 @@
+::ng-deep #admin-test-leaderboard {
+  max-height: calc(100% - 48.8px);
+}
+::ng-deep #admin-test-leaderboard .card {
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+}
+::ng-deep #admin-test-leaderboard .scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 172px;
+  width: 100%;
+}
+::ng-deep #admin-test-leaderboard .leaderboard-header {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 0;
+  border-radius: 8px;
+}
+::ng-deep #admin-test-leaderboard .leaderboard-header .leaderboard-badge {
+  fill: #fff;
+}
+::ng-deep #admin-test-leaderboard .rank-1 .leaderboard-icon path {
+  fill: #ffd700;
+}
+::ng-deep #admin-test-leaderboard .rank-2 .leaderboard-icon path {
+  fill: #c0c0c0;
+}
+::ng-deep #admin-test-leaderboard .rank-3 .leaderboard-icon path {
+  fill: #cd7f32;
+}
+::ng-deep #admin-test-leaderboard .ranks {
+  padding: 6px 0;
+  margin: 4px 0;
+  font-size: 12px;
+  border-radius: 8px;
+}
+::ng-deep #admin-test-leaderboard .ranks.rank-1 {
+  background: linear-gradient(to right, rgba(255, 215, 0, 0.0576), rgba(255, 215, 0, 0.24));
+}
+::ng-deep #admin-test-leaderboard .ranks.rank-2 {
+  background: linear-gradient(to right, rgba(192, 192, 192, 0.0576), rgba(192, 192, 192, 0.24));
+}
+::ng-deep #admin-test-leaderboard .ranks.rank-3 {
+  background: linear-gradient(to right, rgba(205, 127, 50, 0.0576), rgba(205, 127, 50, 0.24));
+}

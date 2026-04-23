@@ -9,7 +9,7 @@ import { GlobalService } from '../../../../shared/services/global.service';
   standalone: false,
   selector: 'app-materials',
   templateUrl: './materials.component.html',
-  styleUrl: './materials.component.scss',
+  styleUrl: './materials.component.css',
 })
 export class MaterialsComponent implements OnInit {
   subjectName: string = 'Subject';

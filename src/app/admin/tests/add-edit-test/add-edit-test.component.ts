@@ -18,7 +18,7 @@ import { AdminHttpService } from '../../../shared/services/admin-http.service';
   standalone: false,
   selector: 'app-add-edit-test',
   templateUrl: './add-edit-test.component.html',
-  styleUrl: './add-edit-test.component.scss',
+  styleUrl: './add-edit-test.component.css',
 })
 export class AddEditTestComponent implements OnInit {
   testForm: FormGroup;

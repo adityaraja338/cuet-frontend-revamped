@@ -1,0 +1,26 @@
+.label-divider p {
+  background-color: #FFF !important;
+}
+
+#subjects-container .newspaper, #subjects-container .subject, #domain-subjects-container .newspaper, #domain-subjects-container .subject, #pyq-container .newspaper, #pyq-container .subject {
+  background-color: rgba(0, 163, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  transition: all 0.6s;
+}
+#subjects-container .newspaper .subject-icon, #subjects-container .subject .subject-icon, #domain-subjects-container .newspaper .subject-icon, #domain-subjects-container .subject .subject-icon, #pyq-container .newspaper .subject-icon, #pyq-container .subject .subject-icon {
+  height: 44px;
+  aspect-ratio: 1;
+  border-radius: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#subjects-container .newspaper .subject-icon img, #subjects-container .subject .subject-icon img, #domain-subjects-container .newspaper .subject-icon img, #domain-subjects-container .subject .subject-icon img, #pyq-container .newspaper .subject-icon img, #pyq-container .subject .subject-icon img {
+  height: 52%;
+  width: auto;
+}
+#subjects-container .newspaper:hover, #subjects-container .subject:hover, #domain-subjects-container .newspaper:hover, #domain-subjects-container .subject:hover, #pyq-container .newspaper:hover, #pyq-container .subject:hover {
+  background-color: rgba(0, 163, 255, 0.12);
+  box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.06);
+}

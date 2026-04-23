@@ -6,7 +6,7 @@ import { StudentAuthService } from '../shared/auth/student-auth.service';
   standalone: false,
   selector: 'app-student',
   templateUrl: './student.component.html',
-  styleUrl: './student.component.scss',
+  styleUrl: './student.component.css',
 })
 export class StudentComponent {
   isCollapsed = false;

@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
   standalone: false,
   selector: 'app-resource-skeleton',
   templateUrl: './skeleton.component.html',
-  styleUrl: './skeleton.component.scss',
+  styleUrl: './skeleton.component.css',
 })
 export class ResourceSkeletonComponent {
   @Input() variant: 'subject-row' | 'topic-row' | 'card' | 'list-row' = 'card';

@@ -11,7 +11,7 @@ import { AsyncState } from '../resources.component';
   standalone: false,
   selector: 'app-resource-topic-panel',
   templateUrl: './topic-panel.component.html',
-  styleUrl: './topic-panel.component.scss',
+  styleUrl: './topic-panel.component.css',
 })
 export class ResourceTopicPanelComponent implements OnInit, OnDestroy {
   @Input({ required: true }) topicId!: number;

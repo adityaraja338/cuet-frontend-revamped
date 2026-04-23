@@ -10,7 +10,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   standalone: false,
   selector: 'app-tests',
   templateUrl: './tests.component.html',
-  styleUrl: './tests.component.scss',
+  styleUrl: './tests.component.css',
 })
 export class TestsComponent implements OnInit {
   subjects: any;

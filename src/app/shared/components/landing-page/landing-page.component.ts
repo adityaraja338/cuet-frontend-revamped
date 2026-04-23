@@ -40,7 +40,7 @@ interface FaqEntry {
   standalone: false,
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrl: './landing-page.component.scss',
+  styleUrl: './landing-page.component.css',
 })
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('landingRoot', { read: ElementRef })

@@ -1,0 +1,1098 @@
+@charset "UTF-8";
+/* Auth — layout/spacing/typography live in the template (Tailwind).
+   SCSS keeps: back link, decorative mesh, hero glass + motion, flip 3D,
+   segmented pill, divider pseudo, ng-zorro overrides, batch/plan. */
+:host {
+  display: block;
+}
+
+/* ----- Background layers ----- */
+.auth-bg__mesh {
+  position: absolute;
+  inset: -10% -5%;
+  background: radial-gradient(ellipse 110% 80% at 0% 0%, rgba(0, 74, 198, 0.22) 0%, transparent 55%), radial-gradient(ellipse 100% 80% at 100% 0%, rgba(37, 99, 235, 0.18) 0%, transparent 55%), radial-gradient(ellipse 90% 75% at 50% 120%, rgba(0, 74, 198, 0.14) 0%, transparent 60%);
+  filter: saturate(1.05);
+}
+
+.auth-bg__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.55;
+  animation: auth-float 18s ease-in-out infinite alternate;
+}
+
+.auth-bg__blob--1 {
+  width: 560px;
+  height: 560px;
+  top: -160px;
+  left: -120px;
+  background: radial-gradient(circle at 30% 30%, rgba(0, 74, 198, 0.45), transparent 65%);
+}
+
+.auth-bg__blob--2 {
+  width: 520px;
+  height: 520px;
+  top: 35%;
+  right: -180px;
+  background: radial-gradient(circle at 70% 50%, rgba(99, 102, 241, 0.38), transparent 65%);
+  animation-delay: -6s;
+}
+
+.auth-bg__blob--3 {
+  width: 420px;
+  height: 420px;
+  bottom: -180px;
+  left: 25%;
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.32), transparent 65%);
+  animation-delay: -12s;
+}
+
+.auth-bg__grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(15, 23, 42, 0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 85%);
+  opacity: 0.6;
+}
+
+@keyframes auth-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(20px, -30px, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(-15px, 18px, 0) scale(0.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-bg__blob {
+    animation: none;
+  }
+}
+@media (max-width: 640px) {
+  .auth-bg__grid {
+    background-size: 40px 40px;
+  }
+}
+/* ----- Back to home (frosted pill — explicit so it wins over <a> / preflight) ----- */
+.auth-page .auth-home {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  /* Above the auth stage (z-10) so clicks are never swallowed by the card. */
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  padding: 0.5rem 0.85rem 0.5rem 0.65rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.7);
+  color: #334155;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-page .auth-home .material-symbols-outlined {
+  font-size: 18px;
+  font-variation-settings: "FILL" 0, "wght" 500;
+}
+.auth-page .auth-home:hover {
+  color: var(--primary);
+  background: #fff;
+  border-color: rgba(148, 163, 184, 0.42);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 640px) {
+  .auth-page .auth-home {
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.4rem 0.55rem;
+  }
+  .auth-page .auth-home .auth-home__label {
+    display: none;
+  }
+}
+/* ----- Auth stage: stretches to fill the page, one section in flow at a time.
+   Page height == active section content (clamped to min 100vh on roomy
+   viewports, overflows and scrolls on short ones). ----- */
+.auth-stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+}
+
+.auth-section {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 4.25rem 1rem 1.25rem;
+}
+@media (min-width: 1024px) {
+  .auth-section {
+    padding: clamp(1rem, 2.5vw, 2.25rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-section {
+    padding: 4rem 0.85rem 1.25rem;
+  }
+}
+/* Hide whichever section isn't active. The page height then tracks only
+   the visible section's content, so short viewports scroll naturally and
+   roomy ones don't. */
+.auth-stage .auth-section--register,
+.auth-stage.is-registration .auth-section--login {
+  display: none;
+}
+
+.auth-stage.is-registration .auth-section--register {
+  display: flex;
+  animation: auth-slide-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Route-level @routeAnimations handles the entry animation for the login
+   card now, so no local keyframe here — avoids a double-slide on enter. */
+@keyframes auth-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-stage .auth-section {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+/* ----- Hero panel (gradient + decorative mesh; lg+) ----- */
+.auth-hero-panel {
+  display: none;
+  position: relative;
+  border-radius: 1.75rem;
+  overflow: hidden;
+  color: #fff;
+  /* Fixed min-height so the panel keeps its visual weight on short viewports.
+     No max-height — let content determine the natural size; on tall screens
+     the auth-card's height will push both columns to match anyway. */
+  min-height: 600px;
+  background: radial-gradient(ellipse 90% 70% at 100% 0%, rgba(255, 255, 255, 0.16) 0%, transparent 55%), linear-gradient(135deg, #041a4b 0%, #004ac6 52%, #2563eb 100%);
+  box-shadow: 0 40px 80px -40px rgba(0, 74, 198, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.auth-hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 30% 20%, #000 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 30% 20%, #000 40%, transparent 85%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.auth-hero-panel::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.16), transparent 65%);
+  filter: blur(40px);
+  top: -120px;
+  right: -120px;
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  .auth-hero-panel {
+    display: block;
+  }
+}
+
+/* Hero headline — Manrope + italic accent on <em> (do not rely on Tailwind tokens here) */
+.auth-hero-panel__title {
+  margin: 0;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.85rem, 1.8vw + 0.9rem, 2.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+.auth-hero-panel__title em {
+  font-style: italic;
+  font-weight: 800;
+  color: #cfd9ff;
+}
+
+/* ----- Hero showcase (orbit, glass card, chips, motion) ----- */
+.auth-hero-showcase__orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.auth-hero-showcase__orbit span {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.auth-hero-showcase__orbit span:nth-child(1) {
+  width: 380px;
+  height: 380px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.auth-hero-showcase__orbit span:nth-child(2) {
+  width: 260px;
+  height: 260px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: rgba(255, 255, 255, 0.18);
+  border-style: dashed;
+}
+.auth-hero-showcase__orbit span:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18), transparent 70%);
+  border: none;
+}
+
+.auth-hero-card {
+  position: relative;
+  z-index: 2;
+  width: min(300px, 88%);
+  padding: 1.1rem 1.2rem 1.05rem;
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 28px 56px -20px rgba(4, 18, 60, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transform: translateY(-4px);
+  animation: auth-hero-card-float 8s ease-in-out infinite alternate;
+}
+
+.auth-hero-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+}
+
+.auth-hero-card__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+}
+
+.auth-hero-card__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
+  animation: auth-hero-dot-pulse 2.2s ease-in-out infinite;
+}
+
+.auth-hero-card__meta {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.auth-hero-card__statline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.auth-hero-card__rank {
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+  font-size: 1.8rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.auth-hero-card__ranksub {
+  font-family: "Inter", sans-serif;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.auth-hero-card__progress {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+.auth-hero-card__progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #cfd9ff 0%, #ffffff 100%);
+  border-radius: inherit;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.45);
+}
+
+.auth-hero-card__foot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+.auth-hero-card__foot .material-symbols-outlined {
+  font-size: 15px;
+  font-variation-settings: "FILL" 1, "wght" 500;
+}
+
+.auth-hero-chip {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 14px 28px -14px rgba(4, 18, 60, 0.5);
+  color: #fff;
+  font-family: "Inter", sans-serif;
+}
+.auth-hero-chip .material-symbols-outlined {
+  font-size: 22px;
+  color: #ffe8b0;
+  font-variation-settings: "FILL" 1, "wght" 500;
+  flex-shrink: 0;
+}
+.auth-hero-chip strong {
+  display: block;
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1.15;
+}
+.auth-hero-chip small {
+  display: block;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.2;
+}
+
+.auth-hero-chip--streak {
+  top: 6%;
+  right: 4%;
+  animation: auth-hero-chip-float-a 9s ease-in-out infinite alternate;
+}
+
+.auth-hero-chip--rewatch {
+  bottom: 5%;
+  left: 2%;
+  animation: auth-hero-chip-float-b 11s ease-in-out infinite alternate;
+}
+.auth-hero-chip--rewatch .material-symbols-outlined {
+  color: #bfd7ff;
+}
+
+@keyframes auth-hero-card-float {
+  0% {
+    transform: translateY(-4px) rotate(-0.3deg);
+  }
+  100% {
+    transform: translateY(4px) rotate(0.4deg);
+  }
+}
+@keyframes auth-hero-chip-float-a {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-6px, 8px, 0);
+  }
+}
+@keyframes auth-hero-chip-float-b {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(8px, -6px, 0);
+  }
+}
+@keyframes auth-hero-dot-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(52, 211, 153, 0.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-hero-card,
+  .auth-hero-chip,
+  .auth-hero-card__dot {
+    animation: none !important;
+  }
+}
+/* ----- Segmented switcher — track + tabs (SCSS: beats preflight on <button>) ----- */
+.auth-page .auth-segmented {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  padding: 0.28rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 6%, #f1f5f9);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+  isolation: isolate;
+}
+
+.auth-segmented__indicator {
+  position: absolute;
+  z-index: 0;
+  top: 0.28rem;
+  bottom: 0.28rem;
+  left: 0.28rem;
+  width: calc(50% - 0.28rem);
+  border-radius: 999px;
+  background: var(--primary-gradient);
+  box-shadow: 0 8px 18px -8px rgba(0, 74, 198, 0.55), 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  pointer-events: none;
+}
+.auth-segmented__indicator.is-admin {
+  transform: translateX(100%);
+}
+
+.auth-page .auth-segmented__item {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  border: none;
+  margin: 0;
+  background: transparent;
+  color: #475569;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.auth-page .auth-segmented__item .material-symbols-outlined {
+  font-size: 18px;
+  color: inherit;
+  font-variation-settings: "FILL" 1, "wght" 500;
+  transition: transform 0.3s ease;
+}
+.auth-page .auth-segmented__item:hover {
+  color: var(--primary);
+}
+.auth-page .auth-segmented__item.is-active {
+  color: #fff;
+}
+.auth-page .auth-segmented__item.is-active .material-symbols-outlined {
+  transform: scale(1.05);
+}
+
+/* ----- Field labels (explicit weight/color — preflight can mute <label>) ----- */
+.auth-page .auth-label {
+  display: block;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  margin-bottom: 0;
+}
+
+/* ----- Flip card (3D) ----- */
+.auth-flip__inner {
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+  display: grid;
+  grid-template-areas: "stack";
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.auth-flip.is-flipped .auth-flip__inner {
+  transform: rotateY(180deg);
+}
+
+.auth-flip__face {
+  grid-area: stack;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: opacity 0.25s ease 0.15s;
+}
+
+.auth-flip__face--back {
+  transform: rotateY(180deg);
+}
+
+.auth-flip:not(.is-flipped) .auth-flip__face--back,
+.auth-flip.is-flipped .auth-flip__face--front {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.auth-flip-body__main > .auth-flip-cta:last-child {
+  margin-top: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-segmented__indicator,
+  .auth-flip__inner,
+  .auth-flip__face {
+    transition: none;
+  }
+}
+/* ----- Divider (pseudo line) ----- */
+.auth-divider {
+  position: relative;
+  text-align: center;
+  margin: 0.25rem 0 0.1rem;
+}
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.3);
+}
+.auth-divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 0.65rem;
+  background: rgba(255, 255, 255, 0.86);
+  font-family: "Inter", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+/* ----- Google + primary CTAs (nz-button → .ant-btn; Ant overrides Tailwind without !important) ----- */
+.auth-page .auth-google-btn.ant-btn,
+.auth-page .auth-primary-btn.ant-btn {
+  height: auto !important;
+  min-height: 0 !important;
+  line-height: inherit !important;
+}
+
+.auth-page .auth-google-btn.ant-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.85rem !important;
+  background: #fff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.4) !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.18s ease;
+}
+.auth-page .auth-google-btn.ant-btn img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.auth-page .auth-google-btn.ant-btn:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
+  box-shadow: 0 10px 24px -10px rgba(0, 74, 198, 0.25);
+  color: #0f172a !important;
+  background: #fff !important;
+}
+.auth-page .auth-google-btn.ant-btn:active {
+  transform: translateY(0);
+}
+
+.auth-page .auth-primary-btn.ant-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.78rem 1.35rem !important;
+  border-radius: 0.85rem !important;
+  border: none !important;
+  background: var(--primary-gradient) !important;
+  color: #fff !important;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 12px 28px -8px rgba(0, 74, 198, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.2s ease;
+}
+.auth-page .auth-primary-btn.ant-btn .material-symbols-outlined {
+  font-size: 20px;
+  font-variation-settings: "FILL" 1, "wght" 500;
+}
+.auth-page .auth-primary-btn.ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 38px -10px rgba(0, 74, 198, 0.55);
+  filter: brightness(1.02);
+  color: #fff !important;
+  background: var(--primary-gradient) !important;
+}
+.auth-page .auth-primary-btn.ant-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.97);
+}
+
+.auth-page .auth-primary-btn--block.ant-btn {
+  width: 100%;
+}
+
+.auth-page .auth-submit-btn.ant-btn {
+  margin-top: 1.25rem;
+}
+
+/* Secondary "use a different Google account" action — low-key link-button. */
+.auth-page .auth-change-account {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  border-radius: 0.7rem;
+  background: transparent;
+  color: #475569;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.auth-page .auth-change-account strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+.auth-page .auth-change-account .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--primary);
+  font-variation-settings: "FILL" 0, "wght" 500;
+}
+.auth-page .auth-change-account:hover {
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+  color: #0f172a;
+}
+.auth-page .auth-change-account:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+.auth-page .auth-change-account:active {
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+/* ----- Form controls ----- */
+.auth-page .auth-card--register {
+  border-radius: 1.45rem;
+}
+
+/* Register split: base = single centred column.
+   Mobile (< 768): form stretches, section padding gives natural margins.
+   Tablet/desktop without hero (768–1279): capped to a comfortable reading width.
+   Desktop with hero (>= 1280): matches login's 2-col layout (hero not shrunk). */
+.auth-page .auth-split--register {
+  grid-template-columns: minmax(0, 1fr) !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+}
+
+.auth-page .auth-content__inner--register {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.auth-page .auth-card--register {
+  width: 100%;
+}
+
+/* Hero hidden by default for register (base .auth-hero-panel turns block at lg+). */
+.auth-page .auth-hero-panel--register {
+  display: none !important;
+}
+
+/* 768–1279: form should not span the whole canvas. */
+@media (min-width: 768px) and (max-width: 1279.98px) {
+  .auth-page .auth-split--register {
+    max-width: min(100%, 36rem) !important;
+  }
+}
+/* 1024–1279: match the sub-1024 section padding so the register UI renders
+   identically to tablet (base .auth-section adopts a tighter clamp at lg+
+   which we don't want here). */
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  .auth-page .auth-section--register {
+    padding: 4.25rem 1rem 1.25rem;
+  }
+}
+/* >= 1280: restore full two-column layout with the big hero (same feel as login). */
+@media (min-width: 1280px) {
+  .auth-page .auth-split--register {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) !important;
+    max-width: min(100%, 78rem) !important;
+    align-items: stretch;
+    gap: 2.5rem;
+  }
+  .auth-page .auth-hero-panel--register {
+    display: block !important;
+    min-height: 600px;
+  }
+}
+.auth-page .auth-register-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0 0 0.9rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(0, 74, 198, 0.16);
+  background: linear-gradient(90deg, rgba(0, 74, 198, 0.08), rgba(0, 74, 198, 0.03));
+  color: #1e293b;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.auth-page .auth-register-compact .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--primary);
+  font-variation-settings: "FILL" 1, "wght" 500;
+}
+
+@media (min-width: 1280px) {
+  .auth-page .auth-register-compact {
+    display: none;
+  }
+}
+.auth-page .auth-form--register {
+  gap: 1.25rem !important;
+}
+
+.auth-page .auth-card--register .auth-card__head {
+  gap: 0.75rem;
+}
+
+.auth-page .auth-form--register .auth-label {
+  font-size: 0.82rem;
+}
+
+.auth-page .auth-form {
+  gap: 1.1rem !important;
+}
+
+.auth-page .auth-form__grid {
+  row-gap: 0.85rem !important;
+}
+
+.auth-page .auth-field {
+  gap: 0.45rem !important;
+}
+
+/* Base input + affix wrapper visuals come from the global styles (see styles.scss).
+   Only layout helpers (bare variant, phone-row pieces) remain here. */
+.auth-page .auth-input {
+  width: 100%;
+}
+
+.auth-input--bare {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  border-radius: 0 !important;
+}
+.auth-input--bare:focus, .auth-input--bare.ant-input-focused {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.auth-pw-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+}
+.auth-pw-toggle .material-symbols-outlined {
+  font-size: 20px;
+  line-height: 1;
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 20;
+  transition: font-variation-settings 0.18s ease, transform 0.18s ease;
+}
+.auth-pw-toggle:hover {
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  color: var(--primary);
+}
+.auth-pw-toggle:active {
+  transform: scale(0.94);
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+.auth-pw-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
+  color: var(--primary);
+}
+.auth-pw-toggle.is-on {
+  color: var(--primary);
+}
+.auth-pw-toggle.is-on .material-symbols-outlined {
+  font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 20;
+}
+
+/* Phone row: country-code affix wrapper + phone input share one visual field.
+   The country-code's right edge acts as the divider; the phone input loses its
+   left border so the two pieces merge cleanly. */
+.auth-page .country-code-input {
+  width: 82px !important;
+  flex: 0 0 82px;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 0.75rem !important;
+  border-radius: 10px 0 0 10px !important;
+  background: #f8fafc !important;
+  display: inline-flex !important;
+  align-items: center;
+}
+.auth-page .country-code-input .ant-input-prefix {
+  color: #64748b;
+  margin-right: 0.3rem;
+}
+.auth-page .country-code-input input.ant-input {
+  height: 100%;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 0.9rem;
+  color: var(--on-surface);
+}
+.auth-page .country-code-input:hover, .auth-page .country-code-input:focus-within {
+  /* Keep the divider visible even on focus; ring lands on the combined row. */
+  background: #f8fafc !important;
+}
+
+.auth-page .phone-input {
+  flex: 1 1 auto;
+  height: 44px !important;
+  min-height: 44px !important;
+  border-left: 0 !important;
+  border-radius: 0 10px 10px 0 !important;
+}
+
+.auth-page .auth-phone-row {
+  align-items: stretch;
+}
+
+.auth-page .auth-phone-row--register {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+}
+
+.auth-page .auth-form--register .country-code-input {
+  width: auto !important;
+  flex: 0 0 auto;
+}
+
+.auth-page .auth-form--register .auth-error {
+  font-size: 0.74rem !important;
+}
+
+.auth-page .auth-form-item {
+  margin-bottom: 0 !important;
+}
+
+/* ----- Batch cards ----- */
+.auth-batch-scroll {
+  max-width: 100%;
+  scrollbar-width: thin;
+}
+
+.auth-batch-row--empty {
+  justify-content: flex-start;
+}
+
+.auth-page .batch-card {
+  flex: 0 0 auto;
+  width: 12rem;
+  background: #fff;
+  border: 1.5px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.9rem;
+  padding: 0.8rem 0.95rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.3s ease, background 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.2rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.auth-page .batch-card--empty {
+  align-items: flex-start;
+  justify-content: center;
+  background: color-mix(in srgb, var(--primary) 4%, #fff);
+  border-style: dashed;
+}
+
+.auth-page .batch-card--empty-only {
+  width: min(100%, 17rem);
+}
+
+.batch-card__icon {
+  font-size: 20px;
+  color: var(--primary);
+  margin-bottom: 0.15rem;
+  font-variation-settings: "FILL" 0, "wght" 500;
+}
+
+.batch-card__title {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.batch-card__sub {
+  font-family: "Inter", sans-serif;
+  font-size: 0.76rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.3;
+}
+.batch-card__sub span {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.batch-card__price {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--primary);
+  margin: 0.25rem 0 0;
+  line-height: 1.2;
+}
+
+.auth-page .batch-card:hover {
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -12px rgba(0, 74, 198, 0.25);
+}
+
+.auth-page .batch-card.selected-batch {
+  border-color: var(--primary);
+  box-shadow: 0 10px 28px -10px rgba(0, 74, 198, 0.4);
+  background: color-mix(in srgb, var(--primary) 4%, #fff);
+}
+
+@media (max-width: 767px) {
+  .auth-page .batch-card {
+    width: min(82vw, 14rem);
+  }
+}
+/* ----- Plan radios (ng-zorro) ----- */
+.auth-plan-radio.ant-radio-wrapper {
+  margin-right: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+}
+
+/* nz-select visuals come from the global styles (see styles.scss). */

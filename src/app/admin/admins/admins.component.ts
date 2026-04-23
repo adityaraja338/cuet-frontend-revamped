@@ -8,7 +8,7 @@ import { GlobalService } from '../../shared/services/global.service';
   standalone: false,
   selector: 'app-admins',
   templateUrl: './admins.component.html',
-  styleUrl: './admins.component.scss',
+  styleUrl: './admins.component.css',
 })
 export class AdminsComponent implements OnInit {
   admins: any = [];

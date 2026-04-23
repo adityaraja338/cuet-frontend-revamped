@@ -8,7 +8,7 @@ import { PaymentService } from '../../shared/services/payment.service';
   standalone: false,
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrl: './account.component.scss',
+  styleUrl: './account.component.css',
 })
 export class AccountComponent implements OnInit {
   profileForm: FormGroup;

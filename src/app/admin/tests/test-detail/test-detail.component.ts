@@ -8,7 +8,7 @@ import { GlobalService } from '../../../shared/services/global.service';
   standalone: false,
   selector: 'app-test-detail',
   templateUrl: './test-detail.component.html',
-  styleUrl: './test-detail.component.scss',
+  styleUrl: './test-detail.component.css',
 })
 export class TestDetailComponent implements OnInit {
   isRecorded = false;

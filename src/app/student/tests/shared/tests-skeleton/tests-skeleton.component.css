@@ -1,0 +1,103 @@
+@keyframes tskel-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.tskel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  background: #ffffff;
+  border-radius: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.tskel--table-row,
+.tskel--topic-row {
+  background: var(--color-surface-container-lowest, #ffffff);
+}
+
+.tskel__cell {
+  background: linear-gradient(90deg, #f0f4f8 25%, #e2e8f0 50%, #f0f4f8 75%);
+  background-size: 800px 100%;
+  animation: tskel-shimmer 1.4s infinite linear;
+  border-radius: 0.4rem;
+  height: 0.95rem;
+}
+.tskel__cell--index {
+  width: 1.75rem;
+}
+.tskel__cell--name {
+  flex: 1;
+  min-width: 0;
+}
+.tskel__cell--num {
+  width: 2.75rem;
+}
+.tskel__cell--chip {
+  width: 4.5rem;
+}
+.tskel__cell--pill {
+  width: 3.5rem;
+  height: 1.25rem;
+  border-radius: 999px;
+}
+.tskel__cell--action {
+  width: 5.5rem;
+  height: 2rem;
+  border-radius: 0.6rem;
+}
+
+.tskel--question {
+  display: block;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: var(--color-surface-container-lowest, #ffffff);
+  box-shadow: 0 12px 32px rgba(25, 28, 30, 0.06);
+}
+
+.tskel__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.25rem;
+}
+
+.tskel__line {
+  background: linear-gradient(90deg, #f0f4f8 25%, #e2e8f0 50%, #f0f4f8 75%);
+  background-size: 800px 100%;
+  animation: tskel-shimmer 1.4s infinite linear;
+  border-radius: 0.4rem;
+  height: 0.85rem;
+}
+.tskel__line--meta {
+  width: 30%;
+  height: 0.7rem;
+}
+.tskel__line--q {
+  width: 90%;
+  height: 1rem;
+}
+.tskel__line--q2 {
+  width: 70%;
+  height: 1rem;
+}
+
+.tskel__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.tskel__option {
+  background: linear-gradient(90deg, #f0f4f8 25%, #e2e8f0 50%, #f0f4f8 75%);
+  background-size: 800px 100%;
+  animation: tskel-shimmer 1.4s infinite linear;
+  border-radius: 0.4rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+}

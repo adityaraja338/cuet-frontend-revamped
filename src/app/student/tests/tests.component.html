@@ -5,8 +5,8 @@
       <p class="tests-hero__eyebrow">Tests</p>
       <h1 class="tests-hero__title">Practice & Mock Tests</h1>
       <p class="tests-hero__subtitle">
-        Sharpen your timing, track accuracy, and prepare with recorded, mock, and
-        topic-wise tests curated for CUET.
+        Sharpen your timing, track accuracy, and prepare with recorded, mock,
+        and topic-wise tests curated for CUET.
       </p>
     </div>
   </header>
@@ -21,11 +21,18 @@
       <ng-template nz-tab>
         <div class="cuet-table-shell">
           @if (isRecordedLoading) {
-            <app-tests-skeleton variant="table-row" [count]="5"></app-tests-skeleton>
+            <app-tests-skeleton
+              variant="table-row"
+              [count]="5"
+            ></app-tests-skeleton>
           } @else if (isRecordedError) {
             <div class="cuet-table-empty cuet-table-empty--error">
-              <span class="cuet-table-empty__icon material-symbols-outlined">error</span>
-              <p class="cuet-table-empty__title">Couldn't load recorded tests</p>
+              <span class="cuet-table-empty__icon material-symbols-outlined"
+                >error</span
+              >
+              <p class="cuet-table-empty__title">
+                Couldn't load recorded tests
+              </p>
               <p class="cuet-table-empty__subtitle">
                 Please check your connection and try again.
               </p>
@@ -39,7 +46,9 @@
             </div>
           } @else if (isRecordedEmpty) {
             <div class="cuet-table-empty">
-              <span class="cuet-table-empty__icon material-symbols-outlined">smart_display</span>
+              <span class="cuet-table-empty__icon material-symbols-outlined"
+                >smart_display</span
+              >
               <p class="cuet-table-empty__title">No recorded tests yet</p>
               <p class="cuet-table-empty__subtitle">
                 Recorded tests will appear here once they're published.
@@ -63,12 +72,14 @@
               </thead>
               <tbody>
                 @for (test of recordedTests; track test.id; let i = $index) {
-                  <tr
-                    class="cuet-table-row"
-                  >
-                    <td class="text-center cuet-table-row__index text-nowrap">{{ i + 1 }}</td>
+                  <tr class="cuet-table-row">
+                    <td class="text-center cuet-table-row__index text-nowrap">
+                      {{ i + 1 }}
+                    </td>
                     <td class="cuet-table-row__name text-nowrap">
-                      <span class="cuet-table-row__name-text">{{ test?.name }}</span>
+                      <span class="cuet-table-row__name-text">{{
+                        test?.name
+                      }}</span>
                       <span class="cuet-table-row__mobile-meta">
                         {{ test?.totalQuestions }} Qs ·
                         {{ Math.floor(test?.duration / 60) }}h
@@ -98,7 +109,11 @@
                         (click)="onClickStartTest(test, 'recorded')"
                       >
                         Start
-                        <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                        <span
+                          nz-icon
+                          nzType="arrow-right"
+                          nzTheme="outline"
+                        ></span>
                       </button>
                     </td>
                   </tr>
@@ -115,10 +130,15 @@
       <ng-template nz-tab>
         <div class="cuet-table-shell">
           @if (isMockLoading) {
-            <app-tests-skeleton variant="table-row" [count]="5"></app-tests-skeleton>
+            <app-tests-skeleton
+              variant="table-row"
+              [count]="5"
+            ></app-tests-skeleton>
           } @else if (isMockError) {
             <div class="cuet-table-empty cuet-table-empty--error">
-              <span class="cuet-table-empty__icon material-symbols-outlined">error</span>
+              <span class="cuet-table-empty__icon material-symbols-outlined"
+                >error</span
+              >
               <p class="cuet-table-empty__title">Couldn't load mock tests</p>
               <p class="cuet-table-empty__subtitle">
                 Please check your connection and try again.
@@ -133,7 +153,9 @@
             </div>
           } @else if (isMockEmpty) {
             <div class="cuet-table-empty">
-              <span class="cuet-table-empty__icon material-symbols-outlined">assignment</span>
+              <span class="cuet-table-empty__icon material-symbols-outlined"
+                >assignment</span
+              >
               <p class="cuet-table-empty__title">No mock tests yet</p>
               <p class="cuet-table-empty__subtitle">
                 Mock tests will appear here once they're published.
@@ -162,7 +184,9 @@
                 >
                   <td class="text-center cuet-table-row__index">{{ i + 1 }}</td>
                   <td class="cuet-table-row__name text-nowrap">
-                    <span class="cuet-table-row__name-text">{{ test?.name }}</span>
+                    <span class="cuet-table-row__name-text">{{
+                      test?.name
+                    }}</span>
                     <span class="cuet-table-row__mobile-meta">
                       {{ test?.totalQuestions }} Qs ·
                       {{ Math.floor(test?.duration / 60) }}h
@@ -192,7 +216,11 @@
                       (click)="onClickStartTest(test, 'mock')"
                     >
                       Start
-                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                      <span
+                        nz-icon
+                        nzType="arrow-right"
+                        nzTheme="outline"
+                      ></span>
                     </button>
                   </td>
                 </tr>
@@ -256,10 +284,15 @@
 
         <div class="cuet-table-shell">
           @if (isTopicLoading) {
-            <app-tests-skeleton variant="topic-row" [count]="5"></app-tests-skeleton>
+            <app-tests-skeleton
+              variant="topic-row"
+              [count]="5"
+            ></app-tests-skeleton>
           } @else if (isTopicError) {
             <div class="cuet-table-empty cuet-table-empty--error">
-              <span class="cuet-table-empty__icon material-symbols-outlined">error</span>
+              <span class="cuet-table-empty__icon material-symbols-outlined"
+                >error</span
+              >
               <p class="cuet-table-empty__title">Couldn't load topic tests</p>
               <p class="cuet-table-empty__subtitle">
                 Please check your connection and try again.
@@ -274,7 +307,9 @@
             </div>
           } @else if (isTopicEmpty) {
             <div class="cuet-table-empty">
-              <span class="cuet-table-empty__icon material-symbols-outlined">manage_search</span>
+              <span class="cuet-table-empty__icon material-symbols-outlined"
+                >manage_search</span
+              >
               <p class="cuet-table-empty__title">No topic tests found</p>
               <p class="cuet-table-empty__subtitle">
                 Try adjusting your search or topic filter.
@@ -290,8 +325,12 @@
               [nzPageIndex]="topicIndex"
               [nzPageSize]="topicLimit"
               [nzShowTotal]="printTopicTotalCount"
-              (nzPageIndexChange)="this.topicIndex = $event; this.getTopicTests()"
-              (nzPageSizeChange)="this.topicLimit = $event; this.getTopicTests()"
+              (nzPageIndexChange)="
+                this.topicIndex = $event; this.getTopicTests()
+              "
+              (nzPageSizeChange)="
+                this.topicLimit = $event; this.getTopicTests()
+              "
               [nzScroll]="{ x: 'auto' }"
             >
               <thead>
@@ -311,7 +350,9 @@
                 >
                   <td class="text-center cuet-table-row__index">{{ i + 1 }}</td>
                   <td class="cuet-table-row__name text-nowrap">
-                    <span class="cuet-table-row__name-text">{{ test?.name }}</span>
+                    <span class="cuet-table-row__name-text">{{
+                      test?.name
+                    }}</span>
                     <span class="cuet-table-row__mobile-meta">
                       {{ test?.totalQuestions }} Qs ·
                       {{ Math.floor(test?.duration / 60) }}h
@@ -341,7 +382,11 @@
                       (click)="onClickStartTest(test, 'topic')"
                     >
                       Start
-                      <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                      <span
+                        nz-icon
+                        nzType="arrow-right"
+                        nzTheme="outline"
+                      ></span>
                     </button>
                   </td>
                 </tr>
@@ -377,14 +422,15 @@
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
       <div class="tests-modal__head">
-        <span class="tests-modal__icon tests-modal__icon--warn material-symbols-outlined"
+        <span
+          class="tests-modal__icon tests-modal__icon--warn material-symbols-outlined"
           >lock</span
         >
         <h2 class="tests-modal__title">Subscription required</h2>
       </div>
       <p class="tests-modal__body">
-        This test is part of a premium plan. Subscribe to unlock full access to the
-        test library.
+        This test is part of a premium plan. Subscribe to unlock full access to
+        the test library.
       </p>
       <div class="tests-modal__actions">
         <button
@@ -417,7 +463,8 @@
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
       <div class="tests-modal__head">
-        <span class="tests-modal__icon tests-modal__icon--primary material-symbols-outlined"
+        <span
+          class="tests-modal__icon tests-modal__icon--primary material-symbols-outlined"
           >play_arrow</span
         >
         <h2 class="tests-modal__title">Start this test?</h2>
@@ -432,33 +479,37 @@
           </p>
         </div>
 
-        @if (selectedTestType !== 'topic') {
+        @if (selectedTestType !== "topic") {
           <div class="tests-modal__field">
             <p class="tests-modal__label">Subject</p>
-            <p class="tests-modal__value">{{ selectedTest?.subject ?? '-' }}</p>
+            <p class="tests-modal__value">{{ selectedTest?.subject ?? "-" }}</p>
           </div>
         } @else {
           <div class="tests-modal__field">
             <p class="tests-modal__label">Topic</p>
-            <p class="tests-modal__value">{{ selectedTest?.name ?? '-' }}</p>
+            <p class="tests-modal__value">{{ selectedTest?.name ?? "-" }}</p>
           </div>
         }
 
         <div class="tests-modal__field">
           <p class="tests-modal__label">Total questions</p>
-          <p class="tests-modal__value">{{ selectedTest?.totalQuestions ?? '-' }}</p>
+          <p class="tests-modal__value">
+            {{ selectedTest?.totalQuestions ?? "-" }}
+          </p>
         </div>
 
         <div class="tests-modal__field">
           <p class="tests-modal__label">Test type</p>
-          <p class="tests-modal__value">{{ (selectedTestType | titlecase) ?? '-' }}</p>
+          <p class="tests-modal__value">
+            {{ (selectedTestType | titlecase) ?? "-" }}
+          </p>
         </div>
 
-        @if (selectedTestType !== 'topic') {
+        @if (selectedTestType !== "topic") {
           <div class="tests-modal__field tests-modal__field--full">
             <p class="tests-modal__label">Topics</p>
             <p class="tests-modal__value tests-modal__value--soft">
-              {{ selectedTest?.topic?.join(', ') }}
+              {{ selectedTest?.topic?.join(", ") }}
             </p>
           </div>
         }
@@ -467,7 +518,10 @@
       <div class="tests-modal__notes">
         <p class="tests-modal__notes-title">Before you begin</p>
         <ul class="tests-modal__notes-list">
-          <li>You'll have {{ selectedTest?.duration }} minutes to complete the test.</li>
+          <li>
+            You'll have {{ selectedTest?.duration }} minutes to complete the
+            test.
+          </li>
           <li>No submissions allowed after the timer expires.</li>
           <li>The test cannot be paused once started.</li>
         </ul>
@@ -490,7 +544,7 @@
             'tests',
             'attempt',
             selectedTestType,
-            selectedTest?.id
+            selectedTest?.id,
           ]"
         >
           Start test
@@ -512,14 +566,15 @@
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
       <div class="tests-modal__head">
-        <span class="tests-modal__icon tests-modal__icon--amber material-symbols-outlined"
+        <span
+          class="tests-modal__icon tests-modal__icon--amber material-symbols-outlined"
           >pending_actions</span
         >
         <h2 class="tests-modal__title">You have a pending test</h2>
       </div>
       <p class="tests-modal__body">
-        You left a <b>{{ pendingTestDetails?.testType }}</b> test unfinished. Continue
-        where you left off or submit it now to free up a new attempt.
+        You left a <b>{{ pendingTestDetails?.testType }}</b> test unfinished.
+        Continue where you left off or submit it now to free up a new attempt.
       </p>
       <div class="tests-modal__actions">
         <button
@@ -538,7 +593,7 @@
             'tests',
             'attempt',
             pendingTestDetails?.testType,
-            pendingTestDetails?.testId
+            pendingTestDetails?.testId,
           ]"
         >
           Continue

@@ -1,15 +1,23 @@
 @charset "UTF-8";
-/* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 
-@import "./assets/scss/font-face.css";
-@import "./assets/scss/font-variables.css";
-@import "./assets/scss/colors.css";
-@import "ng-zorro-antd/ng-zorro-antd.min.css";
+/* 1. LAYER DECLARATION (MUST be first, but NO curly braces here) */
+@layer vendor, base, components, utilities;
+
+/* 2. ALL @IMPORTS (MUST come before any other CSS rules) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import './assets/scss/font-face.css';
+@import './assets/scss/font-variables.css';
+@import './assets/scss/colors.css';
+
+/* This demotes Zorro so Tailwind and your styles can beat it */
+@import "ng-zorro-antd/ng-zorro-antd.min.css" layer(vendor);
 @import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/* 3. TAILWIND THEME CONFIG                                                   */
+/* -------------------------------------------------------------------------- */
 @theme {
-  /* Colors — same tokens as landing.html tailwind.config theme.extend.colors */
   --color-on-secondary-fixed-variant: #38485d;
   --color-error-container: #ffdad6;
   --color-on-tertiary-fixed: #360f00;
@@ -57,374 +65,133 @@
   --color-surface: #f7f9fb;
   --color-secondary-container: #d0e1fb;
   --color-on-secondary-fixed: #0b1c30;
-  /* Border Radius */
+
   --radius-default: 0.5rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
-  /* Fonts */
+
   --font-headline: "Manrope";
   --font-body: "Inter";
   --font-label: "Inter";
 }
-/* Force dark mode to be class-based as you requested */
-@custom-variant dark (&:where(.dark, .dark *));
-:root {
-  --student-primary: #004ac6;
-  --student-dark-primary: #003ea8;
-  --admin-primary: #0284c7;
-  --primary: #004ac6;
-  --primary-container: #2563eb;
-  --primary-fixed: #dbe1ff;
-  --on-primary-fixed: #00174b;
-  --surface: #f7f9fb;
-  --surface-container-low: #f2f4f6;
-  --surface-container-lowest: #ffffff;
-  --on-surface: #191c1e;
-  --on-surface-variant: #434655;
-  --outline-variant: rgba(195, 198, 215, 0.15);
-  --secondary-container: #d0e1fb;
-  --on-secondary-container: #54647a;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --ambient-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06);
-  /* Premium data tables (ng-zorro nz-table / .ant-table) */
-  --cuet-table-accent: var(--primary);
-  --cuet-table-accent-strong: #003ea8;
-  --cuet-table-accent-soft: rgba(0, 74, 198, 0.1);
-  --cuet-table-accent-softer: rgba(0, 74, 198, 0.06);
-  --cuet-table-surface: #ffffff;
-  --cuet-table-surface-muted: #f8fafc;
-  --cuet-table-surface-dim: #eef2f7;
-  --cuet-table-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
-  --cuet-table-text: #0f172a;
-  --cuet-table-text-muted: #64748b;
-  --cuet-table-text-soft: #94a3b8;
-  --glass-bg: rgba(247, 249, 251, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --primary-gradient: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primary-container) 100%
-  );
-  --indigo-mesh:
-    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
-  /* Light marketing hero — used by landing parallax mesh (falls back to --indigo-mesh if unset) */
-  --landing-hero-mesh:
-    radial-gradient(
-      ellipse 120% 90% at 0% -30%,
-      rgba(0, 74, 198, 0.16) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse 100% 80% at 100% -10%,
-      rgba(37, 99, 235, 0.14) 0%,
-      transparent 52%
-    ),
-    radial-gradient(
-      ellipse 90% 70% at 50% 110%,
-      rgba(0, 74, 198, 0.09) 0%,
-      transparent 58%
-    );
-}
 
-/*
-  Put shared resets in `@layer base` and app helpers in `@layer components` so
-  Tailwind `@layer utilities` wins (hover scale, transitions, margins, etc.).
-  Ng-Zorro / `.ant-*` overrides below stay unlayered so they still beat Ant Design.
-*/
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------------------------- */
+/* 4. BASE LAYER (CSS Resets)                                                 */
+/* -------------------------------------------------------------------------- */
 @layer base {
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
+  :root {
+    --student-primary: #004ac6;
+    --student-dark-primary: #003ea8;
+    --admin-primary: #0284c7;
+    --primary: #004ac6;
+    --primary-container: #2563eb;
+    --primary-fixed: #dbe1ff;
+    --on-primary-fixed: #00174b;
+    --surface: #f7f9fb;
+    --surface-container-low: #f2f4f6;
+    --surface-container-lowest: #ffffff;
+    --on-surface: #191c1e;
+    --on-surface-variant: #434655;
+    --outline-variant: rgba(195, 198, 215, 0.15);
+    --secondary-container: #d0e1fb;
+    --on-secondary-container: #54647a;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --ambient-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06);
+
+    /* Shared elevated-surface tokens (used by .cuet-card and per-module
+       card classes across student/admin modules). */
+    --surface-card: #ffffff;
+    --surface-card-muted: #f8fafc;
+    --surface-card-border: rgba(148, 163, 184, 0.18);
+    --surface-card-border-hover: rgba(0, 74, 198, 0.22);
+    --shadow-card: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
+    --shadow-card-hover: 0 22px 42px -26px rgba(15, 23, 42, 0.32);
+    --lift-card: translateY(-2px);
+    --lift-card-strong: translateY(-3px);
+
+    --cuet-table-accent: var(--primary);
+    --cuet-table-accent-strong: #003ea8;
+    --cuet-table-accent-soft: rgba(0, 74, 198, 0.1);
+    --cuet-table-accent-softer: rgba(0, 74, 198, 0.06);
+    --cuet-table-surface: #ffffff;
+    --cuet-table-surface-muted: #f8fafc;
+    --cuet-table-surface-dim: #eef2f7;
+    --cuet-table-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
+    --cuet-table-text: #0f172a;
+    --cuet-table-text-muted: #64748b;
+    --cuet-table-text-soft: #94a3b8;
+    --glass-bg: rgba(247, 249, 251, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --primary-gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
   }
-  html,
-  body {
+
+  html, body {
     margin: 0;
     padding: 0;
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    line-height: normal;
-  }
-  body {
+    font-family: "Inter", system-ui, sans-serif;
     background: var(--surface);
     color: var(--on-surface);
   }
-  pre {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p {
+
+  /* Reset ng-zorro margins - No !important needed because base > vendor */
+  h1, h2, h3, h4, h5, h6, p {
     margin: 0;
     padding: 0;
     color: inherit;
+    font-family: var(--font-headline), system-ui, sans-serif;
   }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .brand-font {
-    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  }
-  .material-symbols-outlined {
-    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-  }
-}
-.drawer-open {
-  overflow: auto !important;
 }
 
+/* -------------------------------------------------------------------------- */
+/* 5. COMPONENTS LAYER (Custom Global Helpers)                                */
+/* -------------------------------------------------------------------------- */
 @layer components {
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-lg);
   }
-  .reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .reveal-on-scroll.revealed {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .text-primary {
-    color: var(--student-primary) !important;
-    transition: color 0.6s;
-  }
-  .text-primary:hover {
-    color: var(--student-dark-primary) !important;
-  }
-  .text-dark-primary {
-    color: var(--student-dark-primary) !important;
-    transition: color 0.6s;
-  }
-  .text-a-primary {
-    color: var(--admin-primary) !important;
-    transition: color 0.6s;
-  }
-  .text-a-primary:hover {
-    color: #007dd4 !important;
-  }
-  .text-free {
-    color: #bebebe !important;
-  }
-  .text-paid {
-    color: #561abd !important;
-  }
-  .text-red {
-    color: rgb(255, 97, 97);
-  }
-  .text-red:hover {
-    color: rgb(255, 93, 93);
-  }
-  .bg-primary {
-    background-color: var(--student-primary) !important;
-  }
-  .bg-a-primary {
-    background-color: var(--admin-primary) !important;
-  }
-  .bg-danger {
-    background-color: rgb(255, 97, 97) !important;
-  }
-  .bg-gold {
-    background: #ffd700 !important;
-  }
-  .bg-silver {
-    background: rgba(192, 192, 192, 0.5) !important;
-  }
-  .bg-bronze {
-    background: rgba(205, 127, 50, 0.5) !important;
-  }
-  .text-2a {
-    color: #2a2a2a !important;
-  }
-  .text-4a {
-    color: #4a4a4a !important;
-  }
-  .text-8a {
-    color: #8a8a8a !important;
-  }
-  .text-ca {
-    color: #cacaca !important;
-  }
-  .text-aa {
-    color: #aaaaaa !important;
-  }
-  .text-ea {
-    color: #eaeaea !important;
-  }
-  .col-gap-1 {
-    column-gap: 1px;
-  }
-  .col-gap-2 {
-    column-gap: 2px;
-  }
-  .col-gap-3 {
-    column-gap: 3px;
-  }
-  .col-gap-4 {
-    column-gap: 4px;
-  }
-  .col-gap-5 {
-    column-gap: 5px;
-  }
-  .col-gap-6 {
-    column-gap: 6px;
-  }
-  .col-gap-7 {
-    column-gap: 7px;
-  }
-  .col-gap-8 {
-    column-gap: 8px;
-  }
-  .col-gap-9 {
-    column-gap: 9px;
-  }
-  .col-gap-10 {
-    column-gap: 10px;
-  }
-  .col-gap-11 {
-    column-gap: 11px;
-  }
-  .col-gap-12 {
-    column-gap: 12px;
-  }
-  .col-gap-13 {
-    column-gap: 13px;
-  }
-  .col-gap-14 {
-    column-gap: 14px;
-  }
-  .col-gap-15 {
-    column-gap: 15px;
-  }
-  .col-gap-16 {
-    column-gap: 16px;
-  }
-  .col-gap-17 {
-    column-gap: 17px;
-  }
-  .col-gap-18 {
-    column-gap: 18px;
-  }
-  .col-gap-19 {
-    column-gap: 19px;
-  }
-  .col-gap-20 {
-    column-gap: 20px;
-  }
-  .col-gap-21 {
-    column-gap: 21px;
-  }
-  .col-gap-22 {
-    column-gap: 22px;
-  }
-  .col-gap-23 {
-    column-gap: 23px;
-  }
-  .col-gap-24 {
-    column-gap: 24px;
-  }
-  .row-gap-1 {
-    row-gap: 1px;
-  }
-  .row-gap-2 {
-    row-gap: 2px;
-  }
-  .row-gap-3 {
-    row-gap: 3px;
-  }
-  .row-gap-4 {
-    row-gap: 4px;
-  }
-  .row-gap-5 {
-    row-gap: 5px;
-  }
-  .row-gap-6 {
-    row-gap: 6px;
-  }
-  .row-gap-7 {
-    row-gap: 7px;
-  }
-  .row-gap-8 {
-    row-gap: 8px;
-  }
-  .row-gap-9 {
-    row-gap: 9px;
-  }
-  .row-gap-10 {
-    row-gap: 10px;
-  }
-  .row-gap-11 {
-    row-gap: 11px;
-  }
-  .row-gap-12 {
-    row-gap: 12px;
-  }
-  .row-gap-13 {
-    row-gap: 13px;
-  }
-  .row-gap-14 {
-    row-gap: 14px;
-  }
-  .row-gap-15 {
-    row-gap: 15px;
-  }
-  .row-gap-16 {
-    row-gap: 16px;
-  }
-  .row-gap-17 {
-    row-gap: 17px;
-  }
-  .row-gap-18 {
-    row-gap: 18px;
-  }
-  .row-gap-19 {
-    row-gap: 19px;
-  }
-  .row-gap-20 {
-    row-gap: 20px;
-  }
-  .row-gap-21 {
-    row-gap: 21px;
-  }
-  .row-gap-22 {
-    row-gap: 22px;
-  }
-  .row-gap-23 {
-    row-gap: 23px;
-  }
-  .row-gap-24 {
-    row-gap: 24px;
-  }
-  .row {
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-  }
-  [class^=col-] {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-  /* Default native buttons; Tailwind utilities override. `.ant-btn` rules below stay unlayered. */
+
+  /* Canonical elevated card surface — opt-in for new code.
+     Per-module classes can either use this directly or layer their
+     own gradient/glow on top of the shared tokens. */
+  .cuet-card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-card-border);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .cuet-card--interactive { cursor: pointer; }
+
+  .cuet-card--interactive:hover,
+  .cuet-card--interactive:focus-visible {
+    transform: var(--lift-card);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--surface-card-border-hover);
+  }
+
+  /* Color Helpers - notice no !important needed anymore */
+  .text-primary { color: var(--student-primary); }
+  .bg-primary { background-color: var(--student-primary); }
+  .bg-danger { background-color: rgb(255, 97, 97); }
+
+  /* Utility-like classes that should be in components layer */
+  .drawer-open { overflow: auto !important; } /* Kept !important as it might need to override inline styles */
+
   button {
     display: flex;
     height: 36px;
@@ -432,12 +199,13 @@
     justify-content: center;
     border-radius: 6px;
     font-size: 12px;
-    font-weight: 400;
-    padding: 0 24px;
     transition: all 0.6s;
-    outline: none !important;
   }
 }
+
+/* NOTE: I have excluded the 50+ manual row-gap/col-gap classes. 
+   In Tailwind v4, use 'gap-x-[4px]' or define them in your @theme to save 200 lines of code.
+*/
 button.modal-btn,
 button.ant-btn.modal-btn {
   min-width: 108px;
@@ -558,6 +326,10 @@ button.ant-btn.btn-a-secondary:hover {
 
 .ant-menu-inline.ant-menu-root .ant-menu-item > .ant-menu-title-content {
   font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  column-gap: 0.5rem;
 }
 
 .ant-card {
@@ -1418,7 +1190,7 @@ nz-switch:has(.ant-switch-small) {
 .admin nz-pagination .ant-pagination-prev,
 .admin nz-pagination .ant-pagination-next,
 .admin nz-pagination .ant-pagination-jump-prev,
-.admin nz-pagination .ant-pagination-jump-next {
+.admin nz-pagination .ant-pagination-next {
   height: auto;
 }
 .student nz-pagination .ant-pagination-prev .ant-pagination-item-link,
@@ -1786,4 +1558,42 @@ nz-switch:has(.ant-switch-small) {
   ::view-transition-new(root) {
     animation: none !important;
   }
+}
+
+/* Shared student page hero (tests, performances, resources, etc.) */
+.cuet-page-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.1rem 0.15rem 0.25rem;
+}
+
+.cuet-page-hero__eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 0.35rem;
+}
+
+.cuet-page-hero__title {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--cuet-table-text, #0f172a);
+  margin: 0 0 0.35rem;
+}
+
+.cuet-page-hero__subtitle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cuet-table-text-muted, #64748b);
+  max-width: 58ch;
+  line-height: 1.55;
+  margin: 0;
 }

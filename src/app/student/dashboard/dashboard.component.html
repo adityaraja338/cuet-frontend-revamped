@@ -580,9 +580,11 @@
                 [class.podium-card--bronze]="i === 2"
               >
                 <div class="podium-card__top">
-                  <span class="podium-card__rank">#{{ i + 1 }}</span>
-                  <span class="podium-card__medal material-symbols-outlined" aria-hidden="true">
-                    workspace_premium
+                  <span class="podium-card__rank">
+                    <span class="podium-card__medal material-symbols-outlined" aria-hidden="true">
+                      workspace_premium
+                    </span>
+                    #{{ i + 1 }}
                   </span>
                 </div>
 

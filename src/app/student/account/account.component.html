@@ -1,369 +1,647 @@
-<nz-breadcrumb nzSeparator=">">
-  <nz-breadcrumb-item>My Account</nz-breadcrumb-item>
-</nz-breadcrumb>
-<div class="row">
-  <div class="col-md-6">
-    <nz-card nzHoverable nzBorderless>
-      <div class="row mx-0 justify-content-center">
-        <img
-          *ngIf="accountDetails?.imageUrl"
-          [nzSrc]="accountDetails?.imageUrl"
-          nz-image
-          alt=""
-          style="border-radius: 50%"
-          height="120"
-          width="120"
-        />
-        <p
-          class="font-24 font-600 text-primary"
-          *ngIf="!accountDetails?.imageUrl"
-        >
-          {{ accountDetails?.name?.toUpperCase()[0] }}
-        </p>
-      </div>
-      <form [formGroup]="profileForm">
-        <div class="ant-row mt-4">
-          <div class="ant-col-24 mb-2">
+<div class="text-(--acc-text) mx-auto px-1 flex flex-col gap-8 lg:gap-10">
+  <!-- Hero -->
+  <header
+    class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-0.5 pt-1 pb-2"
+  >
+    <div>
+      <p
+        class="text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-(--acc-accent) mb-1.5"
+      >
+        My Account
+      </p>
+      <h1
+        class="font-[Manrope] text-[clamp(1.35rem,2vw,1.75rem)] font-extrabold my-2 tracking-[-0.02em] leading-[1.15] text-(--acc-text)"
+      >
+        Your
+        <span class="acc-grad-text">profile &amp; plan</span>
+      </h1>
+      <p
+        class="text-[0.88rem] font-medium text-(--acc-text-muted) mt-1.5 max-w-[52ch] leading-relaxed"
+      >
+        Manage your identity, membership, and à-la-carte purchases — all from
+        one place.
+      </p>
+    </div>
+
+    <div class="inline-flex items-center gap-2.5 shrink-0">
+      @if (accountDetails) {
+        @if (accountDetails?.isPremium) {
+          <div
+            class="acc-grad-premium inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[0.78rem] font-semibold text-white shadow-[0_14px_28px_-16px_rgba(0,74,198,0.55)]"
+          >
+            <span
+              class="material-symbols-outlined text-base text-white"
+              aria-hidden="true"
+              >workspace_premium</span
+            >
+            <span>Premium member</span>
+          </div>
+        } @else if (accountDetails?.isUpgradeable) {
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[0.78rem] font-semibold bg-(--acc-warn-soft) text-(--acc-warn)"
+          >
+            <span
+              class="material-symbols-outlined text-base text-(--acc-warn)"
+              aria-hidden="true"
+              >rocket_launch</span
+            >
+            <span>Upgrade available</span>
+          </div>
+        } @else {
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[0.78rem] font-semibold bg-(--acc-accent-softer) text-(--acc-accent-strong) ring-1 ring-inset ring-[rgba(0,74,198,0.12)]"
+          >
+            <span
+              class="material-symbols-outlined text-base text-(--acc-accent)"
+              aria-hidden="true"
+              >school</span
+            >
+            <span>Free plan</span>
+          </div>
+        }
+      }
+    </div>
+  </header>
+
+  <ng-container *ngIf="accountDetails; else accountLoading">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Identity banner -->
+      <section
+        class="acc-identity relative isolate overflow-hidden flex flex-col justify-between gap-6 p-6 lg:p-7 rounded-[1.25rem] bg-white shadow-(--acc-shadow-card) lg:col-span-12"
+        aria-label="Profile identity"
+      >
+        <div class="acc-identity__backdrop" aria-hidden="true"></div>
+
+        <div class="flex items-center gap-5 min-w-0">
+          <div class="relative shrink-0 w-[96px] h-[96px]">
+            <img
+              *ngIf="accountDetails?.imageUrl"
+              [nzSrc]="accountDetails?.imageUrl"
+              nz-image
+              alt=""
+              class="w-[96px] h-[96px] rounded-full object-cover block shadow-[0_14px_30px_-14px_rgba(15,23,42,0.35)]"
+            />
+            <div
+              *ngIf="!accountDetails?.imageUrl"
+              class="acc-grad-avatar w-[96px] h-[96px] rounded-full flex items-center justify-center text-white font-[Manrope] text-[2.15rem] font-extrabold tracking-[-0.02em]"
+              aria-hidden="true"
+            >
+              <span>{{ accountDetails?.name?.toUpperCase()[0] }}</span>
+            </div>
+            <span class="acc-avatar-ring" aria-hidden="true"></span>
+          </div>
+
+          <div class="min-w-0 flex flex-col gap-2 flex-1">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <p
+                class="font-[Manrope] text-[clamp(1.5rem,2.3vw,2rem)] font-extrabold tracking-[-0.02em] leading-[1.1] text-(--acc-text)"
+              >
+                {{ accountDetails?.name || "Student" }}
+              </p>
+              @if (accountDetails?.isPremium) {
+                <span
+                  class="acc-grad-premium inline-flex items-center gap-1 h-[24px] px-2.5 rounded-full text-[0.72rem] font-bold tracking-[0.02em] text-white"
+                >
+                  <span
+                    class="material-symbols-outlined text-[0.95rem]"
+                    aria-hidden="true"
+                    >verified</span
+                  >
+                  Premium
+                </span>
+              } @else {
+                <span
+                  class="inline-flex items-center h-[24px] px-2.5 rounded-full text-[0.72rem] font-bold tracking-[0.02em] bg-(--acc-surface-dim) text-(--acc-text-muted)"
+                >
+                  Free
+                </span>
+              }
+            </div>
+            <p
+              class="inline-flex items-center gap-2 text-[0.9rem] font-medium text-(--acc-text-muted)"
+            >
+              <span
+                class="material-symbols-outlined text-[1rem] text-(--acc-text-soft)"
+                aria-hidden="true"
+                >mail</span
+              >
+              {{ accountDetails?.email || "—" }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          @if (accountDetails?.id) {
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[0.7rem] bg-white text-(--acc-text) text-[0.78rem] font-semibold tabular-nums tracking-[0.02em] shadow-[0_6px_18px_-12px_rgba(15,23,42,0.22)]"
+            >
+              <span
+                class="material-symbols-outlined text-[1rem] text-(--acc-accent)"
+                aria-hidden="true"
+                >badge</span
+              >
+              ID · {{ accountDetails?.id }}
+            </span>
+          }
+          @if (accountDetails?.phone) {
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[0.7rem] bg-white text-(--acc-text) text-[0.78rem] font-semibold tabular-nums shadow-[0_6px_18px_-12px_rgba(15,23,42,0.22)]"
+            >
+              <span
+                class="material-symbols-outlined text-[1rem] text-(--acc-accent)"
+                aria-hidden="true"
+                >call</span
+              >
+              {{ accountDetails?.phone }}
+            </span>
+          }
+          @if (accountDetails?.batchName) {
+            <span
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[0.7rem] bg-white text-(--acc-text) text-[0.78rem] font-semibold shadow-[0_6px_18px_-12px_rgba(15,23,42,0.22)]"
+            >
+              <span
+                class="material-symbols-outlined text-[1rem] text-(--acc-accent)"
+                aria-hidden="true"
+                >groups</span
+              >
+              {{ accountDetails?.batchName }}
+            </span>
+          }
+        </div>
+      </section>
+
+      <!-- Membership -->
+      <section
+        class="relative overflow-hidden flex flex-col md:flex-row md:items-center gap-6 md:gap-8 p-6 md:p-7 rounded-[1.1rem] shadow-(--acc-shadow-card) lg:col-span-12"
+        [class.acc-membership-bg]="!accountDetails?.isPremium"
+        [class.acc-membership-bg--premium]="accountDetails?.isPremium"
+        aria-label="Membership"
+      >
+        <header class="flex-1 min-w-0">
+          <p
+            class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) mb-1"
+          >
+            Membership
+          </p>
+          <h2
+            class="font-[Manrope] text-[clamp(1.25rem,1.8vw,1.55rem)] font-extrabold tracking-[-0.02em] leading-tight text-(--acc-text)"
+          >
+            @if (accountDetails?.isPremium) {
+              You're on Premium
+            } @else if (accountDetails?.isUpgradeable) {
+              Ready for Premium?
+            } @else if (totalBatchCount > 0) {
+              Enroll in a batch
+            } @else {
+              No batches available
+            }
+          </h2>
+          <p
+            class="text-[0.88rem] font-medium text-(--acc-text-muted) mt-1.5 leading-normal max-w-[52ch]"
+          >
+            @if (accountDetails?.isPremium) {
+              Full access to every feature and future release.
+            } @else if (accountDetails?.isUpgradeable) {
+              Unlock every feature with a single upgrade.
+            } @else if (totalBatchCount > 0) {
+              Pick a batch to begin your CUET journey with us.
+            } @else {
+              New batches will open for enrollment soon — check back shortly.
+            }
+          </p>
+        </header>
+
+        @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
+          <div
+            class="shrink-0 flex items-center gap-3 px-5 py-3 rounded-[0.95rem] bg-(--acc-accent-softest)"
+          >
+            <div
+              class="font-[Manrope] text-[2.5rem] font-extrabold tracking-[-0.04em] leading-none text-(--acc-accent)"
+            >
+              {{ totalBatchCount }}
+            </div>
+            <div
+              class="text-[0.82rem] font-semibold tracking-[0.02em] leading-snug text-(--acc-text-muted) max-w-[7ch]"
+            >
+              batches available
+            </div>
+          </div>
+
+          @if (totalBatchCount > 0) {
+            <button
+              nz-button
+              class="acc-cta acc-cta--inline shrink-0"
+              (click)="isShowBatches = true"
+            >
+              <span nz-icon nzType="form"></span>
+              Browse &amp; enroll
+              <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+            </button>
+          }
+        } @else if (
+          !accountDetails?.isPremium && accountDetails?.isUpgradeable
+        ) {
+          <ul
+            class="list-none m-0 flex flex-wrap gap-x-5 gap-y-2 shrink-0 md:max-w-[45%]"
+          >
+            <li
+              class="inline-flex items-center gap-2 text-[0.88rem] font-medium text-(--acc-text)"
+            >
+              <span
+                class="material-symbols-outlined acc-icon-filled text-[1.1rem] text-(--acc-accent)"
+                aria-hidden="true"
+                >check_circle</span
+              >
+              All premium features
+            </li>
+            <li
+              class="inline-flex items-center gap-2 text-[0.88rem] font-medium text-(--acc-text)"
+            >
+              <span
+                class="material-symbols-outlined acc-icon-filled text-[1.1rem] text-(--acc-accent)"
+                aria-hidden="true"
+                >check_circle</span
+              >
+              Full mock library
+            </li>
+            <li
+              class="inline-flex items-center gap-2 text-[0.88rem] font-medium text-(--acc-text)"
+            >
+              <span
+                class="material-symbols-outlined acc-icon-filled text-[1.1rem] text-(--acc-accent)"
+                aria-hidden="true"
+                >check_circle</span
+              >
+              Priority support
+            </li>
+          </ul>
+
+          <button
+            nz-button
+            class="acc-cta acc-cta--inline shrink-0"
+            (click)="onInitiateUpgradePayment()"
+          >
+            <span
+              class="material-symbols-outlined acc-icon-cta text-[1.1rem]"
+              aria-hidden="true"
+              >upgrade</span
+            >
+            Upgrade to Premium
+          </button>
+        } @else {
+          <p
+            class="shrink-0 font-[Manrope] text-[1.05rem] font-bold tracking-[-0.01em] leading-snug text-(--acc-text) md:max-w-[45%] md:text-right"
+          >
+            Thanks for supporting us,
+            <span class="text-(--acc-accent)">{{ accountDetails?.name }}</span>
+          </p>
+        }
+      </section>
+
+      <!-- Profile details -->
+      <section
+        class="acc-field acc-panel overflow-hidden p-6 rounded-[1.1rem] lg:col-span-6"
+        aria-label="Profile details"
+      >
+        <header class="flex justify-between items-start gap-4 mb-4">
+          <div>
+            <p
+              class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) mb-1"
+            >
+              Profile
+            </p>
+            <h2
+              class="font-[Manrope] text-[1.05rem] font-bold tracking-[-0.01em] leading-tight text-(--acc-text)"
+            >
+              Personal details
+            </h2>
+            <p
+              class="text-[0.8rem] font-medium text-(--acc-text-muted) mt-1.5 leading-normal max-w-[42ch]"
+            >
+              These fields are kept in sync with your application record.
+            </p>
+          </div>
+          <span
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-(--acc-surface-dim) text-(--acc-text-muted) text-[0.72rem] font-semibold shrink-0"
+          >
+            <span
+              class="material-symbols-outlined text-[0.9rem]"
+              aria-hidden="true"
+              >lock</span
+            >
+            Read-only
+          </span>
+        </header>
+
+        <form [formGroup]="profileForm" class="grid grid-cols-1 gap-4">
+          <div>
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Name</h4>
+              <span
+                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+                >Name</span
+              >
             </nz-form-label>
             <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
+              <nz-form-control [nzErrorTip]="nameError">
                 <input
                   nz-input
                   placeholder="Student Name"
-                  class=""
                   formControlName="name"
                 />
               </nz-form-control>
               <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
-                </ng-container>
+                <ng-container *ngIf="control.hasError('required')"
+                  >Field cannot be empty</ng-container
+                >
+                <ng-container *ngIf="control.hasError('maxlength')"
+                  >Name cannot have more than 40 characters</ng-container
+                >
               </ng-template>
             </nz-form-item>
           </div>
-          <div class="ant-col-24 mb-2">
+
+          <div>
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Student ID</h4>
+              <span
+                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+                >Student ID</span
+              >
             </nz-form-label>
             <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
+              <nz-form-control>
                 <input
                   nz-input
                   placeholder="Student ID"
-                  class=""
                   formControlName="studentId"
                 />
               </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
-                </ng-container>
-              </ng-template>
             </nz-form-item>
           </div>
-          <div class="ant-col-24 mb-2">
+
+          <div>
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Batch Name</h4>
+              <span
+                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+                >Batch</span
+              >
             </nz-form-label>
             <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
+              <nz-form-control>
                 <input
                   nz-input
                   placeholder="Haven't enrolled yet"
-                  class=""
                   formControlName="batchName"
                 />
               </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-              </ng-template>
             </nz-form-item>
           </div>
-          <div class="ant-col-24 mb-2">
+
+          <div>
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Phone</h4>
+              <span
+                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+                >Phone</span
+              >
             </nz-form-label>
             <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
+              <nz-form-control>
                 <input
                   nz-input
                   placeholder="Phone Number"
-                  class=""
                   formControlName="phone"
                 />
               </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
-                </ng-container>
-              </ng-template>
             </nz-form-item>
           </div>
-          <div class="ant-col-24 mb-2">
+
+          <div>
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Email</h4>
+              <span
+                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+                >Email</span
+              >
             </nz-form-label>
             <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
+              <nz-form-control>
                 <input
                   nz-input
                   placeholder="Email Address"
-                  class=""
                   formControlName="email"
                 />
               </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
-                </ng-container>
-              </ng-template>
             </nz-form-item>
           </div>
-          <div class="ant-col-24 mb-2">
+
+          <div>
             <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Age</h4>
+              <span
+                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+                >Age</span
+              >
             </nz-form-label>
             <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
-                <input
-                  nz-input
-                  placeholder="Age"
-                  class=""
-                  formControlName="age"
-                />
+              <nz-form-control>
+                <input nz-input placeholder="Age" formControlName="age" />
               </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
-                </ng-container>
-              </ng-template>
             </nz-form-item>
           </div>
-          <div class="ant-col-24">
-            <nz-form-label [nzNoColon]="true">
-              <h4 class="common-label font-500 font-10 mb-1">Cuet Attempts</h4>
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError" class="">
-                <nz-select
-                  formControlName="cuetAttempts"
-                  nzPlaceHolder="No attempts"
-                  nzMode="multiple"
-                >
-                  <nz-option
-                    *ngFor="let year of yearsOptions"
-                    [nzValue]="year + ''"
-                    [nzLabel]="year"
-                  ></nz-option>
-                </nz-select>
-              </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Field cannot be empty
-                </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">
-                  Name cannot have more than 40 characters
-                </ng-container>
-              </ng-template>
-            </nz-form-item>
-          </div>
-        </div>
-      </form>
-    </nz-card>
-  </div>
-  @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
-    <div class="col-md-6 pl-md-4 mt-md-0 mt-4">
-      <p class="enroll-text mb-4">
-        Haven’t<br /><span>Enrolled</span><br />Yet?
-      </p>
 
-      <div class="col-xl-8 px-0">
-        <button
-          nz-button
-          class="enroll-btn w-100"
-          (click)="isShowBatches = true"
-        >
-          <span nz-icon nzType="form"></span>
-          Enroll Now
-        </button>
-      </div>
-      <p class="font-12 font-300 ml-2 mt-2">
-        <span class="text-primary font-600">{{ totalBatchCount }}</span> Batches
-        Avaliable
-      </p>
-
-      <div class="d-md-block d-none">
-        <nz-divider
-          class="font-14 font-500"
-          nzOrientation="left"
-          nzText="OR"
-        ></nz-divider>
-      </div>
-      <div class="d-md-none d-block">
-        <nz-divider
-          class="font-14 font-500"
-          nzOrientation="center"
-          nzText="OR"
-        ></nz-divider>
-      </div>
-      <nz-card nzHoverable nzBorderless>
-        <p class="font-16 font-400">Buy Individual Features</p>
-
-        <div class="d-flex py-2 mt-2 justify-content-between border-bottom">
-          <p class="font-12 font-400 text-8a">Feature Name</p>
-          <p class="font-12 font-400 text-8a">Price</p>
-        </div>
-
-        <div
-          *ngFor="let feature of features"
-          class="d-flex py-1 justify-content-between"
-        >
-          <label
-            nz-checkbox
-            class="font-12 font-400 text-4a"
-            [nzDisabled]="!feature.canPurchase"
-            [(nzChecked)]="feature.selectedToBuy"
-            (nzCheckedChange)="isFeatureSelectedToBuy()"
-            >{{ feature?.name }}</label
-          >
-          <p class="font-12 font-500 text-primary">₹ {{ feature?.price }}</p>
-        </div>
-
-        <button
-          nz-button
-          class="btn-primary mt-2"
-          *ngIf="showPurchaseButton"
-          (click)="onInitiateFeaturePayment()"
-        >
-          ₹ {{ totalPurchaseAmount }} Purchase
-        </button>
-      </nz-card>
-    </div>
-  } @else if (!accountDetails?.isPremium && accountDetails?.isUpgradeable) {
-    <div class="col-md-6 pl-md-4 mt-md-0 mt-4">
-      <p class="upgrade-text mb-4">
-        Haven’t<br /><span>Access</span><br />To All Things Yet?
-      </p>
-      <div class="col-xl-8 px-0">
-        <button
-          nz-button
-          class="enroll-btn w-100"
-          (click)="onInitiateUpgradePayment()"
-        >
-          <span nz-icon>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 48 48"
-              fill="none"
+          <div>
+            <span
+              class="block mb-2 text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
+              >CUET attempts</span
             >
-              <path
-                d="M34 22L24 12L14 22M34 36L24 26L14 36"
-                stroke="#FFF"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          Upgrade to <span class="font-600 px-1"> Premium </span> Now
-        </button>
-      </div>
-      <div class="d-md-block d-none">
-        <nz-divider
-          class="font-14 font-500"
-          nzOrientation="left"
-          nzText="OR"
-        ></nz-divider>
-      </div>
-      <div class="d-md-none d-block">
-        <nz-divider
-          class="font-14 font-500"
-          nzOrientation="center"
-          nzText="OR"
-        ></nz-divider>
-      </div>
-      <nz-card nzHoverable nzBorderless>
-        <p class="font-16 font-400">Buy Individual Features</p>
+            <div class="flex flex-wrap gap-1.5 min-h-[2.35rem] items-center">
+              @if (accountDetails?.cuetAttempts?.length) {
+                @for (year of accountDetails?.cuetAttempts; track year) {
+                  <span
+                    class="inline-flex items-center gap-1 pl-2.5 pr-3 py-1 rounded-full bg-(--acc-accent-softer) text-(--acc-accent-strong) text-[0.78rem] font-semibold tracking-[0.01em] tabular-nums hover:bg-(--acc-accent-soft) transition-colors"
+                  >
+                    <span
+                      class="material-symbols-outlined acc-icon-filled text-[0.95rem] text-(--acc-accent)"
+                      aria-hidden="true"
+                      >event_available</span
+                    >
+                    {{ year }}
+                  </span>
+                }
+              } @else {
+                <span
+                  class="text-[0.82rem] font-medium italic text-(--acc-text-soft)"
+                  >No attempts recorded</span
+                >
+              }
+            </div>
+          </div>
+        </form>
+      </section>
 
-        <div class="d-flex py-2 mt-2 justify-content-between border-bottom">
-          <p class="font-12 font-400 text-8a">Feature Name</p>
-          <p class="font-12 font-400 text-8a">Price</p>
-        </div>
-
-        <div
-          *ngFor="let feature of features"
-          class="d-flex py-1 justify-content-between"
+      <!-- Features (à la carte) -->
+      @if (!accountDetails?.isPremium) {
+        <section
+          class="acc-panel flex flex-col overflow-hidden p-6 rounded-[1.1rem] lg:col-span-6"
+          aria-label="Individual features"
         >
-          <label
-            nz-checkbox
-            class="font-12 font-400 text-4a"
-            [nzDisabled]="!feature.canPurchase"
-            [(nzChecked)]="feature.selectedToBuy"
-            (nzCheckedChange)="isFeatureSelectedToBuy()"
-            >{{ feature?.name }}</label
-          >
-          <p class="font-12 font-500 text-primary">₹ {{ feature?.price }}</p>
-        </div>
+          <header class="flex justify-between items-start gap-4 mb-4">
+            <div>
+              <p
+                class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) mb-1"
+              >
+                À la carte
+              </p>
+              <h2
+                class="font-[Manrope] text-[1.05rem] font-bold tracking-[-0.01em] leading-tight text-(--acc-text)"
+              >
+                Individual features
+              </h2>
+              <p
+                class="text-[0.8rem] font-medium text-(--acc-text-muted) mt-1.5 leading-normal max-w-[42ch]"
+              >
+                Purchase only what you need — pick any combination below.
+              </p>
+            </div>
+            @if (showPurchaseButton) {
+              <span
+                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-(--acc-accent-softer) text-(--acc-accent-strong) text-[0.72rem] font-semibold shrink-0"
+              >
+                <span
+                  class="material-symbols-outlined text-[0.9rem] text-(--acc-accent)"
+                  aria-hidden="true"
+                  >shopping_cart</span
+                >
+                {{
+                  totalPurchaseAmount
+                    ? "₹ " + totalPurchaseAmount
+                    : "No selection"
+                }}
+              </span>
+            }
+          </header>
 
-        <button
-          nz-button
-          class="btn-primary mt-2"
-          *ngIf="showPurchaseButton"
-          (click)="onInitiateFeaturePayment()"
-        >
-          ₹ {{ totalPurchaseAmount }} Purchase
-        </button>
-      </nz-card>
+          <ng-container *ngIf="features?.length; else featuresEmpty">
+            <div
+              class="grid gap-2.5 grid-cols-[repeat(auto-fill,minmax(150px,1fr))] auto-rows-min items-start"
+            >
+              <div
+                *ngFor="let feature of features"
+                role="button"
+                tabindex="0"
+                class="acc-feature-card relative flex flex-col justify-between gap-3 p-4 rounded-[0.9rem] bg-(--acc-surface-muted) text-left cursor-pointer select-none outline-none"
+                [class.acc-feature-card--selected]="
+                  feature.selectedToBuy && feature.canPurchase
+                "
+                [class.acc-feature-card--owned]="!feature.canPurchase"
+                [attr.aria-disabled]="!feature.canPurchase"
+                [attr.aria-pressed]="
+                  feature.selectedToBuy && feature.canPurchase
+                "
+                (click)="
+                  feature.canPurchase &&
+                    (feature.selectedToBuy = !feature.selectedToBuy);
+                  isFeatureSelectedToBuy()
+                "
+                (keydown.enter)="
+                  feature.canPurchase &&
+                    (feature.selectedToBuy = !feature.selectedToBuy);
+                  isFeatureSelectedToBuy()
+                "
+                (keydown.space)="
+                  feature.canPurchase &&
+                    (feature.selectedToBuy = !feature.selectedToBuy);
+                  isFeatureSelectedToBuy();
+                  $event.preventDefault()
+                "
+              >
+                <span
+                  class="acc-check absolute top-2.5 right-2.5 inline-flex items-center justify-center pointer-events-none transition-colors"
+                  aria-hidden="true"
+                >
+                  <span
+                    class="material-symbols-outlined text-[1.3rem]"
+                    [class.acc-icon-filled]="
+                      (feature.selectedToBuy && feature.canPurchase) ||
+                      !feature.canPurchase
+                    "
+                  >
+                    {{
+                      feature.selectedToBuy && feature.canPurchase
+                        ? "check_circle"
+                        : !feature.canPurchase
+                          ? "verified"
+                          : "radio_button_unchecked"
+                    }}
+                  </span>
+                </span>
+                <p
+                  class="text-[0.90rem] font-medium leading-snug pr-7 text-(--acc-text)"
+                >
+                  {{ feature?.name }}
+                </p>
+                <div class="flex items-center justify-between gap-2">
+                  <p
+                    class="acc-price font-[Manrope] text-[1.2rem] font-extrabold tracking-[-0.02em] tabular-nums leading-none transition-colors"
+                  >
+                    ₹ {{ feature?.price }}
+                  </p>
+                  @if (!feature.canPurchase) {
+                    <span
+                      class="px-2 py-0.5 rounded-full bg-=(--acc-accent-softer) text-(--acc-accent-strong) text-[0.62rem] font-bold tracking-[0.08em] uppercase whitespace-nowrap"
+                    >
+                      Owned
+                    </span>
+                  }
+                </div>
+              </div>
+            </div>
+
+            @if (showPurchaseButton) {
+              <div
+                class="flex items-center justify-between gap-4 mt-5 px-4 py-3.5 rounded-[0.85rem] bg=(--acc-surface-muted) max-sm:flex-col max-sm:items-stretch max-sm:gap-3.5"
+              >
+                <div class="flex flex-col gap-0.5">
+                  <span
+                    class="text-[0.68rem] font-bold tracking-[0.12em] uppercase text-(--acc-text-muted)"
+                    >Total</span
+                  >
+                  <span
+                    class="font-[Manrope] text-[1.35rem] font-extrabold tracking-[-0.02em] tabular-nums text-(--acc-accent-strong)"
+                  >
+                    ₹ {{ totalPurchaseAmount }}
+                  </span>
+                </div>
+                <button
+                  nz-button
+                  class="acc-cta acc-cta--inline max-sm:w-full"
+                  (click)="onInitiateFeaturePayment()"
+                >
+                  <span
+                    class="material-symbols-outlined acc-icon-cta text-[1.1rem]"
+                    aria-hidden="true"
+                    >shopping_bag</span
+                  >
+                  Purchase selected
+                </button>
+              </div>
+            }
+          </ng-container>
+
+          <ng-template #featuresEmpty>
+            <div class="py-5">
+              <nz-empty
+                nzNotFoundContent="No purchasable features right now"
+              ></nz-empty>
+            </div>
+          </ng-template>
+        </section>
+      }
     </div>
-  } @else {
-    <div class="col-md-6 pl-md-4 mt-md-0 mt-4">
-      <p class="thank-you-text mb-4">
-        Thanks for<br /><span>Supporting</span><br />Us!
-      </p>
+  </ng-container>
 
-      <nz-divider nzOrientation="left" nzText="Token of Appreciation"></nz-divider>
-
-      <p class="font-14 font-300">
-        🎉 Thank You for Your Support! 🎉 <br>
-        <br>
-
-        Dear <span class="font-600 text-primary">{{ accountDetails?.name }}</span>, <br>
-        <br>
-        We want to extend our heartfelt gratitude for choosing our premium
-        membership! Your support not only empowers your own learning journey but
-        also helps us continue to enhance our offerings and provide the best
-        possible resources for all students. <br>
-        <br>
-        Thank you for being a vital part of our community. Together, we are
-        paving the way for success and achieving
-        great things! <br>
-        <br>
-        With appreciation, <br>
-        Cuet Corner
-      </p>
+  <ng-template #accountLoading>
+    <div class="py-12 flex justify-center">
+      <nz-spin nzTip="Loading account..."></nz-spin>
     </div>
-  }
+  </ng-template>
 </div>
 
 <nz-modal
@@ -371,165 +649,230 @@
   [nzFooter]="null"
   nzMaskClosable
   nzClosable
+  nzCentered
+  [nzWidth]="640"
+  nzClassName="acc-batch-modal"
   (nzOnCancel)="isShowBatches = false; closeAllCollapse()"
 >
   <ng-container *nzModalContent>
-    <div class="cuet-modal-pad">
-      <p class="font-20 font-400">Available Batches</p>
-
-      <p class="font-12 font-300 mt-1">
-        Note: You can't change batch after enrolling once!
-      </p>
-      <div class="account-batch-modal mt-4">
-        <div
-          *ngFor="let batch of batches"
-          class="mt-3 batch w-100 d-flex flex-column align-items-center"
-        >
-          <div class="batch-container">
-            <p class="font-16 font-500 text-primary">{{ batch?.name }} Batch</p>
-            <p class="font-12 font-500 mt-1">
-              <span class="font-300"
-                >{{
-                  batch?.startDate < currentDate ? "Started" : "Starts"
-                }}:</span
-              >
-              {{
-                batch?.startDate ? (batch?.startDate | date: "dd MMM yyyy") : "-"
-              }}
-            </p>
-            <div class="payment-selection">
-              <nz-radio-group
-                class="mt-2 w-100"
-                #radioGroup
-                [(ngModel)]="batch.type"
-              >
-                <label class="w-50 text-8a mx-0" nz-radio nzValue="basic">
-                  Basic - ₹ {{ batch?.basePrice }}
-                </label>
-                <label class="w-50 mx-0" nz-radio nzValue="premium">
-                  Premium - ₹ {{ batch?.premiumPrice }}
-                </label>
-              </nz-radio-group>
-
-              <button
-                nz-button
-                class="btn-primary mt-2"
-                (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
-              >
-                Pay ₹
-                {{
-                  batch?.type === "basic"
-                    ? batch?.basePrice
-                    : batch?.premiumPrice
-                }}
-                and Enroll
-              </button>
-            </div>
-          </div>
-          <div class="batch-details py-2 px-4">
-            <p
-              class="text-center font-12 font-300 cursor-pointer"
-              (click)="batch.showDetails = !batch?.showDetails"
+    <ngx-simplebar class="acc-batch-modal__scroll">
+    <div class="acc-batch-modal__inner cuet-modal-pad">
+      <header class="relative mb-5 pb-5 acc-batch-modal__header">
+        <div class="flex items-center gap-3 mb-2">
+          <span
+            class="acc-grad-premium inline-flex items-center justify-center w-10 h-10 rounded-xl text-white shadow-[0_14px_28px_-16px_rgba(0,74,198,0.55)]"
+            aria-hidden="true"
+          >
+            <span class="material-symbols-outlined acc-icon-filled text-[1.35rem]"
+              >school</span
             >
-              {{ batch?.showDetails ? "Hide Details" : "View Details" }}
+          </span>
+          <div class="min-w-0">
+            <p
+              class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) leading-none"
+            >
+              Enrollment
             </p>
-            <nz-collapse nzGhost>
-              <nz-collapse-panel
-                [class.pb-2]="batch?.showDetails"
-                [class]="batch?.showDetails ? 'd-block' : 'd-none'"
-                [nzShowArrow]="false"
-                [nzHeader]="undefined"
-                [nzActive]="batch?.showDetails"
-              >
-              <p class="font-16 font-400">Features Included</p>
-              <div class="mt-2 row">
-                <div class="col-md-6">
-                  <p class="font-14 font-300 mb-2">
-                    <span class="font-600 text-aa">Basic</span> Plan
-                  </p>
-                  @for (feature of features; track $index) {
-                    @if (batch?.baseFeatures?.includes(feature?.id)) {
-                      <p class="mt-1">
-                        <span class="mr-2"
-                          ><svg
-                            class="mr-2"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <rect
-                              width="16"
-                              height="16"
-                              rx="8"
-                              fill="#F4EBFF"
-                            />
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              d="M11.3977 4.92667L6.62434 9.53334L5.35767 8.18C5.12434 7.96 4.75767 7.94667 4.491 8.13334C4.231 8.32667 4.15767 8.66667 4.31767 8.94L5.81767 11.38C5.96434 11.6067 6.21767 11.7467 6.50434 11.7467C6.77767 11.7467 7.03767 11.6067 7.18434 11.38C7.42434 11.0667 12.0043 5.60667 12.0043 5.60667C12.6043 4.99334 11.8777 4.45334 11.3977 4.92V4.92667Z"
-                              fill="#6964FF"
-                            /></svg
-                        ></span>
-                        {{ feature?.name }}
-                      </p>
-                    } @else {
-                      <p class="mt-1">
-                        <span class="mr-2">
-                          <svg
-                            class="mr-2"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M12 4L4 12M4 4L12 12"
-                              stroke="#8A8A8A"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            /></svg
-                        ></span>
-                        {{ feature?.name }}
-                      </p>
-                    }
-                  }
-                </div>
-                <div class="col-md-6">
-                  <p class="font-14 font-300 mb-2">
-                    <span class="font-600 text-primary">Premium</span> Plan
-                  </p>
-                  @for (feature of features; track $index) {
-                    <p class="mt-1">
-                      <span class="mr-2"
-                        ><svg
-                          class="mr-2"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                        >
-                          <rect width="16" height="16" rx="8" fill="#F4EBFF" />
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M11.3977 4.92667L6.62434 9.53334L5.35767 8.18C5.12434 7.96 4.75767 7.94667 4.491 8.13334C4.231 8.32667 4.15767 8.66667 4.31767 8.94L5.81767 11.38C5.96434 11.6067 6.21767 11.7467 6.50434 11.7467C6.77767 11.7467 7.03767 11.6067 7.18434 11.38C7.42434 11.0667 12.0043 5.60667 12.0043 5.60667C12.6043 4.99334 11.8777 4.45334 11.3977 4.92V4.92667Z"
-                            fill="#6964FF"
-                          /></svg
-                      ></span>
-                      {{ feature?.name }}
-                    </p>
-                  }
-                </div>
-              </div>
-              </nz-collapse-panel>
-            </nz-collapse>
+            <h3
+              class="font-[Manrope] text-[1.35rem] font-extrabold tracking-[-0.02em] leading-tight text-(--acc-text) mt-1"
+            >
+              Choose your batch
+            </h3>
           </div>
         </div>
+        <p
+          class="inline-flex items-center gap-2 mt-2 px-3 py-2 rounded-[0.7rem] bg-(--acc-warn-soft) text-(--acc-warn) text-[0.76rem] font-semibold leading-snug"
+        >
+          <span
+            class="material-symbols-outlined text-[1rem] mt-px"
+            aria-hidden="true"
+            >info</span
+          >
+          You can't change your batch after enrolling once.
+        </p>
+      </header>
+
+      <div class="flex flex-col gap-4">
+        @for (batch of batches; track batch.id; let i = $index) {
+          <article
+            class="acc-batch-card relative overflow-hidden rounded-[1.1rem] p-4 sm:p-5"
+          >
+            <div class="min-w-0">
+              <p
+                class="font-[Manrope] text-[1.05rem] font-extrabold tracking-[-0.01em] leading-tight text-(--acc-text)"
+              >
+                {{ batch?.name }} Batch
+              </p>
+              <p
+                class="inline-flex items-center gap-1.5 mt-1 text-[0.74rem] font-medium text-(--acc-text-muted)"
+              >
+                <span
+                  class="material-symbols-outlined text-[0.9rem] text-(--acc-accent)"
+                  aria-hidden="true"
+                  >event</span
+                >
+                {{
+                  batch?.startDate < currentDate ? "Started" : "Starts"
+                }}
+                {{
+                  batch?.startDate
+                    ? (batch?.startDate | date: "dd MMM yyyy")
+                    : "—"
+                }}
+              </p>
+            </div>
+
+            <div
+              class="mt-4 flex flex-col items-stretch gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4"
+            >
+              <div class="min-w-0 sm:flex-1">
+                <p
+                  class="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-(--acc-text-muted) leading-none mb-1.5"
+                >
+                  {{ batch?.type === "premium" ? "Premium" : "Basic" }} plan
+                </p>
+                <p
+                  class="font-[Manrope] text-[1.65rem] font-extrabold leading-none tracking-[-0.02em] tabular-nums text-(--acc-text)"
+                >
+                  ₹{{
+                    batch?.type === "premium"
+                      ? batch?.premiumPrice
+                      : batch?.basePrice
+                  }}
+                </p>
+              </div>
+              <div
+                class="acc-plan-switch acc-plan-switch--pill grid grid-cols-2 p-1 rounded-full"
+                role="radiogroup"
+                [attr.data-active]="batch?.type"
+              >
+                <button
+                  type="button"
+                  class="acc-plan-option acc-plan-option--pill"
+                  [class.acc-plan-option--active]="batch.type === 'basic'"
+                  (click)="batch.type = 'basic'"
+                >
+                  Basic
+                </button>
+                <button
+                  type="button"
+                  class="acc-plan-option acc-plan-option--pill acc-plan-option--premium"
+                  [class.acc-plan-option--active]="batch.type === 'premium'"
+                  (click)="batch.type = 'premium'"
+                >
+                  <span
+                    class="material-symbols-outlined acc-icon-filled text-[0.85rem] -ml-0.5"
+                    aria-hidden="true"
+                    >workspace_premium</span
+                  >
+                  Premium
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 mt-5 flex-wrap">
+              <button
+                type="button"
+                class="acc-batch-toggle inline-flex items-center gap-1 text-[0.78rem] font-semibold text-(--acc-accent) hover:text-(--acc-accent-strong) transition-colors"
+                (click)="batch.showDetails = !batch?.showDetails"
+              >
+                {{ batch?.showDetails ? "Hide" : "Compare" }} plans
+                <span
+                  class="material-symbols-outlined text-[1rem] transition-transform"
+                  [class.rotate-180]="batch?.showDetails"
+                  aria-hidden="true"
+                  >expand_more</span
+                >
+              </button>
+              <button
+                nz-button
+                class="acc-cta acc-cta--pill"
+                [disabled]="!batch?.type"
+                (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
+              >
+                Enroll now
+                <span
+                  class="material-symbols-outlined acc-icon-cta text-[1rem]"
+                  aria-hidden="true"
+                  >arrow_forward</span
+                >
+              </button>
+            </div>
+
+            @if (batch?.showDetails) {
+              <div
+                class="mt-4 pt-4 border-t border-[rgba(15,23,42,0.06)] grid grid-cols-1 sm:grid-cols-2 gap-5"
+              >
+                <div>
+                  <p
+                    class="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-(--acc-text-muted) mb-2"
+                  >
+                    <span class="text-(--acc-text)">Basic</span> plan
+                  </p>
+                  <ul class="list-none m-0 p-0 flex flex-col gap-1.5">
+                    @for (feature of features; track feature?.id) {
+                      <li
+                        class="inline-flex items-center gap-2 text-[0.82rem] font-medium leading-snug"
+                        [class.text-(--acc-text)]="
+                          batch?.baseFeatures?.includes(feature?.id)
+                        "
+                        [class.text-(--acc-text-soft)]="
+                          !batch?.baseFeatures?.includes(feature?.id)
+                        "
+                      >
+                        @if (batch?.baseFeatures?.includes(feature?.id)) {
+                          <span
+                            class="material-symbols-outlined acc-icon-filled text-[1.05rem] text-(--acc-accent)"
+                            aria-hidden="true"
+                            >check_circle</span
+                          >
+                        } @else {
+                          <span
+                            class="material-symbols-outlined text-[1.05rem] text-(--acc-text-soft)"
+                            aria-hidden="true"
+                            >cancel</span
+                          >
+                        }
+                        {{ feature?.name }}
+                      </li>
+                    }
+                  </ul>
+                </div>
+                <div>
+                  <p
+                    class="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-(--acc-accent) mb-2"
+                  >
+                    Premium plan
+                  </p>
+                  <ul class="list-none m-0 p-0 flex flex-col gap-1.5">
+                    @for (feature of features; track feature?.id) {
+                      <li
+                        class="inline-flex items-center gap-2 text-[0.82rem] font-medium leading-snug text-(--acc-text)"
+                      >
+                        <span
+                          class="material-symbols-outlined acc-icon-filled text-[1.05rem] text-(--acc-accent)"
+                          aria-hidden="true"
+                          >check_circle</span
+                        >
+                        {{ feature?.name }}
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            }
+          </article>
+        }
+
+        @if (!batches?.length) {
+          <div class="py-8">
+            <nz-empty
+              nzNotFoundContent="No batches available right now"
+            ></nz-empty>
+          </div>
+        }
       </div>
     </div>
+    </ngx-simplebar>
   </ng-container>
 </nz-modal>

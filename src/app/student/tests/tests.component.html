@@ -1,10 +1,10 @@
 <section class="tests-page">
   <!-- ───────────────────────────  Hero  ─────────────────────────── -->
-  <header class="tests-hero">
-    <div class="tests-hero__copy">
-      <p class="tests-hero__eyebrow">Tests</p>
-      <h1 class="tests-hero__title">Practice & Mock Tests</h1>
-      <p class="tests-hero__subtitle">
+  <header class="cuet-page-hero">
+    <div class="cuet-page-hero__copy">
+      <p class="cuet-page-hero__eyebrow">Tests</p>
+      <h1 class="cuet-page-hero__title">Practice & Mock Tests</h1>
+      <p class="cuet-page-hero__subtitle">
         Sharpen your timing, track accuracy, and prepare with recorded, mock,
         and topic-wise tests curated for CUET.
       </p>
@@ -178,52 +178,53 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  *ngFor="let test of mockTests; let i = index"
-                  class="cuet-table-row"
-                >
-                  <td class="text-center cuet-table-row__index">{{ i + 1 }}</td>
-                  <td class="cuet-table-row__name text-nowrap">
-                    <span class="cuet-table-row__name-text">{{
-                      test?.name
-                    }}</span>
-                    <span class="cuet-table-row__mobile-meta">
-                      {{ test?.totalQuestions }} Qs ·
-                      {{ Math.floor(test?.duration / 60) }}h
-                      {{ test?.duration % 60 }}m
-                    </span>
-                  </td>
-                  <td class="text-center cuet-table-row__num">
-                    {{ test?.totalQuestions }}
-                  </td>
-                  <td class="text-center">
-                    <span
-                      class="tests-pill"
-                      [class.tests-pill--free]="test?.isFree"
-                      [class.tests-pill--paid]="!test?.isFree"
-                    >
-                      {{ test?.isFree ? "Free" : "Paid" }}
-                    </span>
-                  </td>
-                  <td class="text-center cuet-table-row__num text-nowrap">
-                    {{ Math.floor(test?.duration / 60) }} hr
-                    {{ test?.duration % 60 }} min
-                  </td>
-                  <td class="text-center">
-                    <button
-                      nz-button
-                      class="cuet-table-row__start"
-                      (click)="onClickStartTest(test, 'mock')"
-                    >
-                      Start
+                @for (test of mockTests; track test.id; let i = $index) {
+                  <tr class="cuet-table-row">
+                    <td class="text-center cuet-table-row__index">
+                      {{ i + 1 }}
+                    </td>
+                    <td class="cuet-table-row__name text-nowrap">
+                      <span class="cuet-table-row__name-text">{{
+                        test?.name
+                      }}</span>
+                      <span class="cuet-table-row__mobile-meta">
+                        {{ test?.totalQuestions }} Qs ·
+                        {{ Math.floor(test?.duration / 60) }}h
+                        {{ test?.duration % 60 }}m
+                      </span>
+                    </td>
+                    <td class="text-center cuet-table-row__num">
+                      {{ test?.totalQuestions }}
+                    </td>
+                    <td class="text-center">
                       <span
-                        nz-icon
-                        nzType="arrow-right"
-                        nzTheme="outline"
-                      ></span>
-                    </button>
-                  </td>
-                </tr>
+                        class="tests-pill"
+                        [class.tests-pill--free]="test?.isFree"
+                        [class.tests-pill--paid]="!test?.isFree"
+                      >
+                        {{ test?.isFree ? "Free" : "Paid" }}
+                      </span>
+                    </td>
+                    <td class="text-center cuet-table-row__num text-nowrap">
+                      {{ Math.floor(test?.duration / 60) }} hr
+                      {{ test?.duration % 60 }} min
+                    </td>
+                    <td class="text-center">
+                      <button
+                        nz-button
+                        class="cuet-table-row__start"
+                        (click)="onClickStartTest(test, 'mock')"
+                      >
+                        Start
+                        <span
+                          nz-icon
+                          nzType="arrow-right"
+                          nzTheme="outline"
+                        ></span>
+                      </button>
+                    </td>
+                  </tr>
+                }
               </tbody>
             </nz-table>
           }
@@ -235,11 +236,12 @@
     <nz-tab nzTitle="Topic-wise Tests">
       <ng-template nz-tab>
         <div class="tests-toolbar">
-          <nz-input-group
-            [nzPrefix]="prefixIcon"
-            [nzSuffix]="suffixIcon"
-            class="tests-toolbar__search"
-          >
+          <nz-input-wrapper class="tests-toolbar__search">
+            <nz-icon
+              nzInputPrefix
+              nzType="search"
+              class="tests-toolbar__icon"
+            ></nz-icon>
             <input
               #testSearchInput
               nz-input
@@ -247,21 +249,16 @@
               placeholder="Search tests"
               (input)="topicSubject.next(testSearchInput.value)"
             />
-          </nz-input-group>
-          <ng-template #prefixIcon>
-            <span nz-icon nzType="search" class="tests-toolbar__icon"></span>
-          </ng-template>
-          <ng-template #suffixIcon>
             @if (testSearchInput.value.length > 0) {
-              <span
-                nz-icon
+              <nz-icon
+                nzInputSuffix
                 nzType="close"
                 nzTheme="outline"
                 class="tests-toolbar__icon tests-toolbar__icon--clear"
                 (click)="testSearchInput.value = ''; topicSubject.next('')"
-              ></span>
+              ></nz-icon>
             }
-          </ng-template>
+          </nz-input-wrapper>
 
           <nz-select
             class="tests-toolbar__filter"

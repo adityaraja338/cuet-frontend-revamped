@@ -4,6 +4,7 @@ import { AccountComponent } from './account.component';
 import { CommonModule } from '@angular/common';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 const routes: Routes = [
   { path: '', component: AccountComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
     NgZorroAntdModule,
     ReactiveFormsModule,
     FormsModule,
+    SimplebarAngularModule,
   ],
   exports: [AccountComponent],
 })

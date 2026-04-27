@@ -13,12 +13,12 @@
   </header>
 
   <!-- ── Split container ── -->
-  <div class="pd-split">
+  <div class="pd-split" #pdSplit>
 
     <!-- ════════════════════════════
          LEFT — Report Card
     ════════════════════════════ -->
-    <ngx-simplebar class="pd-left">
+    <div class="pd-left" #pdLeft [style.top.px]="leftStickyTop">
 
       <!-- Hero banner -->
       <div class="pd-hero">
@@ -173,12 +173,12 @@
         </ul>
       </div>
 
-    </ngx-simplebar>
+    </div>
 
     <!-- ════════════════════════════
          RIGHT — Q&A
     ════════════════════════════ -->
-    <div class="pd-right">
+    <div class="pd-right" #pdRight [style.top.px]="rightStickyTop">
 
       @if (!performance?.showAnswers) {
         <!-- Empty state: answers hidden -->

@@ -1,30 +1,23 @@
 import { NgModule } from '@angular/core';
 import { PerformancesComponent } from './performances.component';
+import { PerformanceDetailComponent } from './performance-detail/performance-detail.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { CommonModule } from '@angular/common';
-import {
-  BaseChartDirective,
-  provideCharts,
-  withDefaultRegisterables,
-} from 'ng2-charts';
-import { SimplebarAngularModule } from 'simplebar-angular';
 
 const routes: Routes = [
   { path: '', component: PerformancesComponent },
+  { path: 'detail/:testId', component: PerformanceDetailComponent },
   { path: '**', redirectTo: '/student/performances' },
 ];
 
 @NgModule({
-  declarations: [PerformancesComponent],
+  declarations: [PerformancesComponent, PerformanceDetailComponent],
   imports: [
     RouterModule.forChild(routes),
     NgZorroAntdModule,
     CommonModule,
-    BaseChartDirective,
-    SimplebarAngularModule,
   ],
-  providers: [provideCharts(withDefaultRegisterables())],
   exports: [PerformancesComponent],
 })
 export class PerformancesModule {}

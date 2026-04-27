@@ -2,8 +2,6 @@
 .pd-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
   background: #f7f9fb;
 }
 
@@ -61,7 +59,6 @@
 .pd-split {
   flex: 1;
   display: flex;
-  overflow: hidden;
 }
 
 /* ── Left column ── */
@@ -70,7 +67,9 @@
   min-width: 400px;
   max-width: 560px;
   flex-shrink: 0;
-  height: 100%;
+  position: sticky;
+  top: 52px;
+  height: calc(100vh - 52px);
   background: #f7f9fb;
   border-right: 1px solid #e8ecf0;
 }
@@ -78,11 +77,8 @@
 /* ── Right column ── */
 .pd-right {
   flex: 1;
-  height: 100%;
+  padding: 22px 24px 32px;
   background: #ffffff;
-}
-.pd-right ::ng-deep .simplebar-content {
-  padding: 22px 24px 32px !important;
 }
 
 /* ── Hero banner ── */
@@ -207,8 +203,18 @@
 @media (max-width: 767px) {
   .pd-page { height: auto; overflow: visible; }
   .pd-split { flex-direction: column; overflow: visible; }
-  .pd-left { width: 100%; max-width: 100%; height: auto; overflow-y: visible; border-right: none; border-bottom: 1px solid #e8ecf0; }
-  .pd-right { height: auto; overflow-y: visible; }
+  .pd-left {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #e8ecf0;
+  }
+  .pd-right {
+    height: auto;
+    padding: 20px 16px 40px;
+  }
 }
 
 /* ── Stats row ── */

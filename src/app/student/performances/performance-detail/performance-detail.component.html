@@ -120,7 +120,7 @@
 
       <!-- Leaderboard -->
       @if (performance.leaderboard.length) {
-        <app-leaderboard [leaderboardData]="performance.leaderboard"></app-leaderboard>
+        <app-leaderboard [leaderboardData]="performance.leaderboard" [hasPadding]="true"></app-leaderboard>
       }
 
       <!-- Divider before session details -->
@@ -178,7 +178,7 @@
     <!-- ════════════════════════════
          RIGHT — Q&A
     ════════════════════════════ -->
-    <ngx-simplebar class="pd-right">
+    <div class="pd-right">
 
       @if (!performance?.showAnswers) {
         <!-- Empty state: answers hidden -->
@@ -268,7 +268,7 @@
       }
 
       <div class="h-8"></div>
-    </ngx-simplebar>
+    </div>
 
   </div>
 </div>

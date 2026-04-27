@@ -59,6 +59,7 @@
 .pd-split {
   flex: 1;
   display: flex;
+  align-items: flex-start;
 }
 
 /* ── Left column ── */
@@ -69,7 +70,6 @@
   flex-shrink: 0;
   position: sticky;
   top: 52px;
-  height: calc(100vh - 52px);
   background: #f7f9fb;
   border-right: 1px solid #e8ecf0;
 }
@@ -79,6 +79,8 @@
   flex: 1;
   padding: 22px 24px 32px;
   background: #ffffff;
+  position: sticky;
+  top: 52px;
 }
 
 /* ── Hero banner ── */
@@ -212,6 +214,7 @@
     border-bottom: 1px solid #e8ecf0;
   }
   .pd-right {
+    position: static;
     height: auto;
     padding: 20px 16px 40px;
   }

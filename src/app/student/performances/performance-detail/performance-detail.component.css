@@ -55,7 +55,7 @@
   border-radius: 20px !important;
 }
 
-/* ── Split container ── */
+/* ── Split container (Sticky Layout) ── */
 .pd-split {
   flex: 1;
   display: flex;

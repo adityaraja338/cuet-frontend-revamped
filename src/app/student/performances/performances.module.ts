@@ -4,6 +4,8 @@ import { PerformanceDetailComponent } from './performance-detail/performance-det
 import { RouterModule, Routes } from '@angular/router';
 import { NgZorroAntdModule } from '../../ng-zorro-antd.module';
 import { CommonModule } from '@angular/common';
+import { LeaderboardComponent } from '../../shared/components/leaderboard/leaderboard.component';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 const routes: Routes = [
   { path: '', component: PerformancesComponent },
@@ -17,6 +19,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgZorroAntdModule,
     CommonModule,
+    LeaderboardComponent,
+    SimplebarAngularModule
   ],
   exports: [PerformancesComponent],
 })

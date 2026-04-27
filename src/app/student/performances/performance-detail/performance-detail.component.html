@@ -18,7 +18,7 @@
     <!-- ════════════════════════════
          LEFT — Report Card
     ════════════════════════════ -->
-    <div class="pd-left">
+    <ngx-simplebar class="pd-left">
 
       <!-- Hero banner -->
       <div class="pd-hero">
@@ -119,40 +119,8 @@
       <nz-divider class="pd-divider"></nz-divider>
 
       <!-- Leaderboard -->
-      @if (performance?.leaderboard?.length) {
-        <div class="pd-section">
-          <p class="pd-section__title">
-            Leaderboard
-            <span class="pd-section__count">{{ performance.leaderboard.length }} students</span>
-          </p>
-
-          <!-- Top-3 podium -->
-          <div class="pd-podium">
-            @for (entry of performance.leaderboard | slice:0:3; track entry.id; let i = $index) {
-              <div class="pd-podium__card"
-                   [class.pd-podium__card--gold]="i === 0"
-                   [class.pd-podium__card--silver]="i === 1"
-                   [class.pd-podium__card--bronze]="i === 2">
-                <p class="pd-podium__rank">#{{ i + 1 }}</p>
-                <p class="pd-podium__name">{{ entry.studentName }}</p>
-                <p class="pd-podium__score">{{ getLbPct(entry) }}</p>
-                <p class="pd-podium__raw">{{ entry.scoreObtained }} / {{ entry.totalScore }}</p>
-              </div>
-            }
-          </div>
-
-          <!-- Remaining list -->
-          <div class="pd-lb-list">
-            @for (entry of performance.leaderboard | slice:3; track entry.id; let i = $index) {
-              <div class="pd-lb-row" [class.pd-lb-row--you]="isCurrentStudent(entry)">
-                <span class="pd-lb-row__rank">{{ isCurrentStudent(entry) ? '—' : i + 4 }}</span>
-                <div class="pd-lb-row__avatar">{{ entry.studentName?.charAt(0) || '?' }}</div>
-                <span class="pd-lb-row__name">{{ entry.studentName }}</span>
-                <span class="pd-lb-row__score">{{ entry.scoreObtained }}</span>
-              </div>
-            }
-          </div>
-        </div>
+      @if (performance.leaderboard.length) {
+        <app-leaderboard [leaderboardData]="performance.leaderboard"></app-leaderboard>
       }
 
       <!-- Divider before session details -->
@@ -205,13 +173,12 @@
         </ul>
       </div>
 
-    </div>
-    <!-- left end (more sections added in later tasks) -->
+    </ngx-simplebar>
 
     <!-- ════════════════════════════
          RIGHT — Q&A
     ════════════════════════════ -->
-    <div class="pd-right">
+    <ngx-simplebar class="pd-right">
 
       @if (!performance?.showAnswers) {
         <!-- Empty state: answers hidden -->
@@ -301,7 +268,7 @@
       }
 
       <div class="h-8"></div>
-    </div>
+    </ngx-simplebar>
 
   </div>
 </div>

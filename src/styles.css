@@ -561,9 +561,6 @@
     margin-bottom: 1rem;
     font-size: 0.82rem;
   }
-  @media (max-width: 479px) {
-    .modal-facts { grid-template-columns: 1fr; }
-  }
   .modal-fact--full { grid-column: 1 / -1; }
   .modal-facts dt { font-weight: 600; color: #64748b; margin: 0 0 0.1rem; }
   .modal-facts dd { font-weight: 500; color: #0f172a; margin: 0; }
@@ -598,6 +595,10 @@
     padding-top: 0.75rem;
     flex-wrap: wrap;
   }
+}
+
+@media (max-width: 479px) {
+  .modal-facts { grid-template-columns: 1fr; }
 }
 
 /* NOTE: I have excluded the 50+ manual row-gap/col-gap classes. 
@@ -1757,10 +1758,6 @@ nz-switch:has(.ant-switch-small) {
 }
 
 /* ── Ant Design divider overrides ── */
-.ant-divider {
-  border-top: 1px solid rgba(0, 0, 0, .06);
-
-}
 .ant-divider-horizontal.ant-divider-with-text {
   font-size: 12px;
   font-weight: 300;

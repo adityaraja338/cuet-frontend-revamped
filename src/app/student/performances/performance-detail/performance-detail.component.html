@@ -1,274 +1,281 @@
-<div class="pd-page">
+<!-- ── Page root: stacked layout ── -->
+<div class="flex flex-col gap-5">
 
-  <!-- ── Topbar ── -->
-  <header class="pd-topbar">
-    <button class="pd-topbar__back" (click)="goBack()">
-      <span class="material-symbols-outlined pd-topbar__back-icon">arrow_back_ios</span>
-      Performances
-    </button>
-    <span class="pd-topbar__title">{{ performance?.testName }}</span>
-    <span class="pd-topbar__meta">·&nbsp;{{ performance?.testType | titlecase }}</span>
-    <span class="flex-1"></span>
-    <nz-tag class="pd-topbar__badge">{{ performance?.testType | uppercase }}</nz-tag>
-  </header>
+  <!-- ══════════════════════════════════════════════
+       TOP ROW — Report Card [+ Leaderboard: live]
+  ══════════════════════════════════════════════ -->
+  <div [class.pd-top-live]="performance?.testType === 'live'">
 
-  <!-- ── Split container ── -->
-  <div class="pd-split" #pdSplit>
+    <!-- ── Report Card ── -->
+    <div class="rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(25,28,30,0.06)]">
 
-    <!-- ════════════════════════════
-         LEFT — Report Card
-    ════════════════════════════ -->
-    <div class="pd-left" #pdLeft [style.top.px]="leftStickyTop">
+      <!-- HERO: gradient zone ─────────────────── -->
+      <div class="pd-hero px-6 pt-6 md:px-8 md:pt-7">
 
-      <!-- Hero banner -->
-      <div class="pd-hero">
-        <p class="pd-hero__eyebrow">Performance Report</p>
-        <h1 class="pd-hero__title">{{ performance?.testName }}</h1>
-        <div class="pd-hero__pills">
-          <span class="pd-hero__pill">{{ performance?.testType | titlecase }} Test</span>
-          @for (topic of performance?.testTopics; track topic) {
-            <span class="pd-hero__pill">{{ topic }}</span>
-          }
-          <span class="pd-hero__pill">
-            {{ performance?.testItem?.startTime | date: 'dd MMM yyyy' }}
-          </span>
-        </div>
+        <!-- Grid: test identity (left) | score + grade (right) -->
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-8 gap-y-5 mb-6">
 
-        <!-- Frosted stat shelf -->
+          <!-- Test identity -->
+          <div>
+            <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45 mb-1.5">
+              Performance Report
+            </p>
+            <h1 class="font-[Manrope] text-xl font-black text-white leading-tight mb-3 tracking-tight">
+              {{ performance?.testName }}
+            </h1>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="text-[10px] font-semibold px-[9px] py-[3px] rounded-full
+                           bg-white/12 border border-white/12 text-white/80">
+                {{ performance?.testType | titlecase }} Test
+              </span>
+              @for (topic of performance?.testTopics; track topic) {
+                <span class="text-[10px] font-semibold px-[9px] py-[3px] rounded-full
+                             bg-white/12 border border-white/12 text-white/80">
+                  {{ topic }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <!-- Score + Grade -->
+          <div class="flex items-center gap-4 md:gap-6">
+            <div>
+              <p class="text-[9px] font-bold uppercase tracking-[0.14em] text-white/50 mb-1.5">
+                Final Score
+              </p>
+              <div class="pd-shelf__score">
+                {{ performance?.scoreObtained }}
+                <span class="pd-shelf__total">/ {{ performance?.totalScore }}</span>
+              </div>
+              <p class="pd-shelf__pct">Accuracy: {{ accuracyLabel }} · {{ scoreAvgLabel }}</p>
+            </div>
+            <div class="w-px self-stretch bg-white/10 mx-1 hidden md:block"></div>
+            <div class="pd-shelf__grade" [attr.data-grade]="performance?.grade">
+              <span class="pd-shelf__grade-letter">{{ performance?.grade }}</span>
+              <span class="pd-shelf__grade-label">Grade</span>
+            </div>
+          </div>
+
+        </div><!-- /hero top grid -->
+
+        <!-- Frosted stats shelf -->
         <div class="pd-shelf">
-          <div class="pd-shelf__main">
-            <p class="pd-shelf__label">Score Obtained</p>
-            <p class="pd-shelf__score">
-              {{ performance?.scoreObtained }}
-              <span class="pd-shelf__total">/ {{ performance?.totalScore }}</span>
-            </p>
-            <p class="pd-shelf__pct">
-              {{ scorePct !== null ? (scorePct | number:'1.0-2') + '%' : '—' }}
-              &nbsp;·&nbsp;
-              {{ scoreAvgLabel }}
-            </p>
+          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
+            <span class="font-[Manrope] text-base font-extrabold text-green-300">{{ correctCount }}</span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Correct</span>
           </div>
           <div class="pd-shelf__divider"></div>
-          <div class="pd-shelf__grade" [attr.data-grade]="performance?.grade">
-            <span class="pd-shelf__grade-letter">{{ performance?.grade || '—' }}</span>
-            <span class="pd-shelf__grade-label">Grade</span>
+          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
+            <span class="font-[Manrope] text-base font-extrabold text-red-300">{{ incorrectCount }}</span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Incorrect</span>
+          </div>
+          <div class="pd-shelf__divider"></div>
+          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
+            <span class="font-[Manrope] text-base font-extrabold text-slate-400">{{ skippedCount }}</span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Skipped</span>
+          </div>
+          <div class="pd-shelf__divider"></div>
+          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
+            <span class="font-[Manrope] text-base font-extrabold text-white">{{ totalQ }}</span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Total</span>
           </div>
         </div>
-      </div>
-      <!-- hero end -->
 
-      <!-- Stats row -->
-      <div class="pd-stats">
-        <div class="pd-stat">
-          <p class="pd-stat__num pd-stat__num--good">{{ correctCount }}</p>
-          <p class="pd-stat__label">Correct</p>
-        </div>
-        <div class="pd-stat">
-          <p class="pd-stat__num pd-stat__num--bad">{{ incorrectCount }}</p>
-          <p class="pd-stat__label">Incorrect</p>
-        </div>
-        <div class="pd-stat">
-          <p class="pd-stat__num pd-stat__num--muted">{{ skippedCount }}</p>
-          <p class="pd-stat__label">Skipped</p>
-        </div>
-      </div>
+      </div><!-- /pd-hero -->
 
-      <!-- Distribution bar -->
-      <div class="pd-dist">
-        <div class="pd-dist__bar">
-          <div class="pd-dist__seg pd-dist__seg--good" [style.width.%]="correctPct"></div>
-          <div class="pd-dist__seg pd-dist__seg--bad"  [style.width.%]="incorrectPct"></div>
-          <div class="pd-dist__seg pd-dist__seg--neutral"></div>
-        </div>
-        <div class="pd-dist__legend">
-          <span class="pd-dist__legend-item">
-            <span class="pd-dist__dot pd-dist__dot--good"></span>{{ correctCount }} correct
-          </span>
-          <span class="pd-dist__legend-item">
-            <span class="pd-dist__dot pd-dist__dot--bad"></span>{{ incorrectCount }} incorrect
-          </span>
-          <span class="pd-dist__legend-item">
-            <span class="pd-dist__dot pd-dist__dot--neutral"></span>{{ skippedCount }} skipped
-          </span>
-        </div>
-      </div>
+      <!-- WHITE BODY: 2×2 detail grid ────────── -->
+      <div class="grid grid-cols-1 md:grid-cols-2 bg-white">
 
-      <!-- Accuracy -->
-      <div class="flex items-center gap-2 px-[26px] pt-3">
-        <span class="text-[11px] font-semibold text-[#94a3b8]">Accuracy</span>
-        <span class="font-[Manrope] text-[14px] font-extrabold"
-              [class.text-[#dc2626]]="(scorePct ?? 0) < 50"
-              [class.text-[#16a34a]]="(scorePct ?? 0) >= 50">
-          {{ accuracyLabel }}
-        </span>
-      </div>
-
-      <!-- Divider above remark -->
-      @if (performance?.remark) {
-        <nz-divider class="pd-divider"></nz-divider>
-
-        <!-- Remarks -->
-        <div class="pd-remark">
-          <span class="pd-remark__quote" aria-hidden="true">"</span>
-          <p class="pd-remark__source">Remarks</p>
-          <p class="pd-remark__text">{{ performance.remark }}</p>
-        </div>
-      }
-
-      <!-- Divider before leaderboard -->
-      <nz-divider class="pd-divider"></nz-divider>
-
-      <!-- Leaderboard -->
-      @if (performance.leaderboard.length) {
-        <app-leaderboard [leaderboardData]="performance.leaderboard" [hasPadding]="true"></app-leaderboard>
-      }
-
-      <!-- Divider before session details -->
-      <nz-divider class="pd-divider"></nz-divider>
-
-      <!-- Session details -->
-      <div class="pd-section" style="padding-bottom: 36px;">
-        <p class="pd-section__title">Session Details</p>
-        <ul class="pd-detail-list">
-          <li>
-            <span class="pd-detail-list__key">Test name</span>
-            <span class="pd-detail-list__val">{{ performance?.testName }}</span>
-          </li>
-          <li>
-            <span class="pd-detail-list__key">Test type</span>
-            <span class="pd-detail-list__val">{{ performance?.testType | titlecase }} Test</span>
-          </li>
-          <li>
-            <span class="pd-detail-list__key">
-              {{ performance?.testType === 'topic' ? 'Topic' : 'Topics' }}
-            </span>
-            <span class="pd-detail-list__val">
-              {{ performance?.testType === 'topic'
-                 ? performance?.topicName
-                 : performance?.testTopics?.join(', ') }}
-            </span>
-          </li>
-          <li>
-            <span class="pd-detail-list__key">Date</span>
-            <span class="pd-detail-list__val">
-              {{ performance?.testItem?.startTime | date: 'dd MMM yyyy' }}
-            </span>
-          </li>
-          <li>
-            <span class="pd-detail-list__key">Started</span>
-            <span class="pd-detail-list__val">
-              {{ performance?.testItem?.startTime | date: 'hh:mm a' }}
-            </span>
-          </li>
-          <li>
-            <span class="pd-detail-list__key">Ended</span>
-            <span class="pd-detail-list__val">
-              {{ performance?.testItem?.endTime | date: 'hh:mm a' }}
-            </span>
-          </li>
-          <li>
-            <span class="pd-detail-list__key">Duration</span>
-            <span class="pd-detail-list__val">{{ duration }}</span>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- ════════════════════════════
-         RIGHT — Q&A
-    ════════════════════════════ -->
-    <div class="pd-right" #pdRight [style.top.px]="rightStickyTop">
-
-      @if (!performance?.showAnswers) {
-        <!-- Empty state: answers hidden -->
-        <div class="pd-qa-empty">
-          <span class="material-symbols-outlined pd-qa-empty__icon">lock</span>
-          <p class="pd-qa-empty__title">Answers not available</p>
-          <p class="pd-qa-empty__sub">Answers for this test have not been released yet.</p>
-        </div>
-      } @else {
-
-        <!-- Header -->
-        <div class="flex items-center gap-2 mb-4">
-          <span class="font-[Manrope] text-[13px] font-extrabold text-[#0f172a]">
-            Questions &amp; Answers
-          </span>
-          <span class="pd-count-pill">{{ performance.questions.length }} questions</span>
-        </div>
-
-        <!-- Filter chips -->
-        <div class="pd-filters">
-          <button class="pd-filter-chip" [class.pd-filter-chip--active]="activeFilter === 'all'"       (click)="setFilter('all')">All</button>
-          <button class="pd-filter-chip" [class.pd-filter-chip--active]="activeFilter === 'correct'"   (click)="setFilter('correct')">Correct ({{ correctCount }})</button>
-          <button class="pd-filter-chip" [class.pd-filter-chip--active]="activeFilter === 'incorrect'" (click)="setFilter('incorrect')">Incorrect ({{ incorrectCount }})</button>
-          <button class="pd-filter-chip" [class.pd-filter-chip--active]="activeFilter === 'skipped'"   (click)="setFilter('skipped')">Skipped ({{ skippedCount }})</button>
-        </div>
-
-        <!-- Question cards -->
-        @for (q of filteredQuestions; track q.id; let i = $index) {
-          <div class="pd-q-card">
-
-            <!-- Card header: index + status badge -->
-            <div class="flex items-center gap-2 mb-2">
-              <span class="pd-q-card__index">Q {{ i + 1 }}</span>
-              <span class="pd-q-status"
-                    [class.pd-q-status--correct]="getQuestionStatus(q) === 'correct'"
-                    [class.pd-q-status--incorrect]="getQuestionStatus(q) === 'incorrect'"
-                    [class.pd-q-status--skipped]="getQuestionStatus(q) === 'skipped'">
-                @if (getQuestionStatus(q) === 'correct')   { ✓ Correct }
-                @if (getQuestionStatus(q) === 'incorrect') { ✗ Incorrect }
-                @if (getQuestionStatus(q) === 'skipped')   { — Skipped }
-              </span>
+        <!-- Score distribution -->
+        <div class="p-5 md:p-6 border-b border-slate-100 md:border-r">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+            Score Distribution
+          </p>
+          <div class="pd-dist__bar">
+            <div class="pd-dist__seg--good"    [style.width.%]="correctPct"></div>
+            <div class="pd-dist__seg--bad"     [style.width.%]="incorrectPct"></div>
+            <div class="pd-dist__seg--neutral" [style.flex]="1"></div>
+          </div>
+          <div class="pd-dist__legend">
+            <div class="pd-dist__legend-item">
+              <span class="pd-dist__dot pd-dist__dot--good"></span> Correct
             </div>
+            <div class="pd-dist__legend-item">
+              <span class="pd-dist__dot pd-dist__dot--bad"></span> Incorrect
+            </div>
+            <div class="pd-dist__legend-item">
+              <span class="pd-dist__dot pd-dist__dot--neutral"></span> Unattempted
+            </div>
+          </div>
+        </div>
 
-            <!-- Question text -->
-            <pre class="pd-q-text">{{ q.question }}</pre>
+        <!-- Instructor remarks -->
+        <div class="p-5 md:p-6 border-b border-slate-100">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
+            Instructor Remarks
+          </p>
+          <p class="text-sm font-medium text-slate-600 leading-relaxed">
+            {{ performance.remark ?? 'Keep up the good work!' }}
+          </p>
+        </div>
 
-            <!-- Options -->
-            <ul class="pd-options">
+        <!-- Session details -->
+        <div class="p-5 md:p-6 border-b border-slate-100 md:border-b-0 md:border-r">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+            Session Details
+          </p>
+          <dl class="flex flex-col gap-2">
+            <div class="flex gap-2">
+              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Date</dt>
+              <dd class="text-[10px] font-semibold text-slate-700">
+                {{ performance?.testItem?.startTime | date: 'dd MMM yyyy' }}
+              </dd>
+            </div>
+            <div class="flex gap-2">
+              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Started</dt>
+              <dd class="text-[10px] font-semibold text-slate-700">
+                {{ performance?.testItem?.startTime | date: 'hh:mm a' }}
+              </dd>
+            </div>
+            <div class="flex gap-2">
+              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Ended</dt>
+              <dd class="text-[10px] font-semibold text-slate-700">
+                {{ performance?.testItem?.endTime | date: 'hh:mm a' }}
+              </dd>
+            </div>
+            <div class="flex gap-2">
+              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Duration</dt>
+              <dd class="text-[10px] font-semibold text-slate-700">{{ duration }}</dd>
+            </div>
+          </dl>
+        </div>
 
-              <!-- Correct option -->
-              <li class="pd-opt pd-opt--correct"
-                  [class.pd-opt--yours-ok]="q.answerChosen === q.correctOption">
-                <div class="pd-opt__dot pd-opt__dot--good">
-                  <span class="material-symbols-outlined" style="font-size:11px;color:#fff;line-height:1">check</span>
+        <!-- Test info -->
+        <div class="p-5 md:p-6">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+            Test Info
+          </p>
+          <dl class="flex flex-col gap-2">
+            <div class="flex gap-2">
+              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Type</dt>
+              <dd class="text-[10px] font-semibold text-slate-700">
+                {{ performance?.testType | titlecase }} Test
+              </dd>
+            </div>
+            <div class="flex gap-2">
+              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">
+                {{ performance?.testType === 'topic' ? 'Topic' : 'Topics' }}
+              </dt>
+              <dd class="text-[10px] font-semibold text-slate-700">
+                {{ performance?.testType === 'topic'
+                   ? performance?.topicName
+                   : performance?.testTopics?.join(', ') }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+      </div><!-- /white body -->
+    </div><!-- /report card -->
+
+    <!-- Leaderboard — live tests only ────────── -->
+    @if (performance?.testType === 'live') {
+      <div class="rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)]">
+        <app-leaderboard [leaderboardData]="performance.leaderboard"></app-leaderboard>
+      </div>
+    }
+
+  </div><!-- /top row -->
+
+  <!-- ══════════════════════════════════════════════
+       Q&A SECTION — full width
+  ══════════════════════════════════════════════ -->
+  <div class="rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)] p-5 md:p-6">
+
+    @if (!performance?.showAnswers) {
+      <!-- Answers hidden -->
+      <div class="pd-qa-empty">
+        <span class="material-symbols-outlined pd-qa-empty__icon">lock</span>
+        <p class="pd-qa-empty__title">Answers not available</p>
+        <p class="pd-qa-empty__sub">Answers for this test have not been released yet.</p>
+      </div>
+    } @else {
+
+      <!-- Header -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="font-[Manrope] text-[13px] font-extrabold text-[#0f172a]">
+          Questions &amp; Answers
+        </span>
+        <span class="pd-count-pill">{{ performance.questions.length }} questions</span>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="pd-filters">
+        <button class="pd-filter-chip"
+                [class.pd-filter-chip--active]="activeFilter === 'all'"
+                (click)="setFilter('all')">All</button>
+        <button class="pd-filter-chip"
+                [class.pd-filter-chip--active]="activeFilter === 'correct'"
+                (click)="setFilter('correct')">Correct ({{ correctCount }})</button>
+        <button class="pd-filter-chip"
+                [class.pd-filter-chip--active]="activeFilter === 'incorrect'"
+                (click)="setFilter('incorrect')">Incorrect ({{ incorrectCount }})</button>
+        <button class="pd-filter-chip"
+                [class.pd-filter-chip--active]="activeFilter === 'skipped'"
+                (click)="setFilter('skipped')">Skipped ({{ skippedCount }})</button>
+      </div>
+
+      <!-- Question cards -->
+      @for (q of filteredQuestions; track q.id; let i = $index) {
+        <div class="pd-q-card">
+
+          <!-- Card header -->
+          <div class="flex items-center gap-2 mb-2">
+            <span class="pd-q-card__index">Q {{ i + 1 }}</span>
+            <span class="pd-q-status"
+                  [class.pd-q-status--correct]="getQuestionStatus(q) === 'correct'"
+                  [class.pd-q-status--incorrect]="getQuestionStatus(q) === 'incorrect'"
+                  [class.pd-q-status--skipped]="getQuestionStatus(q) === 'skipped'">
+              @if (getQuestionStatus(q) === 'correct')   { ✓ Correct }
+              @if (getQuestionStatus(q) === 'incorrect') { ✗ Incorrect }
+              @if (getQuestionStatus(q) === 'skipped')   { — Skipped }
+            </span>
+          </div>
+
+          <!-- Question text -->
+          <pre class="pd-q-text">{{ q.question }}</pre>
+
+          <!-- Options -->
+          <ul class="pd-options">
+            <!-- Correct option -->
+            <li class="pd-opt pd-opt--correct">
+              <div class="pd-opt__dot pd-opt__dot--good">
+                <span class="material-symbols-outlined text-[10px] text-white">check</span>
+              </div>
+              <span class="pd-opt__text">{{ q.correctOption }}</span>
+              @if (q.answerChosen === q.correctOption) {
+                <span class="pd-opt__yours pd-opt__yours--ok">Your Answer</span>
+              }
+            </li>
+            <!-- Other options -->
+            @for (opt of getQuestionOptions(q); track opt.val) {
+              <li class="pd-opt" [class.pd-opt--wrong]="q.answerChosen === opt.val">
+                <div class="pd-opt__dot" [class.pd-opt__dot--bad]="q.answerChosen === opt.val">
+                  @if (q.answerChosen === opt.val) {
+                    <span class="material-symbols-outlined text-[10px] text-white">close</span>
+                  }
                 </div>
-                <span class="pd-opt__text">{{ q.correctOption }}</span>
-                @if (q.answerChosen === q.correctOption) {
-                  <span class="pd-opt__yours pd-opt__yours--ok">Your answer ✓</span>
+                <span class="pd-opt__text">{{ opt.val }}</span>
+                @if (q.answerChosen === opt.val) {
+                  <span class="pd-opt__yours pd-opt__yours--bad">Your Answer</span>
                 }
               </li>
-
-              <!-- Other options -->
-              @for (opt of getQuestionOptions(q); track opt.val) {
-                @if (opt.val) {
-                  <li class="pd-opt"
-                      [class.pd-opt--wrong]="opt.val === q.answerChosen">
-                    <div class="pd-opt__dot" [class.pd-opt__dot--bad]="opt.val === q.answerChosen"></div>
-                    <span class="pd-opt__text">{{ opt.val }}</span>
-                    @if (opt.val === q.answerChosen) {
-                      <span class="pd-opt__yours pd-opt__yours--bad">Your answer ✗</span>
-                    }
-                  </li>
-                }
-              }
-
-            </ul>
-          </div>
-        }
-
-        @if (filteredQuestions.length === 0) {
-          <div class="pd-qa-empty">
-            <span class="material-symbols-outlined pd-qa-empty__icon">search_off</span>
-            <p class="pd-qa-empty__title">No questions match this filter</p>
-          </div>
-        }
-
+            }
+          </ul>
+        </div>
       }
 
-      <div class="h-8"></div>
-    </div>
+    }
+  </div><!-- /Q&A -->
 
-  </div>
-</div>
+</div><!-- /page root -->

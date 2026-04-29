@@ -86,58 +86,58 @@
 
   <!-- Progress Overview -->
   <section class="dash-section" id="progress-overview">
-    <header class="dash-section__header">
+    <header class="section-head">
       <div>
-        <p class="dash-section__eyebrow">Progress</p>
-        <h2 class="dash-section__title">Your overview</h2>
+        <p class="section-head__eyebrow">Progress</p>
+        <h2 class="section-head__title">Your overview</h2>
       </div>
     </header>
 
     <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
-      <article class="dash-stat dash-stat--blue">
-        <div class="dash-stat__top">
-          <p class="dash-stat__label">Tests Attempted</p>
-          <div class="dash-stat__icon">
+      <article class="stat-card stat-card--blue">
+        <div class="stat-card__top">
+          <p class="stat-card__label">Tests Attempted</p>
+          <div class="stat-card__icon">
             <span class="material-symbols-outlined" aria-hidden="true">assignment_turned_in</span>
           </div>
         </div>
-        <p class="dash-stat__value">{{ progressStats?.testsAttempted ?? '-' }}</p>
-        <p class="dash-stat__hint">Across all subjects</p>
+        <p class="stat-card__value">{{ progressStats?.testsAttempted ?? '-' }}</p>
+        <p class="stat-card__hint">Across all subjects</p>
       </article>
 
-      <article class="dash-stat dash-stat--indigo">
-        <div class="dash-stat__top">
-          <p class="dash-stat__label">Materials Read</p>
-          <div class="dash-stat__icon">
+      <article class="stat-card stat-card--indigo">
+        <div class="stat-card__top">
+          <p class="stat-card__label">Materials Read</p>
+          <div class="stat-card__icon">
             <span class="material-symbols-outlined" aria-hidden="true">auto_stories</span>
           </div>
         </div>
-        <p class="dash-stat__value">{{ progressStats?.materialsRead ?? '-' }}</p>
-        <p class="dash-stat__hint">Notes and PDFs combined</p>
+        <p class="stat-card__value">{{ progressStats?.materialsRead ?? '-' }}</p>
+        <p class="stat-card__hint">Notes and PDFs combined</p>
       </article>
 
-      <article class="dash-stat dash-stat--sky">
-        <div class="dash-stat__top">
-          <p class="dash-stat__label">Videos Watched</p>
-          <div class="dash-stat__icon">
+      <article class="stat-card stat-card--sky">
+        <div class="stat-card__top">
+          <p class="stat-card__label">Videos Watched</p>
+          <div class="stat-card__icon">
             <span class="material-symbols-outlined" aria-hidden="true">smart_display</span>
           </div>
         </div>
-        <p class="dash-stat__value">{{ progressStats?.videosWatched ?? '-' }}</p>
-        <p class="dash-stat__hint">From lecture library</p>
+        <p class="stat-card__value">{{ progressStats?.videosWatched ?? '-' }}</p>
+        <p class="stat-card__hint">From lecture library</p>
       </article>
     </div>
   </section>
 
   <!-- Upcoming Live Tests -->
   <section class="dash-section" id="upcoming-live-tests">
-    <header class="dash-section__header">
+    <header class="section-head">
       <div>
-        <p class="dash-section__eyebrow">Live Tests</p>
-        <h2 class="dash-section__title">Upcoming</h2>
+        <p class="section-head__eyebrow">Live Tests</p>
+        <h2 class="section-head__title">Upcoming</h2>
       </div>
       <a
-        class="dash-link"
+        class="section-head__action"
         [routerLink]="['/', 'student', 'tests']"
       >
         See all
@@ -191,12 +191,10 @@
         </div>
       </ngx-simplebar>
     } @else {
-      <div class="dash-empty dash-empty--card">
-        <span class="dash-empty__icon material-symbols-outlined" aria-hidden="true">event_available</span>
-        <div>
-          <p class="dash-empty__title">No live tests scheduled</p>
-          <p class="dash-empty__subtitle">You're all caught up. New tests will show up here.</p>
-        </div>
+      <div class="empty-state empty-state--card">
+        <span class="empty-state__icon material-symbols-outlined" aria-hidden="true">event_available</span>
+        <p class="empty-state__title">No live tests scheduled</p>
+        <p class="empty-state__subtitle">You're all caught up. New tests will show up here.</p>
       </div>
     }
   </section>
@@ -204,10 +202,10 @@
   <!-- Quick Links + Previous Tests -->
   <section class="dash-split" id="quick-links-previous-tests">
     <div class="shortcut-panel">
-      <header class="dash-section__header shortcut-panel__head">
+      <header class="section-head shortcut-panel__head">
         <div>
-          <p class="dash-section__eyebrow">Shortcuts</p>
-          <h2 class="dash-section__title">Jump back in</h2>
+          <p class="section-head__eyebrow">Shortcuts</p>
+          <h2 class="section-head__title">Jump back in</h2>
         </div>
         <p class="shortcut-panel__copy">Your most-used student actions in one place.</p>
       </header>
@@ -276,12 +274,12 @@
     </div>
 
     <div class="recent-panel">
-      <header class="dash-section__header recent-panel__head">
+      <header class="section-head recent-panel__head">
         <div>
-          <p class="dash-section__eyebrow">Recent</p>
-          <h2 class="dash-section__title">Previous live tests</h2>
+          <p class="section-head__eyebrow">Recent</p>
+          <h2 class="section-head__title">Previous live tests</h2>
         </div>
-        <a class="dash-link" [routerLink]="['/', 'student', 'tests']">
+        <a class="section-head__action" [routerLink]="['/', 'student', 'tests']">
           View all
           <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
         </a>
@@ -370,9 +368,9 @@
           </div>
         </ngx-simplebar>
       } @else {
-        <div class="dash-empty dash-empty--inline recent-panel__empty">
-          <span class="material-symbols-outlined" aria-hidden="true">history</span>
-          <p>No previous tests yet.</p>
+        <div class="empty-state empty-state--sm recent-panel__empty">
+          <span class="empty-state__icon material-symbols-outlined" aria-hidden="true">history</span>
+          <p class="empty-state__subtitle">No previous tests yet.</p>
         </div>
       }
     </div>
@@ -380,10 +378,10 @@
 
   <!-- Performance Overview -->
   <section class="dash-section" id="performance-overview-charts">
-    <header class="dash-section__header">
+    <header class="section-head">
       <div>
-        <p class="dash-section__eyebrow">Analytics</p>
-        <h2 class="dash-section__title">Performance overview</h2>
+        <p class="section-head__eyebrow">Analytics</p>
+        <h2 class="section-head__title">Performance overview</h2>
       </div>
     </header>
 
@@ -499,10 +497,10 @@
   <section class="dash-split" id="subject-analysis-leaderboard">
     <!-- Subject Analysis -->
     <div class="dash-split__col">
-      <header class="dash-section__header">
+      <header class="section-head">
         <div>
-          <p class="dash-section__eyebrow">Strengths & gaps</p>
-          <h2 class="dash-section__title">Subject analysis</h2>
+          <p class="section-head__eyebrow">Strengths & gaps</p>
+          <h2 class="section-head__title">Subject analysis</h2>
         </div>
       </header>
 
@@ -559,90 +557,16 @@
 
     <!-- Leaderboard -->
     <div class="dash-split__col">
-      <header class="dash-section__header">
+      <header class="section-head">
         <div>
-          <p class="dash-section__eyebrow">Ranking</p>
-          <h2 class="dash-section__title">Leaderboard</h2>
+          <p class="section-head__eyebrow">Ranking</p>
+          <h2 class="section-head__title">Leaderboard</h2>
         </div>
       </header>
 
       <article class="dash-surface dash-surface--padded leaderboard-card">
         @if (leaderboardData.length) {
-          <div class="leaderboard-podium">
-            @for (data of (leaderboardData | slice: 0 : 3); track data; let i = $index) {
-              @let scorePct = (data?.totalScore
-                ? ((data?.scoreObtained / data?.totalScore) * 100 | number: '1.0-1')
-                : null);
-              <article
-                class="podium-card"
-                [class.podium-card--gold]="i === 0"
-                [class.podium-card--silver]="i === 1"
-                [class.podium-card--bronze]="i === 2"
-              >
-                <div class="podium-card__top">
-                  <span class="podium-card__rank">
-                    <span class="podium-card__medal material-symbols-outlined" aria-hidden="true">
-                      workspace_premium
-                    </span>
-                    #{{ i + 1 }}
-                  </span>
-                </div>
-
-                <div class="podium-card__avatar" aria-hidden="true">
-                  @if (i === 0) {
-                    <span class="material-symbols-outlined">military_tech</span>
-                  } @else {
-                    <span>{{ data?.studentName?.charAt(0) || '?' }}</span>
-                  }
-                </div>
-
-                <div class="podium-card__body">
-                  <p class="podium-card__name">{{ data?.studentName ?? '-' }}</p>
-                  <p class="podium-card__score">{{ scorePct ?? '-' }}%</p>
-                  <div class="podium-card__meter">
-                    <div class="podium-card__meter-fill" [style.width.%]="scorePct ?? 0"></div>
-                  </div>
-                </div>
-              </article>
-            }
-          </div>
-
-          @if (leaderboardData.length > 3) {
-            <div class="leaderboard-list-head">
-              <p class="leaderboard-list-head__title !mt-3 !mb-0">More rankings</p>
-              <p class="leaderboard-list-head__meta !mt-3 !mb-0">{{ leaderboardData.length }} students</p>
-            </div>
-
-            <ngx-simplebar class="leaderboard-scroll">
-              <ul class="leader-list">
-                @for (data of (leaderboardData | slice: 3); track data; let i = $index) {
-                  @let scorePct = (data?.totalScore
-                    ? ((data?.scoreObtained / data?.totalScore) * 100 | number: '1.0-1')
-                    : null);
-                  <li class="leader-row">
-                    <div class="leader-row__lead">
-                      <span class="leader-row__rank">{{ i + 4 }}</span>
-                      <div class="leader-row__avatar" aria-hidden="true">
-                        <span>{{ data?.studentName?.charAt(0) || '?' }}</span>
-                      </div>
-                    </div>
-                    <div class="leader-row__main">
-                      <div class="leader-row__topline">
-                        <p class="leader-row__name">{{ data?.studentName ?? '-' }}</p>
-                        <span class="leader-row__pill">{{ scorePct ?? '-' }}%</span>
-                      </div>
-                      <p class="leader-row__score">Overall score</p>
-                    </div>
-                  </li>
-                }
-              </ul>
-            </ngx-simplebar>
-          }
-        } @else {
-          <div class="dash-empty dash-empty--inline">
-            <span class="material-symbols-outlined" aria-hidden="true">leaderboard</span>
-            <p>No leaderboard data yet.</p>
-          </div>
+          <app-leaderboard [leaderboardData]="leaderboardData"></app-leaderboard>
         }
       </article>
     </div>
@@ -660,48 +584,51 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="start-modal cuet-modal-pad">
-      <div class="start-modal__head">
-        <p class="start-modal__eyebrow">{{ currentTestType ?? '-' }} test</p>
-        <p class="start-modal__title">Test details</p>
+    <div class="cuet-modal-pad">
+      <div class="modal-head">
+        <span class="modal-head__icon material-symbols-outlined" aria-hidden="true">quiz</span>
+        <div>
+          <p class="modal-head__title">Test details</p>
+          <p class="modal-head__subtitle">{{ currentTestType ?? '-' }} test</p>
+        </div>
       </div>
 
-      <dl class="start-modal__facts">
-        <div class="start-modal__row">
+      <dl class="modal-facts">
+        <div class="modal-fact modal-fact--full">
           <dt>Test name</dt>
           <dd>{{ currentTest?.name ?? '-' }}</dd>
         </div>
-        <div class="start-modal__row">
+        <div class="modal-fact">
           <dt>Subject</dt>
           <dd>{{ currentTest?.subject ?? '-' }}</dd>
         </div>
-        <div class="start-modal__row">
-          <dt>Topics</dt>
-          <dd>{{ currentTest?.topic ? currentTest?.topic?.join(', ') : '-' }}</dd>
-        </div>
-        <div class="start-modal__row">
+        <div class="modal-fact">
           <dt>Duration</dt>
           <dd>{{ currentTest?.duration ?? '-' }} minutes</dd>
         </div>
-        <div class="start-modal__row">
+        <div class="modal-fact">
           <dt>Total marks</dt>
           <dd>{{ (currentTest?.totalQuestions ?? 0) * 5 }}</dd>
         </div>
-        <div class="start-modal__row">
+        <div class="modal-fact">
           <dt>Questions</dt>
           <dd>{{ currentTest?.totalQuestions ?? '-' }}</dd>
         </div>
-        <div class="start-modal__row">
+        <div class="modal-fact">
           <dt>Starts</dt>
           <dd>{{ (currentTest?.startTime | date: 'dd MMM yyyy · hh:mm a') ?? '-' }}</dd>
         </div>
-        <div class="start-modal__row">
+        <div class="modal-fact">
           <dt>Ends</dt>
           <dd>{{ (currentTest?.endTime | date: 'dd MMM yyyy · hh:mm a') ?? '-' }}</dd>
         </div>
+        <div class="modal-fact modal-fact--full">
+          <dt>Topics</dt>
+          <dd>{{ currentTest?.topic ? currentTest?.topic?.join(', ') : '-' }}</dd>
+        </div>
       </dl>
 
-      <div class="start-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
           class="btn-primary modal-btn"

@@ -98,10 +98,10 @@
                               }
                             </div>
                           } @else if (!isTopicsLoading) {
-                            <div class="res-empty res-empty--sm">
-                              <span class="res-empty__icon material-symbols-outlined">folder_open</span>
-                              <p class="res-empty__title">No topics yet</p>
-                              <p class="res-empty__subtitle">No topics available for this subject.</p>
+                            <div class="empty-state empty-state--sm">
+                              <span class="empty-state__icon material-symbols-outlined">folder_open</span>
+                              <p class="empty-state__title">No topics yet</p>
+                              <p class="empty-state__subtitle">No topics available for this subject.</p>
                             </div>
                           }
                         </nz-spin>
@@ -190,9 +190,9 @@
                                 }
                               </div>
                             } @else if (!isTopicsLoading) {
-                              <div class="res-empty res-empty--sm">
-                                <span class="res-empty__icon material-symbols-outlined">folder_open</span>
-                                <p class="res-empty__title">No topics yet</p>
+                              <div class="empty-state empty-state--sm">
+                                <span class="empty-state__icon material-symbols-outlined">folder_open</span>
+                                <p class="empty-state__title">No topics yet</p>
                               </div>
                             }
                           </nz-spin>
@@ -204,10 +204,10 @@
               }
 
             } @else if (!isSubjectsLoading) {
-              <div class="res-empty" style="padding: 4rem 1rem;">
-                <span class="res-empty__icon material-symbols-outlined">inventory_2</span>
-                <p class="res-empty__title">No subjects found</p>
-                <p class="res-empty__subtitle">Subjects will appear here once they are available.</p>
+              <div class="empty-state" style="padding: 4rem 1rem;">
+                <span class="empty-state__icon material-symbols-outlined">inventory_2</span>
+                <p class="empty-state__title">No subjects found</p>
+                <p class="empty-state__subtitle">Subjects will appear here once they are available.</p>
               </div>
             }
 
@@ -254,27 +254,27 @@
                     ? video?.url
                     : 'https://' + video?.url"
                   (click)="onViewVideo(video?.id)"
-                  class="res-content-card"
+                  class="content-card"
                   [id]="'video-card-' + video?.id"
                 >
-                  <div class="res-content-card__icon res-content-card__icon--video"><span class="material-symbols-outlined">play_circle</span>
+                  <div class="content-card__icon content-card__icon--video"><span class="material-symbols-outlined">play_circle</span>
                   </div>
-                  <div class="res-content-card__body">
-                    <p class="res-content-card__name">{{ video?.name }}</p>
-                    <div class="res-content-card__meta">
+                  <div class="content-card__body">
+                    <p class="content-card__name">{{ video?.name }}</p>
+                    <div class="content-card__meta">
                       @if (video?.subject) {
-                        <span class="res-content-card__chip">{{ video?.subject }}</span>
+                        <span class="content-card__chip">{{ video?.subject }}</span>
                       }
-                      <span class="res-content-card__stat">
+                      <span class="content-card__stat">
                         <span class="material-symbols-outlined" style="font-size:0.75rem">schedule</span>
                         {{ Math.floor(video?.length / 60) }}h {{ video?.length % 60 }}m
                       </span>
                     </div>
                   </div>
                   <span
-                    class="res-content-card__badge"
-                    [class.res-content-card__badge--free]="video?.isFree"
-                    [class.res-content-card__badge--paid]="!video?.isFree"
+                    class="pill"
+                    [class.pill--free]="video?.isFree"
+                    [class.pill--paid]="!video?.isFree"
                   >
                     {{ video?.isFree ? 'Free' : 'Paid' }}
                   </span>
@@ -284,27 +284,27 @@
                 <!-- Video locked -->
                 <div
                   *ngIf="video?.url === null"
-                  class="res-content-card"
+                  class="content-card"
                   (click)="isInvalidModal = true"
                   style="cursor:pointer"
                   [id]="'video-locked-' + video?.id"
                 >
-                  <div class="res-content-card__icon res-content-card__icon--locked">
+                  <div class="content-card__icon content-card__icon--locked">
                     <span class="material-symbols-outlined">lock</span>
                   </div>
-                  <div class="res-content-card__body">
-                    <p class="res-content-card__name">{{ video?.name }}</p>
-                    <div class="res-content-card__meta">
+                  <div class="content-card__body">
+                    <p class="content-card__name">{{ video?.name }}</p>
+                    <div class="content-card__meta">
                       @if (video?.subject) {
-                        <span class="res-content-card__chip">{{ video?.subject }}</span>
+                        <span class="content-card__chip">{{ video?.subject }}</span>
                       }
-                      <span class="res-content-card__stat">
+                      <span class="content-card__stat">
                         <span class="material-symbols-outlined" style="font-size:0.75rem">schedule</span>
                         {{ Math.floor(video?.length / 60) }}h {{ video?.length % 60 }}m
                       </span>
                     </div>
                   </div>
-                  <span class="res-content-card__badge res-content-card__badge--paid">Paid</span>
+                  <span class="pill pill--paid">Paid</span>
                 </div>
 
               }
@@ -334,10 +334,10 @@
               </nz-select>
             </div>
           } @else if (!isVideosLoading) {
-            <div class="res-empty" style="padding: 3.5rem 1rem;">
-              <span class="res-empty__icon material-symbols-outlined">smart_display</span>
-              <p class="res-empty__title">No videos found</p>
-              <p class="res-empty__subtitle">Try adjusting your search or check back later.</p>
+            <div class="empty-state" style="padding: 3.5rem 1rem;">
+              <span class="empty-state__icon material-symbols-outlined">smart_display</span>
+              <p class="empty-state__title">No videos found</p>
+              <p class="empty-state__subtitle">Try adjusting your search or check back later.</p>
             </div>
           }
         </nz-spin>
@@ -387,25 +387,25 @@
                     [href]="newspaper?.url?.startsWith('https://') || newspaper?.url?.startsWith('http://')
                       ? newspaper?.url
                       : 'https://' + newspaper?.url"
-                    class="res-content-card"
+                    class="content-card"
                     [id]="'newspaper-card-' + newspaper?.id"
                   >
-                    <div class="res-content-card__icon res-content-card__icon--newspaper">
+                    <div class="content-card__icon content-card__icon--newspaper">
                       <span class="material-symbols-outlined">newspaper</span>
                     </div>
-                    <div class="res-content-card__body">
-                      <p class="res-content-card__name">{{ newspaper?.name }}</p>
-                      <div class="res-content-card__meta">
-                        <span class="res-content-card__stat">
+                    <div class="content-card__body">
+                      <p class="content-card__name">{{ newspaper?.name }}</p>
+                      <div class="content-card__meta">
+                        <span class="content-card__stat">
                           <span class="material-symbols-outlined" style="font-size:0.75rem">calendar_today</span>
                           {{ newspaper?.date | date: 'dd MMM yyyy' }}
                         </span>
                       </div>
                     </div>
                     <span
-                      class="res-content-card__badge"
-                      [class.res-content-card__badge--free]="newspaper?.isFree"
-                      [class.res-content-card__badge--paid]="!newspaper?.isFree"
+                      class="pill"
+                      [class.pill--free]="newspaper?.isFree"
+                      [class.pill--paid]="!newspaper?.isFree"
                     >
                       {{ newspaper?.isFree ? 'Free' : 'Paid' }}
                     </span>
@@ -413,24 +413,24 @@
                 } @else {
                   <!-- Newspaper locked -->
                   <div
-                    class="res-content-card"
+                    class="content-card"
                     (click)="isInvalidModal = true"
                     style="cursor:pointer"
                     [id]="'newspaper-locked-' + newspaper?.id"
                   >
-                    <div class="res-content-card__icon res-content-card__icon--locked">
+                    <div class="content-card__icon content-card__icon--locked">
                       <span class="material-symbols-outlined">lock</span>
                     </div>
-                    <div class="res-content-card__body">
-                      <p class="res-content-card__name">{{ newspaper?.name }}</p>
-                      <div class="res-content-card__meta">
-                        <span class="res-content-card__stat">
+                    <div class="content-card__body">
+                      <p class="content-card__name">{{ newspaper?.name }}</p>
+                      <div class="content-card__meta">
+                        <span class="content-card__stat">
                           <span class="material-symbols-outlined" style="font-size:0.75rem">calendar_today</span>
                           {{ newspaper?.date | date: 'dd MMM yyyy' }}
                         </span>
                       </div>
                     </div>
-                    <span class="res-content-card__badge res-content-card__badge--paid">Paid</span>
+                    <span class="pill pill--paid">Paid</span>
                   </div>
                 }
               }
@@ -460,10 +460,10 @@
               </nz-select>
             </div>
           } @else if (!isNewspapersLoading) {
-            <div class="res-empty" style="padding: 3.5rem 1rem;">
-              <span class="res-empty__icon material-symbols-outlined">newspaper</span>
-              <p class="res-empty__title">No newspapers found</p>
-              <p class="res-empty__subtitle">Try adjusting your search or date filter.</p>
+            <div class="empty-state" style="padding: 3.5rem 1rem;">
+              <span class="empty-state__icon material-symbols-outlined">newspaper</span>
+              <p class="empty-state__title">No newspapers found</p>
+              <p class="empty-state__subtitle">Try adjusting your search or date filter.</p>
             </div>
           }
         </nz-spin>
@@ -484,53 +484,53 @@
                     [href]="pyq?.url?.startsWith('https://') || pyq?.url?.startsWith('http://')
                     ? pyq?.url
                     : 'https://' + pyq?.url"
-                    class="res-content-card"
+                    class="content-card"
                     [id]="'pyq-card-' + pyq?.id"
                   >
-                    <div class="res-content-card__icon res-content-card__icon--pyq">
+                    <div class="content-card__icon content-card__icon--pyq">
                       <span class="material-symbols-outlined">history_edu</span>
                     </div>
-                    <div class="res-content-card__body">
-                      <p class="res-content-card__name">{{ pyq?.name }}</p>
-                      <div class="res-content-card__meta">
-                      <span class="res-content-card__stat">
+                    <div class="content-card__body">
+                      <p class="content-card__name">{{ pyq?.name }}</p>
+                      <div class="content-card__meta">
+                      <span class="content-card__stat">
                         <span class="material-symbols-outlined" style="font-size:0.75rem">quiz</span>
                         Previous Year Questions
                       </span>
                       </div>
                     </div>
-                    <span class="res-content-card__badge res-content-card__badge--free">Free</span>
+                    <span class="pill pill--free">Free</span>
                   </a>
                 } @else {
                   <!-- PYQ locked -->
                   <div
-                    class="res-content-card"
+                    class="content-card"
                     (click)="isInvalidModal = true"
                     style="cursor:pointer"
                     [id]="'pyq-locked-' + pyq?.id"
                   >
-                    <div class="res-content-card__icon res-content-card__icon--locked">
+                    <div class="content-card__icon content-card__icon--locked">
                       <span class="material-symbols-outlined">lock</span>
                     </div>
-                    <div class="res-content-card__body">
-                      <p class="res-content-card__name">{{ pyq?.name }}</p>
-                      <div class="res-content-card__meta">
-                      <span class="res-content-card__stat">
+                    <div class="content-card__body">
+                      <p class="content-card__name">{{ pyq?.name }}</p>
+                      <div class="content-card__meta">
+                      <span class="content-card__stat">
                         <span class="material-symbols-outlined" style="font-size:0.75rem">quiz</span>
                         Previous Year Questions
                       </span>
                       </div>
                     </div>
-                    <span class="res-content-card__badge res-content-card__badge--paid">Paid</span>
+                    <span class="pill pill--paid">Paid</span>
                   </div>
                 }
               }
             </div>
           } @else if (!isPYQsLoading) {
-            <div class="res-empty" style="padding: 3.5rem 1rem;">
-              <span class="res-empty__icon material-symbols-outlined">history_edu</span>
-              <p class="res-empty__title">No PYQs available</p>
-              <p class="res-empty__subtitle">Previous year questions will appear here once uploaded.</p>
+            <div class="empty-state" style="padding: 3.5rem 1rem;">
+              <span class="empty-state__icon material-symbols-outlined">history_edu</span>
+              <p class="empty-state__title">No PYQs available</p>
+              <p class="empty-state__subtitle">Previous year questions will appear here once uploaded.</p>
             </div>
           }
         </nz-spin>
@@ -556,29 +556,27 @@
   id="invalid-access-modal"
 >
   <ng-container *nzModalContent>
-    <div class="res-modal cuet-modal-pad">
-      <div class="res-modal__head">
-        <span class="res-modal__icon res-modal__icon--error material-symbols-outlined">
+    <div class="cuet-modal-pad">
+      <div class="modal-head">
+        <span class="modal-head__icon modal-head__icon--error material-symbols-outlined" aria-hidden="true">
           info
         </span>
         <div>
-          <p class="res-modal__title">Access Restricted</p>
-          <p class="res-modal__subtitle">This resource requires a subscription.</p>
+          <p class="modal-head__title">Access Restricted</p>
+          <p class="modal-head__subtitle">This resource requires a subscription.</p>
         </div>
       </div>
 
-      <div class="res-modal__body">
-        <p style="font-size:0.84rem; color:var(--res-text-muted); line-height:1.55;">
-          You do not have access to this content. A valid subscription is required to
-          unlock this material, video, or paper.
-        </p>
-      </div>
+      <p class="modal-body">
+        You do not have access to this content. A valid subscription is required to
+        unlock this material, video, or paper.
+      </p>
 
-      <div class="res-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
           type="button"
-          class="btn-secondary modal-btn"
+          class="btn-ghost"
           (click)="isInvalidModal = false"
           id="invalid-modal-cancel-btn"
         >
@@ -586,7 +584,7 @@
         </button>
         <button
           nz-button
-          class="btn-primary modal-btn"
+          class="btn-primary"
           [routerLink]="['/', 'student', 'account']"
           id="invalid-modal-subscribe-btn"
         >
@@ -609,42 +607,42 @@
   id="start-test-modal"
 >
   <ng-container *nzModalContent>
-    <div class="res-modal">
-      <div class="res-modal__head">
-        <span class="res-modal__icon res-modal__icon--info material-symbols-outlined">
+    <div class="cuet-modal-pad">
+      <div class="modal-head">
+        <span class="modal-head__icon material-symbols-outlined" aria-hidden="true">
           quiz
         </span>
         <div>
-          <p class="res-modal__title">Start Test</p>
-          <p class="res-modal__subtitle">Review the details before you begin.</p>
+          <p class="modal-head__title">Start Test</p>
+          <p class="modal-head__subtitle">Review the details before you begin.</p>
         </div>
       </div>
 
-      <dl class="res-modal__facts">
-        <div class="res-modal__fact res-modal__facts--full" style="grid-column:1/-1">
+      <dl class="modal-facts">
+        <div class="modal-fact modal-fact--full">
           <dt>Test Name</dt>
           <dd>{{ selectedTest?.name ?? '—' }}</dd>
         </div>
-        <div class="res-modal__fact">
+        <div class="modal-fact">
           <dt>Topic</dt>
           <dd>{{ selectedTest?.topic?.name || selectedTopicName || '—' }}</dd>
         </div>
-        <div class="res-modal__fact">
+        <div class="modal-fact">
           <dt>Type</dt>
           <dd>{{ selectedTestType | titlecase }}</dd>
         </div>
-        <div class="res-modal__fact">
+        <div class="modal-fact">
           <dt>Duration</dt>
           <dd>{{ Math.floor(selectedTest?.duration / 60) }}h {{ selectedTest?.duration % 60 }}m</dd>
         </div>
-        <div class="res-modal__fact">
+        <div class="modal-fact">
           <dt>Questions</dt>
           <dd>{{ selectedTest?.totalQuestions ?? '—' }}</dd>
         </div>
       </dl>
 
-      <div class="res-modal__note">
-        <p class="res-modal__note-title">Before you start</p>
+      <div class="modal-note">
+        <p class="modal-note__title">Before you start</p>
         <ul>
           <li>You will have {{ selectedTest?.duration }} minutes to complete the test.</li>
           <li>No answer submissions are allowed after the time limit expires.</li>
@@ -652,11 +650,11 @@
         </ul>
       </div>
 
-      <div class="res-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
           type="button"
-          class="btn-secondary modal-btn"
+          class="btn-ghost"
           (click)="isStartTestModal = false"
           id="start-test-cancel-btn"
         >
@@ -664,7 +662,7 @@
         </button>
         <button
           nz-button
-          class="btn-primary modal-btn"
+          class="btn-primary"
           [routerLink]="['/', 'student', 'tests', 'attempt', selectedTestType, selectedTest?.id]"
           id="start-test-confirm-btn"
         >
@@ -687,28 +685,26 @@
   id="pending-test-modal"
 >
   <ng-container *nzModalContent>
-    <div class="res-modal">
-      <div class="res-modal__head">
-        <span class="res-modal__icon res-modal__icon--warn material-symbols-outlined">
+    <div class="cuet-modal-pad">
+      <div class="modal-head">
+        <span class="modal-head__icon modal-head__icon--warn material-symbols-outlined" aria-hidden="true">
           hourglass_top
         </span>
         <div>
-          <p class="res-modal__title">Unfinished Test</p>
-          <p class="res-modal__subtitle">You have a pending {{ pendingTestDetails?.testType }} test.</p>
+          <p class="modal-head__title">Unfinished Test</p>
+          <p class="modal-head__subtitle">You have a pending {{ pendingTestDetails?.testType }} test.</p>
         </div>
       </div>
 
-      <div class="res-modal__body">
-        <p style="font-size:0.84rem; color:var(--res-text-muted); line-height:1.55;">
-          Would you like to continue where you left off, or submit what you've done so far?
-        </p>
-      </div>
+      <p class="modal-body">
+        Would you like to continue where you left off, or submit what you've done so far?
+      </p>
 
-      <div class="res-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
           type="button"
-          class="btn-secondary modal-btn"
+          class="btn-ghost"
           (click)="submitPendingTest()"
           id="pending-test-submit-btn"
         >
@@ -716,7 +712,7 @@
         </button>
         <button
           nz-button
-          class="btn-primary modal-btn"
+          class="btn-primary"
           [routerLink]="['/', 'student', 'tests', 'attempt', pendingTestDetails?.testType, pendingTestDetails?.testId]"
           id="pending-test-continue-btn"
         >

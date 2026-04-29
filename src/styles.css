@@ -6,9 +6,6 @@
 /* 2. ALL @IMPORTS (MUST come before any other CSS rules) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-@import './assets/scss/font-face.css';
-@import './assets/scss/font-variables.css';
-@import './assets/scss/colors.css';
 
 /* This demotes Zorro so Tailwind and your styles can beat it */
 @import "ng-zorro-antd/ng-zorro-antd.min.css" layer(vendor);
@@ -18,63 +15,123 @@
 /* 3. TAILWIND THEME CONFIG                                                   */
 /* -------------------------------------------------------------------------- */
 @theme {
-  --color-on-secondary-fixed-variant: #38485d;
-  --color-error-container: #ffdad6;
-  --color-on-tertiary-fixed: #360f00;
-  --color-surface-container-highest: #e0e3e5;
-  --color-on-primary: #ffffff;
+  /* Tailwind v4 theme tokens
+     - Keep these as CSS variables so Tailwind utilities can reference them.
+     - Naming follows a mostly “semantic token” (Material-ish) style. */
+
+  /* Brand palette scales (useful for charts, subtle borders, hovers, etc.) */
+  --color-primary-50: #ecf7ff;
+  --color-primary-100: #d4ecff;
+  --color-primary-200: #b2dfff;
+  --color-primary-300: #7dccff;
+  --color-primary-400: #40b0ff;
+  --color-primary-500: #148eff;
+  --color-primary-600: #0073ff;
+  --color-primary-700: #0066ff;
+  --color-primary-800: #004ac6;
+  --color-primary-900: #0845a0;
+  --color-primary-950: #0a2a61;
+
+  --color-secondary-50: #f6f7f9;
+  --color-secondary-100: #eceef2;
+  --color-secondary-200: #d5dae2;
+  --color-secondary-300: #b0bac9;
+  --color-secondary-400: #8595ab;
+  --color-secondary-500: #667891;
+  --color-secondary-600: #505f76;
+  --color-secondary-700: #434e61;
+  --color-secondary-800: #3a4352;
+  --color-secondary-900: #333a47;
+  --color-secondary-950: #22262f;
+
+  /* Core semantic colors (prefer these in components over raw scale values) */
+  --color-primary: #004ac6;
   --color-secondary: #505f76;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-fixed: #ffdbcd;
-  --color-tertiary-fixed-dim: #ffb596;
-  --color-outline: #737686;
-  --color-primary-fixed-dim: #b4c5ff;
-  --color-on-primary-fixed-variant: #003ea8;
-  --color-on-secondary: #ffffff;
-  --color-surface-container-lowest: #ffffff;
   --color-tertiary: #943700;
-  --color-secondary-fixed: #d3e4fe;
-  --color-on-surface: #191c1e;
-  --color-inverse-primary: #b4c5ff;
-  --color-secondary-fixed-dim: #b7c8e1;
-  --color-inverse-surface: #2d3133;
-  --color-surface-container-high: #e6e8ea;
   --color-error: #ba1a1a;
-  --color-surface-bright: #f7f9fb;
-  --color-on-tertiary-fixed-variant: #7d2d00;
-  --color-surface-variant: #e0e3e5;
-  --color-on-tertiary-container: #ffede6;
-  --color-on-secondary-container: #54647a;
-  --color-surface-container: #eceef0;
-  --color-surface-container-low: #f2f4f6;
-  --color-on-error-container: #93000a;
+
+  /* “On-*” foregrounds */
+  --color-on-primary: #ffffff;
+  --color-on-secondary: #ffffff;
+  --color-on-tertiary: #ffffff;
   --color-on-error: #ffffff;
+  --color-on-surface: #191c1e;
   --color-on-surface-variant: #434655;
   --color-on-background: #191c1e;
-  --color-tertiary-container: #bc4800;
-  --color-on-primary-fixed: #00174b;
-  --color-surface-dim: #d8dadc;
-  --color-on-primary-container: #eeefff;
-  --color-primary: #004ac6;
-  --color-primary-fixed: #dbe1ff;
-  --color-background: #f7f9fb;
-  --color-surface-tint: #0053db;
-  --color-inverse-on-surface: #eff1f3;
-  --color-outline-variant: #c3c6d7;
-  --color-primary-container: #2563eb;
-  --color-surface: #f7f9fb;
-  --color-secondary-container: #d0e1fb;
-  --color-on-secondary-fixed: #0b1c30;
 
+  /* Containers (background surfaces tied to semantic colors) */
+  --color-primary-container: #2563eb;
+  --color-on-primary-container: #eeefff;
+  --color-secondary-container: #d0e1fb;
+  --color-on-secondary-container: #54647a;
+  --color-tertiary-container: #bc4800;
+  --color-on-tertiary-container: #ffede6;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Fixed / inverse variants (used for elevation/contrast patterns) */
+  --color-primary-fixed: #dbe1ff;
+  --color-primary-fixed-dim: #b4c5ff;
+  --color-on-primary-fixed: #00174b;
+  --color-on-primary-fixed-variant: #003ea8;
+
+  --color-secondary-fixed: #d3e4fe;
+  --color-secondary-fixed-dim: #b7c8e1;
+  --color-on-secondary-fixed: #0b1c30;
+  --color-on-secondary-fixed-variant: #38485d;
+
+  --color-tertiary-fixed: #ffdbcd;
+  --color-tertiary-fixed-dim: #ffb596;
+  --color-on-tertiary-fixed: #360f00;
+  --color-on-tertiary-fixed-variant: #7d2d00;
+
+  --color-inverse-surface: #2d3133;
+  --color-inverse-on-surface: #eff1f3;
+  --color-inverse-primary: #b4c5ff;
+
+  /* Surfaces + outlines */
+  --color-background: #f7f9fb;
+  --color-surface: #f7f9fb;
+  --color-surface-bright: #f7f9fb;
+  --color-surface-dim: #d8dadc;
+  --color-surface-variant: #e0e3e5;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-outline: #737686;
+  --color-outline-variant: #c3c6d7;
+
+  /* Brand tint (used by some Tailwind color-mix patterns) */
+  --color-surface-tint: #0053db;
+
+  /* Shape */
   --radius-default: 0.5rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
 
+  /* Typography */
   --font-headline: "Manrope";
   --font-body: "Inter";
   --font-label: "Inter";
+
+  /* Font Sizes */
+  --text-xs: 0.625rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.25rem;
+  --text-3xl: 1.5rem;
+  --text-4xl: 1.75rem;
+  --text-5xl: 2rem;
+  --text-6xl: 2.25rem;
+  --text-7xl: 2.5rem;
+  --text-8xl: 2.75rem;
+  --text-9xl: 3rem;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -154,6 +211,22 @@
 /* 5. COMPONENTS LAYER (Custom Global Helpers)                                */
 /* -------------------------------------------------------------------------- */
 @layer components {
+  /* Faded divider — opacity dissolves toward both ends via mask.
+     Works on plain <hr> and <nz-divider> (which renders as .ant-divider). */
+  hr.divider-fade {
+    border: none;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    mask-image: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+    margin: 1.5rem 0;
+  }
+
+  .ant-divider.divider-fade {
+    mask-image: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+  }
+
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
@@ -201,6 +274,330 @@
     font-size: 12px;
     transition: all 0.6s;
   }
+
+  /* ── Pill / Badge ── */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .pill--free   { background: #dcfce7; color: #15803d; }
+  .pill--paid   { background: color-mix(in oklab, var(--primary) 10%, #fff); color: var(--primary); }
+  .pill--domain { background: #f1f5f9; color: #475569; }
+  .pill--warn   { background: #fef9c3; color: #854d0e; }
+  .pill--live   { background: #dcfce7; color: #15803d; }
+  .pill--live::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    animation: pill-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pill-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  /* ── Empty State ── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+  .empty-state__icon {
+    font-size: 2.25rem;
+    color: #94a3b8;
+    font-variation-settings: "FILL" 0, "wght" 300;
+    margin-bottom: 0.25rem;
+  }
+  .empty-state__title {
+    font-family: "Manrope", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .empty-state__subtitle {
+    font-size: 0.82rem;
+    color: #64748b;
+    max-width: 34ch;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .empty-state__cta { margin-top: 0.5rem; }
+  .empty-state--sm { padding: 1.5rem 0.75rem; }
+  .empty-state--sm .empty-state__icon { font-size: 1.75rem; }
+  .empty-state--error .empty-state__icon { color: #ef4444; }
+  .empty-state--card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: var(--ambient-shadow);
+  }
+
+  /* ── Stat Card ── */
+  .stat-card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1.25rem 1.35rem;
+    box-shadow: var(--ambient-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    --_sc-icon-bg: #e0e7ff;
+    --_sc-icon-color: #4338ca;
+  }
+  .stat-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .stat-card__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.02em;
+  }
+  .stat-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.6rem;
+    background: var(--_sc-icon-bg);
+    color: var(--_sc-icon-color);
+    flex-shrink: 0;
+  }
+  .stat-card__value {
+    font-family: "Manrope", sans-serif;
+    font-size: clamp(1.6rem, 2vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+    line-height: 1;
+  }
+  .stat-card__hint {
+    font-size: 0.76rem;
+    color: #94a3b8;
+  }
+  .stat-card--blue   { --_sc-icon-bg: #dbeafe; --_sc-icon-color: #1d4ed8; }
+  .stat-card--indigo { --_sc-icon-bg: #e0e7ff; --_sc-icon-color: #4338ca; }
+  .stat-card--sky    { --_sc-icon-bg: #e0f2fe; --_sc-icon-color: #0369a1; }
+  .stat-card--green  { --_sc-icon-bg: #dcfce7; --_sc-icon-color: #15803d; }
+  .stat-card--amber  { --_sc-icon-bg: #fef9c3; --_sc-icon-color: #a16207; }
+
+  /* ── Content Card ── */
+  .content-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .content-card:hover {
+    transform: var(--lift-card);
+    box-shadow: var(--shadow-card-hover);
+  }
+  .content-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.65rem;
+    flex-shrink: 0;
+    --_ci-bg: #eff6ff;
+    --_ci-color: var(--primary);
+    background: var(--_ci-bg);
+    color: var(--_ci-color);
+  }
+  .content-card__icon--video     { --_ci-bg: #eff6ff; --_ci-color: #1d4ed8; }
+  .content-card__icon--newspaper { --_ci-bg: #f0fdf4; --_ci-color: #15803d; }
+  .content-card__icon--pyq       { --_ci-bg: #fdf4ff; --_ci-color: #7e22ce; }
+  .content-card__icon--note      { --_ci-bg: #fffbeb; --_ci-color: #a16207; }
+  .content-card__icon--locked    { --_ci-bg: #f1f5f9; --_ci-color: #94a3b8; }
+  .content-card__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .content-card__name {
+    font-family: "Manrope", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 0 0.3rem;
+  }
+  .content-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+  }
+  .content-card__chip {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #475569;
+    background: #f1f5f9;
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+  }
+  .content-card__stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
+  /* ── Section Header ── */
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .section-head__eyebrow {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 0.2rem;
+  }
+  .section-head__title {
+    font-family: "Manrope", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .section-head__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .section-head__action:hover { text-decoration: underline; }
+
+  /* ── Modal Inner Structure ── */
+  .modal-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 1.1rem;
+  }
+  .modal-head__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.65rem;
+    flex-shrink: 0;
+    font-size: 1.35rem;
+    background: color-mix(in oklab, var(--primary) 10%, #fff);
+    color: var(--primary);
+  }
+  .modal-head__icon--warn  { background: #fef9c3; color: #a16207; }
+  .modal-head__icon--error { background: #fee2e2; color: #dc2626; }
+  .modal-head__title {
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.2rem;
+  }
+  .modal-head__subtitle {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .modal-body {
+    font-size: 0.84rem;
+    color: #64748b;
+    line-height: 1.55;
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  .modal-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 1.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+  }
+  @media (max-width: 479px) {
+    .modal-facts { grid-template-columns: 1fr; }
+  }
+  .modal-fact--full { grid-column: 1 / -1; }
+  .modal-facts dt { font-weight: 600; color: #64748b; margin: 0 0 0.1rem; }
+  .modal-facts dd { font-weight: 500; color: #0f172a; margin: 0; }
+
+  .modal-note {
+    background: #fef9c3;
+    border-radius: 0.65rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+    color: #713f12;
+    line-height: 1.5;
+  }
+  .modal-note__title {
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+    font-size: 0.82rem;
+  }
+  .modal-note ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    padding-top: 0.75rem;
+    flex-wrap: wrap;
+  }
 }
 
 /* NOTE: I have excluded the 50+ manual row-gap/col-gap classes. 
@@ -225,31 +622,65 @@ button.ant-button.dark-btn {
 }
 
 button.ant-btn.btn-primary {
-  background-color: var(--student-primary) !important;
-  color: white !important;
-  transition: all 0.6s;
-  border-color: var(--student-primary) !important;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 6px 18px -8px rgba(0, 74, 198, 0.45);
+  transition: filter 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
 }
 button.ant-btn.btn-primary:hover {
-  background-color: var(--student-dark-primary) !important;
-  border-color: var(--student-dark-primary) !important;
-}
-button.ant-btn.btn-primary:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 74, 198, 0.35) !important;
+  filter: brightness(1.08);
+  box-shadow: 0 10px 24px -8px rgba(0, 74, 198, 0.5);
+  transform: translateY(-1px);
 }
 button.ant-btn.btn-primary:active {
-  box-shadow: 0 0 0 0.2rem rgba(0, 74, 198, 0.35) !important;
+  transform: none;
+  filter: brightness(0.96);
+}
+button.ant-btn.btn-primary:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 74, 198, 0.28);
 }
 
 button.ant-btn.btn-secondary {
-  border: 1px solid var(--student-primary);
-  background-color: #fff;
-  color: var(--student-primary);
-  transition: all 0.6s;
+  background: color-mix(in oklab, var(--primary) 8%, #fff);
+  color: var(--primary);
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: background 0.18s ease, transform 0.15s ease;
 }
 button.ant-btn.btn-secondary:hover {
-  background-color: var(--student-primary);
-  color: #fff;
+  background: color-mix(in oklab, var(--primary) 14%, #fff);
+  transform: translateY(-1px);
+}
+button.ant-btn.btn-secondary:active {
+  transform: none;
+}
+
+button.ant-btn.btn-ghost {
+  background: transparent;
+  color: var(--primary);
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: background 0.18s ease;
+}
+button.ant-btn.btn-ghost:hover {
+  background: color-mix(in oklab, var(--primary) 6%, transparent);
+}
+
+button.ant-btn.btn-sm {
+  height: 2rem;
+  padding: 0 0.85rem;
+  font-size: 0.8rem;
+  border-radius: 0.55rem;
+  gap: 0.3rem;
+}
+
+button.ant-btn.btn-block {
+  width: 100%;
 }
 
 button.ant-btn.btn-danger {
@@ -1323,6 +1754,12 @@ nz-switch:has(.ant-switch-small) {
     justify-self: stretch;
     width: 100%;
   }
+}
+
+/* ── Ant Design divider overrides ── */
+.ant-divider {
+  border-top: 1px solid rgba(0, 0, 0, .06);
+
 }
 .ant-divider-horizontal.ant-divider-with-text {
   font-size: 12px;

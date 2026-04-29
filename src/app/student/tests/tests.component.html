@@ -91,9 +91,9 @@
                     </td>
                     <td class="text-center">
                       <span
-                        class="tests-pill"
-                        [class.tests-pill--free]="test?.isFree"
-                        [class.tests-pill--paid]="!test?.isFree"
+                        class="pill"
+                        [class.pill--free]="test?.isFree"
+                        [class.pill--paid]="!test?.isFree"
                       >
                         {{ test?.isFree ? "Free" : "Paid" }}
                       </span>
@@ -105,7 +105,7 @@
                     <td class="text-center">
                       <button
                         nz-button
-                        class="cuet-table-row__start"
+                        class="btn-primary btn-sm"
                         (click)="onClickStartTest(test, 'recorded')"
                       >
                         Start
@@ -198,9 +198,9 @@
                     </td>
                     <td class="text-center">
                       <span
-                        class="tests-pill"
-                        [class.tests-pill--free]="test?.isFree"
-                        [class.tests-pill--paid]="!test?.isFree"
+                        class="pill"
+                        [class.pill--free]="test?.isFree"
+                        [class.pill--paid]="!test?.isFree"
                       >
                         {{ test?.isFree ? "Free" : "Paid" }}
                       </span>
@@ -212,7 +212,7 @@
                     <td class="text-center">
                       <button
                         nz-button
-                        class="cuet-table-row__start"
+                        class="btn-primary btn-sm"
                         (click)="onClickStartTest(test, 'mock')"
                       >
                         Start
@@ -361,9 +361,9 @@
                   </td>
                   <td class="text-center">
                     <span
-                      class="tests-pill"
-                      [class.tests-pill--free]="test?.isFree"
-                      [class.tests-pill--paid]="!test?.isFree"
+                      class="pill"
+                      [class.pill--free]="test?.isFree"
+                      [class.pill--paid]="!test?.isFree"
                     >
                       {{ test?.isFree ? "Free" : "Paid" }}
                     </span>
@@ -375,7 +375,7 @@
                   <td class="text-center">
                     <button
                       nz-button
-                      class="cuet-table-row__start"
+                      class="btn-primary btn-sm"
                       (click)="onClickStartTest(test, 'topic')"
                     >
                       Start
@@ -418,28 +418,29 @@
 >
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
-      <div class="tests-modal__head">
-        <span
-          class="tests-modal__icon tests-modal__icon--warn material-symbols-outlined"
+      <div class="modal-head">
+        <span class="modal-head__icon modal-head__icon--warn material-symbols-outlined" aria-hidden="true"
           >lock</span
         >
-        <h2 class="tests-modal__title">Subscription required</h2>
+        <div>
+          <p class="modal-head__title">Subscription required</p>
+        </div>
       </div>
-      <p class="tests-modal__body">
+      <p class="modal-body">
         This test is part of a premium plan. Subscribe to unlock full access to
         the test library.
       </p>
-      <div class="tests-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
-          class="tests-modal__btn tests-modal__btn--ghost"
+          class="btn-ghost"
           (click)="onModalClose()"
         >
           Not now
         </button>
         <button
           nz-button
-          class="tests-modal__btn tests-modal__btn--primary"
+          class="btn-primary"
           [routerLink]="['/', 'student', 'account']"
         >
           Subscribe
@@ -459,62 +460,64 @@
 >
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
-      <div class="tests-modal__head">
+      <div class="modal-head">
         <span
-          class="tests-modal__icon tests-modal__icon--primary material-symbols-outlined"
+          class="modal-head__icon material-symbols-outlined" aria-hidden="true"
           >play_arrow</span
         >
-        <h2 class="tests-modal__title">Start this test?</h2>
+        <div>
+          <p class="modal-head__title">Start this test?</p>
+        </div>
       </div>
 
-      <div class="tests-modal__grid">
-        <div class="tests-modal__field">
-          <p class="tests-modal__label">Time allotted</p>
-          <p class="tests-modal__value">
+      <dl class="modal-facts">
+        <div class="modal-fact">
+          <dt>Time allotted</dt>
+          <dd>
             {{ Math.floor(selectedTest?.duration / 60) }} hr
             {{ selectedTest?.duration % 60 }} min
-          </p>
+          </dd>
         </div>
 
         @if (selectedTestType !== "topic") {
-          <div class="tests-modal__field">
-            <p class="tests-modal__label">Subject</p>
-            <p class="tests-modal__value">{{ selectedTest?.subject ?? "-" }}</p>
+          <div class="modal-fact">
+            <dt>Subject</dt>
+            <dd>{{ selectedTest?.subject ?? "-" }}</dd>
           </div>
         } @else {
-          <div class="tests-modal__field">
-            <p class="tests-modal__label">Topic</p>
-            <p class="tests-modal__value">{{ selectedTest?.name ?? "-" }}</p>
+          <div class="modal-fact">
+            <dt>Topic</dt>
+            <dd>{{ selectedTest?.name ?? "-" }}</dd>
           </div>
         }
 
-        <div class="tests-modal__field">
-          <p class="tests-modal__label">Total questions</p>
-          <p class="tests-modal__value">
+        <div class="modal-fact">
+          <dt>Total questions</dt>
+          <dd>
             {{ selectedTest?.totalQuestions ?? "-" }}
-          </p>
+          </dd>
         </div>
 
-        <div class="tests-modal__field">
-          <p class="tests-modal__label">Test type</p>
-          <p class="tests-modal__value">
+        <div class="modal-fact">
+          <dt>Test type</dt>
+          <dd>
             {{ (selectedTestType | titlecase) ?? "-" }}
-          </p>
+          </dd>
         </div>
 
         @if (selectedTestType !== "topic") {
-          <div class="tests-modal__field tests-modal__field--full">
-            <p class="tests-modal__label">Topics</p>
-            <p class="tests-modal__value tests-modal__value--soft">
+          <div class="modal-fact modal-fact--full">
+            <dt>Topics</dt>
+            <dd>
               {{ selectedTest?.topic?.join(", ") }}
-            </p>
+            </dd>
           </div>
         }
-      </div>
+      </dl>
 
-      <div class="tests-modal__notes">
-        <p class="tests-modal__notes-title">Before you begin</p>
-        <ul class="tests-modal__notes-list">
+      <div class="modal-note">
+        <p class="modal-note__title">Before you begin</p>
+        <ul>
           <li>
             You'll have {{ selectedTest?.duration }} minutes to complete the
             test.
@@ -524,17 +527,17 @@
         </ul>
       </div>
 
-      <div class="tests-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
-          class="tests-modal__btn tests-modal__btn--ghost"
+          class="btn-ghost"
           (click)="onModalClose()"
         >
           Cancel
         </button>
         <button
           nz-button
-          class="tests-modal__btn tests-modal__btn--primary"
+          class="btn-primary"
           [routerLink]="[
             '/',
             'student',
@@ -562,28 +565,30 @@
 >
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
-      <div class="tests-modal__head">
+      <div class="modal-head">
         <span
-          class="tests-modal__icon tests-modal__icon--amber material-symbols-outlined"
+          class="modal-head__icon modal-head__icon--warn material-symbols-outlined" aria-hidden="true"
           >pending_actions</span
         >
-        <h2 class="tests-modal__title">You have a pending test</h2>
+        <div>
+          <p class="modal-head__title">You have a pending test</p>
+        </div>
       </div>
-      <p class="tests-modal__body">
+      <p class="modal-body">
         You left a <b>{{ pendingTestDetails?.testType }}</b> test unfinished.
         Continue where you left off or submit it now to free up a new attempt.
       </p>
-      <div class="tests-modal__actions">
+      <div class="modal-actions">
         <button
           nz-button
-          class="tests-modal__btn tests-modal__btn--ghost"
+          class="btn-ghost"
           (click)="submitPendingTest()"
         >
           Submit
         </button>
         <button
           nz-button
-          class="tests-modal__btn tests-modal__btn--primary"
+          class="btn-primary"
           [routerLink]="[
             '/',
             'student',

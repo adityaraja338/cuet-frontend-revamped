@@ -10,13 +10,13 @@
     <div class="rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(25,28,30,0.06)]">
 
       <!-- HERO: gradient zone ─────────────────── -->
-      <div class="pd-hero px-6 pt-6 md:px-8 md:pt-7">
+      <div class="pd-hero px-5 pt-6 md:px-5 md:pt-7">
 
         <!-- Grid: test identity (left) | score + grade (right) -->
         <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-8 gap-y-5 mb-6">
 
           <!-- Test identity -->
-          <div>
+          <div class="col-span-2 xl:col-span-1">
             <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45 mb-1.5">
               Performance Report
             </p>
@@ -38,18 +38,18 @@
           </div>
 
           <!-- Score + Grade -->
-          <div class="flex items-center gap-4 md:gap-6">
-            <div>
-              <p class="text-[9px] font-bold uppercase tracking-[0.14em] text-white/50 mb-1.5">
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="grow">
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/50 mb-1.5">
                 Final Score
               </p>
               <div class="pd-shelf__score">
-                {{ performance?.scoreObtained }}
-                <span class="pd-shelf__total">/ {{ performance?.totalScore }}</span>
+                {{ performance.scoreObtained | number: '1.0-0' }}
+                <span class="pd-shelf__total">/ {{ performance.totalScore | number: '1.0-0' }}</span>
               </div>
               <p class="pd-shelf__pct">Accuracy: {{ accuracyLabel }} · {{ scoreAvgLabel }}</p>
             </div>
-            <div class="w-px self-stretch bg-white/10 mx-1 hidden md:block"></div>
+            <div class="w-px self-stretch bg-white/10 mx-1"></div>
             <div class="pd-shelf__grade" [attr.data-grade]="performance?.grade">
               <span class="pd-shelf__grade-letter">{{ performance?.grade }}</span>
               <span class="pd-shelf__grade-label">Grade</span>
@@ -87,8 +87,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 bg-white">
 
         <!-- Score distribution -->
-        <div class="p-5 md:p-6 border-b border-slate-100 md:border-r">
-          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+        <div class="p-5 border-b border-slate-100 md:border-r">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
             Score Distribution
           </p>
           <div class="pd-dist__bar">
@@ -110,8 +110,8 @@
         </div>
 
         <!-- Instructor remarks -->
-        <div class="p-5 md:p-6 border-b border-slate-100">
-          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
+        <div class="p-5 border-b border-slate-100">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
             Instructor Remarks
           </p>
           <p class="text-sm font-medium text-slate-600 leading-relaxed">
@@ -120,53 +120,53 @@
         </div>
 
         <!-- Session details -->
-        <div class="p-5 md:p-6 border-b border-slate-100 md:border-b-0 md:border-r">
-          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+        <div class="p-5 border-b border-slate-100 md:border-b-0 md:border-r">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
             Session Details
           </p>
           <dl class="flex flex-col gap-2">
-            <div class="flex gap-2">
-              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Date</dt>
-              <dd class="text-[10px] font-semibold text-slate-700">
+            <div class="flex gap-2"> 
+              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Date</dt>
+              <dd class="text-sm font-semibold text-slate-700">
                 {{ performance?.testItem?.startTime | date: 'dd MMM yyyy' }}
               </dd>
             </div>
             <div class="flex gap-2">
-              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Started</dt>
-              <dd class="text-[10px] font-semibold text-slate-700">
+              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Started</dt>
+              <dd class="text-sm font-semibold text-slate-700">
                 {{ performance?.testItem?.startTime | date: 'hh:mm a' }}
               </dd>
             </div>
             <div class="flex gap-2">
-              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Ended</dt>
-              <dd class="text-[10px] font-semibold text-slate-700">
+              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Ended</dt>
+              <dd class="text-sm font-semibold text-slate-700">
                 {{ performance?.testItem?.endTime | date: 'hh:mm a' }}
               </dd>
             </div>
             <div class="flex gap-2">
-              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Duration</dt>
-              <dd class="text-[10px] font-semibold text-slate-700">{{ duration }}</dd>
+              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Duration</dt>
+              <dd class="text-sm font-semibold text-slate-700">{{ duration }}</dd>
             </div>
           </dl>
         </div>
 
         <!-- Test info -->
-        <div class="p-5 md:p-6">
-          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+        <div class="p-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
             Test Info
           </p>
           <dl class="flex flex-col gap-2">
             <div class="flex gap-2">
-              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">Type</dt>
-              <dd class="text-[10px] font-semibold text-slate-700">
+              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Type</dt>
+              <dd class="text-sm font-semibold text-slate-700">
                 {{ performance?.testType | titlecase }} Test
               </dd>
             </div>
             <div class="flex gap-2">
-              <dt class="text-[10px] font-semibold text-slate-400 w-16 shrink-0">
+              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">
                 {{ performance?.testType === 'topic' ? 'Topic' : 'Topics' }}
               </dt>
-              <dd class="text-[10px] font-semibold text-slate-700">
+              <dd class="text-sm font-semibold text-slate-700">
                 {{ performance?.testType === 'topic'
                    ? performance?.topicName
                    : performance?.testTopics?.join(', ') }}
@@ -180,8 +180,15 @@
 
     <!-- Leaderboard — live tests only ────────── -->
     @if (performance?.testType === 'live') {
-      <div class="rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)]">
-        <app-leaderboard [leaderboardData]="performance.leaderboard"></app-leaderboard>
+      <div
+        class="relative rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)] min-h-104"
+      >
+        <div class="absolute inset-5">
+          <app-leaderboard
+            class="block h-full"
+            [leaderboardData]="performance.leaderboard"
+          ></app-leaderboard>
+        </div>
       </div>
     }
 
@@ -190,7 +197,7 @@
   <!-- ══════════════════════════════════════════════
        Q&A SECTION — full width
   ══════════════════════════════════════════════ -->
-  <div class="rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)] p-5 md:p-6">
+  <div class="rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)] p-5">
 
     @if (!performance?.showAnswers) {
       <!-- Answers hidden -->

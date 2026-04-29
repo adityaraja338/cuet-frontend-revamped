@@ -10,6 +10,7 @@ import {
 } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
 import { ImageFallbackDirective } from '../../shared/directive/img-fallback.directive';
+import { LeaderboardComponent } from '../../shared/components/leaderboard/leaderboard.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
     BaseChartDirective,
     CommonModule,
     ImageFallbackDirective,
+    LeaderboardComponent
   ],
   providers: [provideCharts(withDefaultRegisterables())],
   declarations: [DashboardComponent],

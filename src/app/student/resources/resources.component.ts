@@ -148,12 +148,13 @@ export class ResourcesComponent implements OnInit, OnDestroy {
   private topicShownInResourcesAccordion(topic: any): boolean {
     const id = Number(topic?.id);
     if (!id || Number.isNaN(id)) return false;
-    if ((topic?.material ?? 0) > 0) return true;
-    // const tt = topic?.topicTest;
-    // if (typeof tt === 'number' && Number.isInteger(tt)) {
-    //   return tt > 0;
-    // }
-    return true;
+
+    const tt = topic?.topicTests ?? topic?.topicTest;
+    if (typeof tt === 'number' && Number.isInteger(tt)) {
+      return tt > 0;
+    }
+
+    return (topic?.material ?? 0) > 0;
   }
 
   selectTopic(topic: any): void {

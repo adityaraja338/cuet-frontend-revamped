@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { NgZorroAntdModule } from '../../../ng-zorro-antd.module';
 import { CommonModule } from '@angular/common';
+import { SimplebarAngularModule } from 'simplebar-angular';
+import { LeaderboardComponent } from '../../../shared/components/leaderboard/leaderboard.component';
 
 describe('PerformanceDetailComponent', () => {
   let component: PerformanceDetailComponent;
@@ -24,7 +26,7 @@ describe('PerformanceDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PerformanceDetailComponent],
-      imports: [NgZorroAntdModule, CommonModule],
+      imports: [NgZorroAntdModule, CommonModule, SimplebarAngularModule, LeaderboardComponent],
       providers: [
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: Router, useValue: mockRouter }

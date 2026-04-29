@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 interface Question {
@@ -53,15 +53,7 @@ interface PerformanceDetail {
   templateUrl: './performance-detail.component.html',
   styleUrl: './performance-detail.component.css',
 })
-export class PerformanceDetailComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('pdSplit') pdSplit!: ElementRef;
-  @ViewChild('pdLeft') pdLeft!: ElementRef;
-  @ViewChild('pdRight') pdRight!: ElementRef;
-
-  leftStickyTop = 0;
-  rightStickyTop = 0;
-  private resizeObserver?: ResizeObserver;
-
+export class PerformanceDetailComponent implements OnInit {
   testId!: number;
   performance!: PerformanceDetail;
   activeFilter: 'all' | 'correct' | 'incorrect' | 'skipped' = 'all';
@@ -71,7 +63,7 @@ export class PerformanceDetailComponent implements OnInit, AfterViewInit, OnDest
     id: 216,
     testId: 1,
     testName: 'ENGLISH PYQ 1',
-    testType: 'mock',
+    testType: 'live',
     testTopics: ['PYQ'],
     grade: 'F',
     remark: 'Early stages, pick up the pace, you can do better.',
@@ -115,51 +107,11 @@ export class PerformanceDetailComponent implements OnInit, AfterViewInit, OnDest
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.testId = Number(this.route.snapshot.paramMap.get('testId'));
-    // TODO: replace with API call: this.http.getApi(`get-performance-detail/${this.testId}`, {})
     this.performance = this.STATIC_DATA;
-  }
-
-  ngAfterViewInit(): void {
-    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
-      this.resizeObserver = new ResizeObserver(() => {
-        this.calculateOffsets();
-      });
-
-      if (this.pdSplit) this.resizeObserver.observe(this.pdSplit.nativeElement);
-      if (this.pdLeft) this.resizeObserver.observe(this.pdLeft.nativeElement);
-      if (this.pdRight) this.resizeObserver.observe(this.pdRight.nativeElement);
-
-      // Initial calculation
-      setTimeout(() => this.calculateOffsets(), 100);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-    }
-  }
-
-  calculateOffsets(): void {
-    if (!this.pdLeft || !this.pdRight) return;
-
-    const vh = window.innerHeight;
-    const padding = 24; // Standard padding/gap
-
-    const leftHeight = this.pdLeft.nativeElement.offsetHeight;
-    const rightHeight = this.pdRight.nativeElement.offsetHeight;
-
-    // Logic: If column is taller than viewport, we stick it so the bottom is visible
-    // Offset = ViewportHeight - ColumnHeight - Padding
-    this.leftStickyTop = leftHeight + padding > vh ? vh - leftHeight - padding : 24;
-    this.rightStickyTop = rightHeight + padding > vh ? vh - rightHeight - padding : 24;
-
-    this.cdr.detectChanges();
   }
 
   goBack(): void {

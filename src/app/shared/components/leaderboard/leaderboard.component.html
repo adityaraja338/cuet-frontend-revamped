@@ -1,0 +1,135 @@
+<!-- Leaderboard -->
+<div
+  id="test-leaderboard"
+  class="leaderboard h-full min-h-0 flex flex-col"
+  [class.px-3]="hasPadding"
+>
+  @if (leaderboardData.length) {
+    <!-- Podium top-3 -->
+    <div class="grid grid-cols-3 gap-2.5 mb-4">
+      @for (
+        data of leaderboardData | slice: 0 : 3;
+        track data;
+        let i = $index
+      ) {
+        @let scorePct =
+          data?.totalScore
+            ? ((data?.scoreObtained / data?.totalScore) * 100 | number: "1.0-1")
+            : null;
+        <article
+          class="podium-card"
+          [class.podium-card--gold]="i === 0"
+          [class.podium-card--silver]="i === 1"
+          [class.podium-card--bronze]="i === 2"
+        >
+          <div class="flex items-center justify-between w-full mb-2">
+            <span class="podium-rank">#{{ i + 1 }}</span>
+            <span
+              class="material-symbols-outlined podium-medal"
+              aria-hidden="true"
+            >
+              workspace_premium
+            </span>
+          </div>
+          <div class="podium-avatar" aria-hidden="true">
+            @if (i === 0) {
+              <span class="material-symbols-outlined text-[20px]"
+                >military_tech</span
+              >
+            } @else {
+              <span>{{ data?.studentName?.charAt(0) || "?" }}</span>
+            }
+          </div>
+          <p class="podium-name">
+            {{ data?.studentName ?? "-" }}
+          </p>
+          <p
+            class="font-headline text-[17px] font-extrabold podium-score tracking-tight mt-0.5"
+          >
+            {{ scorePct ?? "-" }}%
+          </p>
+          <div class="podium-bar">
+            <div class="podium-bar-fill" [style.width.%]="scorePct ?? 0"></div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <!-- More rankings -->
+    @if (leaderboardData.length > 3) {
+      <div class="flex flex-col flex-1 min-h-0">
+        <div class="flex items-baseline justify-between px-1 mb-2 shrink-0">
+        <p
+          class="text-[11px] font-bold uppercase tracking-widest text-[#64748b]"
+        >
+          More rankings
+        </p>
+        <p class="text-[11px] text-[#94a3b8]">
+          {{ leaderboardData.length }} students
+        </p>
+      </div>
+
+      <div class="leader-list flex-1 min-h-0 overflow-hidden">
+        <ngx-simplebar class="lb-scroll">
+          <ul class="flex flex-col gap-1.5 list-none p-0 m-0">
+            @for (
+              data of leaderboardData | slice: 3;
+              track data;
+              let i = $index
+            ) {
+              @let scorePct =
+                data?.totalScore
+                  ? ((data?.scoreObtained / data?.totalScore) * 100
+                    | number: "1.0-1")
+                  : null;
+              <li class="leader-row w-full">
+                <div class="flex items-center gap-2.5 shrink-0">
+                  <span
+                    class="font-headline text-[12px] font-extrabold text-[#94a3b8] w-5 text-center"
+                  >
+                    {{ i + 4 }}
+                  </span>
+                  <div class="leader-avatar" aria-hidden="true">
+                    <span>{{ data?.studentName?.charAt(0) || "?" }}</span>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-2">
+                    <p
+                      class="text-[13px] font-semibold text-[#0f172a] truncate m-0"
+                    >
+                      {{ data?.studentName ?? "-" | titlecase }}
+                    </p>
+                    <span class="leader-pill"
+                      >{{ scorePct ? (scorePct | number: "1.0-1") : "-" }}%</span
+                    >
+                  </div>
+                  <p class="text-[10.5px] text-[#94a3b8] m-0 mt-0.5">
+                    Overall score
+                  </p>
+                </div>
+              </li>
+            }
+          </ul>
+        </ngx-simplebar>
+      </div>
+      </div>
+    }
+  } @else {
+    <div
+      class="flex flex-col items-center justify-center gap-2 py-12 text-[#94a3b8]"
+    >
+      <span
+        class="material-symbols-outlined text-[36px]"
+        aria-hidden="true"
+        style="
+          font-variation-settings:
+            &quot;FILL&quot; 0,
+            &quot;wght&quot; 200;
+        "
+        >leaderboard</span
+      >
+      <p class="text-[13px] m-0">No leaderboard data yet.</p>
+    </div>
+  }
+</div>

@@ -11,24 +11,6 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-/**
- * CSS variables written on the landing root during scroll. They are inherited
- * by every descendant element, so children can opt into parallax purely via
- * CSS (`transform: translate3d(0, var(--parallax-mid), 0)` etc.) without JS.
- *
- * Important: these vars live ONLY on #landing-page (the outer host). Do NOT
- * shadow them with `--parallax-*: 0px` defaults on inner wrappers like
- * `.landing-hero`, or children will resolve against those defaults and the
- * parallax will appear broken.
- */
-const PARALLAX_VARS = [
-  '--parallax-slow',
-  '--parallax-mid',
-  '--parallax-fast',
-  '--parallax-fg',
-  '--parallax-rise',
-  '--parallax-drift',
-] as const;
 
 interface FaqEntry {
   readonly id: string;
@@ -52,126 +34,101 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private reducedMotion = false;
   private initScrollHandle = 0;
 
+  readonly isScrolled = signal(false);
+  readonly activeChapter = signal<string>('struggle');
   readonly mobileMenuOpen = signal(false);
   readonly openFaqId = signal<string | null>('what-is');
   readonly currentYear = new Date().getFullYear();
+
+  /** 
+   * Stores progress (0 to 1) for each chapter.
+   * 0: top of section is at bottom of viewport.
+   * 1: bottom of section is at top of viewport.
+   * We use a simpler 0-1 mapping where 0.5 is roughly 'centered'.
+   */
+  readonly chapterProgress = signal<Record<string, number>>({
+    struggle: 1,
+    realization: 0,
+    levers: 0,
+    system: 0,
+    success: 0,
+    faq: 0,
+    epilogue: 0
+  });
+
+  readonly levers: ReadonlyArray<{ icon: string; title: string; description: string }> = [
+    { icon: 'target', title: 'Curated Focus', description: 'Stop wasting time on everything. We show you the exact topics that matter most for CUET and getting into JNU.' },
+    { icon: 'speed', title: 'Velocity Drills', description: 'Speed is half the battle. Practice sets that train you to solve faster, not just smarter.' },
+    { icon: 'analytics', title: 'Precision Gaps', description: 'Know exactly what you got wrong and why. Fix the gap before exam day, not after.' },
+    { icon: 'psychology', title: 'Mental Calm', description: 'Preparation is also about mindset. Build the focus and steadiness to perform when it counts.' },
+  ];
 
   readonly platformPillars: ReadonlyArray<{
     readonly icon: string;
     readonly title: string;
     readonly copy: string;
-    readonly tag: string;
-    readonly span?: 'wide' | 'half';
   }> = [
     {
       icon: 'login',
-      title: 'Secure login & personal dashboard',
+      title: 'Secure login & dashboard',
       copy: 'One sign-in unlocks your batches, upcoming live tests, recent scores, and shortcuts to every study tool.',
-      tag: 'Your hub',
-      span: 'wide',
     },
     {
       icon: 'groups',
       title: 'Batch enrolment',
-      copy: 'Join the cohort that matches your timeline. Schedules, announcements, and cohort-specific resources stay grouped cleanly per batch.',
-      tag: 'Cohorts',
+      copy: 'Join elite cohorts mentored by those who have already conquered the summit.',
     },
     {
       icon: 'bolt',
       title: 'Live tests',
-      copy: 'Attempt proctored live assessments alongside peers with real-time rank context so exam pressure never surprises you.',
-      tag: 'Live',
+      copy: 'Real-time proctored assessments to simulate exam-day stakes.',
     },
     {
       icon: 'quiz',
       title: 'Practice & mock tests',
-      copy: 'Drill topic-wise sets and full-length mocks with instant feedback and analytics that point at the gaps worth closing next.',
-      tag: 'Practice',
-      span: 'wide',
+      copy: 'Topic-wise drills and full-length mocks with deep analytical feedback.',
     },
     {
       icon: 'menu_book',
-      title: 'Study material & daily newspapers',
-      copy: 'Curated notes alongside a reading-room of articles sharpen language, comprehension, and general awareness every day.',
-      tag: 'Reading room',
-      span: 'half',
+      title: 'Study material',
+      copy: 'Curated materials and daily newspapers to sharpen your comprehension.',
     },
     {
       icon: 'smart_display',
       title: 'Recorded lectures',
-      copy: 'Rewatch classes on your schedule — perfect for revision and catching up between live tests without missing a beat.',
-      tag: 'On demand',
-      span: 'half',
-    },
-  ];
-
-  readonly howItWorks: ReadonlyArray<{
-    readonly step: string;
-    readonly title: string;
-    readonly copy: string;
-    readonly icon: string;
-  }> = [
-    {
-      step: '01',
-      title: 'Create your account',
-      copy: 'Sign up in under a minute. Your dashboard is ready before you finish your first sip of chai.',
-      icon: 'person_add',
-    },
-    {
-      step: '02',
-      title: 'Enrol in the right batch',
-      copy: 'Pick a cohort that matches your target window. Schedules, mentors, and content fall into place.',
-      icon: 'playlist_add_check',
-    },
-    {
-      step: '03',
-      title: 'Practice, test, rewatch',
-      copy: 'Run daily drills, join live tests, and revisit recordings. Analytics tells you what to fix next.',
-      icon: 'workspace_premium',
+      copy: 'Rewatch classes on your schedule — perfect for revision and catching up.',
     },
   ];
 
   readonly stats: ReadonlyArray<{
     readonly value: string;
     readonly label: string;
-    readonly icon: string;
   }> = [
-    { value: '40+', label: 'Students placed in EFLU', icon: 'school' },
-    { value: '40+', label: 'Students placed at JNU', icon: 'account_balance' },
-    { value: '50+', label: 'Mock & topic-wise tests', icon: 'assignment_turned_in' },
-    { value: '24/7', label: 'Recorded lecture library', icon: 'video_library' },
+    { value: '80+', label: 'Students at JNU' },
+    { value: '5000+', label: 'Tests Taken' },
+    { value: '24/7', label: 'Support Available' },
   ];
 
-  readonly faqs: ReadonlyArray<FaqEntry> = [
+  readonly faqs: ReadonlyArray<{ id: string; question: string; answer: string }> = [
     {
       id: 'what-is',
-      question: 'What exactly is CUET Corner?',
-      answer:
-        'A single student workspace for CUET aspirants — batches, live tests, practice and mocks, study material, daily newspapers, and recorded lectures, all behind one secure login.',
-    },
-    {
-      id: 'who-for',
-      question: 'Who is it for?',
-      answer:
-        'Serious CUET aspirants who want structure: students preparing from scratch, repeaters tightening weak spots, and anyone who prefers one flow instead of juggling five apps.',
-    },
-    {
-      id: 'how-tests',
-      question: 'How do live vs mock tests differ?',
-      answer:
-        'Live tests run at fixed windows with peer rankings and exam-day pressure. Mocks and topic drills are on-demand with instant feedback and analytics you can revisit any time.',
-    },
-    {
-      id: 'materials',
-      question: 'What is inside the study material?',
-      answer:
-        'Mentor-curated notes by subject, plus a daily reading room of newspapers and articles focused on language, comprehension, and general awareness.',
+      question: 'What is CUET Corner?',
+      answer: 'Your complete prep workspace for CUET — batches, live tests, practice tests, study material, daily newspapers, and recorded lectures, all behind one secure login.',
     },
     {
       id: 'device',
-      question: 'Can I use it on mobile?',
-      answer:
-        'Yes. The dashboard, tests, materials, and recordings are all built to work comfortably on phone, tablet, and desktop.',
+      question: 'Does it work on my phone?',
+      answer: 'Yes. Everything — tests, materials, lectures, your dashboard — is built to work comfortably on any smartphone.',
+    },
+    {
+      id: 'batches',
+      question: 'How do batches work?',
+      answer: 'Join a batch to get guided preparation: scheduled tests, curated study material, and structured access to everything you need for your subjects.',
+    },
+    {
+      id: 'who',
+      question: 'Who made CUET Corner?',
+      answer: 'Abhinav Harsh, a CUET qualifier now studying at JNU. He built the system he wished existed when he was preparing.',
     },
   ];
 
@@ -181,48 +138,30 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!isPlatformBrowser(this.platformId)) return;
     const root = document.documentElement;
     this.previousRootClasses = root.className;
-    root.classList.remove('dark');
-    if (!root.classList.contains('light')) root.classList.add('light');
   }
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    // Defer one tick so ViewChild is resolved and the first paint has happened.
     this.initScrollHandle = window.setTimeout(() => {
       this.initScrollHandle = 0;
-      const docRoot = document.documentElement;
-      docRoot.classList.remove('dark');
-      docRoot.classList.add('light');
-
-      this.reducedMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)',
-      ).matches;
-
-      this.bindParallaxScroll();
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.bindScrollEvents();
     }, 0);
   }
 
   ngOnDestroy(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    if (this.initScrollHandle) {
-      window.clearTimeout(this.initScrollHandle);
-      this.initScrollHandle = 0;
-    }
+    if (this.initScrollHandle) window.clearTimeout(this.initScrollHandle);
     this.removeScrollListeners?.();
-    this.removeScrollListeners = undefined;
-    if (this.rafId) {
-      window.cancelAnimationFrame(this.rafId);
-      this.rafId = 0;
+    if (this.rafId) window.cancelAnimationFrame(this.rafId);
+    if (this.previousRootClasses !== null) {
+      document.documentElement.className = this.previousRootClasses;
     }
-    this.clearParallaxStyles();
-    if (this.previousRootClasses === null) return;
-    document.documentElement.className = this.previousRootClasses;
   }
 
   scrollToSection(sectionId: string, event: Event): void {
     event.preventDefault();
     this.mobileMenuOpen.set(false);
-    if (!isPlatformBrowser(this.platformId)) return;
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -244,80 +183,66 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /** Host element that owns the parallax CSS variables. */
-  private landingHost(): HTMLElement | null {
-    return (
-      this.landingRoot?.nativeElement ??
-      document.getElementById('landing-page')
-    );
+  clamp(min: number, val: number, max: number): number {
+    return Math.max(min, Math.min(val, max));
   }
 
-  private getScrollY(): number {
-    const se = document.scrollingElement;
-    const fromDoc = se?.scrollTop ?? 0;
-    const fromWin = window.scrollY ?? window.pageYOffset ?? 0;
-    const fromBody = document.body?.scrollTop ?? 0;
-    return Math.max(fromDoc, fromWin, fromBody);
-  }
-
-  private clearParallaxStyles(): void {
-    const el = this.landingHost();
-    if (!el) return;
-    for (const v of PARALLAX_VARS) {
-      el.style.removeProperty(v);
-    }
-  }
-
-  private applyParallax(): void {
-    const el = this.landingHost();
-    if (!el) return;
-
-    if (this.reducedMotion) {
-      this.clearParallaxStyles();
-      return;
-    }
-
-    const y = this.getScrollY();
-    // Tuned to give visible depth at normal reading scroll speeds without
-    // ripping layers off the page at deep scroll.
-    el.style.setProperty('--parallax-slow', `${y * 0.2}px`);
-    el.style.setProperty('--parallax-mid', `${y * 0.4}px`);
-    el.style.setProperty('--parallax-fast', `${y * 0.68}px`);
-    el.style.setProperty('--parallax-fg', `${-y * 0.09}px`);
-    el.style.setProperty('--parallax-rise', `${y * 0.16}px`);
-    el.style.setProperty('--parallax-drift', `${y * 0.05}px`);
-  }
-
-  private bindParallaxScroll(): void {
+  private bindScrollEvents(): void {
     const onScroll = () => {
       if (this.rafId) return;
       this.rafId = window.requestAnimationFrame(() => {
         this.rafId = 0;
-        this.applyParallax();
+        this.updateScrollMetrics();
       });
     };
 
-    const opts: AddEventListenerOptions = { passive: true, capture: true };
-    window.addEventListener('scroll', onScroll, opts);
-    document.addEventListener('scroll', onScroll, opts);
-    document.documentElement.addEventListener('scroll', onScroll, opts);
-    document.body.addEventListener('scroll', onScroll, opts);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    this.removeScrollListeners = () => window.removeEventListener('scroll', onScroll);
+    this.updateScrollMetrics();
+  }
 
-    const vv = window.visualViewport;
-    vv?.addEventListener('scroll', onScroll, { passive: true });
+  private updateScrollMetrics(): void {
+    const scrollY = window.scrollY;
+    this.isScrolled.set(scrollY > 50);
 
-    const host = this.landingHost();
-    host?.addEventListener('scroll', onScroll, { passive: true });
+    const viewportHeight = window.innerHeight;
+    const chapters = ['struggle', 'realization', 'levers', 'system', 'success', 'faq', 'epilogue'];
+    const newProgress: Record<string, number> = {};
 
-    this.removeScrollListeners = () => {
-      window.removeEventListener('scroll', onScroll, opts);
-      document.removeEventListener('scroll', onScroll, opts);
-      document.documentElement.removeEventListener('scroll', onScroll, opts);
-      document.body.removeEventListener('scroll', onScroll, opts);
-      vv?.removeEventListener('scroll', onScroll);
-      host?.removeEventListener('scroll', onScroll);
-    };
+    let dominantChapter = 'struggle';
+    let minDistance = Infinity;
 
-    onScroll();
+    chapters.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const rect = el.getBoundingClientRect();
+      
+      // Refined Progress: 0 (bottom of viewport) to 1 (top of viewport)
+      // We want to track the element as it moves through the viewport.
+      const entry = rect.top - viewportHeight; // Negative when in view
+      const exit = rect.bottom; // Positive when in view
+      
+      // Calculate 0-1 progress specifically for the viewport transit
+      // 0: top of element is at bottom of viewport
+      // 1: bottom of element is at top of viewport
+      const totalDistance = viewportHeight + rect.height;
+      const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / totalDistance));
+      
+      newProgress[id] = progress;
+
+      // Dominant chapter logic (using center-point focus)
+      const centerY = rect.top + (rect.height / 2);
+      const viewportCenter = viewportHeight / 2;
+      const distanceFromCenter = Math.abs(centerY - viewportCenter);
+      
+      if (distanceFromCenter < minDistance) {
+        minDistance = distanceFromCenter;
+        dominantChapter = id;
+      }
+    });
+
+    this.chapterProgress.set(newProgress);
+    this.activeChapter.set(dominantChapter);
   }
 }

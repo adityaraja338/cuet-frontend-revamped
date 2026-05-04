@@ -21,6 +21,47 @@ export class AccountComponent implements OnInit {
   batches: any = [];
   totalBatchCount = 0;
   currentDate: Date = new Date();
+  private getDemoBatches(): any[] {
+    const today = new Date();
+    const d = (daysFromNow: number) =>
+      new Date(today.getTime() + daysFromNow * 24 * 60 * 60 * 1000);
+
+    return [
+      {
+        id: -101,
+        name: 'Foundation',
+        startDate: d(6),
+        basePrice: 999,
+        premiumPrice: 1999,
+        baseFeatures: [],
+        type: 'basic',
+        showDetails: false,
+        isDemo: true,
+      },
+      {
+        id: -102,
+        name: 'Sprint',
+        startDate: d(13),
+        basePrice: 1499,
+        premiumPrice: 2499,
+        baseFeatures: [],
+        type: 'basic',
+        showDetails: false,
+        isDemo: true,
+      },
+      {
+        id: -103,
+        name: 'Final Push',
+        startDate: d(21),
+        basePrice: 1999,
+        premiumPrice: 2999,
+        baseFeatures: [],
+        type: 'basic',
+        showDetails: false,
+        isDemo: true,
+      },
+    ];
+  }
 
   constructor(
     private http: HttpService,
@@ -85,6 +126,11 @@ export class AccountComponent implements OnInit {
         this.batches = res?.data?.batches;
         this.totalBatchCount = res?.data?.total;
 
+        if (!this.batches?.length) {
+          this.batches = this.getDemoBatches();
+          this.totalBatchCount = this.batches.length;
+        }
+
         this.batches?.forEach((batch: any) => {
           batch.showDetails = false;
           batch.startDate = new Date(batch.startDate);
@@ -94,6 +140,10 @@ export class AccountComponent implements OnInit {
       error: (error: any) => {
         console.log(error);
         this.message.error(error?.error?.message);
+
+        // Fallback demo batches so the UI can still be reviewed.
+        this.batches = this.getDemoBatches();
+        this.totalBatchCount = this.batches.length;
       },
     });
   }

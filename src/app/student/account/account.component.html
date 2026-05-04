@@ -1,203 +1,560 @@
-<div class="text-(--acc-text) mx-auto px-1 flex flex-col gap-8 lg:gap-10">
-  <!-- Hero -->
-  <header
-    class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 px-0.5 pt-1 pb-2"
-  >
-    <div>
-      <p
-        class="text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-(--acc-accent) mb-1.5"
-      >
-        My Account
-      </p>
-      <h1
-        class="font-[Manrope] text-[clamp(1.35rem,2vw,1.75rem)] font-extrabold my-2 tracking-[-0.02em] leading-[1.15] text-(--acc-text)"
-      >
-        Your
-        <span class="acc-grad-text">profile &amp; plan</span>
-      </h1>
-      <p
-        class="text-[0.88rem] font-medium text-(--acc-text-muted) mt-1.5 max-w-[52ch] leading-relaxed"
-      >
-        Manage your identity, membership, and à-la-carte purchases — all from
-        one place.
-      </p>
-    </div>
-
-    <div class="inline-flex items-center gap-2.5 shrink-0">
-      @if (accountDetails) {
-        @if (accountDetails?.isPremium) {
-          <div
-            class="acc-grad-premium inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[0.78rem] font-semibold text-white shadow-[0_14px_28px_-16px_rgba(0,74,198,0.55)]"
+<div class="text-on-surface font-[Inter] min-h-screen">
+  @if (accountDetails) {
+    <!-- Dossier header -->
+    <section
+      class="relative rounded-4xl overflow-hidden shadow-[0_12px_32px_rgba(25,28,30,0.06)] bg-[linear-gradient(150deg,#001f6b_0%,#003eb8_45%,#1259e8_100%)] text-white"
+      aria-label="Account dossier"
+    >
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-6 md:px-8 py-6 md:py-8">
+        <div class="lg:col-span-7">
+          <p
+            class="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45"
           >
-            <span
-              class="material-symbols-outlined text-base text-white"
-              aria-hidden="true"
-              >workspace_premium</span
-            >
-            <span>Premium member</span>
-          </div>
-        } @else if (accountDetails?.isUpgradeable) {
-          <div
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[0.78rem] font-semibold bg-(--acc-warn-soft) text-(--acc-warn)"
-          >
-            <span
-              class="material-symbols-outlined text-base text-(--acc-warn)"
-              aria-hidden="true"
-              >rocket_launch</span
-            >
-            <span>Upgrade available</span>
-          </div>
-        } @else {
-          <div
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[0.78rem] font-semibold bg-(--acc-accent-softer) text-(--acc-accent-strong) ring-1 ring-inset ring-[rgba(0,74,198,0.12)]"
-          >
-            <span
-              class="material-symbols-outlined text-base text-(--acc-accent)"
-              aria-hidden="true"
-              >school</span
-            >
-            <span>Free plan</span>
-          </div>
-        }
-      }
-    </div>
-  </header>
-
-  <ng-container *ngIf="accountDetails; else accountLoading">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <!-- Identity banner -->
-      <section
-        class="acc-identity relative isolate overflow-hidden flex flex-col justify-between gap-6 p-6 lg:p-7 rounded-[1.25rem] bg-white shadow-(--acc-shadow-card) lg:col-span-12"
-        aria-label="Profile identity"
-      >
-        <div class="acc-identity__backdrop" aria-hidden="true"></div>
-
-        <div class="flex items-center gap-5 min-w-0">
-          <div class="relative shrink-0 w-[96px] h-[96px]">
-            <img
-              *ngIf="accountDetails?.imageUrl"
-              [nzSrc]="accountDetails?.imageUrl"
-              nz-image
-              alt=""
-              class="w-[96px] h-[96px] rounded-full object-cover block shadow-[0_14px_30px_-14px_rgba(15,23,42,0.35)]"
-            />
-            <div
-              *ngIf="!accountDetails?.imageUrl"
-              class="acc-grad-avatar w-[96px] h-[96px] rounded-full flex items-center justify-center text-white font-[Manrope] text-[2.15rem] font-extrabold tracking-[-0.02em]"
-              aria-hidden="true"
-            >
-              <span>{{ accountDetails?.name?.toUpperCase()[0] }}</span>
-            </div>
-            <span class="acc-avatar-ring" aria-hidden="true"></span>
-          </div>
-
-          <div class="min-w-0 flex flex-col gap-2 flex-1">
-            <div class="flex flex-wrap items-center gap-2.5">
-              <p
-                class="font-[Manrope] text-[clamp(1.5rem,2.3vw,2rem)] font-extrabold tracking-[-0.02em] leading-[1.1] text-(--acc-text)"
-              >
-                {{ accountDetails?.name || "Student" }}
-              </p>
-              @if (accountDetails?.isPremium) {
-                <span
-                  class="acc-grad-premium inline-flex items-center gap-1 h-[24px] px-2.5 rounded-full text-[0.72rem] font-bold tracking-[0.02em] text-white"
-                >
-                  <span
-                    class="material-symbols-outlined text-[0.95rem]"
-                    aria-hidden="true"
-                    >verified</span
-                  >
-                  Premium
-                </span>
+            Account dossier
+          </p>
+          <div class="mt-4 flex items-start gap-6 min-w-0">
+            <div class="relative shrink-0 w-[84px] h-[84px]">
+              @if(accountDetails?.imageUrl) {
+                <img
+                  [nzSrc]="accountDetails?.imageUrl"
+                  nz-image
+                  alt=""
+                  class="w-[84px] h-[84px] m-[4px] rounded-full object-cover block shadow-(--ambient-shadow) ring-4 ring-white"
+                />
               } @else {
-                <span
-                  class="inline-flex items-center h-[24px] px-2.5 rounded-full text-[0.72rem] font-bold tracking-[0.02em] bg-(--acc-surface-dim) text-(--acc-text-muted)"
+                <div
+                  class="cuet-grad-avatar w-[84px] h-[84px] rounded-full flex items-center justify-center text-white font-[Manrope] text-[2.15rem] font-extrabold tracking-tight shadow-[0_20px_40px_-12px_rgba(0,74,198,0.25)] ring-4 ring-white"
+                  aria-hidden="true"
                 >
-                  Free
-                </span>
+                  <span>{{ accountDetails?.name?.toUpperCase()[0] }}</span>
+                </div>
               }
             </div>
-            <p
-              class="inline-flex items-center gap-2 text-[0.9rem] font-medium text-(--acc-text-muted)"
-            >
-              <span
-                class="material-symbols-outlined text-[1rem] text-(--acc-text-soft)"
-                aria-hidden="true"
-                >mail</span
+
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-3">
+                <h1
+                  class="font-[Manrope] text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05] text-white"
+                >
+                  {{ accountDetails?.name || "Student" }}
+                </h1>
+
+                @if (accountDetails?.isPremium) {
+                  <span
+                    class="inline-flex items-center gap-1.5 h-[30px] px-4 rounded-full text-xs font-black tracking-widest uppercase bg-white/12 border border-white/12 text-white/90"
+                  >
+                    <span
+                      class="material-symbols-outlined text-sm"
+                      aria-hidden="true"
+                      >verified</span
+                    >
+                    Premium
+                  </span>
+                } @else if (accountDetails?.isUpgradeable) {
+                  <span
+                    class="inline-flex items-center gap-1.5 h-[30px] px-4 rounded-full text-xs font-black tracking-widest uppercase bg-white/12 border border-white/12 text-white/90"
+                  >
+                    <span
+                      class="material-symbols-outlined text-sm"
+                      aria-hidden="true"
+                      >rocket_launch</span
+                    >
+                    Upgrade
+                  </span>
+                } @else {
+                  <span
+                    class="inline-flex items-center h-[30px] px-4 rounded-full text-xs font-black tracking-widest uppercase bg-white/10 border border-white/10 text-white/80"
+                  >
+                    Free
+                  </span>
+                }
+              </div>
+
+              <p
+                class="mt-3 inline-flex items-center gap-3 text-base md:text-lg font-semibold text-white/80 min-w-0"
               >
-              {{ accountDetails?.email || "—" }}
-            </p>
+                <span
+                  class="material-symbols-outlined text-xl text-white/75"
+                  aria-hidden="true"
+                  >mail</span
+                >
+                <span class="truncate">{{ accountDetails?.email || "—" }}</span>
+              </p>
+
+              <p
+                class="mt-4 text-xs md:text-sm font-medium text-white/45 leading-relaxed max-w-[60ch]"
+              >
+                Your profile record, membership, and purchases — curated in one
+                place.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2">
-          @if (accountDetails?.id) {
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[0.7rem] bg-white text-(--acc-text) text-[0.78rem] font-semibold tabular-nums tracking-[0.02em] shadow-[0_6px_18px_-12px_rgba(15,23,42,0.22)]"
-            >
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          <div class="flex flex-wrap gap-2.5">
+            @if (accountDetails?.id) {
               <span
-                class="material-symbols-outlined text-[1rem] text-(--acc-accent)"
-                aria-hidden="true"
-                >badge</span
+                class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white/90 text-sm font-bold tabular-nums"
               >
-              ID · {{ accountDetails?.id }}
-            </span>
-          }
-          @if (accountDetails?.phone) {
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[0.7rem] bg-white text-(--acc-text) text-[0.78rem] font-semibold tabular-nums shadow-[0_6px_18px_-12px_rgba(15,23,42,0.22)]"
-            >
+                <span
+                  class="material-symbols-outlined text-xl text-white/75"
+                  aria-hidden="true"
+                  >badge</span
+                >
+                ID · {{ accountDetails?.id }}
+              </span>
+            }
+            @if (accountDetails?.phone) {
               <span
-                class="material-symbols-outlined text-[1rem] text-(--acc-accent)"
-                aria-hidden="true"
-                >call</span
+                class="inline-flex grow items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white/90 text-sm font-bold tabular-nums"
               >
-              {{ accountDetails?.phone }}
-            </span>
-          }
-          @if (accountDetails?.batchName) {
-            <span
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[0.7rem] bg-white text-(--acc-text) text-[0.78rem] font-semibold shadow-[0_6px_18px_-12px_rgba(15,23,42,0.22)]"
-            >
+                <span
+                  class="material-symbols-outlined text-xl text-white/75"
+                  aria-hidden="true"
+                  >call</span
+                >
+                {{ accountDetails?.phone }}
+              </span>
+            }
+            @if (accountDetails?.batchName) {
               <span
-                class="material-symbols-outlined text-[1rem] text-(--acc-accent)"
-                aria-hidden="true"
-                >groups</span
+                class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white/90 text-sm font-bold"
               >
-              {{ accountDetails?.batchName }}
-            </span>
+                <span
+                  class="material-symbols-outlined text-xl text-white/75"
+                  aria-hidden="true"
+                  >groups</span
+                >
+                {{ accountDetails?.batchName }}
+              </span>
+            }
+          </div>
+
+          @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
+            <div
+              class="rounded-3xl bg-white/10 border border-white/10 p-6 flex items-center justify-between gap-6"
+            >
+              <div class="flex items-center gap-5">
+                <div
+                  class="font-[Manrope] text-5xl font-extrabold tracking-tighter leading-none text-white"
+                >
+                  {{ totalBatchCount }}
+                </div>
+                <div
+                  class="text-xs font-black tracking-widest uppercase leading-tight text-white/70 max-w-[14ch]"
+                >
+                  batches available
+                </div>
+              </div>
+              @if (batches?.length) {
+                <button
+                  nz-button
+                  class="h-[48px] px-7 rounded-2xl bg-white/12 border border-white/12 text-white font-black tracking-wide hover:bg-white/16"
+                  (click)="isShowBatches = true"
+                >
+                  Browse
+                  <span
+                    class="material-symbols-outlined cuet-icon-cta text-lg"
+                    aria-hidden="true"
+                    >arrow_forward</span
+                  >
+                </button>
+              }
+            </div>
           }
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Membership -->
-      <section
-        class="relative overflow-hidden flex flex-col md:flex-row md:items-center gap-6 md:gap-8 p-6 md:p-7 rounded-[1.1rem] shadow-(--acc-shadow-card) lg:col-span-12"
-        [class.acc-membership-bg]="!accountDetails?.isPremium"
-        [class.acc-membership-bg--premium]="accountDetails?.isPremium"
-        aria-label="Membership"
-      >
-        <header class="flex-1 min-w-0">
+    <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- Main -->
+      <div class="lg:col-span-8 flex flex-col gap-8">
+        <!-- Profile -->
+        <section
+          class="cuet-card cuet-card--editorial px-6 md:px-8 py-6 md:py-8"
+          aria-label="Profile details"
+        >
+          <header class="flex justify-between items-start gap-4 mb-8">
+            <div>
+              <p
+                class="text-xs font-black uppercase tracking-[0.25em] text-primary mb-3"
+              >
+                Profile record
+              </p>
+              <h2
+                class="font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+              >
+                Personal details
+              </h2>
+              <p
+                class="text-base font-medium text-on-surface-variant mt-3 leading-relaxed max-w-[52ch]"
+              >
+                These fields are synced with your application record.
+              </p>
+            </div>
+            <span
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-[0.7rem] font-black uppercase tracking-widest shrink-0"
+            >
+              <span
+                class="material-symbols-outlined text-base"
+                aria-hidden="true"
+                >lock</span
+              >
+              Read-only
+            </span>
+          </header>
+
+          <form
+            [formGroup]="profileForm"
+            class="cuet-input--soft grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            <div class="md:col-span-2">
+              <nz-form-label [nzNoColon]="true">
+                <span
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  >Name</span
+                >
+              </nz-form-label>
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="nameError">
+                  <input
+                    nz-input
+                    placeholder="Student Name"
+                    formControlName="name"
+                  />
+                </nz-form-control>
+                <ng-template #nameError let-control>
+                  <ng-container *ngIf="control.hasError('required')"
+                    >Field cannot be empty</ng-container
+                  >
+                  <ng-container *ngIf="control.hasError('maxlength')"
+                    >Name cannot have more than 40 characters</ng-container
+                  >
+                </ng-template>
+              </nz-form-item>
+            </div>
+
+            <div>
+              <nz-form-label [nzNoColon]="true">
+                <span
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  >Student ID</span
+                >
+              </nz-form-label>
+              <nz-form-item>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    placeholder="Student ID"
+                    formControlName="studentId"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div>
+              <nz-form-label [nzNoColon]="true">
+                <span
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  >Age</span
+                >
+              </nz-form-label>
+              <nz-form-item>
+                <nz-form-control>
+                  <input nz-input placeholder="Age" formControlName="age" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div class="md:col-span-2">
+              <nz-form-label [nzNoColon]="true">
+                <span
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  >Batch</span
+                >
+              </nz-form-label>
+              <nz-form-item>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    placeholder="Haven't enrolled yet"
+                    formControlName="batchName"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div>
+              <nz-form-label [nzNoColon]="true">
+                <span
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  >Phone</span
+                >
+              </nz-form-label>
+              <nz-form-item>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    placeholder="Phone Number"
+                    formControlName="phone"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div>
+              <nz-form-label [nzNoColon]="true">
+                <span
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  >Email</span
+                >
+              </nz-form-label>
+              <nz-form-item>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    placeholder="Email Address"
+                    formControlName="email"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </form>
+        </section>
+
+        <!-- CUET history -->
+        <section
+          class="cuet-card cuet-card--tonal px-6 md:px-8 py-6 md:py-8"
+          aria-label="CUET history"
+        >
+          <header class="mb-6">
+            <p
+              class="text-xs font-black uppercase tracking-[0.25em] text-primary mb-3"
+            >
+              History
+            </p>
+            <h2
+              class="font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+            >
+              CUET attempts
+            </h2>
+            <p
+              class="text-base font-medium text-gray-400 mt-3 leading-relaxed max-w-[56ch]"
+            >
+              A quick record of the years you've attempted the exam.
+            </p>
+          </header>
+
+          <div class="flex flex-wrap gap-3 min-h-[3rem] items-center">
+            @if (accountDetails?.cuetAttempts?.length) {
+              @for (year of accountDetails?.cuetAttempts; track year) {
+                <span
+                  class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-surface-container-lowest text-on-surface text-sm font-bold tabular-nums shadow-[var(--ambient-shadow)] hover:bg-surface-container-low transition-all"
+                >
+                  <span
+                    class="material-symbols-outlined cuet-icon-filled text-lg text-primary"
+                    aria-hidden="true"
+                    >event_available</span
+                  >
+                  {{ year }}
+                </span>
+              }
+            } @else {
+              <span class="text-base font-medium italic text-on-surface-variant"
+                >No attempts recorded</span
+              >
+            }
+          </div>
+        </section>
+
+        <!-- Features (à la carte) -->
+        @if (!accountDetails?.isPremium) {
+          <section
+            class="cuet-card cuet-card--editorial flex flex-col px-6 md:px-8 py-6 md:py-8"
+            aria-label="Individual features"
+          >
+            <header class="flex items-start justify-between gap-6 mb-8">
+              <div>
+                <p
+                  class="text-xs font-black uppercase tracking-[0.25em] text-primary mb-3"
+                >
+                  À la carte
+                </p>
+                <h2
+                  class="font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+                >
+                  Individual features
+                </h2>
+                <p
+                  class="text-base font-medium text-on-surface-variant mt-3 leading-relaxed max-w-[60ch]"
+                >
+                  Purchase only what you need — pick any combination below.
+                </p>
+              </div>
+
+              @if (showPurchaseButton) {
+                <span
+                  class="hidden sm:inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-container-lowest text-primary text-sm font-black shadow-[var(--ambient-shadow)] shrink-0"
+                >
+                  <span
+                    class="material-symbols-outlined text-lg"
+                    aria-hidden="true"
+                    >shopping_cart</span
+                  >
+                  ₹ {{ totalPurchaseAmount }}
+                </span>
+              }
+            </header>
+
+            <ng-container *ngIf="features?.length; else featuresEmpty">
+              <div
+                class="grid gap-5 grid-cols-[repeat(auto-fill,minmax(190px,1fr))] auto-rows-min items-start"
+              >
+                <div
+                  *ngFor="let feature of features"
+                  role="button"
+                  tabindex="0"
+                  class="cuet-card cuet-card--interactive acc-feature-card relative flex flex-col justify-between gap-6 p-6 text-left cursor-pointer select-none outline-none border-none bg-surface-container-lowest shadow-[var(--ambient-shadow)]"
+                  [class.acc-feature-card--selected]="
+                    feature.selectedToBuy && feature.canPurchase
+                  "
+                  [class.acc-feature-card--owned]="!feature.canPurchase"
+                  [attr.aria-disabled]="!feature.canPurchase"
+                  [attr.aria-pressed]="
+                    feature.selectedToBuy && feature.canPurchase
+                  "
+                  (click)="
+                    feature.canPurchase &&
+                      (feature.selectedToBuy = !feature.selectedToBuy);
+                    isFeatureSelectedToBuy()
+                  "
+                  (keydown.enter)="
+                    feature.canPurchase &&
+                      (feature.selectedToBuy = !feature.selectedToBuy);
+                    isFeatureSelectedToBuy()
+                  "
+                  (keydown.space)="
+                    feature.canPurchase &&
+                      (feature.selectedToBuy = !feature.selectedToBuy);
+                    isFeatureSelectedToBuy();
+                    $event.preventDefault()
+                  "
+                >
+                  <span
+                    class="acc-check absolute top-4 right-4 inline-flex items-center justify-center pointer-events-none transition-all"
+                    aria-hidden="true"
+                  >
+                    <span
+                      class="material-symbols-outlined text-2xl"
+                      [class.cuet-icon-filled]="
+                        (feature.selectedToBuy && feature.canPurchase) ||
+                        !feature.canPurchase
+                      "
+                    >
+                      {{
+                        feature.selectedToBuy && feature.canPurchase
+                          ? "check_circle"
+                          : !feature.canPurchase
+                            ? "verified"
+                            : "radio_button_unchecked"
+                      }}
+                    </span>
+                  </span>
+                  <p
+                    class="text-lg font-bold leading-tight pr-10 text-on-surface"
+                  >
+                    {{ feature?.name }}
+                  </p>
+                  <div class="flex items-center justify-between gap-3">
+                    <p
+                      class="acc-price font-[Manrope] text-2xl font-extrabold tracking-tighter tabular-nums leading-none transition-colors"
+                    >
+                      ₹{{ feature?.price }}
+                    </p>
+                    @if (!feature.canPurchase) {
+                      <span
+                        class="px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-[0.6rem] font-black tracking-widest uppercase whitespace-nowrap"
+                      >
+                        Owned
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mobile checkout bar (rail summary replaces this on desktop) -->
+              @if (showPurchaseButton) {
+                <div
+                  class="mt-10 flex items-center justify-between gap-8 px-8 py-6 rounded-3xl bg-surface-container-lowest shadow-[var(--ambient-shadow)] max-sm:flex-col max-sm:items-stretch max-sm:gap-6 lg:hidden"
+                >
+                  <div class="flex flex-col gap-1">
+                    <span
+                      class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                      >Total investment</span
+                    >
+                    <span
+                      class="font-[Manrope] text-3xl font-extrabold tracking-tight tabular-nums text-primary"
+                    >
+                      ₹{{ totalPurchaseAmount }}
+                    </span>
+                  </div>
+                  <button
+                    nz-button
+                    class="cuet-btn--premium max-sm:w-full h-[56px] px-8 rounded-2xl"
+                    (click)="onInitiateFeaturePayment()"
+                  >
+                    <span
+                      class="material-symbols-outlined cuet-icon-cta text-2xl"
+                      aria-hidden="true"
+                      >shopping_bag</span
+                    >
+                    Purchase selected
+                  </button>
+                </div>
+              }
+            </ng-container>
+
+            <ng-template #featuresEmpty>
+              <div class="py-8">
+                <nz-empty
+                  nzNotFoundContent="No purchasable features right now"
+                ></nz-empty>
+              </div>
+            </ng-template>
+          </section>
+        }
+      </div>
+
+      <!-- Rail -->
+      <aside class="lg:col-span-4 flex flex-col gap-8 lg:sticky lg:top-10">
+        <!-- Membership -->
+        <section
+          class="cuet-card cuet-card--glass px-6 md:px-8 py-6 md:py-8"
+          aria-label="Membership"
+        >
           <p
-            class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) mb-1"
+            class="text-xs font-black uppercase tracking-[0.25em] text-primary"
           >
             Membership
           </p>
+
           <h2
-            class="font-[Manrope] text-[clamp(1.25rem,1.8vw,1.55rem)] font-extrabold tracking-[-0.02em] leading-tight text-(--acc-text)"
+            class="mt-4 font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
           >
             @if (accountDetails?.isPremium) {
-              You're on Premium
+              You're on <span class="cuet-grad-text">Premium</span>
             } @else if (accountDetails?.isUpgradeable) {
-              Ready for Premium?
+              Ready for <span class="cuet-grad-text">Premium?</span>
             } @else if (totalBatchCount > 0) {
               Enroll in a batch
             } @else {
               No batches available
             }
           </h2>
+
           <p
-            class="text-[0.88rem] font-medium text-(--acc-text-muted) mt-1.5 leading-normal max-w-[52ch]"
+            class="mt-4 text-base font-medium text-on-surface-variant leading-relaxed"
           >
             @if (accountDetails?.isPremium) {
               Full access to every feature and future release.
@@ -209,439 +566,203 @@
               New batches will open for enrollment soon — check back shortly.
             }
           </p>
-        </header>
 
-        @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
-          <div
-            class="shrink-0 flex items-center gap-3 px-5 py-3 rounded-[0.95rem] bg-(--acc-accent-softest)"
-          >
-            <div
-              class="font-[Manrope] text-[2.5rem] font-extrabold tracking-[-0.04em] leading-none text-(--acc-accent)"
-            >
-              {{ totalBatchCount }}
-            </div>
-            <div
-              class="text-[0.82rem] font-semibold tracking-[0.02em] leading-snug text-(--acc-text-muted) max-w-[7ch]"
-            >
-              batches available
-            </div>
-          </div>
-
-          @if (totalBatchCount > 0) {
-            <button
-              nz-button
-              class="acc-cta acc-cta--inline shrink-0"
-              (click)="isShowBatches = true"
-            >
-              <span nz-icon nzType="form"></span>
-              Browse &amp; enroll
-              <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-            </button>
-          }
-        } @else if (
-          !accountDetails?.isPremium && accountDetails?.isUpgradeable
-        ) {
-          <ul
-            class="list-none m-0 flex flex-wrap gap-x-5 gap-y-2 shrink-0 md:max-w-[45%]"
-          >
-            <li
-              class="inline-flex items-center gap-2 text-[0.88rem] font-medium text-(--acc-text)"
-            >
-              <span
-                class="material-symbols-outlined acc-icon-filled text-[1.1rem] text-(--acc-accent)"
-                aria-hidden="true"
-                >check_circle</span
+          <div class="mt-8 flex flex-col gap-4">
+            @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
+              <div
+                class="rounded-3xl bg-surface-container-lowest shadow-[var(--ambient-shadow)] px-6 py-5 flex items-center justify-between gap-6"
               >
-              All premium features
-            </li>
-            <li
-              class="inline-flex items-center gap-2 text-[0.88rem] font-medium text-(--acc-text)"
-            >
-              <span
-                class="material-symbols-outlined acc-icon-filled text-[1.1rem] text-(--acc-accent)"
-                aria-hidden="true"
-                >check_circle</span
-              >
-              Full mock library
-            </li>
-            <li
-              class="inline-flex items-center gap-2 text-[0.88rem] font-medium text-(--acc-text)"
-            >
-              <span
-                class="material-symbols-outlined acc-icon-filled text-[1.1rem] text-(--acc-accent)"
-                aria-hidden="true"
-                >check_circle</span
-              >
-              Priority support
-            </li>
-          </ul>
-
-          <button
-            nz-button
-            class="acc-cta acc-cta--inline shrink-0"
-            (click)="onInitiateUpgradePayment()"
-          >
-            <span
-              class="material-symbols-outlined acc-icon-cta text-[1.1rem]"
-              aria-hidden="true"
-              >upgrade</span
-            >
-            Upgrade to Premium
-          </button>
-        } @else {
-          <p
-            class="shrink-0 font-[Manrope] text-[1.05rem] font-bold tracking-[-0.01em] leading-snug text-(--acc-text) md:max-w-[45%] md:text-right"
-          >
-            Thanks for supporting us,
-            <span class="text-(--acc-accent)">{{ accountDetails?.name }}</span>
-          </p>
-        }
-      </section>
-
-      <!-- Profile details -->
-      <section
-        class="acc-field acc-panel overflow-hidden p-6 rounded-[1.1rem] lg:col-span-6"
-        aria-label="Profile details"
-      >
-        <header class="flex justify-between items-start gap-4 mb-4">
-          <div>
-            <p
-              class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) mb-1"
-            >
-              Profile
-            </p>
-            <h2
-              class="font-[Manrope] text-[1.05rem] font-bold tracking-[-0.01em] leading-tight text-(--acc-text)"
-            >
-              Personal details
-            </h2>
-            <p
-              class="text-[0.8rem] font-medium text-(--acc-text-muted) mt-1.5 leading-normal max-w-[42ch]"
-            >
-              These fields are kept in sync with your application record.
-            </p>
-          </div>
-          <span
-            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-(--acc-surface-dim) text-(--acc-text-muted) text-[0.72rem] font-semibold shrink-0"
-          >
-            <span
-              class="material-symbols-outlined text-[0.9rem]"
-              aria-hidden="true"
-              >lock</span
-            >
-            Read-only
-          </span>
-        </header>
-
-        <form [formGroup]="profileForm" class="grid grid-cols-1 gap-4">
-          <div>
-            <nz-form-label [nzNoColon]="true">
-              <span
-                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-                >Name</span
-              >
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="nameError">
-                <input
-                  nz-input
-                  placeholder="Student Name"
-                  formControlName="name"
-                />
-              </nz-form-control>
-              <ng-template #nameError let-control>
-                <ng-container *ngIf="control.hasError('required')"
-                  >Field cannot be empty</ng-container
+                <div
+                  class="font-[Manrope] text-4xl font-extrabold tracking-tighter leading-none text-primary"
                 >
-                <ng-container *ngIf="control.hasError('maxlength')"
-                  >Name cannot have more than 40 characters</ng-container
+                  {{ totalBatchCount }}
+                </div>
+                <div
+                  class="text-[0.65rem] font-black tracking-widest uppercase leading-tight text-on-surface-variant max-w-[12ch]"
                 >
-              </ng-template>
-            </nz-form-item>
-          </div>
+                  batches available
+                </div>
+              </div>
 
-          <div>
-            <nz-form-label [nzNoColon]="true">
-              <span
-                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-                >Student ID</span
-              >
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control>
-                <input
-                  nz-input
-                  placeholder="Student ID"
-                  formControlName="studentId"
-                />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div>
-            <nz-form-label [nzNoColon]="true">
-              <span
-                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-                >Batch</span
-              >
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control>
-                <input
-                  nz-input
-                  placeholder="Haven't enrolled yet"
-                  formControlName="batchName"
-                />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div>
-            <nz-form-label [nzNoColon]="true">
-              <span
-                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-                >Phone</span
-              >
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control>
-                <input
-                  nz-input
-                  placeholder="Phone Number"
-                  formControlName="phone"
-                />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div>
-            <nz-form-label [nzNoColon]="true">
-              <span
-                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-                >Email</span
-              >
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control>
-                <input
-                  nz-input
-                  placeholder="Email Address"
-                  formControlName="email"
-                />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div>
-            <nz-form-label [nzNoColon]="true">
-              <span
-                class="text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-                >Age</span
-              >
-            </nz-form-label>
-            <nz-form-item>
-              <nz-form-control>
-                <input nz-input placeholder="Age" formControlName="age" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
-          <div>
-            <span
-              class="block mb-2 text-[0.72rem] font-semibold tracking-[0.02em] uppercase text-(--acc-text-muted)"
-              >CUET attempts</span
-            >
-            <div class="flex flex-wrap gap-1.5 min-h-[2.35rem] items-center">
-              @if (accountDetails?.cuetAttempts?.length) {
-                @for (year of accountDetails?.cuetAttempts; track year) {
-                  <span
-                    class="inline-flex items-center gap-1 pl-2.5 pr-3 py-1 rounded-full bg-(--acc-accent-softer) text-(--acc-accent-strong) text-[0.78rem] font-semibold tracking-[0.01em] tabular-nums hover:bg-(--acc-accent-soft) transition-colors"
-                  >
-                    <span
-                      class="material-symbols-outlined acc-icon-filled text-[0.95rem] text-(--acc-accent)"
-                      aria-hidden="true"
-                      >event_available</span
+              @if (batches?.length) {
+                <button
+                  type="button"
+                  class="acc-rail-cta group w-full"
+                  (click)="isShowBatches = true"
+                >
+                  <nz-icon class="acc-rail-btn__icon p-2" aria-hidden="true">
+                    <span class="material-symbols-outlined text-[14px]! text-white"
+                      >edit_square</span
                     >
-                    {{ year }}
-                  </span>
-                }
-              } @else {
-                <span
-                  class="text-[0.82rem] font-medium italic text-(--acc-text-soft)"
-                  >No attempts recorded</span
-                >
+                  </nz-icon>
+                  <span class="acc-rail-btn__label text-!">Browse</span>
+                  <span
+                    class="material-symbols-outlined acc-rail-btn__arrow"
+                    aria-hidden="true"
+                    >arrow_forward</span
+                  >
+                </button>
               }
-            </div>
-          </div>
-        </form>
-      </section>
+            } @else if (
+              !accountDetails?.isPremium && accountDetails?.isUpgradeable
+            ) {
+              <ul class="list-none m-0 p-0 flex flex-col gap-3">
+                <li
+                  class="inline-flex items-center gap-3 text-sm font-bold text-on-surface"
+                >
+                  <span
+                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                    aria-hidden="true"
+                    >check_circle</span
+                  >
+                  All premium features
+                </li>
+                <li
+                  class="inline-flex items-center gap-3 text-sm font-bold text-on-surface"
+                >
+                  <span
+                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                    aria-hidden="true"
+                    >check_circle</span
+                  >
+                  Full mock library
+                </li>
+                <li
+                  class="inline-flex items-center gap-3 text-sm font-bold text-on-surface"
+                >
+                  <span
+                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                    aria-hidden="true"
+                    >check_circle</span
+                  >
+                  Priority support
+                </li>
+              </ul>
 
-      <!-- Features (à la carte) -->
-      @if (!accountDetails?.isPremium) {
-        <section
-          class="acc-panel flex flex-col overflow-hidden p-6 rounded-[1.1rem] lg:col-span-6"
-          aria-label="Individual features"
-        >
-          <header class="flex justify-between items-start gap-4 mb-4">
-            <div>
-              <p
-                class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) mb-1"
-              >
-                À la carte
-              </p>
-              <h2
-                class="font-[Manrope] text-[1.05rem] font-bold tracking-[-0.01em] leading-tight text-(--acc-text)"
-              >
-                Individual features
-              </h2>
-              <p
-                class="text-[0.8rem] font-medium text-(--acc-text-muted) mt-1.5 leading-normal max-w-[42ch]"
-              >
-                Purchase only what you need — pick any combination below.
-              </p>
-            </div>
-            @if (showPurchaseButton) {
-              <span
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-(--acc-accent-softer) text-(--acc-accent-strong) text-[0.72rem] font-semibold shrink-0"
+              <button
+                nz-button
+                class="cuet-btn--premium h-[56px] px-8 rounded-2xl w-full"
+                (click)="onInitiateUpgradePayment()"
               >
                 <span
-                  class="material-symbols-outlined text-[0.9rem] text-(--acc-accent)"
+                  class="material-symbols-outlined cuet-icon-cta text-2xl"
+                  aria-hidden="true"
+                  >upgrade</span
+                >
+                Upgrade to Premium
+              </button>
+            } @else {
+              <p
+                class="font-[Manrope] text-lg font-extrabold tracking-tight leading-snug text-on-surface"
+              >
+                Thanks for supporting us,
+                <span class="text-primary">{{ accountDetails?.name }}</span>
+              </p>
+            }
+          </div>
+        </section>
+
+        <!-- Purchase summary (desktop) -->
+        @if (!accountDetails?.isPremium && showPurchaseButton) {
+          <section
+            class="hidden lg:block rounded-4xl bg-surface-container-lowest shadow-(--ambient-shadow) px-6 md:px-8 py-6 md:py-8"
+            aria-label="Purchase summary"
+          >
+            <p
+              class="text-xs font-black uppercase tracking-[0.25em] text-primary"
+            >
+              Checkout
+            </p>
+            <div class="mt-4 flex items-end justify-between gap-4">
+              <div>
+                <p
+                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                >
+                  Total investment
+                </p>
+                <p
+                  class="mt-2 font-[Manrope] text-4xl font-extrabold tracking-tight tabular-nums text-primary"
+                >
+                  ₹{{ totalPurchaseAmount }}
+                </p>
+              </div>
+              <span
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface text-sm font-bold"
+              >
+                <span
+                  class="material-symbols-outlined text-lg text-primary"
                   aria-hidden="true"
                   >shopping_cart</span
                 >
-                {{
-                  totalPurchaseAmount
-                    ? "₹ " + totalPurchaseAmount
-                    : "No selection"
-                }}
+                Ready
               </span>
-            }
-          </header>
-
-          <ng-container *ngIf="features?.length; else featuresEmpty">
-            <div
-              class="grid gap-2.5 grid-cols-[repeat(auto-fill,minmax(150px,1fr))] auto-rows-min items-start"
-            >
-              <div
-                *ngFor="let feature of features"
-                role="button"
-                tabindex="0"
-                class="acc-feature-card relative flex flex-col justify-between gap-3 p-4 rounded-[0.9rem] bg-(--acc-surface-muted) text-left cursor-pointer select-none outline-none"
-                [class.acc-feature-card--selected]="
-                  feature.selectedToBuy && feature.canPurchase
-                "
-                [class.acc-feature-card--owned]="!feature.canPurchase"
-                [attr.aria-disabled]="!feature.canPurchase"
-                [attr.aria-pressed]="
-                  feature.selectedToBuy && feature.canPurchase
-                "
-                (click)="
-                  feature.canPurchase &&
-                    (feature.selectedToBuy = !feature.selectedToBuy);
-                  isFeatureSelectedToBuy()
-                "
-                (keydown.enter)="
-                  feature.canPurchase &&
-                    (feature.selectedToBuy = !feature.selectedToBuy);
-                  isFeatureSelectedToBuy()
-                "
-                (keydown.space)="
-                  feature.canPurchase &&
-                    (feature.selectedToBuy = !feature.selectedToBuy);
-                  isFeatureSelectedToBuy();
-                  $event.preventDefault()
-                "
-              >
-                <span
-                  class="acc-check absolute top-2.5 right-2.5 inline-flex items-center justify-center pointer-events-none transition-colors"
-                  aria-hidden="true"
-                >
-                  <span
-                    class="material-symbols-outlined text-[1.3rem]"
-                    [class.acc-icon-filled]="
-                      (feature.selectedToBuy && feature.canPurchase) ||
-                      !feature.canPurchase
-                    "
-                  >
-                    {{
-                      feature.selectedToBuy && feature.canPurchase
-                        ? "check_circle"
-                        : !feature.canPurchase
-                          ? "verified"
-                          : "radio_button_unchecked"
-                    }}
-                  </span>
-                </span>
-                <p
-                  class="text-[0.90rem] font-medium leading-snug pr-7 text-(--acc-text)"
-                >
-                  {{ feature?.name }}
-                </p>
-                <div class="flex items-center justify-between gap-2">
-                  <p
-                    class="acc-price font-[Manrope] text-[1.2rem] font-extrabold tracking-[-0.02em] tabular-nums leading-none transition-colors"
-                  >
-                    ₹ {{ feature?.price }}
-                  </p>
-                  @if (!feature.canPurchase) {
-                    <span
-                      class="px-2 py-0.5 rounded-full bg-=(--acc-accent-softer) text-(--acc-accent-strong) text-[0.62rem] font-bold tracking-[0.08em] uppercase whitespace-nowrap"
-                    >
-                      Owned
-                    </span>
-                  }
-                </div>
-              </div>
             </div>
-
-            @if (showPurchaseButton) {
-              <div
-                class="flex items-center justify-between gap-4 mt-5 px-4 py-3.5 rounded-[0.85rem] bg=(--acc-surface-muted) max-sm:flex-col max-sm:items-stretch max-sm:gap-3.5"
+            <!-- <button
+              type="button"
+              class="acc-rail-cta group w-full mt-6"
+              (click)="onInitiateFeaturePayment()"
+            >
+              <span class="acc-rail-btn__icon" aria-hidden="true">
+                <span class="material-symbols-outlined text-[22px] text-white"
+                  >shopping_bag</span
+                >
+              </span>
+              <span class="acc-rail-btn__label">Purchase</span>
+              <span
+                class="material-symbols-outlined acc-rail-btn__arrow"
+                aria-hidden="true"
+                >arrow_forward</span
               >
-                <div class="flex flex-col gap-0.5">
-                  <span
-                    class="text-[0.68rem] font-bold tracking-[0.12em] uppercase text-(--acc-text-muted)"
-                    >Total</span
-                  >
-                  <span
-                    class="font-[Manrope] text-[1.35rem] font-extrabold tracking-[-0.02em] tabular-nums text-(--acc-accent-strong)"
-                  >
-                    ₹ {{ totalPurchaseAmount }}
-                  </span>
-                </div>
-                <button
-                  nz-button
-                  class="acc-cta acc-cta--inline max-sm:w-full"
+            </button> -->
+            <button
+                  type="button"
+                  class="acc-rail-cta group w-full mt-6"
                   (click)="onInitiateFeaturePayment()"
                 >
+                  <nz-icon class="acc-rail-btn__icon p-2" aria-hidden="true">
+                    <span class="material-symbols-outlined text-[16px]! text-white"
+                      >shopping_bag</span
+                    >
+                  </nz-icon>
+                  <span class="acc-rail-btn__label text-!">Purchase</span>
                   <span
-                    class="material-symbols-outlined acc-icon-cta text-[1.1rem]"
+                    class="material-symbols-outlined acc-rail-btn__arrow"
                     aria-hidden="true"
-                    >shopping_bag</span
+                    >arrow_forward</span
                   >
-                  Purchase selected
                 </button>
-              </div>
-            }
-          </ng-container>
+          </section>
+        }
 
-          <ng-template #featuresEmpty>
-            <div class="py-5">
-              <nz-empty
-                nzNotFoundContent="No purchasable features right now"
-              ></nz-empty>
-            </div>
-          </ng-template>
+        <!-- Support -->
+        <section
+          class="rounded-4xl bg-surface-container-low px-6 md:px-8 py-6 md:py-8"
+          aria-label="Support"
+        >
+          <p
+            class="text-xs font-black uppercase tracking-[0.25em] text-primary"
+          >
+            Support
+          </p>
+          <p
+            class="mt-4 text-base font-semibold text-on-surface leading-relaxed"
+          >
+            Need help with enrollment or purchases?
+          </p>
+          <p
+            class="mt-2 text-sm font-medium text-on-surface-variant leading-relaxed"
+          >
+            If something looks off, try refreshing once. If it persists, contact
+            the CUET Corner team from the notifications panel.
+          </p>
         </section>
-      }
+      </aside>
     </div>
-  </ng-container>
-
-  <ng-template #accountLoading>
-    <div class="py-12 flex justify-center">
+  } @else {
+    <div class="py-16 flex justify-center">
       <nz-spin nzTip="Loading account..."></nz-spin>
     </div>
-  </ng-template>
+  }
 </div>
 
 <nz-modal
@@ -650,229 +771,241 @@
   nzMaskClosable
   nzClosable
   nzCentered
-  [nzWidth]="640"
+  [nzWidth]="680"
   nzClassName="acc-batch-modal"
   (nzOnCancel)="isShowBatches = false; closeAllCollapse()"
 >
   <ng-container *nzModalContent>
     <ngx-simplebar class="acc-batch-modal__scroll">
-    <div class="acc-batch-modal__inner cuet-modal-pad">
-      <header class="relative mb-5 pb-5 acc-batch-modal__header">
-        <div class="flex items-center gap-3 mb-2">
-          <span
-            class="acc-grad-premium inline-flex items-center justify-center w-10 h-10 rounded-xl text-white shadow-[0_14px_28px_-16px_rgba(0,74,198,0.55)]"
-            aria-hidden="true"
-          >
-            <span class="material-symbols-outlined acc-icon-filled text-[1.35rem]"
-              >school</span
+      <div class="acc-batch-modal__inner p-8 md:p-10">
+        <header class="relative mb-8 pb-8 acc-batch-modal__header">
+          <div class="flex items-center gap-5 mb-4">
+            <span
+              class="cuet-grad-premium inline-flex items-center justify-center w-14 h-14 rounded-2xl text-white shadow-[0_14px_28px_-16px_rgba(0,74,198,0.55)]"
+              aria-hidden="true"
             >
-          </span>
-          <div class="min-w-0">
-            <p
-              class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-(--acc-accent) leading-none"
-            >
-              Enrollment
-            </p>
-            <h3
-              class="font-[Manrope] text-[1.35rem] font-extrabold tracking-[-0.02em] leading-tight text-(--acc-text) mt-1"
-            >
-              Choose your batch
-            </h3>
-          </div>
-        </div>
-        <p
-          class="inline-flex items-center gap-2 mt-2 px-3 py-2 rounded-[0.7rem] bg-(--acc-warn-soft) text-(--acc-warn) text-[0.76rem] font-semibold leading-snug"
-        >
-          <span
-            class="material-symbols-outlined text-[1rem] mt-px"
-            aria-hidden="true"
-            >info</span
-          >
-          You can't change your batch after enrolling once.
-        </p>
-      </header>
-
-      <div class="flex flex-col gap-4">
-        @for (batch of batches; track batch.id; let i = $index) {
-          <article
-            class="acc-batch-card relative overflow-hidden rounded-[1.1rem] p-4 sm:p-5"
-          >
+              <span class="material-symbols-outlined cuet-icon-filled text-2xl"
+                >school</span
+              >
+            </span>
             <div class="min-w-0">
               <p
-                class="font-[Manrope] text-[1.05rem] font-extrabold tracking-[-0.01em] leading-tight text-(--acc-text)"
+                class="text-xs font-black uppercase tracking-[0.2em] text-primary leading-none mb-2"
               >
-                {{ batch?.name }} Batch
+                Enrollment curator
               </p>
-              <p
-                class="inline-flex items-center gap-1.5 mt-1 text-[0.74rem] font-medium text-(--acc-text-muted)"
+              <h3
+                class="font-[Manrope] text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
               >
-                <span
-                  class="material-symbols-outlined text-[0.9rem] text-(--acc-accent)"
-                  aria-hidden="true"
-                  >event</span
-                >
-                {{
-                  batch?.startDate < currentDate ? "Started" : "Starts"
-                }}
-                {{
-                  batch?.startDate
-                    ? (batch?.startDate | date: "dd MMM yyyy")
-                    : "—"
-                }}
-              </p>
+                Choose your batch
+              </h3>
             </div>
-
-            <div
-              class="mt-4 flex flex-col items-stretch gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4"
+          </div>
+          <p
+            class="inline-flex items-center gap-3 mt-4 px-5 py-3 rounded-2xl bg-surface-container-low text-on-surface-variant text-sm font-semibold leading-snug shadow-sm"
+          >
+            <span
+              class="material-symbols-outlined text-xl text-primary"
+              aria-hidden="true"
+              >info</span
             >
-              <div class="min-w-0 sm:flex-1">
+            You can't change your batch after enrolling once.
+          </p>
+        </header>
+
+        <div class="flex flex-col gap-6">
+          @for (batch of batches; track batch.id; let i = $index) {
+            <article
+              class="cuet-card cuet-card--editorial relative p-6 md:p-8 bg-surface-container-lowest shadow-[var(--ambient-shadow)] border-none"
+            >
+              <div class="min-w-0">
+              <div class="flex items-start justify-between gap-4">
                 <p
-                  class="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-(--acc-text-muted) leading-none mb-1.5"
+                  class="font-[Manrope] text-xl font-extrabold tracking-tight leading-tight text-on-surface"
                 >
-                  {{ batch?.type === "premium" ? "Premium" : "Basic" }} plan
+                  {{ batch?.name }} Batch
                 </p>
+                @if (batch?.isDemo) {
+                  <span
+                    class="px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-[0.6rem] font-black tracking-widest uppercase whitespace-nowrap"
+                  >
+                    Demo
+                  </span>
+                }
+              </div>
                 <p
-                  class="font-[Manrope] text-[1.65rem] font-extrabold leading-none tracking-[-0.02em] tabular-nums text-(--acc-text)"
+                  class="inline-flex items-center gap-2 mt-2 text-sm font-medium text-on-surface-variant"
                 >
-                  ₹{{
-                    batch?.type === "premium"
-                      ? batch?.premiumPrice
-                      : batch?.basePrice
+                  <span
+                    class="material-symbols-outlined text-lg text-primary"
+                    aria-hidden="true"
+                    >event</span
+                  >
+                  {{ batch?.startDate < currentDate ? "Started" : "Starts" }}
+                  {{
+                    batch?.startDate
+                      ? (batch?.startDate | date: "dd MMM yyyy")
+                      : "—"
                   }}
                 </p>
               </div>
+
               <div
-                class="acc-plan-switch acc-plan-switch--pill grid grid-cols-2 p-1 rounded-full"
-                role="radiogroup"
-                [attr.data-active]="batch?.type"
+                class="mt-6 flex flex-col items-stretch gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6"
+              >
+                <div class="min-w-0 sm:flex-1">
+                  <p
+                    class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-on-surface-variant leading-none mb-2"
+                  >
+                    {{ batch?.type === "premium" ? "Premium" : "Basic" }} plan
+                  </p>
+                  <p
+                    class="font-[Manrope] text-4xl font-extrabold leading-none tracking-tighter tabular-nums text-on-surface"
+                  >
+                    ₹{{
+                      batch?.type === "premium"
+                        ? batch?.premiumPrice
+                        : batch?.basePrice
+                    }}
+                  </p>
+                </div>
+                <div
+                  class="acc-plan-switch acc-plan-switch--pill grid grid-cols-2 p-1.5 rounded-full bg-surface-container-low"
+                  role="radiogroup"
+                  [attr.data-active]="batch?.type"
+                >
+                  <button
+                    type="button"
+                    class="acc-plan-option acc-plan-option--pill h-10 px-6"
+                    [class.acc-plan-option--active]="batch.type === 'basic'"
+                    (click)="batch.type = 'basic'"
+                  >
+                    Basic
+                  </button>
+                  <button
+                    type="button"
+                    class="acc-plan-option acc-plan-option--pill acc-plan-option--premium h-10 px-6"
+                    [class.acc-plan-option--active]="batch.type === 'premium'"
+                    (click)="batch.type = 'premium'"
+                  >
+                    <span
+                      class="material-symbols-outlined cuet-icon-filled text-base -ml-1"
+                      aria-hidden="true"
+                      >workspace_premium</span
+                    >
+                    Premium
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="flex items-center justify-between gap-4 mt-8 flex-wrap"
               >
                 <button
                   type="button"
-                  class="acc-plan-option acc-plan-option--pill"
-                  [class.acc-plan-option--active]="batch.type === 'basic'"
-                  (click)="batch.type = 'basic'"
+                  class="acc-batch-toggle inline-flex items-center gap-2 text-sm font-black tracking-wide text-primary hover:text-primary-container transition-colors"
+                  (click)="batch.showDetails = !batch?.showDetails"
                 >
-                  Basic
+                  {{ batch?.showDetails ? "Hide" : "Compare" }} plans
+                  <span
+                    class="material-symbols-outlined text-xl transition-transform"
+                    [class.rotate-180]="batch?.showDetails"
+                    aria-hidden="true"
+                    >expand_more</span
+                  >
                 </button>
                 <button
-                  type="button"
-                  class="acc-plan-option acc-plan-option--pill acc-plan-option--premium"
-                  [class.acc-plan-option--active]="batch.type === 'premium'"
-                  (click)="batch.type = 'premium'"
+                  nz-button
+                  class="cuet-btn--premium h-[48px] px-8 rounded-xl"
+                [disabled]="!batch?.type || batch?.isDemo"
+                  (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
                 >
+                  Enroll now
                   <span
-                    class="material-symbols-outlined acc-icon-filled text-[0.85rem] -ml-0.5"
+                    class="material-symbols-outlined cuet-icon-cta text-lg"
                     aria-hidden="true"
-                    >workspace_premium</span
+                    >arrow_forward</span
                   >
-                  Premium
                 </button>
               </div>
-            </div>
 
-            <div class="flex items-center justify-between gap-3 mt-5 flex-wrap">
-              <button
-                type="button"
-                class="acc-batch-toggle inline-flex items-center gap-1 text-[0.78rem] font-semibold text-(--acc-accent) hover:text-(--acc-accent-strong) transition-colors"
-                (click)="batch.showDetails = !batch?.showDetails"
-              >
-                {{ batch?.showDetails ? "Hide" : "Compare" }} plans
-                <span
-                  class="material-symbols-outlined text-[1rem] transition-transform"
-                  [class.rotate-180]="batch?.showDetails"
-                  aria-hidden="true"
-                  >expand_more</span
+              @if (batch?.showDetails) {
+                <div
+                  class="mt-6 p-6 md:p-7 rounded-3xl bg-surface-container-low grid grid-cols-1 sm:grid-cols-2 gap-8"
                 >
-              </button>
-              <button
-                nz-button
-                class="acc-cta acc-cta--pill"
-                [disabled]="!batch?.type"
-                (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
-              >
-                Enroll now
-                <span
-                  class="material-symbols-outlined acc-icon-cta text-[1rem]"
-                  aria-hidden="true"
-                  >arrow_forward</span
-                >
-              </button>
-            </div>
-
-            @if (batch?.showDetails) {
-              <div
-                class="mt-4 pt-4 border-t border-[rgba(15,23,42,0.06)] grid grid-cols-1 sm:grid-cols-2 gap-5"
-              >
-                <div>
-                  <p
-                    class="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-(--acc-text-muted) mb-2"
-                  >
-                    <span class="text-(--acc-text)">Basic</span> plan
-                  </p>
-                  <ul class="list-none m-0 p-0 flex flex-col gap-1.5">
-                    @for (feature of features; track feature?.id) {
-                      <li
-                        class="inline-flex items-center gap-2 text-[0.82rem] font-medium leading-snug"
-                        [class.text-(--acc-text)]="
-                          batch?.baseFeatures?.includes(feature?.id)
-                        "
-                        [class.text-(--acc-text-soft)]="
-                          !batch?.baseFeatures?.includes(feature?.id)
-                        "
-                      >
-                        @if (batch?.baseFeatures?.includes(feature?.id)) {
+                  <div>
+                    <p
+                      class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4"
+                    >
+                      <span class="text-on-surface">Basic</span> plan
+                    </p>
+                    <ul class="list-none m-0 p-0 flex flex-col gap-3">
+                      @for (feature of features; track feature?.id) {
+                        <li
+                          class="inline-flex items-center gap-3 text-sm font-bold leading-snug"
+                          [class.text-on-surface]="
+                            batch?.baseFeatures?.includes(feature?.id)
+                          "
+                          [class.text-on-surface-variant]="
+                            !batch?.baseFeatures?.includes(feature?.id)
+                          "
+                          [class.opacity-50]="
+                            !batch?.baseFeatures?.includes(feature?.id)
+                          "
+                        >
+                          @if (batch?.baseFeatures?.includes(feature?.id)) {
+                            <span
+                              class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                              aria-hidden="true"
+                              >check_circle</span
+                            >
+                          } @else {
+                            <span
+                              class="material-symbols-outlined text-xl"
+                              aria-hidden="true"
+                              >cancel</span
+                            >
+                          }
+                          {{ feature?.name }}
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    <p
+                      class="text-xs font-black uppercase tracking-[0.2em] text-primary mb-4"
+                    >
+                      Premium plan
+                    </p>
+                    <ul class="list-none m-0 p-0 flex flex-col gap-3">
+                      @for (feature of features; track feature?.id) {
+                        <li
+                          class="inline-flex items-center gap-3 text-sm font-bold leading-snug text-on-surface"
+                        >
                           <span
-                            class="material-symbols-outlined acc-icon-filled text-[1.05rem] text-(--acc-accent)"
+                            class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
                             aria-hidden="true"
                             >check_circle</span
                           >
-                        } @else {
-                          <span
-                            class="material-symbols-outlined text-[1.05rem] text-(--acc-text-soft)"
-                            aria-hidden="true"
-                            >cancel</span
-                          >
-                        }
-                        {{ feature?.name }}
-                      </li>
-                    }
-                  </ul>
+                          {{ feature?.name }}
+                        </li>
+                      }
+                    </ul>
+                  </div>
                 </div>
-                <div>
-                  <p
-                    class="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-(--acc-accent) mb-2"
-                  >
-                    Premium plan
-                  </p>
-                  <ul class="list-none m-0 p-0 flex flex-col gap-1.5">
-                    @for (feature of features; track feature?.id) {
-                      <li
-                        class="inline-flex items-center gap-2 text-[0.82rem] font-medium leading-snug text-(--acc-text)"
-                      >
-                        <span
-                          class="material-symbols-outlined acc-icon-filled text-[1.05rem] text-(--acc-accent)"
-                          aria-hidden="true"
-                          >check_circle</span
-                        >
-                        {{ feature?.name }}
-                      </li>
-                    }
-                  </ul>
-                </div>
-              </div>
-            }
-          </article>
-        }
+              }
+            </article>
+          }
 
-        @if (!batches?.length) {
-          <div class="py-8">
-            <nz-empty
-              nzNotFoundContent="No batches available right now"
-            ></nz-empty>
-          </div>
-        }
+          @if (!batches?.length) {
+            <div class="py-8">
+              <nz-empty
+                nzNotFoundContent="No batches available right now"
+              ></nz-empty>
+            </div>
+          }
+        </div>
       </div>
-    </div>
     </ngx-simplebar>
   </ng-container>
 </nz-modal>

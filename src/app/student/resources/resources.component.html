@@ -223,10 +223,10 @@
         <!-- Filter bar -->
         <p class="text-[13px] font-bold !mb-1">Filters</p>
         <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          <nz-input-group [nzPrefix]="videoSearchPfx" class="res-filter__search" nzSize="large">
-            <ng-template #videoSearchPfx>
-              <span class="material-symbols-outlined res-filter__pfx-icon">search</span>
-            </ng-template>
+          <nz-input-wrapper class="res-filter__search" nzSize="large">
+            <nz-icon nzInputPrefix>
+              <span class="material-symbols-outlined res-filter__pfx-icon mr-1">search</span>
+            </nz-icon>
             <input
               #videoSearchInput
               nz-input
@@ -235,7 +235,12 @@
               (input)="onSearchVideoLinks(videoSearchInput.value)"
               id="video-search-input"
             />
-          </nz-input-group>
+            @if (videoSearchInput.value.length > 0) {
+              <nz-icon nzInputSuffix (click)="videoSearchInput.value = ''; onSearchVideoLinks(videoSearchInput.value)">
+                <span class="material-symbols-outlined res-filter__pfx-icon cursor-pointer">close</span>
+              </nz-icon>
+            }
+          </nz-input-wrapper>
         </div>
 
         <nz-divider></nz-divider>
@@ -350,10 +355,10 @@
         <!-- Filter bar -->
         <p class="text-[13px] font-bold mb-1">Filters</p>
         <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          <nz-input-group [nzPrefix]="newspaperSearchPfx" class="res-filter__search" nzSize="large">
-            <ng-template #newspaperSearchPfx>
-              <span class="material-symbols-outlined res-filter__pfx-icon">search</span>
-            </ng-template>
+          <nz-input-wrapper class="res-filter__search" nzSize="large" nzAllowClear>
+            <nz-icon nzInputPrefix>
+              <span class="material-symbols-outlined res-filter__pfx-icon mr-1">search</span>
+            </nz-icon>
             <input
               #newspaperSearchInput
               nz-input
@@ -362,9 +367,15 @@
               (input)="onSearchNewspaper(newspaperSearchInput.value)"
               id="newspaper-search-input"
             />
-          </nz-input-group>
+            @if (newspaperSearchInput.value.length > 0) {
+              <nz-icon nzInputSuffix (click)="newspaperSearchInput.value = ''; onSearchNewspaper(newspaperSearchInput.value)">
+                <span class="material-symbols-outlined res-filter__pfx-icon cursor-pointer">close</span>
+              </nz-icon>
+            }
+          </nz-input-wrapper>
           <nz-date-picker
             class="w-full"
+            nzSize="large"
             [(ngModel)]="searchNewspaperDate"
             (ngModelChange)="getNewspapers()"
             nzFormat="dd MMM yyyy"

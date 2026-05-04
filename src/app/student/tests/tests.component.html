@@ -237,11 +237,11 @@
       <ng-template nz-tab>
         <div class="tests-toolbar">
           <nz-input-wrapper class="tests-toolbar__search">
-            <nz-icon
-              nzInputPrefix
-              nzType="search"
-              class="tests-toolbar__icon"
-            ></nz-icon>
+            <nz-icon nzInputPrefix>
+              <span class="material-symbols-outlined tests-toolbar__icon mr-1"
+                >search</span
+              >
+            </nz-icon>
             <input
               #testSearchInput
               nz-input
@@ -419,7 +419,9 @@
   <ng-container *nzModalContent>
     <div class="cuet-modal-pad">
       <div class="modal-head">
-        <span class="modal-head__icon modal-head__icon--warn material-symbols-outlined" aria-hidden="true"
+        <span
+          class="modal-head__icon modal-head__icon--warn material-symbols-outlined"
+          aria-hidden="true"
           >lock</span
         >
         <div>
@@ -431,11 +433,7 @@
         the test library.
       </p>
       <div class="modal-actions">
-        <button
-          nz-button
-          class="btn-ghost"
-          (click)="onModalClose()"
-        >
+        <button nz-button class="btn-ghost" (click)="onModalClose()">
           Not now
         </button>
         <button
@@ -462,7 +460,8 @@
     <div class="cuet-modal-pad">
       <div class="modal-head">
         <span
-          class="modal-head__icon material-symbols-outlined" aria-hidden="true"
+          class="modal-head__icon material-symbols-outlined"
+          aria-hidden="true"
           >play_arrow</span
         >
         <div>
@@ -528,11 +527,7 @@
       </div>
 
       <div class="modal-actions">
-        <button
-          nz-button
-          class="btn-ghost"
-          (click)="onModalClose()"
-        >
+        <button nz-button class="btn-ghost" (click)="onModalClose()">
           Cancel
         </button>
         <button
@@ -567,7 +562,8 @@
     <div class="cuet-modal-pad">
       <div class="modal-head">
         <span
-          class="modal-head__icon modal-head__icon--warn material-symbols-outlined" aria-hidden="true"
+          class="modal-head__icon modal-head__icon--warn material-symbols-outlined"
+          aria-hidden="true"
           >pending_actions</span
         >
         <div>
@@ -579,11 +575,7 @@
         Continue where you left off or submit it now to free up a new attempt.
       </p>
       <div class="modal-actions">
-        <button
-          nz-button
-          class="btn-ghost"
-          (click)="submitPendingTest()"
-        >
+        <button nz-button class="btn-ghost" (click)="submitPendingTest()">
           Submit
         </button>
         <button

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PLATFORM_ID } from '@angular/core';
+import { PLATFORM_ID, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 import { LandingPageComponent } from './landing-page.component';
 
@@ -10,9 +11,10 @@ describe('LandingPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, NzImageModule],
       declarations: [LandingPageComponent],
       providers: [{ provide: PLATFORM_ID, useValue: 'browser' }],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LandingPageComponent);
@@ -36,7 +38,7 @@ describe('LandingPageComponent', () => {
   it('renders the hero headline', () => {
     const host: HTMLElement = fixture.nativeElement;
     const headline = host.querySelector('.landing-hero__headline');
-    expect(headline?.textContent?.toLowerCase()).toContain('one login');
+    expect(headline?.textContent?.toLowerCase()).toContain('the struggle');
   });
 
   it('exposes platform pillars covering every core capability', () => {

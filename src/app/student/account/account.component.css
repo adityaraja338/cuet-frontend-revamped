@@ -1,332 +1,77 @@
 :host {
   display: block;
-  --acc-accent: #004ac6;
-  --acc-accent-strong: #003ea8;
-  --acc-accent-soft: rgba(0, 74, 198, 0.12);
-  --acc-accent-softer: rgba(0, 74, 198, 0.06);
-  --acc-accent-softest: rgba(0, 74, 198, 0.035);
-  --acc-surface-muted: var(--surface-card-muted);
-  --acc-surface-dim: #eef2f7;
-  --acc-shadow-card: var(--shadow-card);
-  --acc-text: #0f172a;
-  --acc-text-muted: #64748b;
-  --acc-text-soft: #94a3b8;
-  --acc-warn: #b45309;
-  --acc-warn-soft: rgba(180, 83, 9, 0.1);
   font-family: "Inter", sans-serif;
 }
 
-/* Gradient text used in the hero title accent */
-.acc-grad-text {
-  background: linear-gradient(135deg, var(--acc-accent) 10%, #2563eb 55%, #60a5fa 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+/* Soft Input focus state override for 'Digital Curator' spec — 2px primary bottom bar */
+.cuet-input--soft :is(input.ant-input:focus, .ant-select-focused .ant-select-selector, .ant-input-number-focused, .ant-picker-focused) {
+  background: var(--surface-container-lowest) !important;
+  box-shadow: 0 2px 0 0 var(--primary), 0 8px 16px -4px rgba(0, 74, 198, 0.08) !important;
 }
 
-/* Premium gradient surfaces (chips, pills, status accents) */
-.acc-grad-premium {
-  background: linear-gradient(135deg, var(--acc-accent) 0%, #2563eb 100%);
-}
-
-/* Avatar fallback gradient */
-.acc-grad-avatar {
-  background: linear-gradient(135deg, var(--acc-accent) 0%, #2563eb 60%, #60a5fa 100%);
-}
-
-/* Premium panel surface — used on profile + à la carte cards */
-.acc-panel {
-  position: relative;
-  background:
-    radial-gradient(80% 100% at 100% 0%, rgba(0, 74, 198, 0.06) 0%, rgba(0, 74, 198, 0) 55%),
-    linear-gradient(160deg, #ffffff 0%, #fafbff 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 22px 44px -28px rgba(15, 23, 42, 0.22),
-    0 8px 20px -16px rgba(0, 74, 198, 0.12);
-}
-.acc-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.05) 1px, transparent 0);
-  background-size: 18px 18px;
-  mask-image: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0) 55%);
-  opacity: 0.7;
-  pointer-events: none;
-  z-index: 0;
-}
-.acc-panel > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Identity banner — layered radial wash + dot grid for tonal depth */
-.acc-identity {
-  background:
-    radial-gradient(110% 130% at 100% 0%, rgba(0, 74, 198, 0.1) 0%, rgba(0, 74, 198, 0) 55%),
-    radial-gradient(80% 110% at 0% 100%, rgba(96, 165, 250, 0.1) 0%, rgba(96, 165, 250, 0) 60%),
-    #ffffff;
-}
-.acc-identity__backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.08) 1px, transparent 0);
-  background-size: 18px 18px;
-  opacity: 0.75;
-  mask-image: linear-gradient(120deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0));
-  pointer-events: none;
-}
-.acc-identity > *:not(.acc-identity__backdrop) {
-  position: relative;
-  z-index: 1;
-}
-
-/* Conic-gradient ring around avatar */
-.acc-avatar-ring {
-  position: absolute;
-  inset: -5px;
-  border-radius: 9999px;
-  background: conic-gradient(from 180deg, rgba(0, 74, 198, 0.4), rgba(96, 165, 250, 0.18), rgba(0, 74, 198, 0.4));
-  filter: blur(8px);
-  opacity: 0.45;
-  z-index: -1;
-}
-
-/* Membership card — layered radial washes + soft dot grid + premium shadow */
-.acc-membership-bg,
-.acc-membership-bg--premium {
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 24px 48px -28px rgba(0, 74, 198, 0.28),
-    0 10px 24px -18px rgba(15, 23, 42, 0.18);
-}
-.acc-membership-bg {
-  background:
-    radial-gradient(90% 120% at 100% 0%, rgba(0, 74, 198, 0.14) 0%, rgba(0, 74, 198, 0) 55%),
-    radial-gradient(70% 100% at 0% 100%, rgba(96, 165, 250, 0.1) 0%, rgba(96, 165, 250, 0) 60%),
-    linear-gradient(135deg, #ffffff 0%, #f6f9ff 100%);
-}
-.acc-membership-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(0, 74, 198, 0.09) 1px, transparent 0);
-  background-size: 18px 18px;
-  mask-image: linear-gradient(120deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0) 60%);
-  opacity: 0.7;
-  pointer-events: none;
-  z-index: 0;
-}
-.acc-membership-bg--premium {
-  background:
-    radial-gradient(90% 130% at 100% 0%, rgba(0, 74, 198, 0.24) 0%, rgba(0, 74, 198, 0) 60%),
-    radial-gradient(70% 100% at 0% 100%, rgba(96, 165, 250, 0.18) 0%, rgba(96, 165, 250, 0) 65%),
-    linear-gradient(135deg, #ffffff 0%, #eef3ff 55%, #e7edff 100%);
-}
-.acc-membership-bg--premium::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(0, 74, 198, 0.14) 1px, transparent 0);
-  background-size: 18px 18px;
-  mask-image: linear-gradient(120deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0) 65%);
-  opacity: 0.8;
-  pointer-events: none;
-  z-index: 0;
-}
-.acc-membership-bg > *,
-.acc-membership-bg--premium > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* CTA — ng-zorro button override with gradient + lift */
-.acc-cta.ant-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  height: 2.7rem;
-  padding: 0 1rem;
-  border-radius: 0.8rem;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #fff !important;
-  background: linear-gradient(135deg, var(--acc-accent) 0%, #2563eb 100%) !important;
-  border: none !important;
-  box-shadow: 0 16px 32px -16px rgba(0, 74, 198, 0.55);
-  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.15s ease;
-}
-.acc-cta.ant-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 18px 36px -14px rgba(0, 74, 198, 0.6);
-  filter: brightness(1.03);
-}
-.acc-cta--inline.ant-btn {
-  width: auto;
-  padding: 0 1.25rem;
-}
-
-/* ng-zorro form-input overrides (must be !important to beat antd) */
-.acc-field :is(input.ant-input, .ant-select-selector) {
-  background: var(--acc-surface-muted) !important;
-  border-color: transparent !important;
-  border-radius: 0.65rem !important;
-  min-height: 2.35rem !important;
-  font-size: 0.88rem !important;
-  color: var(--acc-text) !important;
-  font-weight: 500 !important;
-  box-shadow: none !important;
-  transition: background 0.2s ease;
-}
-.acc-field :is(input.ant-input:hover, .ant-select-selector:hover) {
-  background: var(--acc-surface-dim) !important;
-}
-.acc-field input.ant-input[disabled],
-.acc-field .ant-select-disabled .ant-select-selector {
-  color: var(--acc-text) !important;
-  cursor: default !important;
-}
-
-/* Feature card interactive states — inset ring + animated bg */
+/* Feature card interactive states — Tonal layering & Background shifts */
 .acc-feature-card {
-  transition: background 0.18s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: inset 0 0 0 1.5px transparent;
+  transition: background 0.25s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s ease, box-shadow 0.2s ease;
 }
-.acc-feature-card:hover {
-  background: var(--acc-surface-dim);
-  transform: var(--lift-card);
-  box-shadow: var(--shadow-card-hover), inset 0 0 0 1.5px transparent;
-}
-.acc-feature-card:focus-visible {
-  box-shadow: inset 0 0 0 1.5px var(--acc-accent), 0 0 0 3px var(--acc-accent-softer);
-  outline: none;
+.acc-feature-card:hover:not([aria-disabled="true"]) {
+  background: var(--color-blue-50) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(25, 28, 30, 0.08) !important;
 }
 .acc-feature-card--selected {
-  background: var(--acc-accent-softer);
-  box-shadow: inset 0 0 0 1.5px var(--acc-accent);
+  background: color-mix(in srgb, var(--primary) 8%, white) !important;
+  box-shadow: 
+    var(--ambient-shadow), 
+    0 0 0 0 transparent !important; /* Remove inset borders */
 }
 .acc-feature-card--selected:hover {
-  background: var(--acc-accent-soft);
+  background: color-mix(in srgb, var(--primary) 12%, white) !important;
 }
 .acc-feature-card--owned {
   cursor: default;
-  opacity: 0.85;
+  opacity: 0.7;
 }
 .acc-feature-card--owned:hover {
-  background: var(--acc-surface-muted);
-  transform: none;
+  background: var(--surface-container-lowest) !important;
+  transform: none !important;
+  box-shadow: var(--ambient-shadow) !important;
 }
 
 /* Feature card price + check colors driven by parent state class */
-.acc-feature-card .acc-price { color: var(--acc-text); }
-.acc-feature-card .acc-check { color: var(--acc-text-soft); }
-.acc-feature-card--selected .acc-price { color: var(--acc-accent-strong); }
-.acc-feature-card--selected .acc-check { color: var(--acc-accent); }
-.acc-feature-card--owned .acc-price { color: var(--acc-text-soft); }
-.acc-feature-card--owned .acc-check { color: var(--acc-accent); }
+.acc-feature-card .acc-price { color: var(--on-surface); }
+.acc-feature-card .acc-check { color: var(--color-surface-variant); }
+.acc-feature-card--selected .acc-price { color: var(--primary); }
+.acc-feature-card--selected .acc-check { color: var(--primary); }
+.acc-feature-card--owned .acc-price { color: var(--on-surface-variant); }
+.acc-feature-card--owned .acc-check { color: var(--primary); }
 
-/* Material Symbols filled variants (font-variation-settings is not a Tailwind utility) */
-.acc-icon-filled {
-  font-variation-settings: "FILL" 1;
-}
-.acc-icon-cta {
-  font-variation-settings: "FILL" 1, "wght" 500;
-}
+/* ------- Batch modal ------- */
 
-/* ------- Batch modal (redesigned) ------- */
-
-/* Modal inner — soft radial wash + decorative grid overlay */
 .acc-batch-modal__inner {
   position: relative;
-  background:
-    radial-gradient(90% 40% at 100% 0%, rgba(0, 74, 198, 0.06) 0%, rgba(0, 74, 198, 0) 65%),
-    radial-gradient(70% 40% at 0% 0%, rgba(96, 165, 250, 0.05) 0%, rgba(96, 165, 250, 0) 70%),
-    #ffffff;
+  background: linear-gradient(165deg, #ffffff 0%, var(--surface-container-low) 100%);
 }
 
-/* Modal header — gradient hairline separator */
+/* Modal header — subtle separator */
 .acc-batch-modal__header::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 1px;
+  height: 14px;
   background: linear-gradient(
-    90deg,
-    rgba(0, 74, 198, 0) 0%,
-    rgba(0, 74, 198, 0.18) 50%,
-    rgba(0, 74, 198, 0) 100%
+    180deg,
+    color-mix(in srgb, var(--surface-container-low) 0%, transparent) 0%,
+    color-mix(in srgb, var(--surface-container-low) 80%, transparent) 60%,
+    var(--surface-container-low) 100%
   );
-}
-
-/* Batch card */
-.acc-batch-card {
-  background:
-    radial-gradient(80% 120% at 100% 0%, rgba(0, 74, 198, 0.08) 0%, rgba(0, 74, 198, 0) 55%),
-    linear-gradient(160deg, #ffffff 0%, #f8faff 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 18px 34px -24px rgba(15, 23, 42, 0.2),
-    0 8px 18px -14px rgba(0, 74, 198, 0.16);
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
-}
-.acc-batch-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: radial-gradient(circle at 1px 1px, rgba(0, 74, 198, 0.09) 1px, transparent 0);
-  background-size: 18px 18px;
-  mask-image: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0) 50%);
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: 0;
-}
-.acc-batch-card > * {
-  position: relative;
-  z-index: 1;
-}
-.acc-batch-card:hover {
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 24px 46px -24px rgba(15, 23, 42, 0.25),
-    0 12px 24px -14px rgba(0, 74, 198, 0.22);
-  transform: var(--lift-card);
-}
-
-/* Featured card — gradient edge ring + accent wash */
-.acc-batch-card--featured {
-  background:
-    radial-gradient(80% 120% at 100% 0%, rgba(0, 74, 198, 0.14) 0%, rgba(0, 74, 198, 0) 60%),
-    linear-gradient(160deg, #ffffff 0%, #eef3ff 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 0 0 1.5px rgba(0, 74, 198, 0.18),
-    0 22px 42px -22px rgba(0, 74, 198, 0.28),
-    0 10px 22px -12px rgba(15, 23, 42, 0.18);
-}
-.acc-batch-card--featured:hover {
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 0 0 1.5px rgba(0, 74, 198, 0.28),
-    0 28px 50px -22px rgba(0, 74, 198, 0.34),
-    0 14px 26px -12px rgba(15, 23, 42, 0.22);
-}
-.acc-batch-card__ribbon {
-  z-index: 2;
-  box-shadow: 0 10px 22px -12px rgba(0, 74, 198, 0.55);
 }
 
 /* Plan switch — segmented control with gradient active pill */
 .acc-plan-switch {
   position: relative;
-  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+  background: var(--surface-container-low);
 }
 .acc-plan-switch .acc-plan-option {
   display: flex;
@@ -338,36 +83,28 @@
   border-radius: 0.6rem;
   background: transparent;
   border: none;
-  color: var(--acc-text-muted);
+  color: var(--on-surface-variant);
   cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  transition: background 0.18s ease, color 0.18s ease;
 }
 .acc-plan-switch .acc-plan-option:hover {
-  color: var(--acc-text);
+  color: var(--on-surface);
 }
 .acc-plan-switch .acc-plan-option.acc-plan-option--active {
   background: #ffffff;
-  color: var(--acc-accent-strong);
-  box-shadow:
-    0 8px 16px -10px rgba(0, 74, 198, 0.4),
-    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 .acc-plan-switch .acc-plan-option--premium.acc-plan-option--active {
-  background: linear-gradient(135deg, var(--acc-accent) 0%, #2563eb 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
   color: #ffffff;
-  box-shadow:
-    0 12px 22px -10px rgba(0, 74, 198, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.25) inset;
 }
 
 /* Compact inline pill variant — sliding indicator */
 .acc-plan-switch--pill {
   position: relative;
   flex: 0 0 auto;
-  background: var(--acc-surface-muted);
-  box-shadow:
-    inset 0 1px 2px rgba(15, 23, 42, 0.05),
-    inset 0 0 0 1px rgba(15, 23, 42, 0.04);
+  background: var(--surface-container-low);
   isolation: isolate;
 }
 .acc-plan-switch--pill::before {
@@ -378,28 +115,14 @@
   left: 0.25rem;
   width: calc(50% - 0.25rem);
   border-radius: 999px;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 74, 198, 0.16) 0%,
-    rgba(96, 165, 250, 0.18) 100%
-  );
-  box-shadow:
-    0 6px 14px -8px rgba(0, 74, 198, 0.4),
-    0 1px 0 rgba(255, 255, 255, 0.6) inset,
-    inset 0 0 0 1px rgba(0, 74, 198, 0.12);
+  background: rgba(0, 74, 198, 0.1);
   z-index: -1;
   transform: translateX(0);
-  transition:
-    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.32s ease,
-    box-shadow 0.32s ease;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .acc-plan-switch--pill[data-active="premium"]::before {
   transform: translateX(100%);
-  background: linear-gradient(135deg, var(--acc-accent) 0%, #2563eb 100%);
-  box-shadow:
-    0 10px 18px -10px rgba(0, 74, 198, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.25) inset;
+  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
 }
 .acc-plan-switch .acc-plan-option--pill {
   position: relative;
@@ -409,97 +132,102 @@
   gap: 0.3rem;
   padding: 0.4rem 0.95rem;
   border-radius: 999px;
-  font-family: "Inter", sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: -0.005em;
-  text-transform: none;
-  background: transparent;
-  box-shadow: none;
-  color: var(--acc-text-muted);
+  color: var(--on-surface-variant);
   transition: color 0.28s ease;
+  border: none;
+  background: transparent;
 }
 .acc-plan-switch .acc-plan-option--pill.acc-plan-option--active {
-  background: transparent;
-  box-shadow: none;
-  color: var(--acc-accent-strong);
+  color: var(--primary);
 }
-.acc-plan-switch
-  .acc-plan-option--pill.acc-plan-option--premium.acc-plan-option--active {
-  background: transparent;
-  box-shadow: none;
+.acc-plan-switch .acc-plan-option--pill.acc-plan-option--premium.acc-plan-option--active {
   color: #ffffff;
 }
 
-/* Pill CTA — compact accent gradient */
-.acc-cta--pill.ant-btn {
-  display: inline-flex;
+/* ------- Rail CTA buttons (standalone; no nz-button dependency) ------- */
+
+.acc-rail-cta {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) 2rem;
   align-items: center;
-  gap: 0.4rem;
+  width: 100%;
   height: auto;
-  padding: 0.55rem 1.1rem;
-  border-radius: 999px;
+  padding: 0.6rem 0.75rem;
+  column-gap: 0.6rem;
   border: none;
-  background: linear-gradient(135deg, var(--acc-accent) 0%, #2563eb 100%);
-  color: #ffffff;
-  font-family: "Inter", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: -0.005em;
-  box-shadow:
-    0 12px 24px -12px rgba(0, 74, 198, 0.5),
-    0 1px 0 rgba(255, 255, 255, 0.25) inset;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
-}
-.acc-cta--pill.ant-btn:hover:not([disabled]) {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-  box-shadow:
-    0 16px 28px -12px rgba(0, 74, 198, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.3) inset;
-}
-.acc-cta--pill.ant-btn[disabled] {
-  background: var(--acc-surface-dim);
-  color: var(--acc-text-soft);
-  box-shadow: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+  box-shadow: 0 14px 28px -18px rgba(0, 74, 198, 0.55);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
-/* Modal CSS variables (portal needs these redeclared — not on :host) */
-::ng-deep .acc-batch-modal .ant-modal,
-::ng-deep .acc-batch-modal .ant-modal-content {
-  --acc-accent: #004ac6;
-  --acc-accent-strong: #003ea8;
-  --acc-accent-soft: rgba(0, 74, 198, 0.12);
-  --acc-accent-softer: rgba(0, 74, 198, 0.06);
-  --acc-accent-softest: rgba(0, 74, 198, 0.035);
-  --acc-surface-muted: #f8fafc;
-  --acc-surface-dim: #eef2f7;
-  --acc-text: #0f172a;
-  --acc-text-muted: #64748b;
-  --acc-text-soft: #94a3b8;
-  --acc-warn: #b45309;
-  --acc-warn-soft: rgba(180, 83, 9, 0.1);
+.acc-rail-cta:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.05);
+  box-shadow: 0 18px 34px -20px rgba(0, 74, 198, 0.6);
 }
+
+.acc-rail-cta:active {
+  transform: translateY(0);
+}
+
+.acc-rail-cta:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 35%, transparent);
+  outline-offset: 3px;
+}
+
+.acc-rail-btn__icon {
+  /* display: inline-flex; */
+  /* align-items: center; */
+  /* aspect-ratio: 1; */
+  /* justify-content: center; */
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 22px -14px rgba(255, 255, 255, 0.35);
+}
+
+.acc-rail-btn__label {
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  min-width: 0;
+  padding: 0 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acc-rail-btn__arrow {
+  justify-self: end;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: transform 0.15s ease;
+  width: 1.5rem;
+  text-align: right;
+}
+
+.acc-rail-cta:hover .acc-rail-btn__arrow {
+  transform: translateX(2px);
+}
+
+/* Modal configuration */
 ::ng-deep .acc-batch-modal .ant-modal {
   margin: 1rem auto;
   max-width: calc(100vw - 2rem);
-  padding-bottom: 0;
   top: 0;
 }
 ::ng-deep .acc-batch-modal .ant-modal-content {
-  border-radius: 1.25rem !important;
+  border-radius: 1.5rem !important;
   overflow: hidden;
-  box-shadow:
-    0 32px 64px -32px rgba(15, 23, 42, 0.4),
-    0 18px 36px -24px rgba(0, 74, 198, 0.25) !important;
+  box-shadow: 0 24px 48px -12px rgba(25, 28, 30, 0.12) !important;
 }
 ::ng-deep .acc-batch-modal .ant-modal-body {
   padding: 0 !important;
-}
-::ng-deep .acc-batch-modal .ant-modal-close {
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 5;
 }
 
 .acc-batch-modal__scroll {
@@ -507,11 +235,9 @@
   max-height: calc(100vh - 2rem);
   overscroll-behavior: contain;
 }
-.acc-batch-modal__scroll ::ng-deep .simplebar-content {
-  min-height: 0;
-}
 .acc-batch-modal__scroll ::ng-deep .simplebar-scrollbar::before {
-  background: rgba(0, 74, 198, 0.35);
+  background: var(--primary);
+  opacity: 0.2;
 }
 
 @media (min-width: 640px) {
@@ -523,4 +249,3 @@
     max-height: calc(100vh - 4rem);
   }
 }
-

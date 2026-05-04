@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* 1. LAYER DECLARATION (MUST be first, but NO curly braces here) */
-@layer vendor, base, components, utilities;
+@layer theme, base, vendor, base_overrides, components, utilities;
 
 /* 2. ALL @IMPORTS (MUST come before any other CSS rules) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
@@ -20,17 +20,17 @@
      - Naming follows a mostly “semantic token” (Material-ish) style. */
 
   /* Brand palette scales (useful for charts, subtle borders, hovers, etc.) */
-  --color-primary-50: #ecf7ff;
-  --color-primary-100: #d4ecff;
-  --color-primary-200: #b2dfff;
-  --color-primary-300: #7dccff;
-  --color-primary-400: #40b0ff;
-  --color-primary-500: #148eff;
-  --color-primary-600: #0073ff;
-  --color-primary-700: #0066ff;
-  --color-primary-800: #004ac6;
-  --color-primary-900: #0845a0;
-  --color-primary-950: #0a2a61;
+  --color-primary-50: oklch(97% 0.025 82);
+  --color-primary-100: oklch(94% 0.05 78);
+  --color-primary-200: oklch(89% 0.08 73);
+  --color-primary-300: oklch(84% 0.11 68);
+  --color-primary-400: oklch(79% 0.14 62);
+  --color-primary-500: oklch(74% 0.16 58);
+  --color-primary-600: oklch(70% 0.17 56);
+  --color-primary-700: oklch(68% 0.17 55);
+  --color-primary-800: oklch(62% 0.17 54);
+  --color-primary-900: oklch(52% 0.16 53);
+  --color-primary-950: oklch(40% 0.15 52);
 
   --color-secondary-50: #f6f7f9;
   --color-secondary-100: #eceef2;
@@ -45,7 +45,7 @@
   --color-secondary-950: #22262f;
 
   /* Core semantic colors (prefer these in components over raw scale values) */
-  --color-primary: #004ac6;
+  --color-primary: oklch(68% 0.17 55);
   --color-secondary: #505f76;
   --color-tertiary: #943700;
   --color-error: #ba1a1a;
@@ -60,8 +60,8 @@
   --color-on-background: #191c1e;
 
   /* Containers (background surfaces tied to semantic colors) */
-  --color-primary-container: #2563eb;
-  --color-on-primary-container: #eeefff;
+  --color-primary-container: oklch(82% 0.1 55);
+  --color-on-primary-container: oklch(25% 0.01 55);
   --color-secondary-container: #d0e1fb;
   --color-on-secondary-container: #54647a;
   --color-tertiary-container: #bc4800;
@@ -70,10 +70,10 @@
   --color-on-error-container: #93000a;
 
   /* Fixed / inverse variants (used for elevation/contrast patterns) */
-  --color-primary-fixed: #dbe1ff;
-  --color-primary-fixed-dim: #b4c5ff;
-  --color-on-primary-fixed: #00174b;
-  --color-on-primary-fixed-variant: #003ea8;
+  --color-primary-fixed: oklch(95% 0.04 75);
+  --color-primary-fixed-dim: oklch(87% 0.08 68);
+  --color-on-primary-fixed: oklch(20% 0.01 55);
+  --color-on-primary-fixed-variant: oklch(55% 0.17 55);
 
   --color-secondary-fixed: #d3e4fe;
   --color-secondary-fixed-dim: #b7c8e1;
@@ -87,7 +87,7 @@
 
   --color-inverse-surface: #2d3133;
   --color-inverse-on-surface: #eff1f3;
-  --color-inverse-primary: #b4c5ff;
+  --color-inverse-primary: oklch(87% 0.08 68);
 
   /* Surfaces + outlines */
   --color-background: #f7f9fb;
@@ -104,7 +104,7 @@
   --color-outline-variant: #c3c6d7;
 
   /* Brand tint (used by some Tailwind color-mix patterns) */
-  --color-surface-tint: #0053db;
+  --color-surface-tint: oklch(68% 0.17 55);
 
   /* Shape */
   --radius-default: 0.5rem;
@@ -139,15 +139,15 @@
 /* -------------------------------------------------------------------------- */
 /* 4. BASE LAYER (CSS Resets)                                                 */
 /* -------------------------------------------------------------------------- */
-@layer base {
+@layer base_overrides {
   :root {
-    --student-primary: #004ac6;
-    --student-dark-primary: #003ea8;
+    --student-primary: oklch(68% 0.17 55);
+    --student-dark-primary: oklch(58% 0.17 55);
     --admin-primary: #0284c7;
-    --primary: #004ac6;
-    --primary-container: #2563eb;
-    --primary-fixed: #dbe1ff;
-    --on-primary-fixed: #00174b;
+    --primary: oklch(68% 0.17 55);
+    --primary-container: oklch(82% 0.1 55);
+    --primary-fixed: oklch(95% 0.04 75);
+    --on-primary-fixed: oklch(20% 0.01 55);
     --surface: #f7f9fb;
     --surface-container-low: #f2f4f6;
     --surface-container-lowest: #ffffff;
@@ -168,16 +168,16 @@
     --surface-card: #ffffff;
     --surface-card-muted: #f8fafc;
     --surface-card-border: rgba(148, 163, 184, 0.18);
-    --surface-card-border-hover: rgba(0, 74, 198, 0.22);
+    --surface-card-border-hover: oklch(68% 0.17 55 / 0.22);
     --shadow-card: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
     --shadow-card-hover: 0 22px 42px -26px rgba(15, 23, 42, 0.32);
     --lift-card: translateY(-2px);
     --lift-card-strong: translateY(-3px);
 
     --cuet-table-accent: var(--primary);
-    --cuet-table-accent-strong: #003ea8;
-    --cuet-table-accent-soft: rgba(0, 74, 198, 0.1);
-    --cuet-table-accent-softer: rgba(0, 74, 198, 0.06);
+    --cuet-table-accent-strong: oklch(58% 0.17 55);
+    --cuet-table-accent-soft: oklch(68% 0.17 55 / 0.1);
+    --cuet-table-accent-softer: oklch(68% 0.17 55 / 0.06);
     --cuet-table-surface: #ffffff;
     --cuet-table-surface-muted: #f8fafc;
     --cuet-table-surface-dim: #eef2f7;
@@ -234,18 +234,15 @@
     box-shadow: var(--shadow-lg);
   }
 
-  /* Canonical elevated card surface — opt-in for new code.
-     Per-module classes can either use this directly or layer their
-     own gradient/glow on top of the shared tokens. */
+  /* Canonical elevated card surface — opt-in for new code. */
   .cuet-card {
-    background: var(--surface-card);
-    border: 1px solid var(--surface-card-border);
-    border-radius: 1rem;
-    box-shadow: var(--shadow-card);
+    border-radius: 1.25rem;
     transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease,
-      border-color 0.2s ease;
+      transform 0.25s cubic-bezier(0.2, 1, 0.3, 1),
+      box-shadow 0.25s cubic-bezier(0.2, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    border: none;
   }
 
   .cuet-card--interactive { cursor: pointer; }
@@ -254,13 +251,137 @@
   .cuet-card--interactive:focus-visible {
     transform: var(--lift-card);
     box-shadow: var(--shadow-card-hover);
-    border-color: var(--surface-card-border-hover);
+  }
+
+  /* Editorial variant: Sophisticated pearl gradient with top-light highlight */
+  .cuet-card--editorial {
+    background: linear-gradient(165deg, #ffffff 0%, #f8faff 100%);
+    box-shadow: 
+      var(--ambient-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  /* Premium variant: Substrate for high-tier content using a soft amber mesh */
+  .cuet-card--premium {
+    background:
+      radial-gradient(at 100% 0%, oklch(68% 0.17 55 / 0.05) 0%, transparent 50%),
+      radial-gradient(at 0% 100%, oklch(75% 0.14 57 / 0.03) 0%, transparent 50%),
+      #ffffff;
+    box-shadow:
+      0 20px 40px -20px oklch(68% 0.17 55 / 0.12),
+      var(--ambient-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+
+  /* Glass variant: Frosted glass effect for high-impact highlights */
+  .cuet-card--glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+      0 20px 40px -20px rgba(25, 28, 30, 0.1),
+      var(--ambient-shadow);
+  }
+
+  /* Tonal variant: Subtle background shift for grouping */
+  .cuet-card--tonal {
+    background: var(--color-blue-50);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.02);
   }
 
   /* Color Helpers - notice no !important needed anymore */
   .text-primary { color: var(--student-primary); }
   .bg-primary { background-color: var(--student-primary); }
   .bg-danger { background-color: rgb(255, 97, 97); }
+
+  /* Premium Gradients */
+  .cuet-grad-text {
+    background: linear-gradient(135deg, var(--primary) 10%, var(--primary-container) 55%, oklch(90% 0.08 70) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .cuet-grad-premium {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+  }
+
+  .cuet-grad-avatar {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 60%, oklch(90% 0.08 70) 100%);
+  }
+
+  /* Material Symbols Helpers */
+  .cuet-icon-filled {
+    font-variation-settings: "FILL" 1;
+  }
+
+  .cuet-icon-cta {
+    font-variation-settings: "FILL" 1, "wght" 500;
+  }
+
+  /* Premium Buttons */
+  .cuet-btn--premium {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.5rem;
+    border-radius: 0.85rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%) !important;
+    border: none !important;
+    box-shadow: 0 16px 32px -16px oklch(68% 0.17 55 / 0.45);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.15s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .cuet-btn--premium:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 36px -14px oklch(68% 0.17 55 / 0.5);
+    filter: brightness(1.03);
+  }
+
+  .cuet-btn--premium:active:not(:disabled) {
+    transform: translateY(0);
+    filter: brightness(0.98);
+  }
+
+  .cuet-btn--premium:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .cuet-btn--pill {
+    border-radius: 999px;
+  }
+
+  /* Soft Input Variant — No borders, subtle background shift */
+  .cuet-input--soft :is(input.ant-input, .ant-select-selector, .ant-input-number, .ant-picker) {
+    background: var(--surface-container-low) !important;
+    border: none !important;
+    border-radius: 0.75rem !important;
+    min-height: 2.5rem !important;
+    font-size: 0.88rem !important;
+    color: var(--on-surface) !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cuet-input--soft :is(input.ant-input:hover, .ant-select-selector:hover, .ant-input-number:hover, .ant-picker:hover) {
+    background: var(--surface-container) !important;
+  }
+
+  .cuet-input--soft :is(input.ant-input:focus, .ant-select-focused .ant-select-selector, .ant-input-number-focused, .ant-picker-focused) {
+    background: #ffffff !important;
+    box-shadow: 0 0 0 2px oklch(68% 0.17 55 / 0.1) !important;
+  }
 
   /* Utility-like classes that should be in components layer */
   .drawer-open { overflow: auto !important; } /* Kept !important as it might need to override inline styles */
@@ -628,12 +749,12 @@ button.ant-btn.btn-primary {
   border: none;
   border-radius: 0.75rem;
   font-weight: 600;
-  box-shadow: 0 6px 18px -8px rgba(0, 74, 198, 0.45);
+  box-shadow: 0 6px 18px -8px oklch(68% 0.17 55 / 0.4);
   transition: filter 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
 }
 button.ant-btn.btn-primary:hover {
   filter: brightness(1.08);
-  box-shadow: 0 10px 24px -8px rgba(0, 74, 198, 0.5);
+  box-shadow: 0 10px 24px -8px oklch(68% 0.17 55 / 0.45);
   transform: translateY(-1px);
 }
 button.ant-btn.btn-primary:active {
@@ -641,7 +762,7 @@ button.ant-btn.btn-primary:active {
   filter: brightness(0.96);
 }
 button.ant-btn.btn-primary:focus-visible {
-  box-shadow: 0 0 0 3px rgba(0, 74, 198, 0.28);
+  box-shadow: 0 0 0 3px oklch(68% 0.17 55 / 0.25);
 }
 
 button.ant-btn.btn-secondary {
@@ -777,7 +898,7 @@ button.ant-btn.btn-a-secondary:hover {
 }
 
 .ant-tabs > .ant-tabs-nav {
-  margin: 0 0 1rem;
+  margin: 0 0 0.75rem;
 }
 
 .ant-tabs-nav .ant-tabs-tab {
@@ -920,7 +1041,7 @@ button.ant-btn.btn-a-secondary:hover {
 }
 .ant-pagination-item-active {
   background: var(--primary) !important;
-  box-shadow: 0 12px 24px -6px rgba(0, 74, 198, 0.45), 0 4px 10px -2px rgba(0, 74, 198, 0.2) !important;
+  box-shadow: 0 12px 24px -6px oklch(68% 0.17 55 / 0.35), 0 4px 10px -2px oklch(68% 0.17 55 / 0.15) !important;
 }
 .ant-pagination-item-active a {
   color: #ffffff !important;
@@ -928,7 +1049,7 @@ button.ant-btn.btn-a-secondary:hover {
 .ant-pagination-item-active:hover {
   background: var(--primary-container) !important;
   transform: translateY(-2px);
-  box-shadow: 0 16px 32px -6px rgba(0, 74, 198, 0.45), 0 4px 10px -2px rgba(0, 74, 198, 0.2) !important;
+  box-shadow: 0 16px 32px -6px oklch(68% 0.17 55 / 0.35), 0 4px 10px -2px oklch(68% 0.17 55 / 0.15) !important;
 }
 .ant-pagination-disabled {
   opacity: 0.3;
@@ -1142,11 +1263,11 @@ nz-table .ant-pagination-total-text {
   color: #ffffff;
   border: none;
   font-weight: 600;
-  box-shadow: 0 6px 16px -8px rgba(0, 74, 198, 0.45);
+  box-shadow: 0 6px 16px -8px oklch(68% 0.17 55 / 0.35);
   transition: background 0.18s ease;
 }
 .cuet-table-empty__cta.ant-btn:hover {
-  background: #003ea8;
+  background: oklch(58% 0.17 55);
 }
 
 nz-breadcrumb {
@@ -1165,11 +1286,11 @@ nz-breadcrumb {
 }
 
 .student .ant-breadcrumb > nz-breadcrumb-item:last-child {
-  color: #8555fd;
+  color: oklch(68% 0.17 55);
 }
 
 .student .ant-breadcrumb > nz-breadcrumb-item:hover {
-  color: #561abd;
+  color: oklch(58% 0.17 55);
 }
 
 .admin .ant-breadcrumb > nz-breadcrumb-item:last-child {
@@ -1306,7 +1427,7 @@ nz-input-group .ant-input {
 }
 
 nz-input-group:has(.ant-input:focus) {
-  border-color: #561abd !important;
+  border-color: oklch(68% 0.17 55) !important;
 }
 
 .admin-form .ant-input-affix-wrapper {
@@ -1356,14 +1477,16 @@ nz-input-group.password-input {
 }
 
 .ant-picker-input > input {
+  font-family: var(--font-body), "Inter", sans-serif !important;
   font-size: 0.9rem !important;
-  font-weight: 400;
-  color: var(--on-surface);
+  font-weight: 500 !important;
+  color: var(--on-surface) !important;
+  line-height: 1.5 !important;
 }
+
 .ant-picker-input > input::placeholder {
-  font-size: 0.9rem !important;
-  color: color-mix(in srgb, var(--on-surface) 50%, #fff);
-  font-weight: 400;
+  color: color-mix(in srgb, var(--on-surface) 50%, #fff) !important;
+  font-weight: 400 !important;
 }
 
 .ant-picker {
@@ -1373,15 +1496,207 @@ nz-input-group.password-input {
   border-radius: 10px !important;
   border: 1px solid rgba(148, 163, 184, 0.42) !important;
   background: #fff !important;
-  box-shadow: none !important;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease;
 }
+
 .ant-picker:hover {
   border-color: color-mix(in srgb, var(--primary) 45%, transparent) !important;
 }
+
+.ant-picker-focused,
 .ant-picker:focus-within {
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent) !important;
+  outline: none;
+}
+
+/* Suffix & Clear icons */
+.ant-picker-suffix,
+.ant-picker-clear {
+  color: #94a3b8 !important;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.ant-picker:hover .ant-picker-suffix,
+.ant-picker:hover .ant-picker-clear {
+  color: #64748b !important;
+}
+
+/* Dropdown Panel */
+.ant-picker-dropdown {
+  padding: 0.5rem !important;
+}
+
+.ant-picker-panel-container {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 40px -18px rgba(15, 23, 42, 0.22), 0 8px 18px -10px rgba(15, 23, 42, 0.1) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+.ant-picker-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.ant-picker-header > button {
+  min-width: 1.6rem !important;
+  height: 1.6rem !important;
+  padding: 0 !important;
+  color: #94a3b8 !important;
+  background: transparent !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  font-size: 12px !important;
+}
+
+/* Restore visibility of navigation arrows by overriding Tailwind's 'border: 0 solid' reset for pseudo-elements */
+.ant-picker-header button::before,
+.ant-picker-header button::after {
+  border-style: solid !important;
+  border-width: 1px 0 0 1px !important; /* Standard Ant Design chevron construction */
+}
+
+/* Ensure SVGs inside these buttons are also correctly styled if used */
+.ant-picker-header > button svg {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  fill: currentColor !important;
+  width: 1em !important;
+  height: 1em !important;
+  border: none !important; /* Ensure no accidental borders on SVGs */
+}
+
+.ant-picker-header > button:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-radius: 6px !important;
+}
+
+.ant-picker-header-view {
+  flex: 1 !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+  font-weight: 700 !important;
+}
+
+.ant-picker-header-view button {
+  font-family: var(--font-headline), "Manrope", sans-serif !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  font-size: 0.95rem !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 4px !important;
+  height: auto !important;
+  display: inline-block !important;
+  min-width: 0 !important;
+}
+
+.ant-picker-header-view button:hover {
+  color: var(--primary) !important;
+  background: transparent !important;
+}
+
+.ant-picker-content th {
+  font-family: var(--font-body), "Inter", sans-serif !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.5rem !important;
+}
+
+.ant-picker-content {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.ant-picker-cell {
+  padding: 2px !important;
+}
+
+.ant-picker-cell-inner {
+  border-radius: 8px !important;
+  font-family: var(--font-body), "Inter", sans-serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  transition: all 0.15s ease !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+}
+
+/* Date panel: Keep cells square and small */
+.ant-picker-date-panel .ant-picker-cell-inner {
+  width: 32px !important;
+}
+
+/* Month/Year panels: Wider cells to accommodate text labels comfortably */
+.ant-picker-month-panel .ant-picker-cell-inner,
+.ant-picker-year-panel .ant-picker-cell-inner {
+  width: auto !important;
+  min-width: 64px !important;
+  padding: 0 16px !important;
+}
+
+/* Decade panel: Even wider for range labels like "2000-2009" */
+.ant-picker-decade-panel {
+  min-width: 340px !important;
+}
+
+.ant-picker-decade-panel .ant-picker-cell-inner {
+  width: auto !important;
+  min-width: 100px !important;
+  padding: 0 12px !important;
+  font-size: 0.8rem !important;
+}
+
+.ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end) .ant-picker-cell-inner {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border: 1px solid var(--primary) !important;
+  border-radius: 8px !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px -2px oklch(68% 0.17 55 / 0.25) !important;
+}
+
+.ant-picker-footer {
+  border-top: 1px solid #f1f5f9 !important;
+  padding: 0.5rem !important;
+}
+
+.ant-picker-today-btn {
+  color: var(--primary) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+}
+
+.ant-picker-today-btn:hover {
+  color: var(--student-dark-primary) !important;
 }
 
 .admin .ant-picker:hover,
@@ -1392,7 +1707,7 @@ nz-input-group.password-input {
 .admin .ant-picker:focus-within,
 .admin-form .ant-picker:focus-within {
   border-color: var(--admin-primary) !important;
-  box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.2) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-primary) 15%, transparent) !important;
 }
 
 nz-select {
@@ -1658,15 +1973,16 @@ nz-switch:has(.ant-switch-small) {
 }
 
 .student nz-pagination .ant-pagination-item-active {
-  background-color: #8555fd;
+  background-color: oklch(68% 0.17 55);
   border: none;
+  box-shadow: 0 12px 24px -6px oklch(68% 0.17 55 / 0.4), 0 4px 10px -2px oklch(68% 0.17 55 / 0.18);
 }
 .student nz-pagination .ant-pagination-item-active a {
   color: #fff !important;
 }
 
 .student nz-pagination .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-  border-color: #8555fd;
+  border-color: oklch(68% 0.17 55);
 }
 
 .admin nz-pagination .ant-pagination-item-active {

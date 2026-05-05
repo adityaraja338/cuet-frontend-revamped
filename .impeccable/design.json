@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2024-05-05T12:00:00Z",
+  "title": "Design System: CUET Corner",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Confidence Amber",
+        "canonical": "oklch(68% 0.17 55)",
+        "tonalRamp": [
+          "oklch(40% 0.15 52)",
+          "oklch(52% 0.16 53)",
+          "oklch(62% 0.17 54)",
+          "oklch(68% 0.17 55)",
+          "oklch(74% 0.16 58)",
+          "oklch(82% 0.1 55)",
+          "oklch(94% 0.05 78)",
+          "oklch(97% 0.025 82)"
+        ]
+      },
+      "background": {
+        "role": "background",
+        "displayName": "Warm White",
+        "canonical": "oklch(99% 0.006 80)"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (KPI)",
+        "purpose": "Used for hero stats and large numerical values. Italic Cormorant Garamond adds academic prestige."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Primary navigation and section grouping."
+      }
+    },
+    "shadows": [
+      {
+        "name": "ambient-shadow",
+        "value": "0px 12px 32px rgba(25, 28, 30, 0.06)",
+        "purpose": "Standard depth for floating cards."
+      }
+    ],
+    "motion": [
+      {
+        "name": "entrance",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Soft, deliberate content reveals (400-500ms)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The primary 'Radiant Mentor' action.",
+      "html": "<button class=\"ds-btn-primary\">CONTINUE LEARNING</button>",
+      "css": ".ds-btn-primary { background: oklch(68% 0.17 55); color: #fff; padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-family: 'Manrope', sans-serif; font-weight: 700; border: none; box-shadow: 0 4px 12px oklch(68% 0.17 55 / 0.15); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; } .ds-btn-primary:hover { background: oklch(58% 0.17 55); transform: translateY(-1px); box-shadow: 0 8px 16px oklch(68% 0.17 55 / 0.2); }"
+    },
+    {
+      "name": "Resource Card",
+      "kind": "card",
+      "refersTo": "card-cuet",
+      "description": "Standard floating container for educational content.",
+      "html": "<div class=\"ds-card\">\n  <div class=\"ds-card-eyebrow\">GENERAL TEST</div>\n  <h3 class=\"ds-card-title\">Quantitative Aptitude</h3>\n  <p class=\"ds-card-body\">Master the fundamentals of numbers and logic.</p>\n</div>",
+      "css": ".ds-card { background: #fff; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0px 12px 32px rgba(25, 28, 30, 0.06); transition: all 0.3s ease; border: 1px solid rgba(148, 163, 184, 0.15); } .ds-card:hover { transform: translateY(-4px); border-color: oklch(68% 0.17 55 / 0.2); } .ds-card-eyebrow { font-family: 'Manrope', sans-serif; font-size: 0.7rem; font-weight: 700; color: oklch(68% 0.17 55); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.5rem; } .ds-card-title { font-family: 'Manrope', sans-serif; font-size: 1.1rem; font-weight: 700; color: #191c1e; margin: 0 0 0.5rem; } .ds-card-body { font-family: 'Inter', sans-serif; font-size: 0.875rem; color: #434655; margin: 0; line-height: 1.5; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Radiant Mentor",
+    "overview": "CUET Corner is designed to feel like a warm sunrise—a signal of hope and clarity for 16-17 year olds navigating the anxiety of university entrance exams. The aesthetic is 'Supportive Mentor': authoritative yet approachable, replacing the cold, utilitarian feel of traditional EdTech with a prestigious, editorial experience.",
+    "keyCharacteristics": [
+      "Warmth over Drama: Amber-tinted neutrals and soft light over cold grays.",
+      "Clarity over Density: One primary idea per viewport; breathing room for the story.",
+      "Supportive Elevation: Surfaces that float slightly, suggesting a workspace that is organized and ready."
+    ],
+    "rules": [
+      {
+        "name": "The 10% Radiance Rule",
+        "body": "The primary Confidence Amber is used on ≤10% of any given screen. Its rarity makes it a powerful signal for 'what to do next.'",
+        "section": "colors"
+      },
+      {
+        "name": "The Soft Shadow Rule",
+        "body": "Shadows are never structural or heavy. Use 0px 12px 32px rgba(25, 28, 30, 0.06) for ambient depth.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use clamp() for fluid, readable headlines across budget Android devices.",
+      "Do ensure touch targets are at least 48px for mobile accessibility.",
+      "Do lead with 'Mentor’s Guidance'—every screen must answer 'What's next?'."
+    ],
+    "donts": [
+      "Don't use side-stripe borders as colored accents on cards.",
+      "Don't use gradient text; maintain solid color authority.",
+      "Don't use FOMO tactics like countdown timers or 'Batch Bazaar' clutter."
+    ]
+  }
+}

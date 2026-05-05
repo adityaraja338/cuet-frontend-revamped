@@ -152,6 +152,11 @@ export class AccountComponent implements OnInit {
     this.batches?.forEach((batch: any) => (batch.showDetails = false));
   }
 
+  getFeatureName(featureId: number): string {
+    const feature = this.features?.find((f: any) => f.id === featureId);
+    return feature ? feature.name : '';
+  }
+
   isFeatureSelectedToBuy() {
     const selectedFeatures = this.features?.filter(
       (feature: any) => feature?.selectedToBuy && feature?.canPurchase,

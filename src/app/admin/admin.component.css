@@ -62,8 +62,8 @@
 }
 
 .shell-trigger {
-  width: 2.45rem;
-  height: 2.45rem;
+  width: 3rem;
+  height: 3rem;
   border: 1px solid var(--shell-border);
   border-radius: 0.8rem;
   padding: 0;

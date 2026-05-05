@@ -1,4 +1,4 @@
-<section class="tests-page">
+<section class="tests-page editorial-frame">
   <!-- ───────────────────────────  Hero  ─────────────────────────── -->
   <header class="cuet-page-hero">
     <div class="cuet-page-hero__copy">
@@ -13,6 +13,7 @@
 
   <!-- ───────────────────────────  Tabs  ─────────────────────────── -->
   <nz-tabs
+    class="tests-tabs"
     [(nzSelectedIndex)]="currentTabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
@@ -80,11 +81,6 @@
                       <span class="cuet-table-row__name-text">{{
                         test?.name
                       }}</span>
-                      <span class="cuet-table-row__mobile-meta">
-                        {{ test?.totalQuestions }} Qs ·
-                        {{ Math.floor(test?.duration / 60) }}h
-                        {{ test?.duration % 60 }}m
-                      </span>
                     </td>
                     <td class="text-center cuet-table-row__num">
                       {{ test?.totalQuestions }}
@@ -120,6 +116,37 @@
                 }
               </tbody>
             </nz-table>
+
+            <div class="tests-card-list">
+              @for (test of recordedTests; track test.id) {
+                <div class="tests-card" (click)="onClickStartTest(test, 'recorded')">
+                  <div class="tests-card__icon">
+                    <span class="material-symbols-outlined">quiz</span>
+                  </div>
+                  <div class="tests-card__body">
+                    <p class="tests-card__name">{{ test?.name }}</p>
+                    <div class="tests-card__meta">
+                      <span>{{ test?.totalQuestions }} Qs</span>
+                      <span class="tests-card__sep">·</span>
+                      <span>{{ Math.floor(test?.duration / 60) }}h {{ test?.duration % 60 }}m</span>
+                      <span
+                        class="pill"
+                        [class.pill--free]="test?.isFree"
+                        [class.pill--paid]="!test?.isFree"
+                      >{{ test?.isFree ? "Free" : "Paid" }}</span>
+                    </div>
+                  </div>
+                  <button
+                    nz-button
+                    class="btn-primary btn-sm tests-card__cta"
+                    (click)="onClickStartTest(test, 'recorded'); $event.stopPropagation()"
+                  >
+                    Start
+                    <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                  </button>
+                </div>
+              }
+            </div>
           }
         </div>
       </ng-template>
@@ -187,11 +214,6 @@
                       <span class="cuet-table-row__name-text">{{
                         test?.name
                       }}</span>
-                      <span class="cuet-table-row__mobile-meta">
-                        {{ test?.totalQuestions }} Qs ·
-                        {{ Math.floor(test?.duration / 60) }}h
-                        {{ test?.duration % 60 }}m
-                      </span>
                     </td>
                     <td class="text-center cuet-table-row__num">
                       {{ test?.totalQuestions }}
@@ -227,6 +249,37 @@
                 }
               </tbody>
             </nz-table>
+
+            <div class="tests-card-list">
+              @for (test of mockTests; track test.id) {
+                <div class="tests-card" (click)="onClickStartTest(test, 'mock')">
+                  <div class="tests-card__icon">
+                    <span class="material-symbols-outlined">assignment</span>
+                  </div>
+                  <div class="tests-card__body">
+                    <p class="tests-card__name">{{ test?.name }}</p>
+                    <div class="tests-card__meta">
+                      <span>{{ test?.totalQuestions }} Qs</span>
+                      <span class="tests-card__sep">·</span>
+                      <span>{{ Math.floor(test?.duration / 60) }}h {{ test?.duration % 60 }}m</span>
+                      <span
+                        class="pill"
+                        [class.pill--free]="test?.isFree"
+                        [class.pill--paid]="!test?.isFree"
+                      >{{ test?.isFree ? "Free" : "Paid" }}</span>
+                    </div>
+                  </div>
+                  <button
+                    nz-button
+                    class="btn-primary btn-sm tests-card__cta"
+                    (click)="onClickStartTest(test, 'mock'); $event.stopPropagation()"
+                  >
+                    Start
+                    <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                  </button>
+                </div>
+              }
+            </div>
           }
         </div>
       </ng-template>
@@ -350,11 +403,6 @@
                     <span class="cuet-table-row__name-text">{{
                       test?.name
                     }}</span>
-                    <span class="cuet-table-row__mobile-meta">
-                      {{ test?.totalQuestions }} Qs ·
-                      {{ Math.floor(test?.duration / 60) }}h
-                      {{ test?.duration % 60 }}m
-                    </span>
                   </td>
                   <td class="text-center cuet-table-row__num">
                     {{ test?.totalQuestions }}
@@ -389,6 +437,37 @@
                 </tr>
               </tbody>
             </nz-table>
+
+            <div class="tests-card-list">
+              @for (test of topicTests; track test.id) {
+                <div class="tests-card" (click)="onClickStartTest(test, 'topic')">
+                  <div class="tests-card__icon">
+                    <span class="material-symbols-outlined">manage_search</span>
+                  </div>
+                  <div class="tests-card__body">
+                    <p class="tests-card__name">{{ test?.name }}</p>
+                    <div class="tests-card__meta">
+                      <span>{{ test?.totalQuestions }} Qs</span>
+                      <span class="tests-card__sep">·</span>
+                      <span>{{ Math.floor(test?.duration / 60) }}h {{ test?.duration % 60 }}m</span>
+                      <span
+                        class="pill"
+                        [class.pill--free]="test?.isFree"
+                        [class.pill--paid]="!test?.isFree"
+                      >{{ test?.isFree ? "Free" : "Paid" }}</span>
+                    </div>
+                  </div>
+                  <button
+                    nz-button
+                    class="btn-primary btn-sm tests-card__cta"
+                    (click)="onClickStartTest(test, 'topic'); $event.stopPropagation()"
+                  >
+                    Start
+                    <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
+                  </button>
+                </div>
+              }
+            </div>
           }
 
           <ng-template #printTopicTotalCount>
@@ -465,7 +544,8 @@
           >play_arrow</span
         >
         <div>
-          <p class="modal-head__title">Start this test?</p>
+          <p class="modal-head__title">{{ selectedTest?.name }}</p>
+          <p class="modal-head__subtitle">Review the details below before you begin.</p>
         </div>
       </div>
 

@@ -1,33 +1,34 @@
-# Product Specification: CUET Corner
+# Product
 
-## 1. Overview
-CUET Corner is a comprehensive educational platform designed specifically for CUET (Common University Entrance Test) aspirants in India. It aims to provide high-quality, accessible resources to help students secure admission into prestigious central universities like JNU.
+## Register
 
-## 2. Users
-- **CUET Aspirants:** Students (typically 12th grade or gap year) looking for structured preparation materials, tests, and guidance.
-- **Parents:** Secondary users monitoring their children's progress.
+product
 
-## 3. Core Features
-- **Batch Registration:** Students can join specific batches for focused learning.
-- **Participatory Tests:** Comprehensive mock tests and practice sets.
-- **Video Resources:** Access to recorded and/or live video links for topics.
-- **Study Materials:** Digital reading materials and notes.
-- **Performance Monitoring:** Detailed analytics of student performance in tests.
+## Users
+- **Primary: CUET Aspirants.** Students (12th grade or gap year) in India seeking structured, high-quality preparation for the Common University Entrance Test. They are often anxious about their future and need clarity and a clear path to prestigious central universities like JNU.
+- **Secondary: Parents.** Guardians monitoring progress and seeking a trustworthy, education-first platform for their children.
 
-## 4. Business Model
-- **Freemium:** Students can explore and access a selection of free items.
-- **Paid Content:** Premium batches, specialized tests, and advanced materials require payment.
+## Product Purpose
+CUET Corner exists to democratize elite university entrance preparation. Founded by a successful JNU aspirant, it provides the "insider track" through curated resources, participatory tests, and performance analytics. Success means a student feeling fully equipped and confident to secure their seat in a top-tier university.
 
-## 5. Brand & Tone
-- **Authoritative yet Approachable:** Founded by a successful aspirant (Abhinav Harsh, JNU), the platform carries "insider" credibility.
-- **Aspirational:** Focuses on the goal of reaching top-tier universities.
-- **Trustworthy:** Transparent about the success story of its founder and the quality of its materials.
-- **Digital Curator:** (From DESIGN.md) Treating academic data as a prestigious editorial experience.
+## Brand Personality
+- **Supportive Mentor:** Authoritative and credible due to its JNU roots, yet warm and encouraging. It’s the voice of someone who has been there and wants you to succeed.
+- **Education-First:** Transparent and honest. Avoids the aggressive sales tactics and FOMO common in Indian EdTech.
+- **Aspirational & Clear:** Focuses on the goal (JNU/Central Universities) with a "warm sunrise" aesthetic that signals hope and organized progress.
 
-## 6. Strategic Principles
-- **Student-First:** Simplified navigation for ease of learning.
-- **Performance-Driven:** Everything leads to better test scores.
-- **Aesthetic Excellence:** Moving beyond utilitarian dashboards to an editorial, premium feel.
+## Anti-references
+- **The "Batch Bazaar":** Over-selling or pushing multiple paid batches at every turn.
+- **FOMO Tactics:** Countdown timers, "only 2 seats left," or aggressive monetization popups.
+- **Cluttered Dashboards:** Dense, overwhelming interfaces that prioritize feature-count over student focus.
+- **Generic Corporate Blue:** Avoiding the cold, utilitarian "banking" feel of traditional test-prep platforms.
 
-## 7. Register
-- **Register:** Brand (Landing Page) / Product (Student Dashboard)
+## Design Principles
+- **Mentor’s Guidance:** Every screen should answer "What should I do next?" with clarity.
+- **Confidence through Visualization:** Progress isn't just a number; it's a visual journey. Students should see their growth to build exam-day confidence.
+- **Education over Monetization:** Content and learning utility always take visual precedence over "upgrade" prompts.
+- **Warmth & Hope:** Using amber-tinted neutrals and soft light to create an environment that reduces exam anxiety.
+
+## Accessibility & Inclusion
+- **Budget Android Priority:** Optimized for mid-range mobile devices and variable internet speeds.
+- **Touch-First:** Large, clear interaction targets (min 48px).
+- **Cognitive Load:** One primary idea per viewport to prevent overwhelm.

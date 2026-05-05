@@ -4,38 +4,38 @@
       <div class="shell-header__left">
         <button
           type="button"
-          class="shell-trigger"
+          class="shell-trigger flex items-center justify-center"
           (click)="isCollapsed = !isCollapsed"
           [attr.aria-label]="isCollapsed ? 'Open navigation menu' : 'Close navigation menu'"
         >
-          <span nz-icon nzType="menu" nzTheme="outline"></span>
+          <span class="material-symbols-outlined">menu</span>
         </button>
 
         <a class="shell-brand" routerLink="/student/home" aria-label="Open student home">
-          <span class="shell-brand__mark material-symbols-outlined" aria-hidden="true">hub</span>
+          <span class="shell-brand__mark material-symbols-outlined">hub</span>
           <span class="shell-brand__copy">
             <span class="shell-brand__name">CUET Corner</span>
-            <span class="shell-brand__sub">Student workspace</span>
+            <span class="shell-brand__sub">Curated Preparation</span>
           </span>
         </a>
       </div>
 
       <div class="shell-header__right">
         <a
-          class="shell-user-button inline-flex min-w-0 max-w-[min(22rem,46vw)] items-center gap-3 rounded-xl px-2 py-1.5 no-underline transition hover:bg-blue-600/5 focus-visible:bg-blue-600/5 max-sm:h-10 max-sm:w-10 max-sm:max-w-10 max-sm:justify-center max-sm:rounded-full max-sm:p-0.5"
+          class="shell-user-button inline-flex min-w-0 max-w-[min(22rem,46vw)] items-center gap-3 rounded-2xl px-3 py-2 no-underline transition hover:bg-primary/5 focus-visible:bg-primary/5 max-sm:h-10 max-sm:w-10 max-sm:max-w-10 max-sm:justify-center max-sm:rounded-full max-sm:p-0.5"
           [routerLink]="['/', 'student', 'account']"
           aria-label="Open student account"
         >
-          <span class="shell-user-button__copy flex min-w-0 flex-col items-end gap-0.5 text-right leading-tight max-sm:hidden">
-            <span class="shell-user-button__name max-w-56 truncate font-headline text-[0.88rem] font-bold tracking-[-0.01em] text-slate-900">
+          <span class="shell-user-button__copy flex min-w-0 flex-col items-end leading-tight max-sm:hidden">
+            <span class="shell-user-button__name max-w-56 truncate font-headline text-sm font-bold tracking-tight text-on-surface">
               {{ globalService.userDetails?.name || '-' }}
             </span>
-            <span class="shell-user-button__email max-w-56 truncate font-body text-[0.72rem] font-medium text-slate-500">
+            <span class="shell-user-button__email max-w-56 truncate font-body text-[0.7rem] font-medium text-on-surface-variant/70">
               {{ globalService.userDetails?.email || '-' }}
             </span>
           </span>
 
-          <span class="shell-avatar inline-flex h-9 w-9 min-w-9 items-center justify-center overflow-hidden rounded-full bg-(--shell-profile-gradient) text-white max-sm:h-8 max-sm:w-8 max-sm:min-w-8">
+          <span class="shell-avatar inline-flex h-10 w-10 min-w-10 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary max-sm:h-8 max-sm:w-8 max-sm:min-w-8">
             @if (globalService.userDetails?.imageUrl) {
               <img
                 class="h-full w-full object-cover"
@@ -43,7 +43,7 @@
                 alt="Student profile image"
               />
             } @else {
-              <span class="font-headline text-sm font-bold uppercase leading-none tracking-[-0.01em]">
+              <span class="font-headline text-sm font-bold uppercase leading-none">
                 {{ globalService.userDetails?.name?.charAt(0) || 'S' }}
               </span>
             }
@@ -81,33 +81,33 @@
             <h1 class="shell-profile-card__name">
               {{ globalService.userDetails?.name?.split(' ')[0] || '-' }}
             </h1>
-            <p class="shell-profile-card__subtitle">Student profile</p>
+            <p class="shell-profile-card__subtitle">Student Journey</p>
           </div>
 
           <dl class="shell-profile-card__facts">
             <div class="shell-profile-card__fact">
-              <dt>Student ID</dt>
+              <dt>ID Number</dt>
               <dd>{{ globalService.userDetails?.id || '-' }}</dd>
             </div>
             <div class="shell-profile-card__fact">
-              <dt>Batch</dt>
+              <dt>Active Batch</dt>
               <dd>
                 {{
                   globalService.userDetails?.batchId
                     ? globalService.userDetails?.batchName
-                    : '- (Un-enrolled)'
+                    : 'Awaiting Enrollment'
                 }}
               </dd>
             </div>
             <div class="shell-profile-card__fact">
-              <dt>Plan</dt>
-              <dd>{{ globalService.userDetails?.plan || '-' }}</dd>
+              <dt>Curriculum</dt>
+              <dd>{{ globalService.userDetails?.plan || 'Standard Path' }}</dd>
             </div>
           </dl>
         </div>
 
         <div class="shell-menu-block">
-          <p *ngIf="!isCollapsed" class="shell-menu-label">Navigation</p>
+          <p *ngIf="!isCollapsed" class="shell-menu-label">Study Space</p>
 
           <ul
             nz-menu
@@ -121,77 +121,76 @@
               class="shell-menu-item"
               nz-tooltip
               nzTooltipPlacement="right"
-              [nzTooltipTitle]="isCollapsed ? 'Home' : ''"
+              [nzTooltipTitle]="isCollapsed ? 'Dashboard' : ''"
               nzSelected
               nzMatchRouter="/student/home"
               routerLink="/student/home"
             >
-              <span nz-icon nzType="home"></span>
-              <span>Home</span>
+              <span class="material-symbols-outlined">grid_view</span>
+              <span>Dashboard</span>
             </li>
             <li
               nz-menu-item
               class="shell-menu-item"
               nz-tooltip
               nzTooltipPlacement="right"
-              [nzTooltipTitle]="isCollapsed ? 'Resources' : ''"
+              [nzTooltipTitle]="isCollapsed ? 'Study Library' : ''"
               nzSelected
               nzMatchRouter="/student/resources"
               routerLink="/student/resources"
             >
-              <span nz-icon nzType="read"></span>
-              <span>Resources</span>
+              <span class="material-symbols-outlined">auto_stories</span>
+              <span>Study Library</span>
             </li>
             <li
               nz-menu-item
               class="shell-menu-item"
               nz-tooltip
               nzTooltipPlacement="right"
-              [nzTooltipTitle]="isCollapsed ? 'Tests' : ''"
+              [nzTooltipTitle]="isCollapsed ? 'Practice Tests' : ''"
               nzSelected
               nzMatchRouter="/student/tests"
               routerLink="/student/tests"
             >
-              <span nz-icon nzType="project"></span>
-              <span>Tests</span>
+              <span class="material-symbols-outlined">edit_document</span>
+              <span>Practice Tests</span>
             </li>
             <li
               nz-menu-item
               class="shell-menu-item"
               nz-tooltip
               nzTooltipPlacement="right"
-              [nzTooltipTitle]="isCollapsed ? 'My Performances' : ''"
+              [nzTooltipTitle]="isCollapsed ? 'Performance' : ''"
               nzSelected
               nzMatchRouter="/student/performances"
               routerLink="/student/performances"
             >
-              <span nz-icon nzType="line-chart"></span>
-              <span>My Performances</span>
+              <span class="material-symbols-outlined">insights</span>
+              <span>Performance</span>
             </li>
             <li
               nz-menu-item
               class="shell-menu-item"
               nz-tooltip
               nzTooltipPlacement="right"
-              [nzTooltipTitle]="isCollapsed ? 'My Account' : ''"
+              [nzTooltipTitle]="isCollapsed ? 'My Profile' : ''"
               nzSelected
               nzMatchRouter="/student/account"
               routerLink="/student/account"
             >
-              <span nz-icon nzType="user"></span>
-              <span>My Account</span>
+              <span class="material-symbols-outlined">account_circle</span>
+              <span>My Profile</span>
             </li>
           </ul>
         </div>
 
         <div *ngIf="!isCollapsed" class="shell-logout">
           <button
-            nz-button
-            class="btn-secondary shell-logout-btn"
+            class="shell-logout-btn"
             (click)="isLogoutModal = true"
           >
-            <span nz-icon nzType="logout" nzTheme="outline"></span>
-            Logout
+            <span class="material-symbols-outlined">logout</span>
+            Exit Portal
           </button>
         </div>
       </div>
@@ -199,11 +198,9 @@
 
     <nz-content class="shell-content">
       <ngx-simplebar class="shell-scroll" [options]="{}">
-        <section class="shell-canvas">
-          <section class="shell-content-frame">
-            <router-outlet></router-outlet>
-          </section>
-        </section>
+        <main class="shell-main p-4 md:p-6 lg:p-8">
+          <router-outlet></router-outlet>
+        </main>
       </ngx-simplebar>
     </nz-content>
   </nz-layout>
@@ -215,32 +212,33 @@
   [nzFooter]="null"
   nzCentered
   (nzOnCancel)="isLogoutModal = false"
-  [nzWidth]="'auto'"
+  [nzWidth]="420"
 >
   <ng-container *nzModalContent>
-    <div class="cuet-modal-pad">
-    <p class="font-20 font-500">
-      <span
-        class="mr-2 text-primary"
-        nz-icon
-        nzType="info-circle"
-        nzTheme="outline"
-      ></span>
-      Confirmation
-    </p>
-    <p class="font-14 font-400 mt-3">Are you sure you want to logout?</p>
-    <div class="d-flex px-0 mt-3">
-      <button
-        nz-button
-        class="mr-1 w-50 btn-secondary"
-        (click)="isLogoutModal = false"
-      >
-        Cancel
-      </button>
-      <button nz-button class="ml-1 w-50 btn-primary" (click)="onClickLogout()">
-        Logout
-      </button>
-    </div>
+    <div class="p-8 text-center student">
+      <div class="w-16 h-16 rounded-2xl bg-error/10 text-error flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-3xl">logout</span>
+      </div>
+      <h3 class="font-headline text-2xl font-extrabold text-on-surface mb-3">Exit Portal?</h3>
+      <p class="text-on-surface-variant font-medium mb-8 leading-relaxed">
+        Are you sure you want to end your current session? You'll need to sign back in to access your resources.
+      </p>
+      <div class="flex gap-4">
+        <button
+          nz-button
+          class="btn-cuet btn-cuet--ghost flex-1 h-12"
+          (click)="isLogoutModal = false"
+        >
+          Cancel
+        </button>
+        <button 
+          nz-button 
+          class="btn-cuet btn-cuet--primary flex-1 h-12" 
+          (click)="onClickLogout()"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   </ng-container>
 </nz-modal>

@@ -209,7 +209,7 @@
    Distribution row read as one visual family.
 */
 .perf-modal__panel {
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
   border-radius: 16px;
   padding: 16px 18px;
   box-shadow:
@@ -305,7 +305,7 @@
 .perf-modal__donut-card {
   width: 148px;
   flex-shrink: 0;
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
   border-radius: 16px;
   padding: 16px 12px 14px;
   box-shadow:
@@ -367,15 +367,15 @@
 
 /* ── REMARK ───────────────────────────────────────────────────────────────── */
 .perf-modal__remark {
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  background: oklch(97% 0.025 55);
   border-radius: 12px;
   padding: 14px 18px;
-  border-left: 3px solid var(--primary);
+  border: 1px solid oklch(82% 0.1 55 / 0.35);
 }
 
 /* ── SESSION DL ───────────────────────────────────────────────────────────── */
 .perf-modal__dl {
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
   border-radius: 16px;
   padding: 2px 18px;
   box-shadow:
@@ -392,12 +392,12 @@
   padding: 11px 0;
   border-bottom: 1px solid rgba(148,163,184,0.10);
   border-radius: 8px;
-  transition: background 0.15s ease, padding-inline 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .perf-modal__dl-row:hover {
   background: rgba(148, 163, 184, 0.06);
-  padding-inline: 8px;
+  transform: translateX(4px);
 }
 
 .perf-modal__dl-row:last-child { border-bottom: none; }
@@ -420,7 +420,7 @@
 
 /* ── ANSWER CARDS ─────────────────────────────────────────────────────────── */
 .perf-modal__answer-card {
-  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
   border-radius: 16px;
   padding: 16px 18px;
   box-shadow:
@@ -723,5 +723,8 @@ button.perf-modal__btn--primary:active {
   }
 
   .perf-modal__kpi-value { font-size: 17px; }
+}
+/* Remove legacy leaderboard sizing overrides. */
+; }
 }
 /* Remove legacy leaderboard sizing overrides. */

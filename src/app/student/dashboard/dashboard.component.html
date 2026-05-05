@@ -1,578 +1,261 @@
-<div class="dash flex flex-col gap-8 lg:gap-10">
-  <!-- Hero -->
-  <header class="dash-hero">
-    <div class="dash-hero__copy">
-      <p class="dash-hero__eyebrow">Dashboard</p>
-      <h1 class="dash-hero__title">
-        {{ greeting }},
-        <span class="dash-hero__name">{{ firstName }}</span>
-      </h1>
-      <p class="dash-hero__subtitle">
-        Here's a quick look at your progress, upcoming live tests, and how you stack up.
-      </p>
-    </div>
+<div class="dashboard-container editorial-frame">
+  <div class="dash-grid">
+    <!-- Main Column: High-Intent Actions & Analysis -->
+    <main class="dash-main">
+      <!-- Section 1: Sunrise Greeting -->
+      <section class="sunrise-header">
+        <span class="section-eyebrow">Your Morning Brief</span>
+        <h1 class="editorial-title">
+          Ready for today, 
+          <span class="text-primary font-display font-bold italic">{{ firstName | titlecase }}</span>?
+        </h1>
 
-    <div class="dash-hero__meta">
-      <div class="dash-chip">
-        <span class="material-symbols-outlined" aria-hidden="true">event</span>
-        <span class="dash-chip__label">{{ today | date: 'EEE, dd MMM' }}</span>
-      </div>
-      <a
-        nz-button
-        class="btn-primary dash-hero__cta"
-        [routerLink]="['/', 'student', 'tests']"
-      >
-        Browse tests
-        <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-      </a>
-    </div>
-  </header>
-
-  <!-- Unfinished test alert -->
-  @if (pendingTestDetails) {
-    <section class="dash-alert" aria-label="Unfinished test">
-      <div class="dash-alert__rail" aria-hidden="true"></div>
-      <div class="dash-alert__body">
-        <div class="dash-alert__head">
-          <span class="dash-alert__icon material-symbols-outlined" aria-hidden="true">hourglass_top</span>
-          <div>
-            <p class="dash-alert__title">You have an unfinished test</p>
-            <p class="dash-alert__subtitle">Pick up where you left off, or submit what you've done so far.</p>
-          </div>
+        <div class="stat-pods">
+          <article class="stat-pod">
+            <span class="stat-pod__value">{{ progressStats?.testsAttempted ?? '0' }}</span>
+            <span class="stat-pod__label">Tests Attempted</span>
+          </article>
+          <article class="stat-pod">
+            <span class="stat-pod__value">{{ progressStats?.materialsRead ?? '0' }}</span>
+            <span class="stat-pod__label">Notes Read</span>
+          </article>
+          <article class="stat-pod">
+            <span class="stat-pod__value">{{ progressStats?.videosWatched ?? '0' }}</span>
+            <span class="stat-pod__label">Videos Watched</span>
+          </article>
         </div>
+      </section>
 
-        <dl class="dash-alert__facts">
-          <div class="dash-alert__fact">
-            <dt>Test</dt>
-            <dd>{{ pendingTestDetails?.testName ?? '-' }}</dd>
-          </div>
-          <div class="dash-alert__fact">
-            <dt>Type</dt>
-            <dd>{{ (pendingTestDetails?.testType | titlecase) ?? '-' }}</dd>
-          </div>
-          <div class="dash-alert__fact">
-            <dt>Started</dt>
-            <dd>{{ (pendingTestDetails?.startTime | date: 'hh:mm a') ?? '-' }}</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div class="dash-alert__actions">
-        <button
-          nz-button
-          type="button"
-          class="btn-secondary modal-btn"
-          (click)="submitPendingTest()"
-        >
-          Submit
-        </button>
-        <button
-          nz-button
-          class="btn-primary modal-btn"
-          [routerLink]="[
-            '/',
-            'student',
-            'tests',
-            'attempt',
-            pendingTestDetails?.testType,
-            pendingTestDetails?.testId,
-          ]"
-        >
-          Continue
-        </button>
-      </div>
-    </section>
-  }
-
-  <!-- Progress Overview -->
-  <section class="dash-section" id="progress-overview">
-    <header class="section-head">
-      <div>
-        <p class="section-head__eyebrow">Progress</p>
-        <h2 class="section-head__title">Your overview</h2>
-      </div>
-    </header>
-
-    <div class="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
-      <article class="stat-card stat-card--blue">
-        <div class="stat-card__top">
-          <p class="stat-card__label">Tests Attempted</p>
-          <div class="stat-card__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">assignment_turned_in</span>
-          </div>
-        </div>
-        <p class="stat-card__value">{{ progressStats?.testsAttempted ?? '-' }}</p>
-        <p class="stat-card__hint">Across all subjects</p>
-      </article>
-
-      <article class="stat-card stat-card--indigo">
-        <div class="stat-card__top">
-          <p class="stat-card__label">Materials Read</p>
-          <div class="stat-card__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">auto_stories</span>
-          </div>
-        </div>
-        <p class="stat-card__value">{{ progressStats?.materialsRead ?? '-' }}</p>
-        <p class="stat-card__hint">Notes and PDFs combined</p>
-      </article>
-
-      <article class="stat-card stat-card--sky">
-        <div class="stat-card__top">
-          <p class="stat-card__label">Videos Watched</p>
-          <div class="stat-card__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">smart_display</span>
-          </div>
-        </div>
-        <p class="stat-card__value">{{ progressStats?.videosWatched ?? '-' }}</p>
-        <p class="stat-card__hint">From lecture library</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- Upcoming Live Tests -->
-  <section class="dash-section" id="upcoming-live-tests">
-    <header class="section-head">
-      <div>
-        <p class="section-head__eyebrow">Live Tests</p>
-        <h2 class="section-head__title">Upcoming</h2>
-      </div>
-      <a
-        class="section-head__action"
-        [routerLink]="['/', 'student', 'tests']"
-      >
-        See all
-        <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-      </a>
-    </header>
-
-    @if (upcomingTestOverviewData?.length) {
-      <ngx-simplebar class="dash-rail">
-        <div class="dash-rail__track">
-          @for (data of upcomingTestOverviewData; track data; let i = $index) {
-            <article class="live-card">
-              <div class="live-card__cover" aria-hidden="true">
-                <span class="material-symbols-outlined live-card__cover-icon">bolt</span>
+      <!-- Section 2: Next Action -->
+      <section class="next-action">
+        <span class="section-eyebrow">Next Action</span>
+        @if (pendingTestDetails) {
+          <article class="next-action-card">
+            <div class="next-action__content">
+              <span class="next-action__badge">
+                <span class="material-symbols-outlined text-sm">hourglass_top</span>
+                Continue Unfinished
+              </span>
+              <h3 class="next-action__title">{{ pendingTestDetails?.testName }}</h3>
+              <div class="next-action__meta">
+                <span>
+                  <span class="material-symbols-outlined text-sm">schedule</span>
+                  {{ (pendingTestDetails?.startTime | date: 'hh:mm a') }}
+                </span>
+                <span>
+                  <span class="material-symbols-outlined text-sm">history</span>
+                  {{ pendingTestDetails?.testType | titlecase }}
+                </span>
               </div>
-
-              <div class="live-card__badge">
-                <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-                Live
+            </div>
+            <a
+              class="btn-editorial"
+              [routerLink]="[
+                '/',
+                'student',
+                'tests',
+                'attempt',
+                pendingTestDetails?.testType,
+                pendingTestDetails?.testId,
+              ]"
+            >
+              Resume Test
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </article>
+        } @else if (upcomingTestOverviewData?.length) {
+          <article class="next-action-card">
+            <div class="next-action__content">
+              <span class="next-action__badge">
+                <span class="material-symbols-outlined text-sm">bolt</span>
+                Live Now
+              </span>
+              <h3 class="next-action__title">{{ upcomingTestOverviewData[0]?.name }}</h3>
+              <div class="next-action__meta">
+                <span>
+                  <span class="material-symbols-outlined text-sm">schedule</span>
+                  Ends {{ (upcomingTestOverviewData[0]?.endTime | date: 'hh:mm a') }}
+                </span>
+                <span>
+                  <span class="material-symbols-outlined text-sm">timer</span>
+                  {{ upcomingTestOverviewData[0]?.duration }} min
+                </span>
               </div>
+            </div>
+            <button class="btn-editorial" (click)="onClickStartTest(upcomingTestOverviewData[0])">
+              Start Test
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+          </article>
+        } @else {
+          <div class="next-action-card bg-neutral-50">
+            <p class="text-sm font-medium text-neutral-500">No scheduled tests right now. Why not practice a few topics?</p>
+            <a class="btn-editorial" [routerLink]="['/', 'student', 'resources']">
+              Browse Topics
+            </a>
+          </div>
+        }
+      </section>
 
-              <div class="live-card__body">
-                <p class="live-card__title" [title]="data?.name">{{ data?.name ?? 'Untitled test' }}</p>
-                <p class="live-card__meta">
-                  Ends
-                  <span>{{ (data?.endTime | date: 'dd MMM · hh:mm a') ?? '-' }}</span>
-                </p>
+      <!-- Section 3: Analysis (Latest Score + Trend) -->
+      <section class="analysis">
+        <span class="section-eyebrow">Learning Insights</span>
+        <h2 class="section-title">Performance Trend</h2>
 
-                <div class="live-card__stats">
-                  <div class="live-card__stat">
-                    <span class="live-card__stat-label">Marks</span>
-                    <span class="live-card__stat-value">{{ (data?.totalQuestions ?? 0) * 5 }}</span>
-                  </div>
-                  <div class="live-card__stat">
-                    <span class="live-card__stat-label">Duration</span>
-                    <span class="live-card__stat-value">{{ data?.duration }} min</span>
-                  </div>
+        <div class="analysis-grid">
+          <!-- Latest Result -->
+          <article class="latest-score-card">
+            <div class="score-badge">
+              <span class="score-badge__value">{{ previousPerformanceData?.grade || '-' }}</span>
+            </div>
+            <div class="text-center">
+              <p class="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-1">Latest Result</p>
+              <p class="text-lg font-bold truncate max-w-[150px]">{{ previousPerformanceData?.testName || 'No recent test' }}</p>
+            </div>
+            <div class="accuracy-stack">
+              <div class="flex justify-between text-[10px] font-bold uppercase text-neutral-400">
+                <span>Accuracy</span>
+                <span>{{ (previousPerformanceData?.scoreObtained / previousPerformanceData?.totalScore * 100 | number: '1.0-0') || '0' }}%</span>
+              </div>
+              <div class="accuracy-bar">
+                <div class="accuracy-fill--correct" [style.width.%]="(previousPerformanceData?.correct / previousPerformanceData?.totalQuestions * 100) || 0"></div>
+                <div class="accuracy-fill--incorrect" [style.width.%]="(previousPerformanceData?.incorrect / previousPerformanceData?.totalQuestions * 100) || 0"></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Score Trend -->
+          <article class="score-trend-card overflow-hidden">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-neutral-400">Score History</p>
+                <p class="text-xl font-bold">Average: {{ overallPerformanceData?.overallAverage | number: '1.0-1' }}%</p>
+              </div>
+              <span class="material-symbols-outlined text-amber-500">trending_up</span>
+            </div>
+            <div class="chart-container">
+              <canvas
+                #averageScoreChart
+                baseChart
+                [type]="'line'"
+                [data]="averageScoreChartData"
+                [options]="averageScoreChartOptions"
+                [legend]="false"
+              ></canvas>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 4: Jump Back In Rail -->
+      <section class="jump-back-in">
+        <header class="section-title">
+          <span>Jump Back In</span>
+          <a class="text-xs text-neutral-400 font-bold uppercase hover:text-amber-600" [routerLink]="['/', 'student', 'tests']">See All</a>
+        </header>
+
+        <div class="rail-container">
+          <div class="horizontal-rail">
+            @for (test of recentPreviousTests; track test) {
+              <article class="rail-card" (click)="onClickPreviousTest(test)">
+                <div class="rail-card__icon">
+                  <span class="material-symbols-outlined">history</span>
+                </div>
+                <h4 class="rail-card__title">{{ test?.name }}</h4>
+                <div class="flex items-center gap-2 text-[10px] font-bold text-neutral-400 uppercase">
+                  <span>{{ test?.startTime | date: 'dd MMM' }}</span>
+                  <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+                  <span>{{ test?.duration }} min</span>
+                </div>
+              </article>
+            } @empty {
+              <p class="text-sm text-neutral-400 italic">Complete a test to see it here.</p>
+            }
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Side Column: Social & Pulse -->
+    <aside class="dash-side">
+      <!-- Section 5: Competition Podium -->
+      <section class="podium-section">
+        <span class="section-eyebrow">Leaderboard</span>
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+          <h2 class="section-title mb-0!">Top Performers</h2>
+          <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+            Total <span class="text-primary">{{ leaderboardData[0]?.totalScore || 0 }}</span> Points
+          </span>
+        </div>
+
+        <div class="podium-grid">
+          @for (user of leaderboardData.slice(0, 3); track user; let i = $index) {
+            <article class="podium-card" [class]="'podium-card--' + (i + 1)">
+              <div class="podium-card__medal">
+                <span class="material-symbols-outlined">military_tech</span>
+              </div>
+              <div class="podium-card__body">
+                <p class="podium-card__name">{{ user?.studentName }}</p>
+                <div class="podium-card__score-row">
+                  <span class="podium-card__raw-large">{{ user.scoreObtained }}</span>
                 </div>
               </div>
-
-              <button
-                type="button"
-                class="live-card__cta"
-                (click)="onClickStartTest(data)"
-              >
-                Start test
-                <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-              </button>
             </article>
           }
         </div>
-      </ngx-simplebar>
-    } @else {
-      <div class="empty-state empty-state--card">
-        <span class="empty-state__icon material-symbols-outlined" aria-hidden="true">event_available</span>
-        <p class="empty-state__title">No live tests scheduled</p>
-        <p class="empty-state__subtitle">You're all caught up. New tests will show up here.</p>
-      </div>
-    }
-  </section>
 
-  <!-- Quick Links + Previous Tests -->
-  <section class="dash-split" id="quick-links-previous-tests">
-    <div class="shortcut-panel">
-      <header class="section-head shortcut-panel__head">
-        <div>
-          <p class="section-head__eyebrow">Shortcuts</p>
-          <h2 class="section-head__title">Jump back in</h2>
-        </div>
-        <p class="shortcut-panel__copy">Your most-used student actions in one place.</p>
-      </header>
-
-      <div class="shortcut-grid">
-        <a class="shortcut-tile shortcut-tile--blue" [routerLink]="['/', 'student', 'tests']">
-          <div class="shortcut-tile__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">quiz</span>
-          </div>
-          <div class="shortcut-tile__body">
-            <p class="shortcut-tile__eyebrow">Practice</p>
-            <p class="shortcut-tile__title">Mock Tests</p>
-            <p class="shortcut-tile__subtitle">Live, recorded, and topic-wise tests.</p>
-          </div>
-          <span class="shortcut-tile__cta">
-            Open
-            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-          </span>
-        </a>
-
-        <a class="shortcut-tile shortcut-tile--indigo" [routerLink]="['/', 'student', 'resources']">
-          <div class="shortcut-tile__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">library_books</span>
-          </div>
-          <div class="shortcut-tile__body">
-            <p class="shortcut-tile__eyebrow">Study</p>
-            <p class="shortcut-tile__title">Subjects</p>
-            <p class="shortcut-tile__subtitle">Notes, videos, PYQs, and reading materials.</p>
-          </div>
-          <span class="shortcut-tile__cta">
-            Explore
-            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-          </span>
-        </a>
-
-        <a class="shortcut-tile shortcut-tile--sky" [routerLink]="['/', 'student', 'performances']">
-          <div class="shortcut-tile__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">insights</span>
-          </div>
-          <div class="shortcut-tile__body">
-            <p class="shortcut-tile__eyebrow">Review</p>
-            <p class="shortcut-tile__title">My Performances</p>
-            <p class="shortcut-tile__subtitle">Trends, rankings, and score analysis.</p>
-          </div>
-          <span class="shortcut-tile__cta">
-            Analyze
-            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-          </span>
-        </a>
-
-        <a class="shortcut-tile shortcut-tile--slate" [routerLink]="['/', 'student', 'account']">
-          <div class="shortcut-tile__icon">
-            <span class="material-symbols-outlined" aria-hidden="true">person</span>
-          </div>
-          <div class="shortcut-tile__body">
-            <p class="shortcut-tile__eyebrow">Profile</p>
-            <p class="shortcut-tile__title">My Account</p>
-            <p class="shortcut-tile__subtitle">Manage your plan and personal details.</p>
-          </div>
-          <span class="shortcut-tile__cta">
-            Manage
-            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-          </span>
-        </a>
-      </div>
-    </div>
-
-    <div class="recent-panel">
-      <header class="section-head recent-panel__head">
-        <div>
-          <p class="section-head__eyebrow">Recent</p>
-          <h2 class="section-head__title">Previous live tests</h2>
-        </div>
-        <a class="section-head__action" [routerLink]="['/', 'student', 'tests']">
-          View all
-          <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-        </a>
-      </header>
-
-      @if (featuredPreviousTest) {
-        <div
-          class="recent-feature"
-          role="button"
-          tabindex="0"
-          (click)="onClickPreviousTest(featuredPreviousTest)"
-          (keydown.enter)="onClickPreviousTest(featuredPreviousTest)"
-          (keydown.space)="onClickPreviousTest(featuredPreviousTest)"
-        >
-          <div class="recent-feature__date" aria-hidden="true">
-            <span class="recent-feature__month">
-              {{ (featuredPreviousTest?.startTime | date: 'MMM') ?? '-' }}
-            </span>
-            <span class="recent-feature__day">
-              {{ (featuredPreviousTest?.startTime | date: 'dd') ?? '-' }}
-            </span>
-          </div>
-
-          <div class="recent-feature__body">
-            <p class="recent-feature__eyebrow">Latest completed</p>
-            <p class="recent-feature__title">
-              {{ featuredPreviousTest?.name ?? 'Untitled test' }}
-            </p>
-            <div class="recent-feature__meta">
-              @if (featuredPreviousTest?.subject) {
-                <span class="recent-feature__chip">{{ featuredPreviousTest?.subject }}</span>
-              }
-              <span class="recent-feature__stat">
-                <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-                {{ featuredPreviousTest?.duration ?? '-' }} min
-              </span>
-              <span class="recent-feature__stat">
-                <span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>
-                {{ (featuredPreviousTest?.startTime | date: 'dd MMM yyyy') ?? '-' }}
-              </span>
+        <div class="leader-list-compact">
+          @for (user of leaderboardData.slice(3, 10); track user; let i = $index) {
+            <div class="leader-item-compact">
+              <span class="leader-item__rank">{{ i + 4 }}</span>
+              <span class="leader-item__name">{{ user?.studentName | titlecase }}</span>
+              <span class="leader-item__score-only">{{ user.scoreObtained }}</span>
             </div>
-          </div>
-
-          <span class="recent-feature__cta">
-            Review
-            <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-          </span>
+          }
+          @if (!leaderboardData.length) {
+            <p class="text-sm text-neutral-400 italic py-8 text-center">Calculating rankings...</p>
+          }
         </div>
+      </section>
 
-        <ngx-simplebar class="recent-list-scroll" [options]="{}">
-          <div class="recent-list">
-            @for (test of recentPreviousTests; track test) {
-              <div
-                class="recent-item"
-                role="button"
-                tabindex="0"
-                (click)="onClickPreviousTest(test)"
-                (keydown.enter)="onClickPreviousTest(test)"
-                (keydown.space)="onClickPreviousTest(test)"
-              >
-                <div class="recent-item__date" aria-hidden="true">
-                  <span class="recent-item__month">{{ (test?.startTime | date: 'MMM') ?? '-' }}</span>
-                  <span class="recent-item__day">{{ (test?.startTime | date: 'dd') ?? '-' }}</span>
-                </div>
+      <!-- Section 6: Activity Feed -->
+      <section class="activity-feed">
+        <span class="section-eyebrow">Pulse</span>
+        <h2 class="section-title">Latest Updates</h2>
 
-                <div class="recent-item__body">
-                  <div class="recent-item__title">
-                    {{ test?.name ?? 'Untitled test' }}
-                  </div>
-                  <div class="recent-item__meta">
-                    @if (test?.subject) {
-                      <span class="recent-item__chip">{{ test?.subject }}</span>
-                    }
-                    <span class="recent-item__duration">
-                      <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-                      {{ test?.duration ?? '-' }} min
-                    </span>
-                  </div>
-                </div>
-
-                <span class="recent-item__arrow material-symbols-outlined" aria-hidden="true">
-                  arrow_forward
-                </span>
+        <div class="feed-container">
+          @for (notif of notifications.slice(0, 3); track notif) {
+            <article class="feed-item">
+              <div class="feed-item__icon">
+                <span class="material-symbols-outlined text-sm">notifications</span>
               </div>
-            }
-          </div>
-        </ngx-simplebar>
-      } @else {
-        <div class="empty-state empty-state--sm recent-panel__empty">
-          <span class="empty-state__icon material-symbols-outlined" aria-hidden="true">history</span>
-          <p class="empty-state__subtitle">No previous tests yet.</p>
+              <div class="feed-item__content">
+                <p class="feed-item__title">{{ notif?.title }}</p>
+                <p class="feed-item__time">{{ notif?.createdAt | date: 'hh:mm a, dd MMM' }}</p>
+              </div>
+            </article>
+          }
+          @for (event of upcomingEvents.slice(0, 2); track event) {
+            <article class="feed-item bg-amber-50/30">
+              <div class="feed-item__icon">
+                <span class="material-symbols-outlined text-sm">event</span>
+              </div>
+              <div class="feed-item__content">
+                <p class="feed-item__title">{{ event?.title }}</p>
+                <p class="feed-item__time">{{ event?.date | date: 'dd MMM, yyyy' }}</p>
+              </div>
+            </article>
+          }
+          @if (!notifications.length && !upcomingEvents.length) {
+            <p class="text-sm text-neutral-400 italic">No new updates.</p>
+          }
         </div>
-      }
-    </div>
-  </section>
-
-  <!-- Performance Overview -->
-  <section class="dash-section" id="performance-overview-charts">
-    <header class="section-head">
-      <div>
-        <p class="section-head__eyebrow">Analytics</p>
-        <h2 class="section-head__title">Performance overview</h2>
-      </div>
-    </header>
-
-    <div class="grid grid-cols-1 gap-5 xl:grid-cols-12">
-      <!-- Previous test performance doughnut -->
-      <article class="dash-surface dash-surface--padded xl:col-span-5">
-        <div class="dash-card-head">
-          <p class="dash-card-eyebrow">Previous test</p>
-          <p class="dash-card-title">Score breakdown</p>
-        </div>
-
-        <div class="perf-breakdown">
-          <div class="perf-breakdown__chart">
-            <canvas
-              #previousChart
-              baseChart
-              [labels]="doughnutChartLabels"
-              [datasets]="previousChartDatasets"
-              [options]="doughnutChartOptions"
-              [legend]="false"
-              [type]="'doughnut'"
-              height="180"
-              width="180"
-            ></canvas>
-            <div class="perf-breakdown__chart-center">
-              <span class="perf-breakdown__chart-grade">
-                {{ previousPerformanceData?.grade || '-' }}
-              </span>
-              <span class="perf-breakdown__chart-label">Grade</span>
-            </div>
-          </div>
-
-          <div class="perf-breakdown__legend">
-            <p class="perf-breakdown__score-label">Score</p>
-            <p class="perf-breakdown__score">
-              {{
-                (previousPerformanceData?.totalScore
-                  ? (((previousPerformanceData?.scoreObtained /
-                      previousPerformanceData?.totalScore) *
-                      100 | number: '1.0-1') ?? '-')
-                  : '-')
-              }}<span class="perf-breakdown__score-unit">%</span>
-            </p>
-
-            <ul class="perf-legend">
-              <li class="perf-legend__item">
-                <span class="perf-legend__dot perf-legend__dot--correct"></span>
-                <span class="perf-legend__label">Correct</span>
-                <span class="perf-legend__value">{{ previousPerformanceData?.correct ?? '-' }}</span>
-              </li>
-              <li class="perf-legend__item">
-                <span class="perf-legend__dot perf-legend__dot--incorrect"></span>
-                <span class="perf-legend__label">Incorrect</span>
-                <span class="perf-legend__value">{{ previousPerformanceData?.incorrect ?? '-' }}</span>
-              </li>
-              <li class="perf-legend__item">
-                <span class="perf-legend__dot perf-legend__dot--unattempted"></span>
-                <span class="perf-legend__label">Unattempted</span>
-                <span class="perf-legend__value">{{ previousPerformanceData?.unattempted ?? '-' }}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="perf-breakdown__meta">
-          <div class="perf-breakdown__meta-row">
-            <span class="perf-breakdown__meta-label">Test</span>
-            <span class="perf-breakdown__meta-value">{{ previousPerformanceData?.testName ?? '-' }}</span>
-          </div>
-          <div class="perf-breakdown__meta-row">
-            <span class="perf-breakdown__meta-label">Date</span>
-            <span class="perf-breakdown__meta-value">
-              {{ (previousPerformanceData?.testItem?.startTime | date: 'dd MMM yyyy · hh:mm a') ?? '-' }}
-            </span>
-          </div>
-        </div>
-      </article>
-
-      <!-- Average score line -->
-      <article class="dash-surface dash-surface--padded xl:col-span-7">
-        <div class="dash-card-head dash-card-head--split">
-          <div>
-            <p class="dash-card-eyebrow">Trend</p>
-            <p class="dash-card-title">Average score</p>
-          </div>
-          <div class="dash-avg-pill">
-            <span class="material-symbols-outlined" aria-hidden="true">trending_up</span>
-            <span>
-              Avg
-              {{
-                (overallPerformanceData?.overallAverage
-                  | number: '1.0-1') ?? '-'
-              }}
-            </span>
-          </div>
-        </div>
-
-        <div class="perf-line-wrap">
-          <canvas
-            #averageScoreChart
-            baseChart
-            [type]="'line'"
-            [data]="averageScoreChartData"
-            [options]="averageScoreChartOptions"
-            [legend]="false"
-          ></canvas>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- Subject Analysis + Leaderboard -->
-  <section class="dash-split" id="subject-analysis-leaderboard">
-    <!-- Subject Analysis -->
-    <div class="dash-split__col">
-      <header class="section-head">
-        <div>
-          <p class="section-head__eyebrow">Strengths & gaps</p>
-          <h2 class="section-head__title">Subject analysis</h2>
-        </div>
-      </header>
-
-      <article class="dash-surface dash-surface--padded">
-        <div class="subj-group">
-          <p class="subj-group__label">
-            <span class="subj-group__dot subj-group__dot--best"></span>
-            Your best subjects
-          </p>
-          <ul class="subj-list">
-            @for (subject of subjectAnalysis?.bestSubjects; track subject; let i = $index) {
-              <li class="subj-bar subj-bar--best">
-                <div class="subj-bar__head">
-                  <p class="subj-bar__name">{{ subject?.name ?? '-' }}</p>
-                  <p class="subj-bar__score">
-                    {{ (subject?.score | number: '1.0-1') ?? '-' }}<span>%</span>
-                  </p>
-                </div>
-                <div class="subj-bar__track">
-                  <div class="subj-bar__fill" [style.width.%]="subject?.score ?? 0"></div>
-                </div>
-              </li>
-            } @empty {
-              <li class="subj-group__empty">No data yet.</li>
-            }
-          </ul>
-        </div>
-
-        <div class="subj-group subj-group--spaced">
-          <p class="subj-group__label">
-            <span class="subj-group__dot subj-group__dot--worst"></span>
-            Needs work
-          </p>
-          <ul class="subj-list">
-            @for (subject of subjectAnalysis?.worstSubjects; track subject; let i = $index) {
-              <li class="subj-bar subj-bar--worst">
-                <div class="subj-bar__head">
-                  <p class="subj-bar__name">{{ subject?.name ?? '-' }}</p>
-                  <p class="subj-bar__score">
-                    {{ (subject?.score | number: '1.0-1') ?? '-' }}<span>%</span>
-                  </p>
-                </div>
-                <div class="subj-bar__track">
-                  <div class="subj-bar__fill" [style.width.%]="subject?.score ?? 0"></div>
-                </div>
-              </li>
-            } @empty {
-              <li class="subj-group__empty">No data yet.</li>
-            }
-          </ul>
-        </div>
-      </article>
-    </div>
-
-    <!-- Leaderboard -->
-    <div class="dash-split__col">
-      <header class="section-head">
-        <div>
-          <p class="section-head__eyebrow">Ranking</p>
-          <h2 class="section-head__title">Leaderboard</h2>
-        </div>
-      </header>
-
-      <article class="dash-surface dash-surface--padded leaderboard-card">
-        @if (leaderboardData.length) {
-          <app-leaderboard [leaderboardData]="leaderboardData"></app-leaderboard>
-        }
-      </article>
-    </div>
-  </section>
+      </section>
+    </aside>
+  </div>
 </div>
 
+<!-- Start Test Modal (Keep existing) -->
 <nz-modal
   [(nzVisible)]="isStartTestModal"
   [nzWidth]="460"
@@ -584,54 +267,33 @@
   nzCentered
 >
   <ng-container *nzModalContent>
-    <div class="cuet-modal-pad">
-      <div class="modal-head">
-        <span class="modal-head__icon material-symbols-outlined" aria-hidden="true">quiz</span>
+    <div class="p-8">
+      <div class="flex items-start gap-4 mb-6">
+        <span class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl material-symbols-outlined">quiz</span>
         <div>
-          <p class="modal-head__title">Test details</p>
-          <p class="modal-head__subtitle">{{ currentTestType ?? '-' }} test</p>
+          <h3 class="font-bold text-lg">Test details</h3>
+          <p class="text-sm text-neutral-500">{{ currentTestType ?? '-' }} test</p>
         </div>
       </div>
 
-      <dl class="modal-facts">
-        <div class="modal-fact modal-fact--full">
-          <dt>Test name</dt>
-          <dd>{{ currentTest?.name ?? '-' }}</dd>
+      <dl class="grid grid-cols-2 gap-y-4 gap-x-8 text-sm mb-8">
+        <div class="col-span-2">
+          <dt class="font-bold text-neutral-400 uppercase text-[10px] tracking-widest mb-1">Test name</dt>
+          <dd class="font-bold text-neutral-800">{{ currentTest?.name ?? '-' }}</dd>
         </div>
-        <div class="modal-fact">
-          <dt>Subject</dt>
-          <dd>{{ currentTest?.subject ?? '-' }}</dd>
+        <div>
+          <dt class="font-bold text-neutral-400 uppercase text-[10px] tracking-widest mb-1">Duration</dt>
+          <dd class="font-bold text-neutral-800">{{ currentTest?.duration ?? '-' }} min</dd>
         </div>
-        <div class="modal-fact">
-          <dt>Duration</dt>
-          <dd>{{ currentTest?.duration ?? '-' }} minutes</dd>
-        </div>
-        <div class="modal-fact">
-          <dt>Total marks</dt>
-          <dd>{{ (currentTest?.totalQuestions ?? 0) * 5 }}</dd>
-        </div>
-        <div class="modal-fact">
-          <dt>Questions</dt>
-          <dd>{{ currentTest?.totalQuestions ?? '-' }}</dd>
-        </div>
-        <div class="modal-fact">
-          <dt>Starts</dt>
-          <dd>{{ (currentTest?.startTime | date: 'dd MMM yyyy · hh:mm a') ?? '-' }}</dd>
-        </div>
-        <div class="modal-fact">
-          <dt>Ends</dt>
-          <dd>{{ (currentTest?.endTime | date: 'dd MMM yyyy · hh:mm a') ?? '-' }}</dd>
-        </div>
-        <div class="modal-fact modal-fact--full">
-          <dt>Topics</dt>
-          <dd>{{ currentTest?.topic ? currentTest?.topic?.join(', ') : '-' }}</dd>
+        <div>
+          <dt class="font-bold text-neutral-400 uppercase text-[10px] tracking-widest mb-1">Questions</dt>
+          <dd class="font-bold text-neutral-800">{{ currentTest?.totalQuestions ?? '-' }}</dd>
         </div>
       </dl>
 
-      <div class="modal-actions">
-        <button
-          nz-button
-          class="btn-primary modal-btn"
+      <div class="flex justify-end">
+        <a
+          class="btn-editorial"
           [routerLink]="[
             '/',
             'student',
@@ -641,9 +303,9 @@
             currentTest?.id,
           ]"
         >
-          Start test
-          <span nz-icon nzType="arrow-right" nzTheme="outline"></span>
-        </button>
+          Start Test
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
       </div>
     </div>
   </ng-container>

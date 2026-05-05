@@ -10,17 +10,17 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #64748b;
+  color: oklch(50% 0.008 260);
   margin-bottom: 0.65rem;
 }
 .panel__section-head .material-symbols-outlined {
   font-size: 0.95rem;
   font-variation-settings: "FILL" 1, "wght" 500;
-  color: #004ac6;
+  color: oklch(68% 0.17 55);
 }
 .panel__section-head--mt {
   margin-top: 1.25rem;
@@ -38,18 +38,17 @@
   align-items: center;
   gap: 0.7rem;
   padding: 0.7rem 0.85rem;
-  background: #fff;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: oklch(100% 0.004 80);
   border-radius: 0.85rem;
   text-decoration: none !important;
   color: inherit !important;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 .panel__material-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
-  border-color: rgba(0, 74, 198, 0.22);
+  box-shadow: 0 18px 36px -28px rgba(25, 28, 30, 0.14);
+  background: oklch(98% 0.015 80);
   color: inherit !important;
 }
 .panel__material-card--locked {
@@ -64,19 +63,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
-  color: #fff;
-  box-shadow: 0 4px 10px -4px rgba(0, 74, 198, 0.38);
+  background: linear-gradient(135deg, oklch(68% 0.17 55) 0%, oklch(76% 0.13 55) 100%);
+  color: oklch(99% 0.006 80);
+  box-shadow: 0 4px 10px -4px oklch(68% 0.17 55 / 0.38);
 }
 .panel__material-icon .material-symbols-outlined {
   font-size: 1.1rem;
   font-variation-settings: "FILL" 1, "wght" 500;
 }
 .panel__material-icon--locked {
-  background: #f8fafc;
-  color: #94a3b8;
+  background: oklch(97% 0.006 80);
+  color: oklch(60% 0.008 260);
   box-shadow: none;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid oklch(91% 0.016 80 / 0.2);
 }
 
 .panel__material-body {
@@ -87,7 +86,7 @@
 .panel__material-name {
   font-size: 0.84rem;
   font-weight: 600;
-  color: #0f172a;
+  color: oklch(14% 0.01 260);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -95,16 +94,16 @@
 }
 
 .panel__material-badge {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 .panel__material-badge--free {
-  color: #94a3b8;
+  color: oklch(56% 0.008 260);
 }
 .panel__material-badge--paid {
-  color: #7c3aed;
-  background: rgba(124, 58, 237, 0.08);
+  color: oklch(52% 0.17 55);
+  background: oklch(82% 0.1 55 / 0.15);
   padding: 0.1rem 0.4rem;
   border-radius: 999px;
 }
@@ -121,16 +120,16 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 0.9rem;
-  background: #fff;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: oklch(100% 0.004 80);
+  border: 1px solid oklch(91% 0.016 80 / 0.2);
   border-radius: 0.9rem;
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .panel__test-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.22);
-  border-color: color-mix(in srgb, var(--primary) 22%, transparent);
+  box-shadow: 0 18px 36px -28px rgba(25, 28, 30, 0.14);
+  border-color: oklch(68% 0.17 55 / 0.22);
 }
 
 .panel__test-icon {
@@ -142,8 +141,8 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
-  color: #fff;
-  box-shadow: 0 4px 10px -4px rgba(0, 74, 198, 0.35);
+  color: oklch(99% 0.006 80);
+  box-shadow: 0 4px 10px -4px oklch(68% 0.17 55 / 0.35);
 }
 .panel__test-icon .material-symbols-outlined {
   font-size: 1.25rem;
@@ -159,7 +158,7 @@
   font-family: "Manrope", sans-serif;
   font-size: 0.85rem;
   font-weight: 800;
-  color: #1e293b;
+  color: oklch(18% 0.01 260);
   letter-spacing: 0.01em;
   margin-bottom: 0.15rem;
   white-space: nowrap;
@@ -177,12 +176,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: oklch(60% 0.008 260);
 }
 .panel__test-stat .material-symbols-outlined {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .panel__test-actions {
@@ -194,33 +193,33 @@
 }
 
 .panel__test-badge {
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  padding: 0.15rem 0.4rem;
+  padding: 0.12rem 0.45rem;
   border-radius: 999px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   line-height: 1;
 }
 .panel__test-badge--free {
-  background: #dcfce7;
-  color: #16a34a;
+  background: oklch(95% 0.03 145);
+  color: oklch(40% 0.14 145);
 }
 .panel__test-badge--paid {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fee2e2;
+  background: oklch(97% 0.025 55);
+  color: oklch(52% 0.17 55);
+  border: 1px solid oklch(82% 0.1 55 / 0.3);
 }
 
 .panel__test-btn {
-  font-size: 0.75rem !important;
-  height: 1.7rem !important;
-  padding: 0 0.8rem !important;
-  border-radius: 0.4rem !important;
+  font-size: 0.875rem !important;
+  height: 2rem !important;
+  padding: 0 0.9rem !important;
+  border-radius: 0.5rem !important;
   font-weight: 600 !important;
-  background-color: #1b84ff !important;
-  border-color: #1b84ff !important;
-  color: white !important;
+  background-color: oklch(68% 0.17 55) !important;
+  border-color: oklch(68% 0.17 55) !important;
+  color: oklch(99% 0.006 80) !important;
   box-shadow: none !important;
   line-height: 1 !important;
   display: inline-flex !important;
@@ -228,8 +227,8 @@
   justify-content: center !important;
 }
 .panel__test-btn:hover {
-  background-color: #005fcc !important;
-  border-color: #005fcc !important;
+  background-color: oklch(58% 0.17 55) !important;
+  border-color: oklch(58% 0.17 55) !important;
 }
 
 .panel__empty {
@@ -237,12 +236,12 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 0.5rem;
-  color: #64748b;
+  color: oklch(50% 0.008 260);
 }
 
 .panel__empty-icon {
   font-size: 1.4rem;
-  color: #94a3b8;
+  color: oklch(60% 0.008 260);
   font-variation-settings: "FILL" 0, "wght" 300;
   flex-shrink: 0;
 }
@@ -251,11 +250,11 @@
   font-family: "Manrope", sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #0f172a;
+  color: oklch(14% 0.01 260);
   margin-bottom: 0.15rem;
 }
 
 .panel__empty-subtitle {
-  font-size: 0.72rem;
-  color: #64748b;
+  font-size: 0.75rem;
+  color: oklch(50% 0.008 260);
 }

@@ -11,7 +11,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  background: #fff;
+  background: oklch(100% 0 0);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 1rem;
   margin-bottom: 0.5rem;
@@ -74,7 +74,7 @@
   align-items: center;
   gap: 0.85rem;
   padding: 0.9rem 1rem;
-  background: #fff;
+  background: oklch(100% 0 0);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 0.95rem;
 }
@@ -95,7 +95,7 @@
   align-items: center;
   gap: 0.85rem;
   padding: 0.85rem 1rem;
-  background: #fff;
+  background: oklch(100% 0 0);
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 0.85rem;
   margin-bottom: 0.4rem;

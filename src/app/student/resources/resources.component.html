@@ -1,4 +1,4 @@
-<div class="res-page">
+<div class="res-page editorial-frame">
 
   <!-- ── Page header ──────────────────────────────────────────────────── -->
   <header class="cuet-page-hero">
@@ -12,7 +12,7 @@
   </header>
 
   <!-- ── Tabs ─────────────────────────────────────────────────────────── -->
-  <nz-tabs>
+  <nz-tabs class="res-tabs">
 
     <!-- ════════════════ STUDY MATERIALS TAB ════════════════ -->
     <nz-tab nzTitle="Study Materials">
@@ -84,12 +84,14 @@
                                           <span class="res-acc-topic__chevron material-symbols-outlined">expand_more</span>
                                         </div>
                                         @if (selectedTopicId === topic?.id) {
-                                          <app-resource-topic-panel
-                                            [topicId]="selectedTopicId!"
-                                            [topicName]="selectedTopicName ?? ''"
-                                            (startTest)="onClickStartTest($event.test, $event.testType)"
-                                            (invalidAccess)="isInvalidModal = true"
-                                          ></app-resource-topic-panel>
+                                          <div class="res-acc-topic__body">
+                                            <app-resource-topic-panel
+                                              [topicId]="selectedTopicId!"
+                                              [topicName]="selectedTopicName ?? ''"
+                                              (startTest)="onClickStartTest($event.test, $event.testType)"
+                                              (invalidAccess)="isInvalidModal = true"
+                                            ></app-resource-topic-panel>
+                                          </div>
                                         }
                                       </div>
                                     }
@@ -176,12 +178,14 @@
                                             <span class="res-acc-topic__chevron material-symbols-outlined">expand_more</span>
                                           </div>
                                           @if (selectedTopicId === topic?.id) {
-                                            <app-resource-topic-panel
-                                              [topicId]="selectedTopicId!"
-                                              [topicName]="selectedTopicName ?? ''"
-                                              (startTest)="onClickStartTest($event.test, $event.testType)"
-                                              (invalidAccess)="isInvalidModal = true"
-                                            ></app-resource-topic-panel>
+                                            <div class="res-acc-topic__body">
+                                              <app-resource-topic-panel
+                                                [topicId]="selectedTopicId!"
+                                                [topicName]="selectedTopicName ?? ''"
+                                                (startTest)="onClickStartTest($event.test, $event.testType)"
+                                                (invalidAccess)="isInvalidModal = true"
+                                              ></app-resource-topic-panel>
+                                            </div>
                                           }
                                         </div>
                                       }

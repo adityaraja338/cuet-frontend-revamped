@@ -33,7 +33,7 @@
   font-family: 'Manrope', sans-serif;
   font-size: 40px;
   font-weight: 900;
-  color: #fff;
+  color: oklch(100% 0 0);
   line-height: 1;
   display: flex;
   align-items: baseline;
@@ -120,7 +120,7 @@
   color: #64748b;
   transition: background 0.15s, color 0.15s;
 }
-.pd-filter-chip--active { background: #004ac6; color: #fff; }
+.pd-filter-chip--active { background: #004ac6; color: oklch(100% 0 0); }
 
 /* ── Question card ── */
 .pd-q-card {
@@ -176,10 +176,10 @@
   border-radius: 8px;
   font-size: 12px;
   color: #334155;
-  background: #fff;
+  background: oklch(100% 0 0);
 }
 .pd-opt--correct { background: #f0fdf4; color: #15803d; }
-.pd-opt--wrong   { background: #fff1f2; color: #be123c; }
+.pd-opt--wrong   { background: oklch(100% 0 0)1f2; color: #be123c; }
 .pd-opt__dot {
   width: 16px;
   height: 16px;
@@ -203,8 +203,8 @@
   border-radius: 20px;
   flex-shrink: 0;
 }
-.pd-opt__yours--ok  { background: #16a34a; color: #fff; }
-.pd-opt__yours--bad { background: #dc2626; color: #fff; }
+.pd-opt__yours--ok  { background: #16a34a; color: oklch(100% 0 0); }
+.pd-opt__yours--bad { background: #dc2626; color: oklch(100% 0 0); }
 
 /* Empty state */
 .pd-qa-empty {

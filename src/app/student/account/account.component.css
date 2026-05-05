@@ -14,7 +14,7 @@
   transition: background 0.25s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s ease, box-shadow 0.2s ease;
 }
 .acc-feature-card:hover:not([aria-disabled="true"]) {
-  background: var(--color-blue-50) !important;
+  background: oklch(97% 0.025 55) !important;
   transform: translateY(-4px);
   box-shadow: 0 16px 32px -8px rgba(25, 28, 30, 0.08) !important;
 }
@@ -45,207 +45,139 @@
 .acc-feature-card--owned .acc-price { color: var(--on-surface-variant); }
 .acc-feature-card--owned .acc-check { color: var(--primary); }
 
-/* ------- Batch modal ------- */
+/* ------- Batch modal (Editorial Curator) ------- */
 
 .acc-batch-modal__inner {
-  position: relative;
-  background: linear-gradient(165deg, #ffffff 0%, var(--surface-container-low) 100%);
+  background: oklch(99.5% 0.005 85); /* Slightly warmer, cleaner background */
 }
 
-/* Modal header — subtle separator */
-.acc-batch-modal__header::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 14px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surface-container-low) 0%, transparent) 0%,
-    color-mix(in srgb, var(--surface-container-low) 80%, transparent) 60%,
-    var(--surface-container-low) 100%
-  );
+/* Linear Editorial Sections */
+.acc-editorial-batch {
+  transition: opacity 0.4s ease;
 }
 
-/* Plan switch — segmented control with gradient active pill */
-.acc-plan-switch {
-  position: relative;
-  background: var(--surface-container-low);
-}
-.acc-plan-switch .acc-plan-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  padding: 0.65rem 0.75rem;
-  border-radius: 0.6rem;
-  background: transparent;
-  border: none;
-  color: var(--on-surface-variant);
-  cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease;
-}
-.acc-plan-switch .acc-plan-option:hover {
-  color: var(--on-surface);
-}
-.acc-plan-switch .acc-plan-option.acc-plan-option--active {
-  background: #ffffff;
-  color: var(--primary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.acc-plan-switch .acc-plan-option--premium.acc-plan-option--active {
-  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
-  color: #ffffff;
+/* Path Options - Standard & Full Access choices in a single flow */
+.acc-path-option {
+  background: white;
+  border: 1.5px solid oklch(92% 0.01 80);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(25, 28, 30, 0.02);
 }
 
-/* Compact inline pill variant — sliding indicator */
-.acc-plan-switch--pill {
-  position: relative;
-  flex: 0 0 auto;
-  background: var(--surface-container-low);
-  isolation: isolate;
-}
-.acc-plan-switch--pill::before {
-  content: "";
-  position: absolute;
-  top: 0.25rem;
-  bottom: 0.25rem;
-  left: 0.25rem;
-  width: calc(50% - 0.25rem);
-  border-radius: 999px;
-  background: rgba(0, 74, 198, 0.1);
-  z-index: -1;
-  transform: translateX(0);
-  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.acc-plan-switch--pill[data-active="premium"]::before {
-  transform: translateX(100%);
-  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
-}
-.acc-plan-switch .acc-plan-option--pill {
-  position: relative;
-  flex: 1 1 0;
-  justify-content: center;
-  flex-direction: row;
-  gap: 0.3rem;
-  padding: 0.4rem 0.95rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--on-surface-variant);
-  transition: color 0.28s ease;
-  border: none;
-  background: transparent;
-}
-.acc-plan-switch .acc-plan-option--pill.acc-plan-option--active {
-  color: var(--primary);
-}
-.acc-plan-switch .acc-plan-option--pill.acc-plan-option--premium.acc-plan-option--active {
-  color: #ffffff;
+.acc-path-option:hover {
+  transform: translateY(-4px);
+  border-color: oklch(68% 0.17 55); /* Amber focus */
+  box-shadow: 0 24px 48px -12px rgba(25, 28, 30, 0.08);
 }
 
-/* ------- Rail CTA buttons (standalone; no nz-button dependency) ------- */
-
-.acc-rail-cta {
-  display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr) 2rem;
-  align-items: center;
-  width: 100%;
-  height: auto;
-  padding: 0.6rem 0.75rem;
-  column-gap: 0.6rem;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
-  user-select: none;
-  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
-  box-shadow: 0 14px 28px -18px rgba(0, 74, 198, 0.55);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+.acc-path-option--active {
+  border-color: oklch(68% 0.17 55) !important;
+  border-width: 2.5px !important;
+  box-shadow: 0 32px 64px -16px oklch(68% 0.17 55 / 0.12) !important;
+  background: oklch(99% 0.015 55 / 0.3); /* Very subtle amber tint when active */
 }
 
-.acc-rail-cta:hover {
-  transform: translateY(-1px);
-  filter: saturate(1.05);
-  box-shadow: 0 18px 34px -20px rgba(0, 74, 198, 0.6);
+/* Custom Radio Indicator */
+.acc-path-radio {
+  transition: all 0.3s ease;
 }
 
-.acc-rail-cta:active {
-  transform: translateY(0);
+.acc-path-option--active .acc-path-radio {
+  border-color: oklch(68% 0.17 55) !important;
+  background: oklch(68% 0.17 55 / 0.05);
 }
 
-.acc-rail-cta:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--primary) 35%, transparent);
-  outline-offset: 3px;
+.acc-path-option--active .acc-path-radio-inner {
+  opacity: 1 !important;
 }
 
-.acc-rail-btn__icon {
-  /* display: inline-flex; */
-  /* align-items: center; */
-  /* aspect-ratio: 1; */
-  /* justify-content: center; */
-  border-radius: 0.7rem;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 22px -14px rgba(255, 255, 255, 0.35);
+/* Explicitly disable any blue outlines from browsers */
+.acc-path-option:focus, .acc-path-option:focus-visible {
+  outline: none !important;
 }
 
-.acc-rail-btn__label {
-  text-align: center;
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  color: #ffffff;
-  min-width: 0;
-  padding: 0 0.25rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* Action Button - High Contrast, Centered, and Roomy */
+.btn-cuet.btn-cuet--lg.h-16 {
+  height: 4rem !important;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  border-radius: 1.25rem !important;
+  background: oklch(68% 0.17 55) !important;
+  color: oklch(14% 0.01 260) !important; /* Dark text on amber as per DESIGN.md */
+  box-shadow: 0 16px 32px -8px oklch(68% 0.17 55 / 0.3) !important;
+  border: none !important;
 }
 
-.acc-rail-btn__arrow {
-  justify-self: end;
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
-  transition: transform 0.15s ease;
-  width: 1.5rem;
-  text-align: right;
+.btn-cuet.btn-cuet--lg.h-16:hover:not([disabled]) {
+  background: oklch(58% 0.17 55) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -10px oklch(68% 0.17 55 / 0.4) !important;
 }
 
-.acc-rail-cta:hover .acc-rail-btn__arrow {
-  transform: translateX(2px);
+.btn-cuet.btn-cuet--lg.h-16:active:not([disabled]) {
+  transform: scale(0.98);
 }
 
-/* Modal configuration */
+/* Modal configuration overrides */
 ::ng-deep .acc-batch-modal .ant-modal {
-  margin: 1rem auto;
-  max-width: calc(100vw - 2rem);
-  top: 0;
+  max-width: calc(100vw - 3rem);
+  max-height: calc(100vh - 6rem); /* Ensure it doesn't touch top/bottom */
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
+
 ::ng-deep .acc-batch-modal .ant-modal-content {
-  border-radius: 1.5rem !important;
+  border-radius: 3rem !important;
+  padding: 0 !important;
   overflow: hidden;
-  box-shadow: 0 24px 48px -12px rgba(25, 28, 30, 0.12) !important;
+  height: 100%;
 }
+
 ::ng-deep .acc-batch-modal .ant-modal-body {
   padding: 0 !important;
+  height: calc(100vh - 6rem); /* Match modal max-height */
 }
 
 .acc-batch-modal__scroll {
-  display: block;
-  max-height: calc(100vh - 2rem);
-  overscroll-behavior: contain;
-}
-.acc-batch-modal__scroll ::ng-deep .simplebar-scrollbar::before {
-  background: var(--primary);
-  opacity: 0.2;
+  height: 100%;
 }
 
-@media (min-width: 640px) {
-  ::ng-deep .acc-batch-modal .ant-modal {
-    margin: 2rem auto;
-    max-width: calc(100vw - 4rem);
+
+::ng-deep .acc-batch-modal .ant-modal-close {
+  top: 1rem;
+  right: 1rem;
+  background: white !important;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  border: 1px solid oklch(91% 0.016 80);
+  transition: all 0.2s ease;
+}
+
+::ng-deep .acc-batch-modal .ant-modal-close:hover {
+  background: oklch(97% 0.01 80) !important;
+  transform: scale(1.05);
+}
+
+::ng-deep .acc-batch-modal .ant-modal-close-x {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@media (max-width: 1279px) {
+  .acc-page-container {
+    padding-bottom: 6.5rem;
   }
-  .acc-batch-modal__scroll {
-    max-height: calc(100vh - 4rem);
+}
+
+@media (min-width: 768px) {
+  ::ng-deep .acc-batch-modal .ant-modal-close {
+    top: 2rem;
+    right: 2rem;
   }
 }

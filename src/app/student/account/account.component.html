@@ -1,29 +1,29 @@
-<div class="text-on-surface font-[Inter] min-h-screen">
+<div class="acc-page-container editorial-frame min-h-screen">
   @if (accountDetails) {
-    <!-- Dossier header -->
+    <!-- Profile header -->
     <section
-      class="relative rounded-4xl overflow-hidden shadow-[0_12px_32px_rgba(25,28,30,0.06)] bg-[linear-gradient(150deg,#001f6b_0%,#003eb8_45%,#1259e8_100%)] text-white"
-      aria-label="Account dossier"
+      class="relative rounded-xl md:rounded-3xl overflow-hidden shadow-(--ambient-shadow) bg-linear-to-br from-primary-container/30 to-surface border border-outline-variant/10"
+      aria-label="Profile"
     >
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-6 md:px-8 py-6 md:py-8">
-        <div class="lg:col-span-7">
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-center px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
+        <div class="xl:col-span-7">
           <p
-            class="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45"
+            class="text-[10px] font-black uppercase tracking-[0.3em] text-primary"
           >
-            Account dossier
+            Your Profile
           </p>
-          <div class="mt-4 flex items-start gap-6 min-w-0">
-            <div class="relative shrink-0 w-[84px] h-[84px]">
+          <div class="mt-6 flex items-start gap-6 md:gap-8 min-w-0">
+            <div class="relative shrink-0">
               @if(accountDetails?.imageUrl) {
                 <img
                   [nzSrc]="accountDetails?.imageUrl"
                   nz-image
-                  alt=""
-                  class="w-[84px] h-[84px] m-[4px] rounded-full object-cover block shadow-(--ambient-shadow) ring-4 ring-white"
+                  [alt]="accountDetails?.name?.toUpperCase()?.charAt(0) || 'Student'"
+                  class="w-24 h-24 md:w-32 md:h-32 rounded-3xl object-cover block shadow-lg ring-4 ring-white"
                 />
               } @else {
                 <div
-                  class="cuet-grad-avatar w-[84px] h-[84px] rounded-full flex items-center justify-center text-white font-[Manrope] text-[2.15rem] font-extrabold tracking-tight shadow-[0_20px_40px_-12px_rgba(0,74,198,0.25)] ring-4 ring-white"
+                  class="cuet-grad-avatar w-24 h-24 md:w-32 md:h-32 rounded-3xl flex items-center justify-center text-white font-headline text-4xl md:text-5xl font-extrabold tracking-tight shadow-lg ring-4 ring-white"
                   aria-hidden="true"
                 >
                   <span>{{ accountDetails?.name?.toUpperCase()[0] }}</span>
@@ -32,16 +32,16 @@
             </div>
 
             <div class="min-w-0 flex-1">
-              <div class="flex flex-wrap items-center gap-3">
+              <div class="flex flex-wrap items-center gap-4">
                 <h1
-                  class="font-[Manrope] text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05] text-white"
+                  class="font-display text-4xl md:text-6xl font-extrabold tracking-tighter leading-none text-on-surface italic"
                 >
                   {{ accountDetails?.name || "Student" }}
                 </h1>
 
                 @if (accountDetails?.isPremium) {
                   <span
-                    class="inline-flex items-center gap-1.5 h-[30px] px-4 rounded-full text-xs font-black tracking-widest uppercase bg-white/12 border border-white/12 text-white/90"
+                    class="inline-flex items-center gap-1.5 h-8 px-4 rounded-full text-[10px] font-black tracking-widest uppercase bg-primary/10 border border-primary/10 text-primary"
                   >
                     <span
                       class="material-symbols-outlined text-sm"
@@ -52,7 +52,7 @@
                   </span>
                 } @else if (accountDetails?.isUpgradeable) {
                   <span
-                    class="inline-flex items-center gap-1.5 h-[30px] px-4 rounded-full text-xs font-black tracking-widest uppercase bg-white/12 border border-white/12 text-white/90"
+                    class="inline-flex items-center gap-1.5 h-8 px-4 rounded-full text-[10px] font-black tracking-widest uppercase bg-primary-container text-on-primary-container shadow-sm"
                   >
                     <span
                       class="material-symbols-outlined text-sm"
@@ -63,7 +63,7 @@
                   </span>
                 } @else {
                   <span
-                    class="inline-flex items-center h-[30px] px-4 rounded-full text-xs font-black tracking-widest uppercase bg-white/10 border border-white/10 text-white/80"
+                    class="inline-flex items-center h-8 px-4 rounded-full text-[10px] font-black tracking-widest uppercase bg-surface-container-low border border-outline-variant/20 text-on-surface-variant"
                   >
                     Free
                   </span>
@@ -71,10 +71,10 @@
               </div>
 
               <p
-                class="mt-3 inline-flex items-center gap-3 text-base md:text-lg font-semibold text-white/80 min-w-0"
+                class="mt-4 inline-flex items-center gap-3 text-lg font-medium text-on-surface/80 min-w-0"
               >
                 <span
-                  class="material-symbols-outlined text-xl text-white/75"
+                  class="material-symbols-outlined text-xl text-primary/60"
                   aria-hidden="true"
                   >mail</span
                 >
@@ -82,67 +82,53 @@
               </p>
 
               <p
-                class="mt-4 text-xs md:text-sm font-medium text-white/45 leading-relaxed max-w-[60ch]"
+                class="mt-6 text-sm font-medium text-on-surface-variant leading-relaxed max-w-[50ch]"
               >
-                Your profile record, membership, and purchases — curated in one
-                place.
+                Welcome back! Here you can find your profile details, membership status, and your curated preparation resources.
               </p>
             </div>
           </div>
         </div>
 
-        <div class="lg:col-span-5 flex flex-col gap-4">
-          <div class="flex flex-wrap gap-2.5">
+        <div class="xl:col-span-5 flex flex-col gap-6">
+          <div class="flex flex-wrap gap-3">
             @if (accountDetails?.id) {
-              <span
-                class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white/90 text-sm font-bold tabular-nums"
-              >
-                <span
-                  class="material-symbols-outlined text-xl text-white/75"
-                  aria-hidden="true"
-                  >badge</span
-                >
-                ID · {{ accountDetails?.id }}
-              </span>
-            }
-            @if (accountDetails?.phone) {
-              <span
-                class="inline-flex grow items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white/90 text-sm font-bold tabular-nums"
-              >
-                <span
-                  class="material-symbols-outlined text-xl text-white/75"
-                  aria-hidden="true"
-                  >call</span
-                >
-                {{ accountDetails?.phone }}
-              </span>
-            }
-            @if (accountDetails?.batchName) {
-              <span
-                class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white/90 text-sm font-bold"
-              >
-                <span
-                  class="material-symbols-outlined text-xl text-white/75"
-                  aria-hidden="true"
-                  >groups</span
-                >
-                {{ accountDetails?.batchName }}
-              </span>
-            }
-          </div>
+               <span
+                 class="inline-flex grow items-center gap-3 px-5 py-3 rounded-2xl bg-primary/5 border border-primary/10 text-on-surface text-sm font-bold tabular-nums shadow-sm"
+               >
+                 <span
+                   class="material-symbols-outlined text-xl text-primary/60"
+                   aria-hidden="true"
+                   >badge</span
+                 >
+                 ID · {{ accountDetails?.id }}
+               </span>
+             }
+             @if (accountDetails?.phone) {
+               <span
+                 class="inline-flex grow items-center gap-3 px-5 py-3 rounded-2xl bg-primary/5 border border-primary/10 text-on-surface text-sm font-bold tabular-nums shadow-sm"
+               >
+                 <span
+                   class="material-symbols-outlined text-xl text-primary/60"
+                   aria-hidden="true"
+                   >call</span
+                 >
+                 {{ accountDetails?.phone }}
+               </span>
+             }          </div>
 
           @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
             <div
-              class="rounded-3xl bg-white/10 border border-white/10 p-6 flex items-center justify-between gap-6"
+              class="rounded-3xl bg-white/40 border border-white/60 p-6 flex items-center justify-between gap-6 backdrop-blur-sm shadow-sm"
             >
               <div class="flex items-center gap-5">
                 <div
-                  class="font-[Manrope] text-5xl font-extrabold tracking-tighter leading-none text-white"
+                  class="font-headline text-5xl font-extrabold tracking-tighter leading-none text-primary"
                 >
                   {{ totalBatchCount }}
                 </div>
                 <div
-                  class="text-xs font-black tracking-widest uppercase leading-tight text-white/70 max-w-[14ch]"
+                  class="text-[10px] font-black tracking-widest uppercase leading-tight text-on-surface-variant max-w-[12ch]"
                 >
                   batches available
                 </div>
@@ -150,12 +136,12 @@
               @if (batches?.length) {
                 <button
                   nz-button
-                  class="h-[48px] px-7 rounded-2xl bg-white/12 border border-white/12 text-white font-black tracking-wide hover:bg-white/16"
+                  class="btn-cuet btn-cuet--primary"
                   (click)="isShowBatches = true"
                 >
                   Browse
                   <span
-                    class="material-symbols-outlined cuet-icon-cta text-lg"
+                    class="material-symbols-outlined cuet-icon-cta text-sm! ml-2"
                     aria-hidden="true"
                     >arrow_forward</span
                   >
@@ -167,34 +153,34 @@
       </div>
     </section>
 
-    <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      <!-- Main -->
-      <div class="lg:col-span-8 flex flex-col gap-8">
+    <div class="mt-8 grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+      <!-- Main Content -->
+      <div class="xl:col-span-8 flex flex-col gap-8">
         <!-- Profile -->
         <section
-          class="cuet-card cuet-card--editorial px-6 md:px-8 py-6 md:py-8"
+          class="cuet-card cuet-card--editorial p-4 md:p-6 lg:p-8 rounded-xl md:rounded-3xl"
           aria-label="Profile details"
         >
-          <header class="flex justify-between items-start gap-4 mb-8">
+          <header class="flex justify-between items-start gap-4 mb-10">
             <div>
               <p
-                class="text-xs font-black uppercase tracking-[0.25em] text-primary mb-3"
+                class="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-3"
               >
-                Profile record
+                Profile details
               </p>
               <h2
-                class="font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+                class="font-headline text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
               >
-                Personal details
+                Personal information
               </h2>
               <p
-                class="text-base font-medium text-on-surface-variant mt-3 leading-relaxed max-w-[52ch]"
+                class="text-base font-medium text-on-surface-variant mt-4 leading-relaxed max-w-[50ch]"
               >
-                These fields are synced with your application record.
+                These details are synced with your application. If you need to make changes, please contact support.
               </p>
             </div>
             <span
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-[0.7rem] font-black uppercase tracking-widest shrink-0"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-[10px] font-black uppercase tracking-widest shrink-0"
             >
               <span
                 class="material-symbols-outlined text-base"
@@ -207,12 +193,12 @@
 
           <form
             [formGroup]="profileForm"
-            class="cuet-input--soft grid grid-cols-1 md:grid-cols-2 gap-6"
+            class="cuet-input--soft grid grid-cols-1 md:grid-cols-2 gap-8"
           >
             <div class="md:col-span-2">
               <nz-form-label [nzNoColon]="true">
                 <span
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
                   >Name</span
                 >
               </nz-form-label>
@@ -229,7 +215,7 @@
                     >Field cannot be empty</ng-container
                   >
                   <ng-container *ngIf="control.hasError('maxlength')"
-                    >Name cannot have more than 40 characters</ng-container
+                    >Name cannot exceed 40 characters</ng-container
                   >
                 </ng-template>
               </nz-form-item>
@@ -238,7 +224,7 @@
             <div>
               <nz-form-label [nzNoColon]="true">
                 <span
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
                   >Student ID</span
                 >
               </nz-form-label>
@@ -256,7 +242,7 @@
             <div>
               <nz-form-label [nzNoColon]="true">
                 <span
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
                   >Age</span
                 >
               </nz-form-label>
@@ -270,8 +256,8 @@
             <div class="md:col-span-2">
               <nz-form-label [nzNoColon]="true">
                 <span
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
-                  >Batch</span
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
+                  >Current Batch</span
                 >
               </nz-form-label>
               <nz-form-item>
@@ -288,7 +274,7 @@
             <div>
               <nz-form-label [nzNoColon]="true">
                 <span
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
                   >Phone</span
                 >
               </nz-form-label>
@@ -306,8 +292,8 @@
             <div>
               <nz-form-label [nzNoColon]="true">
                 <span
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
-                  >Email</span
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
+                  >Email Address</span
                 >
               </nz-form-label>
               <nz-form-item>
@@ -325,35 +311,35 @@
 
         <!-- CUET history -->
         <section
-          class="cuet-card cuet-card--tonal px-6 md:px-8 py-6 md:py-8"
+          class="cuet-card cuet-card--tonal p-4 md:p-6 lg:p-8 rounded-xl md:rounded-3xl"
           aria-label="CUET history"
         >
-          <header class="mb-6">
+          <header class="mb-8">
             <p
-              class="text-xs font-black uppercase tracking-[0.25em] text-primary mb-3"
+              class="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-3"
             >
-              History
+              Exam History
             </p>
             <h2
-              class="font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+              class="font-headline text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
             >
               CUET attempts
             </h2>
             <p
-              class="text-base font-medium text-gray-400 mt-3 leading-relaxed max-w-[56ch]"
+              class="text-base font-medium text-on-surface-variant mt-4 leading-relaxed max-w-[50ch]"
             >
               A quick record of the years you've attempted the exam.
             </p>
           </header>
 
-          <div class="flex flex-wrap gap-3 min-h-[3rem] items-center">
+          <div class="flex flex-wrap gap-4 items-center">
             @if (accountDetails?.cuetAttempts?.length) {
               @for (year of accountDetails?.cuetAttempts; track year) {
                 <span
-                  class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-surface-container-lowest text-on-surface text-sm font-bold tabular-nums shadow-[var(--ambient-shadow)] hover:bg-surface-container-low transition-all"
+                  class="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-surface-container-lowest text-on-surface text-sm font-bold tabular-nums shadow-sm hover:shadow-md transition-all"
                 >
                   <span
-                    class="material-symbols-outlined cuet-icon-filled text-lg text-primary"
+                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
                     aria-hidden="true"
                     >event_available</span
                   >
@@ -361,41 +347,41 @@
                 </span>
               }
             } @else {
-              <span class="text-base font-medium italic text-on-surface-variant"
-                >No attempts recorded</span
+              <span class="text-base font-medium italic text-on-surface-variant/60"
+                >No attempts recorded yet</span
               >
             }
           </div>
         </section>
 
-        <!-- Features (à la carte) -->
+        <!-- Features -->
         @if (!accountDetails?.isPremium) {
           <section
-            class="cuet-card cuet-card--editorial flex flex-col px-6 md:px-8 py-6 md:py-8"
+            class="cuet-card cuet-card--editorial p-4 md:p-6 lg:p-8 rounded-xl md:rounded-3xl"
             aria-label="Individual features"
           >
-            <header class="flex items-start justify-between gap-6 mb-8">
+            <header class="flex items-start justify-between gap-6 mb-10">
               <div>
                 <p
-                  class="text-xs font-black uppercase tracking-[0.25em] text-primary mb-3"
+                  class="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-3"
                 >
-                  À la carte
+                  Pick what you need
                 </p>
                 <h2
-                  class="font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+                  class="font-headline text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
                 >
-                  Individual features
+                  Curated features
                 </h2>
                 <p
-                  class="text-base font-medium text-on-surface-variant mt-3 leading-relaxed max-w-[60ch]"
+                  class="text-base font-medium text-on-surface-variant mt-4 leading-relaxed max-w-[55ch]"
                 >
-                  Purchase only what you need — pick any combination below.
+                  Add specific tools to your portal: select any combination below to enhance your preparation.
                 </p>
               </div>
 
               @if (showPurchaseButton) {
                 <span
-                  class="hidden sm:inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-container-lowest text-primary text-sm font-black shadow-[var(--ambient-shadow)] shrink-0"
+                  class="hidden sm:inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-surface-container-low text-primary text-sm font-black shadow-sm shrink-0"
                 >
                   <span
                     class="material-symbols-outlined text-lg"
@@ -409,13 +395,13 @@
 
             <ng-container *ngIf="features?.length; else featuresEmpty">
               <div
-                class="grid gap-5 grid-cols-[repeat(auto-fill,minmax(190px,1fr))] auto-rows-min items-start"
+                class="grid gap-6 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]"
               >
                 <div
                   *ngFor="let feature of features"
                   role="button"
                   tabindex="0"
-                  class="cuet-card cuet-card--interactive acc-feature-card relative flex flex-col justify-between gap-6 p-6 text-left cursor-pointer select-none outline-none border-none bg-surface-container-lowest shadow-[var(--ambient-shadow)]"
+                  class="cuet-card cuet-card--interactive acc-feature-card relative flex flex-col justify-between gap-5 p-4 md:p-6 text-left bg-surface-container-lowest shadow-sm border border-transparent rounded-xl md:rounded-3xl"
                   [class.acc-feature-card--selected]="
                     feature.selectedToBuy && feature.canPurchase
                   "
@@ -429,20 +415,9 @@
                       (feature.selectedToBuy = !feature.selectedToBuy);
                     isFeatureSelectedToBuy()
                   "
-                  (keydown.enter)="
-                    feature.canPurchase &&
-                      (feature.selectedToBuy = !feature.selectedToBuy);
-                    isFeatureSelectedToBuy()
-                  "
-                  (keydown.space)="
-                    feature.canPurchase &&
-                      (feature.selectedToBuy = !feature.selectedToBuy);
-                    isFeatureSelectedToBuy();
-                    $event.preventDefault()
-                  "
                 >
                   <span
-                    class="acc-check absolute top-4 right-4 inline-flex items-center justify-center pointer-events-none transition-all"
+                    class="acc-check absolute top-5 right-5 inline-flex items-center justify-center transition-all"
                     aria-hidden="true"
                   >
                     <span
@@ -462,19 +437,19 @@
                     </span>
                   </span>
                   <p
-                    class="text-lg font-bold leading-tight pr-10 text-on-surface"
+                    class="text-md font-bold leading-tight pr-10 text-on-surface font-headline"
                   >
                     {{ feature?.name }}
                   </p>
-                  <div class="flex items-center justify-between gap-3">
+                  <div class="flex items-center justify-between gap-4">
                     <p
-                      class="acc-price font-[Manrope] text-2xl font-extrabold tracking-tighter tabular-nums leading-none transition-colors"
+                      class="acc-price font-headline text-3xl font-extrabold tracking-tighter tabular-nums leading-none"
                     >
                       ₹{{ feature?.price }}
                     </p>
                     @if (!feature.canPurchase) {
                       <span
-                        class="px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-[0.6rem] font-black tracking-widest uppercase whitespace-nowrap"
+                        class="px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-[10px] font-black tracking-widest uppercase whitespace-nowrap"
                       >
                         Owned
                       </span>
@@ -483,29 +458,29 @@
                 </div>
               </div>
 
-              <!-- Mobile checkout bar (rail summary replaces this on desktop) -->
+              <!-- Mobile checkout bar -->
               @if (showPurchaseButton) {
                 <div
-                  class="mt-10 flex items-center justify-between gap-8 px-8 py-6 rounded-3xl bg-surface-container-lowest shadow-[var(--ambient-shadow)] max-sm:flex-col max-sm:items-stretch max-sm:gap-6 lg:hidden"
+                  class="mt-10 flex items-center justify-between gap-8 px-8 py-6 rounded-3xl bg-surface-container-lowest shadow-xl xl:hidden"
                 >
                   <div class="flex flex-col gap-1">
                     <span
-                      class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
-                      >Total investment</span
+                      class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
+                      >Total cost</span
                     >
                     <span
-                      class="font-[Manrope] text-3xl font-extrabold tracking-tight tabular-nums text-primary"
+                      class="font-headline text-3xl font-extrabold tracking-tight tabular-nums text-primary"
                     >
                       ₹{{ totalPurchaseAmount }}
                     </span>
                   </div>
                   <button
                     nz-button
-                    class="cuet-btn--premium max-sm:w-full h-[56px] px-8 rounded-2xl"
+                    class="btn-cuet btn-cuet--primary btn-cuet--lg"
                     (click)="onInitiateFeaturePayment()"
                   >
                     <span
-                      class="material-symbols-outlined cuet-icon-cta text-2xl"
+                      class="material-symbols-outlined cuet-icon-cta text-2xl mr-2"
                       aria-hidden="true"
                       >shopping_bag</span
                     >
@@ -516,7 +491,7 @@
             </ng-container>
 
             <ng-template #featuresEmpty>
-              <div class="py-8">
+              <div class="py-12">
                 <nz-empty
                   nzNotFoundContent="No purchasable features right now"
                 ></nz-empty>
@@ -526,26 +501,26 @@
         }
       </div>
 
-      <!-- Rail -->
-      <aside class="lg:col-span-4 flex flex-col gap-8 lg:sticky lg:top-10">
+      <!-- Side Rail -->
+      <aside class="xl:col-span-4 flex flex-col gap-8 xl:sticky xl:top-10">
         <!-- Membership -->
         <section
-          class="cuet-card cuet-card--glass px-6 md:px-8 py-6 md:py-8"
+          class="cuet-card cuet-card--tonal p-4 md:p-6 lg:p-8 rounded-xl md:rounded-3xl"
           aria-label="Membership"
         >
           <p
-            class="text-xs font-black uppercase tracking-[0.25em] text-primary"
+            class="text-[10px] font-black uppercase tracking-[0.3em] text-primary"
           >
             Membership
           </p>
 
           <h2
-            class="mt-4 font-[Manrope] text-2xl md:text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
+            class="mt-6 font-headline text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
           >
             @if (accountDetails?.isPremium) {
-              You're on <span class="cuet-grad-text">Premium</span>
+              You're on <span class="text-primary">Premium</span>
             } @else if (accountDetails?.isUpgradeable) {
-              Ready for <span class="cuet-grad-text">Premium?</span>
+              Ready for <span class="text-primary">Premium?</span>
             } @else if (totalBatchCount > 0) {
               Enroll in a batch
             } @else {
@@ -563,22 +538,22 @@
             } @else if (totalBatchCount > 0) {
               Pick a batch to begin your CUET journey with us.
             } @else {
-              New batches will open for enrollment soon — check back shortly.
+              New batches will open for enrollment soon: check back shortly.
             }
           </p>
 
-          <div class="mt-8 flex flex-col gap-4">
+          <div class="mt-8 flex flex-col gap-5">
             @if (!accountDetails?.isPremium && !accountDetails?.isUpgradeable) {
               <div
-                class="rounded-3xl bg-surface-container-lowest shadow-[var(--ambient-shadow)] px-6 py-5 flex items-center justify-between gap-6"
+                class="rounded-3xl bg-surface-container-lowest shadow-sm px-6 py-5 flex items-center xl:justify-between justify-center gap-6"
               >
                 <div
-                  class="font-[Manrope] text-4xl font-extrabold tracking-tighter leading-none text-primary"
+                  class="font-headline text-5xl font-extrabold tracking-tighter leading-none text-primary"
                 >
                   {{ totalBatchCount }}
                 </div>
                 <div
-                  class="text-[0.65rem] font-black tracking-widest uppercase leading-tight text-on-surface-variant max-w-[12ch]"
+                  class="text-[10px] font-black tracking-widest uppercase leading-tight text-on-surface-variant xl:max-w-[12ch]"
                 >
                   batches available
                 </div>
@@ -587,15 +562,15 @@
               @if (batches?.length) {
                 <button
                   type="button"
-                  class="acc-rail-cta group w-full"
+                  class="btn-cuet btn-cuet--primary btn-cuet--lg"
                   (click)="isShowBatches = true"
                 >
-                  <nz-icon class="acc-rail-btn__icon p-2" aria-hidden="true">
-                    <span class="material-symbols-outlined text-[14px]! text-white"
-                      >edit_square</span
+                  <span class="acc-rail-btn__icon flex items-center justify-center p-2" aria-hidden="true">
+                    <span class="material-symbols-outlined text-[16px]! text-white"
+                      >grid_view</span
                     >
-                  </nz-icon>
-                  <span class="acc-rail-btn__label text-!">Browse</span>
+                  </span>
+                  <span class="acc-rail-btn__label">Browse</span>
                   <span
                     class="material-symbols-outlined acc-rail-btn__arrow"
                     aria-hidden="true"
@@ -606,32 +581,32 @@
             } @else if (
               !accountDetails?.isPremium && accountDetails?.isUpgradeable
             ) {
-              <ul class="list-none m-0 p-0 flex flex-col gap-3">
+              <ul class="list-none m-0 p-0 flex flex-col gap-4">
                 <li
-                  class="inline-flex items-center gap-3 text-sm font-bold text-on-surface"
+                  class="inline-flex items-center gap-4 text-sm font-bold text-on-surface"
                 >
                   <span
-                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                    class="material-symbols-outlined cuet-icon-filled text-2xl text-primary"
                     aria-hidden="true"
                     >check_circle</span
                   >
                   All premium features
                 </li>
                 <li
-                  class="inline-flex items-center gap-3 text-sm font-bold text-on-surface"
+                  class="inline-flex items-center gap-4 text-sm font-bold text-on-surface"
                 >
                   <span
-                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                    class="material-symbols-outlined cuet-icon-filled text-2xl text-primary"
                     aria-hidden="true"
                     >check_circle</span
                   >
                   Full mock library
                 </li>
                 <li
-                  class="inline-flex items-center gap-3 text-sm font-bold text-on-surface"
+                  class="inline-flex items-center gap-4 text-sm font-bold text-on-surface"
                 >
                   <span
-                    class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
+                    class="material-symbols-outlined cuet-icon-filled text-2xl text-primary"
                     aria-hidden="true"
                     >check_circle</span
                   >
@@ -641,11 +616,11 @@
 
               <button
                 nz-button
-                class="cuet-btn--premium h-[56px] px-8 rounded-2xl w-full"
+                class="btn-cuet btn-cuet--primary btn-cuet--lg w-full"
                 (click)="onInitiateUpgradePayment()"
               >
                 <span
-                  class="material-symbols-outlined cuet-icon-cta text-2xl"
+                  class="material-symbols-outlined cuet-icon-cta text-2xl mr-2"
                   aria-hidden="true"
                   >upgrade</span
                 >
@@ -653,7 +628,7 @@
               </button>
             } @else {
               <p
-                class="font-[Manrope] text-lg font-extrabold tracking-tight leading-snug text-on-surface"
+                class="font-headline text-xl font-extrabold tracking-tight leading-snug text-on-surface"
               >
                 Thanks for supporting us,
                 <span class="text-primary">{{ accountDetails?.name }}</span>
@@ -665,29 +640,29 @@
         <!-- Purchase summary (desktop) -->
         @if (!accountDetails?.isPremium && showPurchaseButton) {
           <section
-            class="hidden lg:block rounded-4xl bg-surface-container-lowest shadow-(--ambient-shadow) px-6 md:px-8 py-6 md:py-8"
+            class="hidden xl:block rounded-xl md:rounded-3xl bg-surface-container-lowest shadow-lg p-4 md:p-6 lg:p-8"
             aria-label="Purchase summary"
           >
             <p
-              class="text-xs font-black uppercase tracking-[0.25em] text-primary"
+              class="text-[10px] font-black uppercase tracking-[0.3em] text-primary"
             >
               Checkout
             </p>
-            <div class="mt-4 flex items-end justify-between gap-4">
+            <div class="mt-6 flex items-end justify-between gap-4">
               <div>
                 <p
-                  class="text-xs font-black tracking-widest uppercase text-on-surface-variant"
+                  class="text-[10px] font-black tracking-widest uppercase text-on-surface-variant"
                 >
-                  Total investment
+                  Total cost
                 </p>
                 <p
-                  class="mt-2 font-[Manrope] text-4xl font-extrabold tracking-tight tabular-nums text-primary"
+                  class="mt-2 font-headline text-5xl font-extrabold tracking-tighter tabular-nums text-primary"
                 >
                   ₹{{ totalPurchaseAmount }}
                 </p>
               </div>
               <span
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface text-sm font-bold"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface text-[10px] font-black uppercase tracking-widest"
               >
                 <span
                   class="material-symbols-outlined text-lg text-primary"
@@ -697,34 +672,18 @@
                 Ready
               </span>
             </div>
-            <!-- <button
-              type="button"
-              class="acc-rail-cta group w-full mt-6"
-              (click)="onInitiateFeaturePayment()"
-            >
-              <span class="acc-rail-btn__icon" aria-hidden="true">
-                <span class="material-symbols-outlined text-[22px] text-white"
-                  >shopping_bag</span
-                >
-              </span>
-              <span class="acc-rail-btn__label">Purchase</span>
-              <span
-                class="material-symbols-outlined acc-rail-btn__arrow"
-                aria-hidden="true"
-                >arrow_forward</span
-              >
-            </button> -->
+            
             <button
                   type="button"
-                  class="acc-rail-cta group w-full mt-6"
+                  class="acc-rail-cta group mt-8"
                   (click)="onInitiateFeaturePayment()"
                 >
-                  <nz-icon class="acc-rail-btn__icon p-2" aria-hidden="true">
+                  <span class="acc-rail-btn__icon flex items-center justify-center p-2" aria-hidden="true">
                     <span class="material-symbols-outlined text-[16px]! text-white"
                       >shopping_bag</span
                     >
-                  </nz-icon>
-                  <span class="acc-rail-btn__label text-!">Purchase</span>
+                  </span>
+                  <span class="acc-rail-btn__label">Purchase</span>
                   <span
                     class="material-symbols-outlined acc-rail-btn__arrow"
                     aria-hidden="true"
@@ -736,21 +695,21 @@
 
         <!-- Support -->
         <section
-          class="rounded-4xl bg-surface-container-low px-6 md:px-8 py-6 md:py-8"
+          class="rounded-xl md:rounded-3xl bg-surface-container-low p-4 md:p-6 lg:p-8"
           aria-label="Support"
         >
           <p
-            class="text-xs font-black uppercase tracking-[0.25em] text-primary"
+            class="text-[10px] font-black uppercase tracking-[0.3em] text-primary"
           >
             Support
           </p>
           <p
-            class="mt-4 text-base font-semibold text-on-surface leading-relaxed"
+            class="mt-6 text-lg font-extrabold text-on-surface leading-snug font-headline"
           >
-            Need help with enrollment or purchases?
+            Need help?
           </p>
           <p
-            class="mt-2 text-sm font-medium text-on-surface-variant leading-relaxed"
+            class="mt-4 text-sm font-medium text-on-surface-variant leading-relaxed"
           >
             If something looks off, try refreshing once. If it persists, contact
             the CUET Corner team from the notifications panel.
@@ -758,9 +717,27 @@
         </section>
       </aside>
     </div>
+
+    <!-- Mobile Sticky CTA: Hoisted for easier access on small screens -->
+    @if (!accountDetails?.isPremium && totalBatchCount > 0) {
+      <div class="fixed bottom-0 left-0 right-0 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] bg-surface/80 backdrop-blur-xl border-t border-outline-variant/10 xl:hidden z-50 shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
+        <button
+          type="button"
+          class="btn-cuet btn-cuet--primary btn-cuet--lg w-full shadow-lg"
+          (click)="isShowBatches = true"
+        >
+          <span class="acc-rail-btn__icon flex items-center justify-center p-2" aria-hidden="true">
+            <span class="material-symbols-outlined text-[16px]! text-white">grid_view</span>
+          </span>
+          <span class="acc-rail-btn__label">Enroll in a Batch</span>
+          <span class="material-symbols-outlined acc-rail-btn__arrow" aria-hidden="true">arrow_forward</span>
+        </button>
+      </div>
+    }
   } @else {
-    <div class="py-16 flex justify-center">
-      <nz-spin nzTip="Loading account..."></nz-spin>
+    <div class="py-32 flex flex-col items-center justify-center gap-6">
+      <nz-spin nzSimple nzSize="large"></nz-spin>
+      <p class="text-on-surface-variant font-medium animate-pulse">Loading your profile...</p>
     </div>
   }
 </div>
@@ -771,237 +748,191 @@
   nzMaskClosable
   nzClosable
   nzCentered
-  [nzWidth]="680"
+  [nzWidth]="920"
   nzClassName="acc-batch-modal"
   (nzOnCancel)="isShowBatches = false; closeAllCollapse()"
 >
   <ng-container *nzModalContent>
-    <ngx-simplebar class="acc-batch-modal__scroll">
-      <div class="acc-batch-modal__inner p-8 md:p-10">
-        <header class="relative mb-8 pb-8 acc-batch-modal__header">
-          <div class="flex items-center gap-5 mb-4">
-            <span
-              class="cuet-grad-premium inline-flex items-center justify-center w-14 h-14 rounded-2xl text-white shadow-[0_14px_28px_-16px_rgba(0,74,198,0.55)]"
-              aria-hidden="true"
-            >
-              <span class="material-symbols-outlined cuet-icon-filled text-2xl"
-                >school</span
-              >
-            </span>
-            <div class="min-w-0">
-              <p
-                class="text-xs font-black uppercase tracking-[0.2em] text-primary leading-none mb-2"
-              >
-                Enrollment curator
-              </p>
-              <h3
-                class="font-[Manrope] text-3xl font-extrabold tracking-tight leading-tight text-on-surface"
-              >
-                Choose your batch
-              </h3>
-            </div>
-          </div>
-          <p
-            class="inline-flex items-center gap-3 mt-4 px-5 py-3 rounded-2xl bg-surface-container-low text-on-surface-variant text-sm font-semibold leading-snug shadow-sm"
-          >
-            <span
-              class="material-symbols-outlined text-xl text-primary"
-              aria-hidden="true"
-              >info</span
-            >
-            You can't change your batch after enrolling once.
+    <ngx-simplebar class="acc-batch-modal__scroll h-full">
+      <div class="acc-batch-modal__inner p-6 md:p-8 lg:p-10 bg-surface student">
+        <!-- Curator Header -->
+        <header class="text-center max-w-[65ch] mx-auto mb-10 md:mb-12">
+          <p class="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-6">
+            Enrollment Curator
+          </p>
+          <h3 class="font-headline text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-[1.05] text-on-surface">
+            Your path to <span class="italic text-primary">University</span> begins here.
+          </h3>
+          <p class="mt-6 text-lg font-medium text-on-surface-variant leading-relaxed">
+            Select a curriculum that fits your target year. Each batch is a curated journey of mentorship and structured preparation.
           </p>
         </header>
 
-        <div class="flex flex-col gap-6">
+        <!-- Batch Catalog -->
+        <div class="flex flex-col">
           @for (batch of batches; track batch.id; let i = $index) {
-            <article
-              class="cuet-card cuet-card--editorial relative p-6 md:p-8 bg-surface-container-lowest shadow-[var(--ambient-shadow)] border-none"
-            >
-              <div class="min-w-0">
-              <div class="flex items-start justify-between gap-4">
-                <p
-                  class="font-[Manrope] text-xl font-extrabold tracking-tight leading-tight text-on-surface"
-                >
-                  {{ batch?.name }} Batch
-                </p>
-                @if (batch?.isDemo) {
-                  <span
-                    class="px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant text-[0.6rem] font-black tracking-widest uppercase whitespace-nowrap"
-                  >
-                    Demo
+            <article class="acc-editorial-batch py-10 md:py-14 border-t border-outline-variant/20 first:border-t-0 first:pt-0">
+              
+              <!-- Batch Header -->
+              <header class="text-center max-w-[60ch] mx-auto mb-8">
+                <div class="inline-flex items-center gap-3 mb-6">
+                  <span class="text-[10px] font-black uppercase tracking-widest text-primary px-3 py-1.5 rounded-full bg-primary/10">
+                    Batch 0{{ i + 1 }}
                   </span>
-                }
-              </div>
-                <p
-                  class="inline-flex items-center gap-2 mt-2 text-sm font-medium text-on-surface-variant"
-                >
-                  <span
-                    class="material-symbols-outlined text-lg text-primary"
-                    aria-hidden="true"
-                    >event</span
-                  >
-                  {{ batch?.startDate < currentDate ? "Started" : "Starts" }}
-                  {{
-                    batch?.startDate
-                      ? (batch?.startDate | date: "dd MMM yyyy")
-                      : "—"
-                  }}
+                  @if (batch?.isDemo) {
+                    <span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/50 border border-outline-variant/30 px-3 py-1.5 rounded-full">
+                      Preview
+                    </span>
+                  }
+                </div>
+                <h4 class="font-headline text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-on-surface leading-tight mb-6">
+                  {{ batch?.name }}
+                </h4>
+                <div class="flex flex-wrap items-center justify-center gap-6 text-sm font-semibold text-on-surface-variant">
+                  <span class="inline-flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xl text-primary/80">calendar_month</span>
+                    Starts {{ batch?.startDate | date: 'dd MMM yyyy' }}
+                  </span>
+                  <span class="inline-flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xl text-primary/80">diversity_3</span>
+                    Mentorship Included
+                  </span>
+                </div>
+              </header>
+
+              <!-- The Offerings: Clean, text-driven selection -->
+              <div class="max-w-[800px] mx-auto bg-surface-container-lowest rounded-4xl p-6 md:p-8 lg:p-10 shadow-sm border border-outline-variant/10">
+                <p class="text-center text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/50 mb-8">
+                  Select your enrollment path
                 </p>
-              </div>
 
-              <div
-                class="mt-6 flex flex-col items-stretch gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6"
-              >
-                <div class="min-w-0 sm:flex-1">
-                  <p
-                    class="text-[0.65rem] font-black uppercase tracking-[0.2em] text-on-surface-variant leading-none mb-2"
-                  >
-                    {{ batch?.type === "premium" ? "Premium" : "Basic" }} plan
-                  </p>
-                  <p
-                    class="font-[Manrope] text-4xl font-extrabold leading-none tracking-tighter tabular-nums text-on-surface"
-                  >
-                    ₹{{
-                      batch?.type === "premium"
-                        ? batch?.premiumPrice
-                        : batch?.basePrice
-                    }}
-                  </p>
-                </div>
-                <div
-                  class="acc-plan-switch acc-plan-switch--pill grid grid-cols-2 p-1.5 rounded-full bg-surface-container-low"
-                  role="radiogroup"
-                  [attr.data-active]="batch?.type"
-                >
-                  <button
-                    type="button"
-                    class="acc-plan-option acc-plan-option--pill h-10 px-6"
-                    [class.acc-plan-option--active]="batch.type === 'basic'"
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                  
+                  <!-- Standard Path -->
+                  <div 
+                    class="acc-path-option group flex flex-col relative p-6 md:p-8 rounded-2xl cursor-pointer transition-all"
+                    [class.acc-path-option--active]="batch.type === 'basic'"
                     (click)="batch.type = 'basic'"
+                    role="button"
+                    tabindex="0"
                   >
-                    Basic
-                  </button>
+                    <div class="flex items-start justify-between mb-8">
+                      <div>
+                        <h5 class="font-headline text-xl md:text-2xl font-extrabold text-on-surface group-hover:text-primary transition-colors">
+                          {{ batch?.baseFeatures?.length === features?.length ? 'Full Access Included' : 'Standard Journey' }}
+                        </h5>
+                        <div class="text-3xl font-black text-on-surface mt-2 tracking-tighter">
+                          ₹{{ batch?.basePrice }}
+                        </div>
+                      </div>
+                      <div class="w-6 h-6 rounded-full border-2 border-outline-variant/40 flex items-center justify-center acc-path-radio transition-colors shrink-0">
+                        <div class="w-3 h-3 rounded-full bg-primary opacity-0 transition-opacity acc-path-radio-inner"></div>
+                      </div>
+                    </div>
+
+                    <div class="mt-auto pt-6 border-t border-outline-variant/20">
+                       <ul class="space-y-4">
+                         @for (featureId of batch?.baseFeatures; track featureId) {
+                           @if (getFeatureName(featureId); as name) {
+                             <li class="flex items-start gap-3 text-[13px] font-medium text-on-surface-variant leading-snug">
+                               <span class="material-symbols-outlined text-[18px] text-primary shrink-0 cuet-icon-filled">check_circle</span>
+                               {{ name }}
+                             </li>
+                           }
+                         }
+                         <li class="flex items-start gap-3 text-[13px] font-medium text-on-surface-variant leading-snug">
+                           <span class="material-symbols-outlined text-[18px] text-primary shrink-0 cuet-icon-filled">check_circle</span>
+                           Live Curriculum & Materials
+                         </li>
+                       </ul>
+                    </div>
+                  </div>
+
+                  <!-- Premium Path -->
+                  @if (batch?.baseFeatures?.length !== features?.length) {
+                    <div 
+                      class="acc-path-option group flex flex-col relative p-6 md:p-8 rounded-2xl cursor-pointer transition-all"
+                      [class.acc-path-option--active]="batch.type === 'premium'"
+                      (click)="batch.type = 'premium'"
+                      role="button"
+                      tabindex="0"
+                    >
+                      <div class="flex items-start justify-between mb-8">
+                        <div>
+                          <div class="flex items-center gap-2">
+                            <h5 class="font-headline text-xl md:text-2xl font-extrabold text-on-surface group-hover:text-primary transition-colors">
+                              Full Access
+                            </h5>
+                            <span class="material-symbols-outlined text-primary cuet-icon-filled text-xl">workspace_premium</span>
+                          </div>
+                          <div class="text-3xl font-black text-on-surface mt-2 tracking-tighter">
+                            ₹{{ batch?.premiumPrice }}
+                          </div>
+                        </div>
+                        <div class="w-6 h-6 rounded-full border-2 border-outline-variant/40 flex items-center justify-center acc-path-radio transition-colors shrink-0">
+                          <div class="w-3 h-3 rounded-full bg-primary opacity-0 transition-opacity acc-path-radio-inner"></div>
+                        </div>
+                      </div>
+
+                      <div class="mt-auto pt-6 border-t border-outline-variant/20">
+                         <ul class="space-y-4">
+                           <li class="flex items-start gap-3 text-[13px] font-medium text-on-surface-variant leading-snug">
+                             <span class="material-symbols-outlined text-[18px] text-primary shrink-0 cuet-icon-filled">check_circle</span>
+                             Everything in Standard
+                           </li>
+                           <li class="flex items-start gap-3 text-[13px] font-medium text-on-surface-variant leading-snug">
+                             <span class="material-symbols-outlined text-[18px] text-primary shrink-0 cuet-icon-filled">check_circle</span>
+                             All Portal Features unlocked
+                           </li>
+                         </ul>
+                      </div>
+                    </div>
+                  } @else {
+                     <div class="flex flex-col items-center justify-center p-8 text-center bg-primary/5 rounded-2xl border border-primary/10">
+                       <span class="material-symbols-outlined text-4xl text-primary/40 mb-4">auto_awesome</span>
+                       <h5 class="font-headline text-lg font-bold text-on-surface mb-2">All-Inclusive Batch</h5>
+                       <p class="text-sm text-on-surface-variant max-w-[25ch]">
+                         This curriculum includes every feature available on the platform by default.
+                       </p>
+                     </div>
+                  }
+                </div>
+
+                <!-- Central Action -->
+                <div class="mt-8 md:mt-10 pt-8 border-t border-outline-variant/10 flex flex-col items-center">
                   <button
-                    type="button"
-                    class="acc-plan-option acc-plan-option--pill acc-plan-option--premium h-10 px-6"
-                    [class.acc-plan-option--active]="batch.type === 'premium'"
-                    (click)="batch.type = 'premium'"
+                    nz-button
+                    class="btn-cuet btn-cuet--primary btn-cuet--lg w-full max-w-[360px] h-16 rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.98] transition-all"
+                    [disabled]="batch?.isDemo"
+                    (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
                   >
-                    <span
-                      class="material-symbols-outlined cuet-icon-filled text-base -ml-1"
-                      aria-hidden="true"
-                      >workspace_premium</span
-                    >
-                    Premium
+                    <span class="flex items-center justify-center gap-3 text-lg font-bold">
+                      Enroll for ₹{{ batch.type === 'premium' ? batch.premiumPrice : batch.basePrice }}
+                      <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                    </span>
                   </button>
-                </div>
-              </div>
-
-              <div
-                class="flex items-center justify-between gap-4 mt-8 flex-wrap"
-              >
-                <button
-                  type="button"
-                  class="acc-batch-toggle inline-flex items-center gap-2 text-sm font-black tracking-wide text-primary hover:text-primary-container transition-colors"
-                  (click)="batch.showDetails = !batch?.showDetails"
-                >
-                  {{ batch?.showDetails ? "Hide" : "Compare" }} plans
-                  <span
-                    class="material-symbols-outlined text-xl transition-transform"
-                    [class.rotate-180]="batch?.showDetails"
-                    aria-hidden="true"
-                    >expand_more</span
-                  >
-                </button>
-                <button
-                  nz-button
-                  class="cuet-btn--premium h-[48px] px-8 rounded-xl"
-                [disabled]="!batch?.type || batch?.isDemo"
-                  (click)="onInitiateEnrollPayment(batch?.id, batch?.type)"
-                >
-                  Enroll now
-                  <span
-                    class="material-symbols-outlined cuet-icon-cta text-lg"
-                    aria-hidden="true"
-                    >arrow_forward</span
-                  >
-                </button>
-              </div>
-
-              @if (batch?.showDetails) {
-                <div
-                  class="mt-6 p-6 md:p-7 rounded-3xl bg-surface-container-low grid grid-cols-1 sm:grid-cols-2 gap-8"
-                >
-                  <div>
-                    <p
-                      class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4"
-                    >
-                      <span class="text-on-surface">Basic</span> plan
+                  <div class="mt-6 p-4 bg-primary/5 rounded-xl border border-primary/10 max-w-[40ch]">
+                    <p class="text-[11px] font-bold text-primary uppercase tracking-wider mb-1 text-center">
+                      Important Note
                     </p>
-                    <ul class="list-none m-0 p-0 flex flex-col gap-3">
-                      @for (feature of features; track feature?.id) {
-                        <li
-                          class="inline-flex items-center gap-3 text-sm font-bold leading-snug"
-                          [class.text-on-surface]="
-                            batch?.baseFeatures?.includes(feature?.id)
-                          "
-                          [class.text-on-surface-variant]="
-                            !batch?.baseFeatures?.includes(feature?.id)
-                          "
-                          [class.opacity-50]="
-                            !batch?.baseFeatures?.includes(feature?.id)
-                          "
-                        >
-                          @if (batch?.baseFeatures?.includes(feature?.id)) {
-                            <span
-                              class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
-                              aria-hidden="true"
-                              >check_circle</span
-                            >
-                          } @else {
-                            <span
-                              class="material-symbols-outlined text-xl"
-                              aria-hidden="true"
-                              >cancel</span
-                            >
-                          }
-                          {{ feature?.name }}
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div>
-                    <p
-                      class="text-xs font-black uppercase tracking-[0.2em] text-primary mb-4"
-                    >
-                      Premium plan
+                    <p class="text-[11px] font-medium text-on-surface-variant/80 text-center leading-relaxed">
+                      By continuing, you agree to the curriculum terms. Enrollment is permanent for the academic year.
                     </p>
-                    <ul class="list-none m-0 p-0 flex flex-col gap-3">
-                      @for (feature of features; track feature?.id) {
-                        <li
-                          class="inline-flex items-center gap-3 text-sm font-bold leading-snug text-on-surface"
-                        >
-                          <span
-                            class="material-symbols-outlined cuet-icon-filled text-xl text-primary"
-                            aria-hidden="true"
-                            >check_circle</span
-                          >
-                          {{ feature?.name }}
-                        </li>
-                      }
-                    </ul>
                   </div>
                 </div>
-              }
+              </div>
             </article>
           }
 
           @if (!batches?.length) {
-            <div class="py-8">
-              <nz-empty
-                nzNotFoundContent="No batches available right now"
-              ></nz-empty>
+            <div class="py-24 flex flex-col items-center text-center max-w-[40ch] mx-auto">
+              <div class="w-20 h-20 rounded-full bg-surface-container-low flex items-center justify-center mb-8">
+                <span class="material-symbols-outlined text-4xl text-on-surface-variant/40">event_busy</span>
+              </div>
+              <h4 class="font-headline text-3xl font-extrabold text-on-surface mb-4">No Active Enrolling</h4>
+              <p class="text-on-surface-variant text-lg font-medium">
+                New batches are curated periodically. Check back soon for the next enrollment window.
+              </p>
             </div>
           }
         </div>
@@ -1009,3 +940,5 @@
     </ngx-simplebar>
   </ng-container>
 </nz-modal>
+
+

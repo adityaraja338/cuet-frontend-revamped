@@ -32,17 +32,19 @@ export class DashboardComponent implements OnInit {
   previousChartDatasets: ChartConfiguration<'doughnut'>['data']['datasets'] = [
     {
       data: [0, 0, 0],
-      backgroundColor: ['#004ac6', '#60a5fa', '#e0e7ff'],
-      borderWidth: 2,
-      borderColor: '#ffffff',
+      backgroundColor: ['oklch(68% 0.17 55)', 'oklch(82% 0.1 55)', 'oklch(95% 0.04 75)'],
+      borderWidth: 0,
       borderRadius: 10,
       hoverOffset: 4,
     },
   ];
   doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: false,
-    radius: 80,
-    cutout: '68%',
+    radius: 50,
+    cutout: '80%',
+    plugins: {
+      tooltip: { enabled: false }
+    }
   };
 
   averageScoreChartData: ChartConfiguration<'line'>['data'] = {
@@ -53,8 +55,8 @@ export class DashboardComponent implements OnInit {
         label: 'Average',
         fill: true,
         tension: 0.4,
-        borderColor: '#004ac6',
-        pointBackgroundColor: '#004ac6',
+        borderColor: 'oklch(68% 0.17 55)',
+        pointBackgroundColor: 'oklch(68% 0.17 55)',
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 4,
@@ -73,8 +75,8 @@ export class DashboardComponent implements OnInit {
             0,
             chartArea.bottom,
           );
-          gradient.addColorStop(0, 'rgba(0, 74, 198, 0.32)');
-          gradient.addColorStop(1, 'rgba(0, 74, 198, 0.02)');
+          gradient.addColorStop(0, 'oklch(68% 0.17 55 / 0.15)');
+          gradient.addColorStop(1, 'oklch(68% 0.17 55 / 0.01)');
 
           return gradient;
         },

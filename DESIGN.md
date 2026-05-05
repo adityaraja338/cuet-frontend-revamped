@@ -1,188 +1,133 @@
+---
+name: CUET Corner
+description: A warm, radiant educational platform for CUET aspirants.
+colors:
+  primary: "#f59e0b"
+  primary-container: "#fde68a"
+  on-primary: "#ffffff"
+  background: "#f7f9fb"
+  surface: "#ffffff"
+  surface-container-low: "#f2f4f6"
+  headline: "#191c1e"
+  body: "#434655"
+typography:
+  display:
+    fontFamily: "Cormorant Garamond, serif"
+    fontSize: "clamp(2rem, 5vw, 3rem)"
+    fontWeight: 600
+    lineHeight: 1.1
+    fontStyle: "italic"
+  headline:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 700
+    lineHeight: 1.3
+  body:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: 1.6
+rounded:
+  sm: "0.5rem"
+  md: "0.75rem"
+  lg: "1rem"
+  xl: "1.25rem"
+spacing:
+  xs: "0.5rem"
+  sm: "1rem"
+  md: "1.5rem"
+  lg: "2rem"
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    rounded: "{rounded.md}"
+    padding: "0.75rem 1.5rem"
+  card-cuet:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.xl}"
+    padding: "1.5rem"
+---
+
 # Design System: CUET Corner
 
 ## 1. Overview
 
-CUET Corner serves 16-17 year olds who just finished their 12th boards, anxious about what comes next, scrolling on a mid-range Android phone. The design must feel like a warm sunrise, not a film trailer.
+**Creative North Star: "The Radiant Mentor"**
 
-**Guiding principles**
-- Warmth over drama. Light, amber-accented surfaces signal hope and clarity.
-- Clarity over density. One idea per viewport. Let the story breathe.
-- Mobile-first. Single-column, 48px touch targets, no heavy parallax.
+CUET Corner is designed to feel like a warm sunrise—a signal of hope and clarity for 16-17 year olds navigating the anxiety of university entrance exams. The aesthetic is "Supportive Mentor": authoritative yet approachable, replacing the cold, utilitarian feel of traditional EdTech with a prestigious, editorial experience.
 
----
+This system explicitly rejects the "Batch Bazaar" clutter and FOMO-driven tactics of competitors. Instead, it prioritizes **Mentor’s Guidance**, using light and space to reduce cognitive load and build confidence through clear, beautiful progress visualizations.
 
-## 2. Color System
+**Key Characteristics:**
+- **Warmth over Drama:** Amber-tinted neutrals and soft light over cold grays.
+- **Clarity over Density:** One primary idea per viewport; breathing room for the story.
+- **Supportive Elevation:** Surfaces that float slightly, suggesting a workspace that is organized and ready.
 
-All colors use OKLCH. Neutrals are amber-tinted, never cold gray.
+## 2. Colors: The Sunrise Palette
 
-### Student / Landing palette
+The palette is anchored in warm, radiant tones that signal optimism and guidance.
 
-| Role | OKLCH | Usage |
-|---|---|---|
-| Primary amber | `oklch(68% 0.17 55)` | CTAs, highlights, active states, icons |
-| Primary dark | `oklch(58% 0.17 55)` | Hover, pressed states |
-| Primary light | `oklch(82% 0.1 55)` | Container, tinted backgrounds |
-| Background | `oklch(99% 0.006 80)` | Page background (warm white) |
-| Card surface | `oklch(97% 0.008 82)` | Card backgrounds |
-| Tinted section | `oklch(97.5% 0.012 82)` | Alternating section fills |
-| Headline text | `oklch(14% 0.01 260)` | H1–H4, near-black |
-| Body text | `oklch(38% 0.01 260)` | Paragraphs, readable on mobile |
-| Muted text | `oklch(48–58% 0.008 260)` | Labels, secondary info |
-| Border / divider | `oklch(91% 0.016 80)` | Subtle warm-tinted separators |
+### Primary
+- **Confidence Amber** (`oklch(68% 0.17 55)`): The primary brand color, used for trust anchors, primary actions, and success signals. It is "Supportive Mentor" in color form.
 
-### CSS variables (`:root` + `.student`)
+### Neutral
+- **Warm White Background** (`oklch(99% 0.006 80)`): The primary canvas, tinted with a hint of amber to avoid eye strain and clinical coldness.
+- **Headline Slate** (`oklch(14% 0.01 260)`): Near-black with a deep navy undertone for high-authority typography.
+- **Body Graphite** (`oklch(38% 0.01 260)`): A softer, readable gray for long-form educational content.
 
-```css
-/* Global */
---student-primary: oklch(68% 0.17 55);
---student-dark-primary: oklch(58% 0.17 55);
+### Named Rules
+**The 10% Radiance Rule.** The primary Confidence Amber is used on ≤10% of any given screen. Its rarity makes it a powerful signal for "what to do next."
 
-/* Student context override — cascades via var(--primary) */
-.student {
-  --primary: oklch(68% 0.17 55);
-  --primary-container: oklch(82% 0.1 55);
-  --primary-gradient: linear-gradient(135deg, oklch(68% 0.17 55) 0%, oklch(76% 0.13 55) 100%);
-}
-```
+## 3. Typography: Editorial Authority
 
-### Admin palette
-Admin uses `--admin-primary: #0284c7` (sky blue). All `.admin` selectors remain unchanged.
+The typography pairing creates a "digital curator" feel, blending the prestige of print with the speed of digital.
 
-### Color strategy
-**Committed** (landing hero, epilogue CTA) — amber IS the surface.
-**Restrained** (student portal interior) — amber at ≤15% via icons, eyebrows, active states on neutral surfaces.
+**Display Font:** Cormorant Garamond (Serif, Italic)
+**Headline Font:** Manrope (Geometric Sans)
+**Body Font:** Inter (Humanist Sans)
 
----
+### Hierarchy
+- **Display** (600, `clamp(2rem, 5vw, 3rem)`, 1.1): Used for KPI values and hero moments. The italic Cormorant Garamond adds an academic, elite university touch.
+- **Headline** (700, 1.25rem, 1.3): Manrope for section titles and card headings. Snappy and authoritative.
+- **Body** (400, 0.875rem, 1.6): Inter for all paragraph text and resource descriptions. Line length capped at 65–75ch for optimal reading.
+- **Label** (700, 0.75rem, 0.14em, uppercase): Manrope for eyebrows and status pills.
 
-## 3. Typography
+## 4. Elevation: The Desk Workspace
 
-| Role | Font | Weight | Notes |
-|---|---|---|---|
-| Display / H1 | Manrope | 800 (Black) | `letter-spacing: -0.03em`, fluid via `clamp()` |
-| Section H2 | Manrope | 800 | `letter-spacing: -0.02em` |
-| Card titles | Manrope | 700–800 | `uppercase` + `letter-spacing: 0.02em` for labels |
-| Body | Inter | 400 | 15–16px, `line-height: 1.6` |
-| UI labels | Inter | 500–600 | 12–14px |
-| Eyebrows | Inter or Manrope | 700 | `uppercase`, `letter-spacing: 0.3em`, 10–12px |
+CUET Corner uses a "slight lifted and floating" philosophy. Elements should feel like high-quality cards placed on a clean desk—organized and distinct.
 
-**Line length cap**: 65–75ch for body paragraphs.
+**The Soft Shadow Rule.** Shadows are never structural or heavy. Use `0px 12px 32px rgba(25, 28, 30, 0.06)` for ambient depth. Depth is a response to organization, not a decoration.
 
-Fonts are loaded globally via Google Fonts in `src/styles.css`:
-```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@200..800&display=swap');
-```
+## 5. Components: Tactile Guidance
 
----
+Interactions are **soft and deliberate**, favoring calm confidence over hyper-active feedback.
 
-## 4. Elevation and Depth
+### Buttons
+- **Shape:** Rounded (0.75rem - 1rem radius)
+- **Primary (.btn-cuet--primary):** Confidence Amber background with white text. Transition is a soft 400ms cubic-bezier.
+- **Secondary (.btn-cuet--secondary):** Outlined amber; used for supportive actions.
 
-No 1px decorative borders. Depth comes from:
-- **Tonal background shifts** — page `oklch(99%)` → card `oklch(97%)` → surface `oklch(100%)`
-- **Ambient shadow** — `0px 12px 32px rgba(25, 28, 30, 0.06)`
-- **Hover lift** — `translateY(-2px)` + slightly heavier shadow on interactive cards
+### Cards (.card-cuet)
+- **Corner Style:** Large radius (1.25rem)
+- **Background:** Warm white or pure white.
+- **Hover Strategy:** `translateY(-4px)` with a slight increase in ambient shadow.
 
-**Radius scale**
+### Pills (.pill-cuet)
+- **Style:** Fully rounded (999px), subtle tinted background, bold uppercase Manrope text.
 
-| Context | Radius |
-|---|---|
-| Buttons | `0.75rem` |
-| Cards (interior) | `1rem` |
-| Landing cards | `1.25–1.5rem` |
-| Icon containers | `0.65–0.75rem` |
+## 6. Do's and Don'ts
 
----
+Guardrails derived from the "Radiant Mentor" strategy and "Education-First" principles.
 
-## 5. Motion
+### Do:
+- **Do** use `clamp()` for fluid, readable headlines across budget Android devices.
+- **Do** ensure touch targets are at least 48px for mobile accessibility.
+- **Do** lead with "Mentor’s Guidance"—every screen must answer "What's next?".
 
-### Rules
-- **100ms** — button press
-- **300ms** — state transitions (FAQ expand, nav scroll)
-- **500ms** — standard content reveals
-- **800ms** — hero headline clip-path reveal
-
-### Easing
-- Entrance: `cubic-bezier(0.16, 1, 0.3, 1)` (expo out) — snappy, confident
-- Scroll-driven: `linear` for direct scroll-mapped properties (opacity, translate)
-
-### Animation classes (landing page component CSS)
-
-| Class | Keyframe | Use |
-|---|---|---|
-| `.animate-reveal-up` | `clip-path` bottom → open | Hero headline lines |
-| `.animate-fade-in-down` | opacity + translateY(-8px) | Eyebrow badges |
-| `.animate-fade-in` | opacity + translateY(16px) | General entrance |
-| `.cta-pulse` | amber box-shadow pulse | Primary CTA button |
-
-### Scroll-driven animations
-`chapterProgress()` signal (0–1 per section) drives `[style.opacity]` and `[style.transform]` inline bindings. No IntersectionObserver — direct scroll math in `updateScrollMetrics()`.
-
-### Reduced motion
-```css
-@media (prefers-reduced-motion: reduce) {
-  .animate-reveal-up, .animate-fade-in-down, .animate-fade-in, .cta-pulse {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    clip-path: none !important;
-  }
-}
-```
-
----
-
-## 6. Landing Page Component Patterns
-
-### Navigation
-Sticky, transparent → `backdrop-filter: blur(16px)` + subtle border on scroll (`isScrolled()` signal). Mobile: logo + hamburger only; section links in a slide-down overlay.
-
-### Lever cards (`.lever-card`)
-Warm-tinted card with large faded number, amber icon container (top-right), title in uppercase Manrope, body in Inter. Bottom edge has a 3px amber progress bar driven by `chapterProgress()`. Hover: `translateY(-4px)` + shadow.
-
-### Platform features (`.platform-feature`)
-Horizontal list item with 40px circular amber icon container, title + copy. Hover: amber tinted background, icon scale(1.1).
-
-### FAQ accordion (`.faq-item`, `.faq-question`, `.faq-answer`)
-Border-bottom separators only (no card). Chevron rotates 180° on open (`faq-icon--open`). Answer uses `max-height` transition from 0 to 200px.
-
-### Stat strip (`.stat-strip__card`)
-Three inline cards: warm white background, amber-tinted border, center-aligned value + label.
-
-### Phone mockup (`.phone-mockup`)
-CSS-rendered dark frame + inner warm-tinted screen. Amber scanner line animates top-to-bottom driven by chapterProgress.
-
-### Epilogue CTA section
-Full amber-drenched background (`oklch(68% 0.17 55)`). Dark text on amber — not white, to avoid readability issues. Primary button: dark surface on amber.
-
----
-
-## 7. Student Portal Interior Patterns
-
-Uses `src/styles.css` global component classes. Key ones:
-
-- **`.cuet-card`** — base card; variants: `--editorial`, `--premium`, `--glass`, `--tonal`
-- **`.stat-card`** — dashboard KPI cards; color variants via `--blue`, `--indigo`, `--sky`, `--green`, `--amber`
-- **`.content-card`** — resource/test list items with icon + body
-- **`.section-head`** — eyebrow + title + optional action link
-- **`.cuet-page-hero`** — page-level heading with eyebrow + title + subtitle
-- **`.pill`** — badge chip; variants: `--free`, `--paid`, `--domain`, `--warn`, `--live`
-
----
-
-## 8. Do's and Don'ts
-
-### Do
-- Use warm amber for active states, primary actions, and trust anchors (eyebrows, active nav)
-- Single column on mobile (<640px) — budget Android is primary
-- Use `clamp()` for fluid headline sizes
-- Touch targets ≥ 48px
-- Entrance animations with clip-path for hero text, opacity+translate for scroll sections
-- Mention batch enrollment as "guided preparation", never as "paid content"
-
-### Don't
-- Don't use side-stripe borders (no `border-left` accent on cards or list items)
-- Don't use gradient text (`background-clip: text` with a gradient)
-- Don't use glassmorphism as a default pattern
-- Don't add parallax — CSS entrance animations only on mobile
-- Don't use em dashes. Use commas, colons, semicolons, or parentheses
-- Don't highlight free vs paid split — no pricing section on landing page
-- Don't skip `prefers-reduced-motion` fallback
+### Don't:
+- **Don't** use side-stripe borders as colored accents on cards.
+- **Don't** use gradient text; maintain solid color authority.
+- **Don't** use FOMO tactics like countdown timers or "Batch Bazaar" clutter.
+- **Don't** use glassmorphism as a default; keep surfaces grounded and clear.
+- **Don't** use em dashes—prefer commas, colons, or parentheses for clarity.

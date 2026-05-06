@@ -74,34 +74,30 @@
       <div class="shell-sider__inner">
         <div
           id="side-info-box"
-          class="shell-profile-card"
+          class="shell-profile-card cuet-card--premium"
           [style]="isCollapsed ? 'display:none;' : ''"
         >
           <div class="shell-profile-card__head">
-            <h1 class="shell-profile-card__name">
+            <p class="shell-profile-card__subtitle font-label">Student Journey</p>
+            <h1 class="shell-profile-card__name font-display">
               {{ globalService.userDetails?.name?.split(' ')[0] || '-' }}
             </h1>
-            <p class="shell-profile-card__subtitle">Student Journey</p>
           </div>
 
           <dl class="shell-profile-card__facts">
             <div class="shell-profile-card__fact">
-              <dt>ID Number</dt>
-              <dd>{{ globalService.userDetails?.id || '-' }}</dd>
+              <dt class="font-label">ID Number</dt>
+              <dd class="font-headline">{{ globalService.userDetails?.id || '-' }}</dd>
             </div>
             <div class="shell-profile-card__fact">
-              <dt>Active Batch</dt>
-              <dd>
+              <dt class="font-label">Active Batch</dt>
+              <dd class="font-headline" [class.text-gray-400]="!globalService.userDetails?.batchId">
                 {{
                   globalService.userDetails?.batchId
                     ? globalService.userDetails?.batchName
                     : 'Awaiting Enrollment'
                 }}
               </dd>
-            </div>
-            <div class="shell-profile-card__fact">
-              <dt>Curriculum</dt>
-              <dd>{{ globalService.userDetails?.plan || 'Standard Path' }}</dd>
             </div>
           </dl>
         </div>

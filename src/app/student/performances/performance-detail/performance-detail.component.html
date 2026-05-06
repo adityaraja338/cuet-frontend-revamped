@@ -1,288 +1,421 @@
-<!-- ── Page root: stacked layout ── -->
-<div class="flex flex-col gap-5">
+<article
+  class="bg-white rounded-4xl border border-warm-border shadow-ambient overflow-hidden flex flex-col desk-workspace"
+>
+    <!-- 1. Sunrise Hero -->
+    <header
+      class="p-6 md:p-12 border-b border-warm-border sunrise-gradient"
+    >
+      <div class="mb-10">
+        <span
+          class="font-label text-[0.75rem] font-extrabold tracking-widest uppercase text-primary mb-3 block"
+          >Performance Report</span
+        >
+        <h1
+          class="font-headline text-3xl md:text-4xl font-extrabold text-on-surface leading-tight tracking-tight"
+        >
+          {{ performance?.testName }}
+        </h1>
+      </div>
 
-  <!-- ══════════════════════════════════════════════
-       TOP ROW — Report Card [+ Leaderboard: live]
-  ══════════════════════════════════════════════ -->
-  <div [class.pd-top-live]="performance?.testType === 'live'">
-
-    <!-- ── Report Card ── -->
-    <div class="rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(25,28,30,0.06)]">
-
-      <!-- HERO: gradient zone ─────────────────── -->
-      <div class="pd-hero px-5 pt-6 md:px-5 md:pt-7">
-
-        <!-- Grid: test identity (left) | score + grade (right) -->
-        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-8 gap-y-5 mb-6">
-
-          <!-- Test identity -->
-          <div class="col-span-2 xl:col-span-1">
-            <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-white/45 mb-1.5">
-              Performance Report
-            </p>
-            <h1 class="font-[Manrope] text-xl font-black text-white leading-tight mb-3 tracking-tight">
-              {{ performance?.testName }}
-            </h1>
-            <div class="flex flex-wrap gap-1.5">
-              <span class="text-[10px] font-semibold px-[9px] py-[3px] rounded-full
-                           bg-white/12 border border-white/12 text-white/80">
-                {{ performance?.testType | titlecase }} Test
-              </span>
-              @for (topic of performance?.testTopics; track topic) {
-                <span class="text-[10px] font-semibold px-[9px] py-[3px] rounded-full
-                             bg-white/12 border border-white/12 text-white/80">
-                  {{ topic }}
-                </span>
-              }
-            </div>
-          </div>
-
-          <!-- Score + Grade -->
-          <div class="flex items-center gap-3 md:gap-4">
-            <div class="grow">
-              <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/50 mb-1.5">
-                Final Score
-              </p>
-              <div class="pd-shelf__score">
-                {{ performance.scoreObtained | number: '1.0-0' }}
-                <span class="pd-shelf__total">/ {{ performance.totalScore | number: '1.0-0' }}</span>
-              </div>
-              <p class="pd-shelf__pct">Accuracy: {{ accuracyLabel }} · {{ scoreAvgLabel }}</p>
-            </div>
-            <div class="w-px self-stretch bg-white/10 mx-1"></div>
-            <div class="pd-shelf__grade" [attr.data-grade]="performance?.grade">
-              <span class="pd-shelf__grade-letter">{{ performance?.grade }}</span>
-              <span class="pd-shelf__grade-label">Grade</span>
-            </div>
-          </div>
-
-        </div><!-- /hero top grid -->
-
-        <!-- Frosted stats shelf -->
-        <div class="pd-shelf">
-          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
-            <span class="font-[Manrope] text-base font-extrabold text-green-300">{{ correctCount }}</span>
-            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Correct</span>
-          </div>
-          <div class="pd-shelf__divider"></div>
-          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
-            <span class="font-[Manrope] text-base font-extrabold text-red-300">{{ incorrectCount }}</span>
-            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Incorrect</span>
-          </div>
-          <div class="pd-shelf__divider"></div>
-          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
-            <span class="font-[Manrope] text-base font-extrabold text-slate-400">{{ skippedCount }}</span>
-            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Skipped</span>
-          </div>
-          <div class="pd-shelf__divider"></div>
-          <div class="flex-1 flex flex-col items-center justify-center py-3 gap-0.5">
-            <span class="font-[Manrope] text-base font-extrabold text-white">{{ totalQ }}</span>
-            <span class="text-[9px] font-bold uppercase tracking-widest text-white/50">Total</span>
+      <div class="flex gap-8 md:gap-16 flex-wrap">
+        <div class="flex flex-col gap-1">
+          <span
+            class="font-label text-[0.75rem] font-bold uppercase tracking-wider text-slate-500"
+            >Score</span
+          >
+          <div
+            class="font-display text-4xl md:text-5xl font-semibold italic text-on-surface leading-none"
+          >
+            <span class="text-primary">{{
+              performance.scoreObtained | number: "1.0-0"
+            }}</span>
+            <small
+              class="text-xl md:text-2xl font-normal not-italic opacity-40 ml-1"
+              >/{{ performance.totalScore | number: "1.0-0" }}</small
+            >
           </div>
         </div>
-
-      </div><!-- /pd-hero -->
-
-      <!-- WHITE BODY: 2×2 detail grid ────────── -->
-      <div class="grid grid-cols-1 md:grid-cols-2 bg-white">
-
-        <!-- Score distribution -->
-        <div class="p-5 border-b border-slate-100 md:border-r">
-          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
-            Score Distribution
-          </p>
-          <div class="pd-dist__bar">
-            <div class="pd-dist__seg--good"    [style.width.%]="correctPct"></div>
-            <div class="pd-dist__seg--bad"     [style.width.%]="incorrectPct"></div>
-            <div class="pd-dist__seg--neutral" [style.flex]="1"></div>
-          </div>
-          <div class="pd-dist__legend">
-            <div class="pd-dist__legend-item">
-              <span class="pd-dist__dot pd-dist__dot--good"></span> Correct
-            </div>
-            <div class="pd-dist__legend-item">
-              <span class="pd-dist__dot pd-dist__dot--bad"></span> Incorrect
-            </div>
-            <div class="pd-dist__legend-item">
-              <span class="pd-dist__dot pd-dist__dot--neutral"></span> Unattempted
-            </div>
+        <div class="flex flex-col gap-1">
+          <span
+            class="font-label text-[0.75rem] font-bold uppercase tracking-wider text-slate-500"
+            >Accuracy</span
+          >
+          <div
+            class="font-display text-4xl md:text-5xl font-semibold italic text-on-surface leading-none"
+          >
+            {{ accuracyLabel }}
           </div>
         </div>
-
-        <!-- Instructor remarks -->
-        <div class="p-5 border-b border-slate-100">
-          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-            Instructor Remarks
-          </p>
-          <p class="text-sm font-medium text-slate-600 leading-relaxed">
-            {{ performance.remark ?? 'Keep up the good work!' }}
-          </p>
-        </div>
-
-        <!-- Session details -->
-        <div class="p-5 border-b border-slate-100 md:border-b-0 md:border-r">
-          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
-            Session Details
-          </p>
-          <dl class="flex flex-col gap-2">
-            <div class="flex gap-2"> 
-              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Date</dt>
-              <dd class="text-sm font-semibold text-slate-700">
-                {{ performance?.testItem?.startTime | date: 'dd MMM yyyy' }}
-              </dd>
-            </div>
-            <div class="flex gap-2">
-              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Started</dt>
-              <dd class="text-sm font-semibold text-slate-700">
-                {{ performance?.testItem?.startTime | date: 'hh:mm a' }}
-              </dd>
-            </div>
-            <div class="flex gap-2">
-              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Ended</dt>
-              <dd class="text-sm font-semibold text-slate-700">
-                {{ performance?.testItem?.endTime | date: 'hh:mm a' }}
-              </dd>
-            </div>
-            <div class="flex gap-2">
-              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Duration</dt>
-              <dd class="text-sm font-semibold text-slate-700">{{ duration }}</dd>
-            </div>
-          </dl>
-        </div>
-
-        <!-- Test info -->
-        <div class="p-5">
-          <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
-            Test Info
-          </p>
-          <dl class="flex flex-col gap-2">
-            <div class="flex gap-2">
-              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">Type</dt>
-              <dd class="text-sm font-semibold text-slate-700">
-                {{ performance?.testType | titlecase }} Test
-              </dd>
-            </div>
-            <div class="flex gap-2">
-              <dt class="text-sm font-semibold text-slate-400 w-16 shrink-0">
-                {{ performance?.testType === 'topic' ? 'Topic' : 'Topics' }}
-              </dt>
-              <dd class="text-sm font-semibold text-slate-700">
-                {{ performance?.testType === 'topic'
-                   ? performance?.topicName
-                   : performance?.testTopics?.join(', ') }}
-              </dd>
-            </div>
-          </dl>
-        </div>
-
-      </div><!-- /white body -->
-    </div><!-- /report card -->
-
-    <!-- Leaderboard — live tests only ────────── -->
-    @if (performance?.testType === 'live') {
-      <div
-        class="relative rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)] min-h-104"
-      >
-        <div class="absolute inset-5">
-          <app-leaderboard
-            class="block h-full"
-            [leaderboardData]="performance.leaderboard"
-          ></app-leaderboard>
+        <div class="flex flex-col gap-1">
+          <span
+            class="font-label text-[0.75rem] font-bold uppercase tracking-wider text-slate-500"
+            >Grade</span
+          >
+          <div
+            class="font-display text-4xl md:text-5xl font-semibold italic text-primary leading-none grade-sunrise"
+          >
+            {{ performance?.grade }}
+          </div>
         </div>
       </div>
+    </header>
+
+    <!-- 2 & 3. Analysis & Mentor's Guidance Grid -->
+    <section
+      class="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] p-6 md:p-12 gap-8 md:gap-16 border-b border-warm-border"
+    >
+      <!-- Performance Analysis -->
+      <div class="flex flex-col">
+        <div class="flex items-center gap-3 mb-6">
+          <h3
+            class="font-headline text-[0.85rem] font-extrabold uppercase tracking-widest text-slate-600"
+          >
+            Performance Analysis
+          </h3>
+        </div>
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-3">
+            <div class="flex justify-between items-baseline">
+              <span
+                class="font-body text-[0.85rem] font-bold text-on-surface-variant"
+                >Correct</span
+              >
+              <span
+                class="font-headline text-base font-extrabold text-on-surface"
+                >{{ correctCount }}</span
+              >
+            </div>
+            <div
+              class="h-2 bg-warm-surface rounded-full overflow-hidden"
+            >
+              <div
+                class="h-full rounded-full transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] radiant-bar--correct"
+                [style.width.%]="correctPct"
+              ></div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="flex justify-between items-baseline">
+              <span
+                class="font-body text-[0.85rem] font-bold text-on-surface-variant"
+                >Incorrect</span
+              >
+              <span
+                class="font-headline text-base font-extrabold text-on-surface"
+                >{{ incorrectCount }}</span
+              >
+            </div>
+            <div
+              class="h-2 bg-warm-surface rounded-full overflow-hidden"
+            >
+              <div
+                class="h-full rounded-full transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] radiant-bar--incorrect"
+                [style.width.%]="incorrectPct"
+              ></div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3">
+            <div class="flex justify-between items-baseline">
+              <span
+                class="font-body text-[0.85rem] font-bold text-on-surface-variant"
+                >Skipped</span
+              >
+              <span
+                class="font-headline text-base font-extrabold text-on-surface"
+                >{{ skippedCount }}</span
+              >
+            </div>
+            <div
+              class="h-2 bg-warm-surface rounded-full overflow-hidden"
+            >
+              <div
+                class="h-full rounded-full transition-all duration-800 ease-[cubic-bezier(0.34,1.56,0.64,1)] radiant-bar--skipped"
+                [style.width.%]="skippedPct"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentor's Guidance -->
+      <div class="flex flex-col">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="text-primary flex items-center">
+            <i class="material-symbols-outlined">psychology</i>
+          </div>
+          <h3
+            class="font-headline text-[0.85rem] font-extrabold uppercase tracking-widest text-slate-600"
+          >
+            Mentor's Guidance
+          </h3>
+        </div>
+        <p
+          class="text-xl font-display italic font-medium leading-relaxed text-on-surface"
+        >
+          {{
+            performance.remark ??
+              "Every step forward is progress. Take a moment to review your journey and keep your focus sharp."
+          }}
+        </p>
+      </div>
+    </section>
+
+    <!-- 4. Session Meta -->
+    <section class="p-6 md:p-12 border-b border-warm-border">
+      <div class="mb-6">
+        <h3
+          class="font-headline text-[0.85rem] font-extrabold uppercase tracking-widest text-slate-600"
+        >
+          Session Details
+        </h3>
+      </div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-10"
+      >
+        <div class="flex flex-col gap-1">
+          <span
+            class="font-label text-[0.65rem] font-extrabold text-slate-500 uppercase tracking-widest"
+            >Date</span
+          >
+          <span class="font-headline text-sm font-extrabold text-on-surface">{{
+            performance?.testItem?.startTime | date: "dd MMM yyyy"
+          }}</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span
+            class="font-label text-[0.65rem] font-extrabold text-slate-500 uppercase tracking-widest"
+            >Duration</span
+          >
+          <span class="font-headline text-sm font-extrabold text-on-surface">{{
+            duration
+          }}</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span
+            class="font-label text-[0.65rem] font-extrabold text-slate-500 uppercase tracking-widest"
+            >Category</span
+          >
+          <span class="font-headline text-sm font-extrabold text-on-surface">{{
+            (performance?.testType ?? "Test") | titlecase
+          }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Warm Leaderboard (Conditional) -->
+    @if (performance?.testType === "live") {
+      <section
+        class="p-6 md:p-12 bg-gradient-to-b from-white to-warm-bg border-b border-warm-border"
+      >
+        <div class="mb-6">
+          <h3
+            class="font-headline text-[0.85rem] font-extrabold uppercase tracking-widest text-slate-600"
+          >
+            Classroom Leaderboard
+          </h3>
+        </div>
+        <app-leaderboard
+          [leaderboardData]="performance.leaderboard"
+        ></app-leaderboard>
+      </section>
     }
 
-  </div><!-- /top row -->
+    <!-- 6. Review Journey -->
+    <section class="p-8 md:p-12">
+      @if (!performance?.showAnswers) {
+        <div
+          class="flex flex-col items-center justify-center py-16 px-6 text-center"
+        >
+          <i
+            class="material-symbols-outlined text-7xl text-primary opacity-30 mb-6"
+            >lock_person</i
+          >
+          <h3 class="font-headline text-2xl font-extrabold text-on-surface mb-4">
+            Evaluation in Progress
+          </h3>
+          <p
+            class="font-body text-base text-on-surface-variant max-w-[400px] leading-relaxed"
+          >
+            Detailed answers and insights are currently being finalized by your
+            mentor. Check back soon to review your journey.
+          </p>
+        </div>
+      } @else {
+        <div class="flex justify-between items-center mb-14 flex-wrap gap-8">
+          <h2
+            class="font-headline text-2xl font-extrabold text-on-surface tracking-tight"
+          >
+            Review Journey
+          </h2>
 
-  <!-- ══════════════════════════════════════════════
-       Q&A SECTION — full width
-  ══════════════════════════════════════════════ -->
-  <div class="rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(25,28,30,0.06)] p-5">
-
-    @if (!performance?.showAnswers) {
-      <!-- Answers hidden -->
-      <div class="pd-qa-empty">
-        <span class="material-symbols-outlined pd-qa-empty__icon">lock</span>
-        <p class="pd-qa-empty__title">Answers not available</p>
-        <p class="pd-qa-empty__sub">Answers for this test have not been released yet.</p>
-      </div>
-    } @else {
-
-      <!-- Header -->
-      <div class="flex items-center gap-2 mb-4">
-        <span class="font-[Manrope] text-[13px] font-extrabold text-[#0f172a]">
-          Questions &amp; Answers
-        </span>
-        <span class="pd-count-pill">{{ performance.questions.length }} questions</span>
-      </div>
-
-      <!-- Filter chips -->
-      <div class="pd-filters">
-        <button class="pd-filter-chip"
-                [class.pd-filter-chip--active]="activeFilter === 'all'"
-                (click)="setFilter('all')">All</button>
-        <button class="pd-filter-chip"
-                [class.pd-filter-chip--active]="activeFilter === 'correct'"
-                (click)="setFilter('correct')">Correct ({{ correctCount }})</button>
-        <button class="pd-filter-chip"
-                [class.pd-filter-chip--active]="activeFilter === 'incorrect'"
-                (click)="setFilter('incorrect')">Incorrect ({{ incorrectCount }})</button>
-        <button class="pd-filter-chip"
-                [class.pd-filter-chip--active]="activeFilter === 'skipped'"
-                (click)="setFilter('skipped')">Skipped ({{ skippedCount }})</button>
-      </div>
-
-      <!-- Question cards -->
-      @for (q of filteredQuestions; track q.id; let i = $index) {
-        <div class="pd-q-card">
-
-          <!-- Card header -->
-          <div class="flex items-center gap-2 mb-2">
-            <span class="pd-q-card__index">Q {{ i + 1 }}</span>
-            <span class="pd-q-status"
-                  [class.pd-q-status--correct]="getQuestionStatus(q) === 'correct'"
-                  [class.pd-q-status--incorrect]="getQuestionStatus(q) === 'incorrect'"
-                  [class.pd-q-status--skipped]="getQuestionStatus(q) === 'skipped'">
-              @if (getQuestionStatus(q) === 'correct')   { ✓ Correct }
-              @if (getQuestionStatus(q) === 'incorrect') { ✗ Incorrect }
-              @if (getQuestionStatus(q) === 'skipped')   { — Skipped }
-            </span>
+          <div class="inline-flex bg-warm-surface p-1 rounded-full gap-1 overflow-x-auto max-w-full no-scrollbar">
+            <button
+              class="whitespace-nowrap px-6 py-2 rounded-full border-none bg-transparent font-headline text-[0.72rem] font-extrabold text-slate-500 cursor-pointer transition-all duration-300 flex items-center justify-center min-w-[72px]"
+              [class.bg-white]="activeFilter === 'all'"
+              [class.text-primary]="activeFilter === 'all'"
+              [class.shadow-sm]="activeFilter === 'all'"
+              (click)="setFilter('all')"
+            >
+              All
+            </button>
+            <button
+              class="whitespace-nowrap px-6 py-2 rounded-full border-none bg-transparent font-headline text-[0.72rem] font-extrabold text-slate-500 cursor-pointer transition-all duration-300 flex items-center justify-center min-w-[72px]"
+              [class.bg-white]="activeFilter === 'correct'"
+              [class.text-primary]="activeFilter === 'correct'"
+              [class.shadow-sm]="activeFilter === 'correct'"
+              (click)="setFilter('correct')"
+            >
+              Correct
+            </button>
+            <button
+              class="whitespace-nowrap px-6 py-2 rounded-full border-none bg-transparent font-headline text-[0.72rem] font-extrabold text-slate-500 cursor-pointer transition-all duration-300 flex items-center justify-center min-w-[72px]"
+              [class.bg-white]="activeFilter === 'incorrect'"
+              [class.text-primary]="activeFilter === 'incorrect'"
+              [class.shadow-sm]="activeFilter === 'incorrect'"
+              (click)="setFilter('incorrect')"
+            >
+              Incorrect
+            </button>
+            <button
+              class="whitespace-nowrap px-6 py-2 rounded-full border-none bg-transparent font-headline text-[0.72rem] font-extrabold text-slate-500 cursor-pointer transition-all duration-300 flex items-center justify-center min-w-[72px]"
+              [class.bg-white]="activeFilter === 'skipped'"
+              [class.text-primary]="activeFilter === 'skipped'"
+              [class.shadow-sm]="activeFilter === 'skipped'"
+              (click)="setFilter('skipped')"
+            >
+              Skipped
+            </button>
           </div>
+        </div>
 
-          <!-- Question text -->
-          <pre class="pd-q-text">{{ q.question }}</pre>
-
-          <!-- Options -->
-          <ul class="pd-options">
-            <!-- Correct option -->
-            <li class="pd-opt pd-opt--correct">
-              <div class="pd-opt__dot pd-opt__dot--good">
-                <span class="material-symbols-outlined text-[10px] text-white">check</span>
+        <div class="flex flex-col gap-20">
+          @for (q of filteredQuestions; track q.id; let i = $index) {
+            <article class="max-w-[900px]">
+              <div class="flex items-center gap-4 mb-6">
+                <span
+                  class="font-headline text-[0.85rem] font-extrabold text-slate-500"
+                  >Question {{ i + 1 }}</span
+                >
+                <span
+                  class="font-label text-[0.65rem] font-extrabold uppercase px-4 py-1.5 rounded-full tracking-wider transition-all duration-300"
+                  [class]="
+                    getQuestionStatus(q) === 'correct'
+                      ? 'bg-correct-container text-correct-text'
+                      : getQuestionStatus(q) === 'incorrect'
+                        ? 'bg-incorrect-container text-incorrect-text'
+                        : 'bg-skipped-container text-skipped-text'
+                  "
+                >
+                  {{ getQuestionStatus(q) }}
+                </span>
               </div>
-              <span class="pd-opt__text">{{ q.correctOption }}</span>
-              @if (q.answerChosen === q.correctOption) {
-                <span class="pd-opt__yours pd-opt__yours--ok">Your Answer</span>
-              }
-            </li>
-            <!-- Other options -->
-            @for (opt of getQuestionOptions(q); track opt.val) {
-              <li class="pd-opt" [class.pd-opt--wrong]="q.answerChosen === opt.val">
-                <div class="pd-opt__dot" [class.pd-opt__dot--bad]="q.answerChosen === opt.val">
-                  @if (q.answerChosen === opt.val) {
-                    <span class="material-symbols-outlined text-[10px] text-white">close</span>
+
+              <div
+                class="font-body text-lg font-medium leading-tight text-on-surface mb-10 whitespace-pre-wrap"
+              >
+                {{ q.question }}
+              </div>
+
+              <div class="grid grid-cols-1 gap-4">
+                <!-- Correct Option -->
+                <div
+                  class="p-4 px-5 rounded-2xl border flex items-start gap-6 relative transition-all duration-200 border-correct/30 bg-correct-container"
+                >
+                  @if (q.answerChosen === q.correctOption) {
+                    <span
+                      class="absolute -top-2.5 left-6 bg-on-surface text-white font-label text-[0.65rem] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider z-10"
+                      >Correct Choice</span
+                    >
                   }
+                  <div
+                    class="w-6 h-6 rounded-full border-2 border-transparent bg-correct text-white flex items-center justify-center shrink-0 mt-0.5"
+                  >
+                    <span class="material-symbols-outlined text-[10px]"
+                      >done</span
+                    >
+                  </div>
+                  <span
+                    class="font-body text-[0.95rem] font-bold text-on-surface leading-relaxed"
+                    >{{ q.correctOption }}</span
+                  >
                 </div>
-                <span class="pd-opt__text">{{ opt.val }}</span>
-                @if (q.answerChosen === opt.val) {
-                  <span class="pd-opt__yours pd-opt__yours--bad">Your Answer</span>
+
+                <!-- Other Options -->
+                @for (opt of getQuestionOptions(q); track opt.val) {
+                  @if (opt.val !== q.correctOption) {
+                    <div
+                      class="p-4 px-5 rounded-2xl border flex items-start gap-6 relative transition-all duration-200"
+                      [class]="
+                        q.answerChosen === opt.val
+                          ? 'border-incorrect bg-incorrect-container'
+                          : 'border-warm-border bg-white'
+                      "
+                    >
+                      @if (q.answerChosen === opt.val) {
+                        <span
+                          class="absolute -top-2.5 left-6 bg-on-surface text-white font-label text-[0.65rem] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider z-10"
+                          >Your Choice</span
+                        >
+                      }
+                      <div
+                        class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                        [class]="
+                          q.answerChosen === opt.val
+                            ? 'border-transparent bg-incorrect text-white'
+                            : 'border-warm-border bg-white text-on-surface-variant border-2'
+                        "
+                      >
+                        @if (q.answerChosen === opt.val) {
+                          <span class="material-symbols-outlined text-[9px]"
+                            >close</span
+                          >
+                        }
+                      </div>
+                      <span
+                        class="font-body text-[0.95rem] font-medium text-on-surface-variant leading-relaxed"
+                        [class.font-bold]="q.answerChosen === opt.val"
+                        [class.text-on-surface]="q.answerChosen === opt.val"
+                        >{{ opt.val }}</span
+                      >
+                    </div>
+                  }
                 }
-              </li>
-            }
-          </ul>
+              </div>
+            </article>
+          } @empty {
+            <div
+              class="flex flex-col items-center justify-center py-20 px-6 text-center bg-warm-surface/30 rounded-3xl border border-dashed border-warm-border"
+            >
+              <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm mb-6">
+                <i class="material-symbols-outlined text-3xl text-primary/40">
+                  @if (activeFilter === 'correct') { sentiment_dissatisfied }
+                  @else if (activeFilter === 'incorrect') { verified }
+                  @else if (activeFilter === 'skipped') { task_alt }
+                  @else { search_off }
+                </i>
+              </div>
+              
+              <h3 class="font-headline text-xl font-extrabold text-on-surface mb-3">
+                @if (activeFilter === 'correct') { No Correct Answers Yet }
+                @else if (activeFilter === 'incorrect') { No Mistakes Found }
+                @else if (activeFilter === 'skipped') { No Questions Skipped }
+                @else { No Questions Found }
+              </h3>
+              
+              <p class="font-display text-xl text-on-surface-variant max-w-[420px] leading-relaxed italic">
+                @if (activeFilter === 'correct') {
+                  Keep pushing! With focused practice and guidance, these challenges will soon become your strengths.
+                } @else if (activeFilter === 'incorrect') {
+                  Exceptional precision! You haven't made a single mistake in the questions you've attempted so far.
+                } @else if (activeFilter === 'skipped') {
+                  Brave effort! You've faced every single question in this session without leaving any behind.
+                } @else {
+                  We couldn't find any questions matching your current selection.
+                }
+              </p>
+            </div>
+          }
         </div>
       }
-
-    }
-  </div><!-- /Q&A -->
-
-</div><!-- /page root -->
+    </section>
+  </article>

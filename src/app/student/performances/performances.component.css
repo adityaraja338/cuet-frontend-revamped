@@ -1,730 +1,168 @@
-@charset "UTF-8";
 :host {
   display: block;
-  font-family: "Inter", system-ui, sans-serif;
+  --perf-accent: oklch(68% 0.17 55);
+  --perf-surface: var(--surface-card, #ffffff);
+  --perf-border: oklch(91% 0.016 80 / 0.6);
+  --perf-text: oklch(14% 0.01 260);
+  --perf-text-muted: oklch(42% 0.008 260);
+  --perf-text-soft: oklch(56% 0.008 260);
 }
 
 .performances-page {
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Mobile Accordion Cards ───────────────────────────────────────── */
+.perf-card-list {
+  display: none;
+  flex-direction: column;
   gap: 0.75rem;
 }
 
-
-.performances-card {
-  border-radius: 1rem;
-  box-shadow: var(--shadow-card);
+.perf-card {
+  background: var(--perf-surface);
+  border: 1px solid var(--perf-border);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: var(--ambient-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.performances-card ::ng-deep .ant-card-body {
-  padding-top: 0.75rem;
+.perf-card--expanded {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--perf-accent);
 }
 
-@media (max-width: 640px) {
-  .performances-page .cuet-table-row__mobile-meta {
-    display: block;
-    margin-top: 0.2rem;
-    font-weight: 500;
-  }
-}
-/* ==========================================================================
-   Performance Modal — component styles
-   Strategy: Tailwind handles all layout, spacing, typography, and color.
-   This file handles only: complex backgrounds, layered shadows, pseudo-
-   elements, dynamic state tinting, transition choreography, and anything
-   that would make the template unreadably verbose.
-   ========================================================================== */
-
-/* ── MODAL SHELL ─────────────────────────────────────────────────────────── */
-.perf-modal {
+.perf-card__header {
   display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  overflow: hidden;
-  background: var(--surface-container-lowest);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
 }
 
-.perf-modal__scroll {
-  max-height: calc(90vh - 64px); /* leave room for sticky footer */
-}
-
-/* ── HERO ─────────────────────────────────────────────────────────────────── */
-/*
-   Multi-stop gradient gives it the "Electric Academic" feel.
-   Radial blobs add depth without a heavy image.
-*/
-.perf-modal__hero {
-  background: linear-gradient(
-    135deg,
-    #003ea8 0%,
-    var(--primary) 45%,
-    var(--primary-container) 100%
-  );
-  padding: 24px 24px 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.perf-modal__hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 92% -15%, rgba(255,255,255,0.08) 0%, transparent 50%),
-    radial-gradient(circle at 4%  105%, rgba(255,255,255,0.05) 0%, transparent 45%);
-  pointer-events: none;
-}
-
-.perf-modal__hero-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.15);
+.perf-card__icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  background: var(--primary-gradient);
+  color: #ffffff;
 }
 
-.perf-modal__eyebrow {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin: 0 0 6px;
+.perf-card__icon .material-symbols-outlined {
+  font-size: 1.25rem;
+  font-variation-settings: "FILL" 1;
 }
 
-.perf-modal__title {
-  font-family: "Manrope", system-ui, sans-serif;
-  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-  margin: 0 0 5px;
-}
-
-.perf-modal__meta {
-  font-size: 12px;
-  color: rgba(255,255,255,0.58);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.perf-modal__meta-sep { opacity: 0.35; }
-
-/* ── STAT SHELF ───────────────────────────────────────────────────────────── */
-/*
-   Tiles sit flush on the hero bottom — rounded only on top corners.
-   This creates an architectural "shelf" that visually bridges hero → body.
-*/
-.perf-modal__stat-shelf {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 8px;
-}
-
-.perf-modal__stat-tile {
-  background: rgba(255,255,255,0.10);
-  border-radius: 13px 13px 0 0;
-  padding: 13px 16px 17px;
-  position: relative;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.perf-modal__stat-tile:hover {
-  background: rgba(255,255,255,0.18);
-  transform: translateY(-2px);
-}
-
-.perf-modal__stat-tile--hero {
-  background: rgba(255,255,255,0.17);
-}
-
-/* Performance-conditional tints */
-.perf-modal__stat-tile.is-good    { background: rgba(255,255,255,0.18); }
-.perf-modal__stat-tile.is-mid     { background: rgba(250,200,0,0.13); }
-.perf-modal__stat-tile.is-low     { background: rgba(255,100,100,0.13); }
-
-.perf-modal__stat-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.52);
-  margin: 0 0 5px;
-}
-
-.perf-modal__stat-num {
-  font-family: "Manrope", system-ui, sans-serif;
-  font-size: 26px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-}
-
-.perf-modal__stat-denom {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0;
-}
-
-/* ── SECTION TITLE ────────────────────────────────────────────────────────── */
-/*
-   Label + a faint rule extending to the right — classic editorial divider
-   that doesn't use an actual border line for section containment.
-*/
-.perf-modal__section-title {
-  font-family: "Manrope", system-ui, sans-serif;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin: 0 0 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.perf-modal__section-title::after {
-  content: "";
+.perf-card__content {
   flex: 1;
-  height: 1px;
-  background: rgba(148,163,184,0.18);
+  min-width: 0;
 }
 
-/* ── PANEL (distribution + donut wrapper) ─────────────────────────────────── */
-/*
-   Matches .perf-modal__donut-card exactly so both cards in the Answer
-   Distribution row read as one visual family.
-*/
-.perf-modal__panel {
-  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
-  border-radius: 16px;
-  padding: 16px 18px;
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.12),
-    0 4px 24px rgba(15, 23, 42, 0.09),
-    0 1px 4px rgba(15, 23, 42, 0.05);
-  transition: box-shadow 0.22s ease, transform 0.22s ease;
-}
-
-.perf-modal__panel:hover {
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.16),
-    0 8px 32px rgba(15, 23, 42, 0.13),
-    0 2px 6px rgba(15, 23, 42, 0.07);
-  transform: translateY(-2px);
-}
-
-/* ── KPI CHIPS ────────────────────────────────────────────────────────────── */
-.perf-modal__kpi {
-  background: var(--surface-container-low);
-  border-radius: 10px;
-  padding: 10px 8px 9px;
-  text-align: center;
-  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.perf-modal__kpi:hover {
-  background: #eef2f7;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-}
-
-.perf-modal__kpi-label {
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin: 0 0 4px;
-}
-
-.perf-modal__kpi-value {
-  font-family: "Manrope", system-ui, sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 2px;
-}
-
-.perf-modal__kpi-denom {
-  font-size: 11px;
-  font-weight: 500;
-  color: #94a3b8;
-}
-
-/* ── STACKED BAR ──────────────────────────────────────────────────────────── */
-.perf-modal__stack {
-  height: 8px;
-  border-radius: 99px;
-  background: var(--surface-container-low);
-  display: flex;
-  overflow: hidden;
-  gap: 2px;
-}
-
-.perf-modal__stack-seg {
-  height: 100%;
-  border-radius: 99px;
-  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.perf-modal__stack-seg--good    { background: #22c55e; }
-.perf-modal__stack-seg--bad     { background: #ef4444; }
-.perf-modal__stack-seg--neutral { background: #cbd5e1; }
-
-/* ── DELTA PILL ───────────────────────────────────────────────────────────── */
-.perf-modal__delta-pill {
-  background: #dcfce7;
-  color: #15803d;
-  font-size: 11px;
+.perf-card__name {
+  font-family: "Manrope", sans-serif;
+  font-size: 0.9rem;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 20px;
-  letter-spacing: 0.03em;
-}
-
-/* ── DONUT CARD ───────────────────────────────────────────────────────────── */
-.perf-modal__donut-card {
-  width: 148px;
-  flex-shrink: 0;
-  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
-  border-radius: 16px;
-  padding: 16px 12px 14px;
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.12),
-    0 4px 24px rgba(15, 23, 42, 0.09),
-    0 1px 4px rgba(15, 23, 42, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: box-shadow 0.22s ease, transform 0.22s ease;
-}
-
-.perf-modal__donut-card:hover {
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.16),
-    0 8px 32px rgba(15, 23, 42, 0.13),
-    0 2px 6px rgba(15, 23, 42, 0.07);
-  transform: translateY(-2px);
-}
-
-.perf-modal__chart-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Soft ambient glow behind the chart ring */
-.perf-modal__chart-wrap::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 74, 198, 0.07) 0%, transparent 72%);
-  pointer-events: none;
-}
-
-.perf-modal__grade {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Manrope", system-ui, sans-serif;
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--primary);
-  letter-spacing: -0.05em;
-  pointer-events: none;
-}
-
-/* Grade-conditional coloring */
-.perf-modal__grade--a { color: #15803d; }
-.perf-modal__grade--b { color: var(--primary); }
-.perf-modal__grade--c { color: #d97706; }
-.perf-modal__grade--d { color: #ea580c; }
-.perf-modal__grade--f { color: #dc2626; }
-
-/* ── REMARK ───────────────────────────────────────────────────────────────── */
-.perf-modal__remark {
-  background: oklch(97% 0.025 55);
-  border-radius: 12px;
-  padding: 14px 18px;
-  border: 1px solid oklch(82% 0.1 55 / 0.35);
-}
-
-/* ── SESSION DL ───────────────────────────────────────────────────────────── */
-.perf-modal__dl {
-  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
-  border-radius: 16px;
-  padding: 2px 18px;
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.12),
-    0 4px 24px rgba(15, 23, 42, 0.09),
-    0 1px 4px rgba(15, 23, 42, 0.05);
-}
-
-.perf-modal__dl-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid rgba(148,163,184,0.10);
-  border-radius: 8px;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-
-.perf-modal__dl-row:hover {
-  background: rgba(148, 163, 184, 0.06);
-  transform: translateX(4px);
-}
-
-.perf-modal__dl-row:last-child { border-bottom: none; }
-
-.perf-modal__dl-row dt {
-  font-size: 12px;
-  font-weight: 500;
-  color: #64748b;
-  white-space: nowrap;
-  min-width: 90px;
-}
-
-.perf-modal__dl-row dd {
-  font-size: 12px;
-  font-weight: 600;
-  color: #0f172a;
-  margin: 0;
-  text-align: right;
-}
-
-/* ── ANSWER CARDS ─────────────────────────────────────────────────────────── */
-.perf-modal__answer-card {
-  background: linear-gradient(145deg, oklch(100% 0 0) 0%, #f8fafc 100%);
-  border-radius: 16px;
-  padding: 16px 18px;
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.12),
-    0 4px 24px rgba(15, 23, 42, 0.09),
-    0 1px 4px rgba(15, 23, 42, 0.05);
-  transition: box-shadow 0.22s ease, transform 0.22s ease;
-}
-
-.perf-modal__answer-card:hover {
-  box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.16),
-    0 8px 32px rgba(15, 23, 42, 0.13),
-    0 2px 6px rgba(15, 23, 42, 0.07);
-  transform: translateY(-2px);
-}
-
-.perf-modal__answer-stem {
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 13px;
-  line-height: 1.65;
-  color: #0f172a;
-  white-space: pre-wrap;
-  word-break: break-word;
-  margin: 0 0 12px;
-  background: none;
-  padding: 0;
-  border: none;
-}
-
-.perf-modal__opt {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: 10px;
-  background: var(--surface-container-low);
-  transition: background 0.15s ease;
-}
-
-.perf-modal__opt--correct {
-  background: #dcfce7;
-}
-
-.perf-modal__opt--correct.perf-modal__opt--yours {
-  background: #bbf7d0;
-}
-
-.perf-modal__opt-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #64748b;
-  min-width: 64px;
-  flex-shrink: 0;
-}
-
-.perf-modal__opt--correct .perf-modal__opt-label { color: #15803d; }
-
-.perf-modal__opt-value {
-  font-size: 13px;
-  font-weight: 500;
-  color: #0f172a;
-  flex: 1;
-  line-height: 1.4;
-}
-
-.perf-modal__pill {
-  margin-left: auto;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 20px;
-  white-space: nowrap;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
-}
-
-.perf-modal__pill--ok  { background: #dcfce7; color: #15803d; }
-.perf-modal__pill--bad { background: #fee2e2; color: #b91c1c; }
-
-/* ── LEADERBOARD PODIUM CARDS ─────────────────────────────────────────────── */
-.perf-modal__podium-card {
-  border-radius: 14px;
-  padding: 14px 12px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 5px;
-}
-
-.perf-modal__podium-card--gold   { background: linear-gradient(160deg, #fef9ee, #fef3c7); }
-.perf-modal__podium-card--silver { background: linear-gradient(160deg, #f8fafc, #f1f5f9); }
-.perf-modal__podium-card--bronze { background: linear-gradient(160deg, #fff7ed, #ffedd5); }
-
-.perf-modal__podium-rank {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.perf-modal__podium-card--gold   .perf-modal__podium-rank { color: #92400e; }
-.perf-modal__podium-card--silver .perf-modal__podium-rank { color: #475569; }
-.perf-modal__podium-card--bronze .perf-modal__podium-rank { color: #7c3b12; }
-
-.perf-modal__podium-medal {
-  font-size: 16px;
-  font-variation-settings: "FILL" 1, "wght" 400;
-}
-
-.perf-modal__podium-card--gold   .perf-modal__podium-medal { color: #f59e0b; }
-.perf-modal__podium-card--silver .perf-modal__podium-medal { color: #94a3b8; }
-.perf-modal__podium-card--bronze .perf-modal__podium-medal { color: #f97316; }
-
-.perf-modal__podium-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Manrope", system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 14px;
-}
-
-.perf-modal__podium-card--gold   .perf-modal__podium-avatar { background: #fbbf24; color: #78350f; }
-.perf-modal__podium-card--silver .perf-modal__podium-avatar { background: #cbd5e1; color: #1e293b; }
-.perf-modal__podium-card--bronze .perf-modal__podium-avatar { background: #fed7aa; color: #7c2d12; }
-
-.perf-modal__podium-name {
-  font-size: 11px;
-  font-weight: 700;
-  color: #0f172a;
+  color: var(--perf-text);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
 }
 
-.perf-modal__podium-bar {
-  width: 100%;
-  height: 3px;
-  background: rgba(0,0,0,0.08);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-top: 2px;
-}
-
-.perf-modal__podium-bar-fill {
-  height: 100%;
-  border-radius: 99px;
-  background: var(--primary-gradient);
-}
-
-/* ── LEADER LIST (rank 4+) ────────────────────────────────────────────────── */
-.perf-modal__lb-scroll {
-  max-height: 220px;
-}
-
-.perf-modal__leader-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: var(--surface-container-lowest);
-  box-shadow: 0 1px 4px rgba(15,23,42,0.04);
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-
-.perf-modal__leader-row:hover {
-  background: var(--surface-container-low);
-  transform: translateX(3px);
-}
-
-.perf-modal__leader-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--surface-container-low);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Manrope", system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 12px;
-  color: var(--primary);
-  flex-shrink: 0;
-}
-
-.perf-modal__leader-pill {
-  font-family: "Manrope", system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--primary);
-  background: rgba(0,74,198,0.08);
-  padding: 2px 8px;
-  border-radius: 20px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  letter-spacing: -0.01em;
-}
-
-/* ── STICKY FOOTER ────────────────────────────────────────────────────────── */
-.perf-modal__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  background: var(--surface-container-lowest);
-  border-top: 1px solid rgba(148,163,184,0.10);
-  gap: 8px;
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-}
-
-/* ── BUTTONS ──────────────────────────────────────────────────────────────── */
-/*
-   Three variants: ghost (secondary), soft (accent/outline), primary (CTA).
-   We scope with .perf-modal__btn to avoid fighting global ant-btn resets.
-*/
-.perf-modal__btn.ant-btn,
-button.perf-modal__btn {
-  height: 36px;
-  padding: 0 18px;
-  border-radius: 10px;
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 13px;
+.perf-card__score-preview {
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: all 0.18s ease;
-  cursor: pointer;
-  border: none;
-  box-shadow: none;
+  color: var(--perf-accent);
+  margin: 0;
 }
 
-/* Ghost */
-.perf-modal__btn--ghost.ant-btn,
-button.perf-modal__btn--ghost {
-  background: var(--surface-container-low);
-  color: #64748b;
+.perf-card__chevron {
+  color: var(--perf-text-soft);
+  transition: transform 0.3s ease;
 }
 
-.perf-modal__btn--ghost.ant-btn:hover,
-button.perf-modal__btn--ghost:hover {
-  background: #e2e8f0;
-  color: #0f172a;
+.perf-card--expanded .perf-card__chevron {
+  transform: rotate(180deg);
+  color: var(--perf-accent);
 }
 
-/* Soft (show answers) */
-.perf-modal__btn--soft.ant-btn,
-button.perf-modal__btn--soft {
-  background: #eff6ff;
-  color: var(--primary);
+.perf-card__body {
+  padding: 0 1rem 1rem;
+  border-top: 1px solid oklch(91% 0.016 80 / 0.3);
+  background: oklch(99% 0.006 80);
+  animation: perf-slide-down 0.3s ease-out;
 }
 
-.perf-modal__btn--soft.ant-btn:hover,
-button.perf-modal__btn--soft:hover {
-  background: #dbeafe;
+.perf-card__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 1rem 0;
 }
 
-/* Primary CTA */
-.perf-modal__btn--primary.ant-btn,
-button.perf-modal__btn--primary {
-  background: var(--primary-gradient);
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(0,74,198,0.28);
+.perf-card__stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
-.perf-modal__btn--primary.ant-btn:hover,
-button.perf-modal__btn--primary:hover {
-  box-shadow: 0 8px 24px rgba(0,74,198,0.42);
-  transform: translateY(-1px);
+.perf-card__stat-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--perf-text-soft);
 }
 
-.perf-modal__btn--primary.ant-btn:active,
-button.perf-modal__btn--primary:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(0,74,198,0.28);
+.perf-card__stat-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--perf-text);
 }
 
-/* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  .perf-modal__stat-shelf {
-    grid-template-columns: repeat(2, 1fr);
+.perf-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.perf-card__view-btn.ant-btn {
+  width: 100%;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  height: 2.25rem;
+  padding: 0 1.25rem;
+}
+
+@keyframes perf-slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive Swap ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .cuet-table-shell nz-table {
+    display: none;
   }
-
-  .perf-modal__stat-shelf > .perf-modal__stat-tile:last-child {
-    grid-column: 1 / -1;
+  .perf-card-list {
+    display: flex;
   }
+}
 
-  .perf-modal__kpi-value { font-size: 17px; }
+/* ── Motivation Text ──────────────────────────────────────────────── */
+.cuet-table-empty__motivation {
+  margin-top: 0.75rem;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--perf-accent);
+  max-width: 40ch;
+  line-height: 1.4;
 }
-/* Remove legacy leaderboard sizing overrides. */
-; }
-}
-/* Remove legacy leaderboard sizing overrides. */

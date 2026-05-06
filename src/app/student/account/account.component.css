@@ -169,12 +169,6 @@
   height: 100%;
 }
 
-@media (max-width: 1279px) {
-  .acc-page-container {
-    padding-bottom: 6.5rem;
-  }
-}
-
 @media (min-width: 768px) {
   ::ng-deep .acc-batch-modal .ant-modal-close {
     top: 2rem;

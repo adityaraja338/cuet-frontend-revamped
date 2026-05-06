@@ -13,7 +13,7 @@
 
   <!-- ───────────────────────────  Tabs  ─────────────────────────── -->
   <nz-tabs
-    class="tests-tabs"
+    class="cuet-tabs-pill"
     [(nzSelectedIndex)]="currentTabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
@@ -138,7 +138,7 @@
                   </div>
                   <button
                     nz-button
-                    class="btn-primary btn-sm tests-card__cta"
+                    class="btn-cuet btn-cuet--lg"
                     (click)="onClickStartTest(test, 'recorded'); $event.stopPropagation()"
                   >
                     Start

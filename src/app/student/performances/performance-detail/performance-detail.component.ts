@@ -149,13 +149,33 @@ export class PerformanceDetailComponent implements OnInit {
     return `${min} min ${sec} sec`;
   }
 
-  get correctCount(): number { return this.performance?.correct ?? 0; }
-  get incorrectCount(): number { return this.performance?.incorrect ?? 0; }
-  get skippedCount(): number { return this.performance?.unattempted ?? 0; }
-  get totalQ(): number { return this.correctCount + this.incorrectCount + this.skippedCount; }
+  get correctCount(): number {
+    return this.performance?.questions?.filter(q => q.answerChosen === q.correctOption).length ?? 0;
+  }
 
-  get correctPct(): number { return this.totalQ ? (this.correctCount / this.totalQ) * 100 : 0; }
-  get incorrectPct(): number { return this.totalQ ? (this.incorrectCount / this.totalQ) * 100 : 0; }
+  get incorrectCount(): number {
+    return this.performance?.questions?.filter(q => q.answerChosen && q.answerChosen !== q.correctOption).length ?? 0;
+  }
+
+  get skippedCount(): number {
+    return this.performance?.questions?.filter(q => !q.answerChosen).length ?? 0;
+  }
+
+  get totalQ(): number {
+    return this.performance?.questions?.length ?? 0;
+  }
+
+  get correctPct(): number {
+    return this.totalQ > 0 ? (this.correctCount / this.totalQ) * 100 : 0;
+  }
+
+  get incorrectPct(): number {
+    return this.totalQ > 0 ? (this.incorrectCount / this.totalQ) * 100 : 0;
+  }
+
+  get skippedPct(): number {
+    return this.totalQ > 0 ? (this.skippedCount / this.totalQ) * 100 : 0;
+  }
 
   get filteredQuestions(): Question[] {
     if (!this.performance?.questions) return [];

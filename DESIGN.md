@@ -17,21 +17,31 @@ typography:
     fontWeight: 600
     lineHeight: 1.1
     fontStyle: "italic"
+    class: "font-display"
   headline:
     fontFamily: "Manrope, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.3
+    class: "font-headline"
   body:
     fontFamily: "Inter, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.6
+    class: "font-body"
+  label:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "0.75rem"
+    fontWeight: 700
+    lineHeight: 1.4
+    class: "font-label"
 rounded:
   sm: "0.5rem"
   md: "0.75rem"
   lg: "1rem"
   xl: "1.25rem"
+  4xl: "2rem"
 spacing:
   xs: "0.5rem"
   sm: "1rem"
@@ -81,17 +91,12 @@ The palette is anchored in warm, radiant tones that signal optimism and guidance
 
 ## 3. Typography: Editorial Authority
 
-The typography pairing creates a "digital curator" feel, blending the prestige of print with the speed of digital.
+The typography pairing creates a "digital curator" feel, blending the prestige of print with the speed of digital. All components MUST use semantic font classes rather than generic utilities.
 
-**Display Font:** Cormorant Garamond (Serif, Italic)
-**Headline Font:** Manrope (Geometric Sans)
-**Body Font:** Inter (Humanist Sans)
-
-### Hierarchy
-- **Display** (600, `clamp(2rem, 5vw, 3rem)`, 1.1): Used for KPI values and hero moments. The italic Cormorant Garamond adds an academic, elite university touch.
-- **Headline** (700, 1.25rem, 1.3): Manrope for section titles and card headings. Snappy and authoritative.
-- **Body** (400, 0.875rem, 1.6): Inter for all paragraph text and resource descriptions. Line length capped at 65–75ch for optimal reading.
-- **Label** (700, 0.75rem, 0.14em, uppercase): Manrope for eyebrows and status pills.
+- **Display (`font-display`):** Cormorant Garamond (Serif, Italic). Used for KPI values and hero moments. The italic Cormorant Garamond adds an academic, elite university touch.
+- **Headline (`font-headline`):** Manrope (Geometric Sans). Used for section titles, card headings, and interactive tab labels. Snappy and authoritative.
+- **Body (`font-body`):** Inter (Humanist Sans). Used for all paragraph text, question content, and descriptive labels. Line length capped at 65–75ch for optimal reading.
+- **Label (`font-label`):** Inter (Bold Sans). Used for eyebrows, status pills, and instructional indicators (e.g., "Your Choice").
 
 ## 4. Elevation: The Desk Workspace
 
@@ -109,14 +114,35 @@ Interactions are **soft and deliberate**, favoring calm confidence over hyper-ac
 - **Secondary (.btn-cuet--secondary):** Outlined amber; used for supportive actions.
 
 ### Cards (.card-cuet)
-- **Corner Style:** Large radius (1.25rem)
+- **Corner Style:** Large radius (1.25rem / `rounded-xl`). **Main containers use `rounded-4xl` (2rem)** to create a bold, distinct workspace.
 - **Background:** Warm white or pure white.
 - **Hover Strategy:** `translateY(-4px)` with a slight increase in ambient shadow.
 
 ### Pills (.pill-cuet)
 - **Style:** Fully rounded (999px), subtle tinted background, bold uppercase Manrope text.
 
-## 6. Do's and Don'ts
+## 7. Implementation: Hybrid CSS Strategy
+
+To maintain both visual precision and developer velocity, CUET Corner follows a hybrid styling approach:
+
+### Tailwind First (Utilities)
+Use **Tailwind CSS utilities** for 90% of layout, spacing, and standard typography:
+- **Layout:** `flex`, `grid`, `grid-cols-*`, `gap-*`, `hidden`, `block`.
+- **Spacing:** `p-*`, `m-*`, `space-y-*`.
+- **Typography:** `font-display`, `font-headline`, `font-body`, `font-label`, `text-sm`, `font-bold`.
+- **Visuals:** `rounded-*`, `rounded-4xl`, `shadow-*`, `opacity-*`, `bg-surface`.
+
+### Custom Second (Complex Craft)
+Use **Scoped Custom CSS** only for signature "Radiant Mentor" effects and complex component states:
+- **Signature Motifs:** `sunrise-gradient`, `grade-sunrise` (glows), `radiant-bar`.
+- **Complex Layouts:** `desk-workspace` (specific card treatments). Main containers act as standalone workspaces, avoiding unnecessary nesting or "editorial frames."
+- **Custom Tokens:** Referencing `oklch` brand variables that aren't yet mapped to Tailwind primitives.
+
+### Naming Convention
+- **Utility:** Tailwind standard (`flex gap-4`).
+- **Component:** Prefix with `pd-` (Performance Detail) or `cuet-` (Global Component).
+
+## 8. Do's and Don'ts
 
 Guardrails derived from the "Radiant Mentor" strategy and "Education-First" principles.
 

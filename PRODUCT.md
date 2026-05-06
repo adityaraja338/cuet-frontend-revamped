@@ -14,7 +14,7 @@ CUET Corner exists to democratize elite university entrance preparation. Founded
 ## Brand Personality
 - **Supportive Mentor:** Authoritative and credible due to its JNU roots, yet warm and encouraging. It’s the voice of someone who has been there and wants you to succeed.
 - **Education-First:** Transparent and honest. Avoids the aggressive sales tactics and FOMO common in Indian EdTech.
-- **Aspirational & Clear:** Focuses on the goal (JNU/Central Universities) with a "warm sunrise" aesthetic that signals hope and organized progress.
+- **Aspirational & Clear:** Focuses on the goal (JNU/Central Universities) with a "warm sunrise" aesthetic. The interface acts as a high-authority standalone workspace that signals hope and organized progress, moving away from cluttered or overly-nested layouts.
 
 ## Anti-references
 - **The "Batch Bazaar":** Over-selling or pushing multiple paid batches at every turn.

@@ -11,6 +11,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PerformancesComponent implements OnInit {
   tabIndex = 0;
+  expandedId: string | null = null;
+
+  motivatingStatements = [
+    'Every test is a step closer to your dream university.',
+    'Progress is built one attempt at a time. Keep going!',
+    'Mistakes are just lessons in disguise. Analyze and conquer.',
+    'Consistency is the key to mastering CUET. Your next attempt is waiting.',
+    "You're doing great! Let's see how much further we can go today.",
+  ];
 
   livePerformances: any[] = [];
   isLiveLoading = false;
@@ -145,5 +154,9 @@ export class PerformancesComponent implements OnInit {
 
   onClickPerformance(performance: any) {
     this.router.navigate(['detail', performance.id], { relativeTo: this.route });
+  }
+
+  toggleExpand(id: string) {
+    this.expandedId = this.expandedId === id ? null : id;
   }
 }

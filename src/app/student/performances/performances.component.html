@@ -11,6 +11,7 @@
   </header>
 
   <nz-tabs
+    class="cuet-tabs-pill"
     [(nzSelectedIndex)]="tabIndex"
     (nzSelectedIndexChange)="onTabChange($event)"
   >
@@ -70,19 +71,6 @@
                     <span class="cuet-table-row__name-text">{{
                       performance?.testName
                     }}</span>
-                    <span class="cuet-table-row__mobile-meta text-nowrap">
-                      {{ performance?.correct + performance?.incorrect }} /
-                      {{
-                        performance?.correct +
-                          performance?.incorrect +
-                          performance?.unattempted
-                      }}
-                      ·
-                      {{
-                        (performance?.testItem?.startTime
-                          | date: "dd MMM yy") ?? "-"
-                      }}
-                    </span>
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     {{ performance?.correct + performance?.incorrect }} /
@@ -99,17 +87,17 @@
                     }}
                   </td>
                   <td
-                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                    class="text-center cuet-table-row__num text-primary font-700 text-nowrap"
                   >
                     {{ performance.scoreObtained }} /
                     {{ performance.totalScore }}
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     @if (performance.totalScore) {
-                      {{
+                      <b>{{
                         (performance.scoreObtained / performance.totalScore) *
                           100 | number: ".0-2"
-                      }}%
+                      }}%</b>
                     } @else {
                       -
                     }
@@ -117,6 +105,87 @@
                 </tr>
               </tbody>
             </nz-table>
+
+            <div class="perf-card-list">
+              @for (performance of livePerformances; track performance.id) {
+                <div
+                  class="perf-card"
+                  [class.perf-card--expanded]="expandedId === performance.id"
+                  (click)="toggleExpand(performance.id)"
+                >
+                  <div class="perf-card__header">
+                    <div class="perf-card__icon">
+                      <span class="material-symbols-outlined">bolt</span>
+                    </div>
+                    <div class="perf-card__content">
+                      <p class="perf-card__name">{{ performance?.testName }}</p>
+                      <p class="perf-card__score-preview">
+                        Score: {{ performance.scoreObtained }} /
+                        {{ performance.totalScore }}
+                      </p>
+                    </div>
+                    <span class="material-symbols-outlined perf-card__chevron"
+                      >expand_more</span
+                    >
+                  </div>
+                  @if (expandedId === performance.id) {
+                    <div class="perf-card__body">
+                      <div class="perf-card__stats">
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Date</span>
+                          <span class="perf-card__stat-value">{{
+                            (performance?.testItem?.startTime
+                              | date: "dd MMM yy") ?? "-"
+                          }}</span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Accuracy</span>
+                          <span class="perf-card__stat-value">
+                            @if (performance.totalScore) {
+                              {{
+                                (performance.scoreObtained /
+                                  performance.totalScore) *
+                                  100 | number: ".0-2"
+                              }}%
+                            } @else {
+                              -
+                            }
+                          </span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Attempted</span>
+                          <span class="perf-card__stat-value"
+                            >{{ performance?.correct + performance?.incorrect }}
+                            /
+                            {{
+                              performance?.correct +
+                                performance?.incorrect +
+                                performance?.unattempted
+                            }}</span
+                          >
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Status</span>
+                          <span class="perf-card__stat-value">Completed</span>
+                        </div>
+                      </div>
+                      <div class="perf-card__actions">
+                        <button
+                          nz-button
+                          class="btn-primary btn-sm perf-card__view-btn"
+                          (click)="
+                            onClickPerformance(performance);
+                            $event.stopPropagation()
+                          "
+                        >
+                          View Detail
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           }
         </div>
         <ng-template #printLiveCount>
@@ -193,16 +262,6 @@
                     <span class="cuet-table-row__name-text">{{
                       performance?.testName
                     }}</span>
-                    <span class="cuet-table-row__mobile-meta text-nowrap">
-                      {{ performance?.correct + performance?.incorrect }} /
-                      {{
-                        performance?.correct +
-                          performance?.incorrect +
-                          performance?.unattempted
-                      }}
-                      ·
-                      {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
-                    </span>
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     {{ performance?.correct + performance?.incorrect }} /
@@ -216,17 +275,17 @@
                     {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
                   </td>
                   <td
-                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                    class="text-center cuet-table-row__num text-primary font-700 text-nowrap"
                   >
                     {{ performance.scoreObtained }} /
                     {{ performance.totalScore }}
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     @if (performance.totalScore) {
-                      {{
+                      <b>{{
                         (performance.scoreObtained / performance.totalScore) *
                           100 | number: ".0-2"
-                      }}%
+                      }}%</b>
                     } @else {
                       -
                     }
@@ -234,6 +293,88 @@
                 </tr>
               </tbody>
             </nz-table>
+
+            <div class="perf-card-list">
+              @for (performance of recordedPerformances; track performance.id) {
+                <div
+                  class="perf-card"
+                  [class.perf-card--expanded]="expandedId === performance.id"
+                  (click)="toggleExpand(performance.id)"
+                >
+                  <div class="perf-card__header">
+                    <div class="perf-card__icon">
+                      <span class="material-symbols-outlined"
+                        >smart_display</span
+                      >
+                    </div>
+                    <div class="perf-card__content">
+                      <p class="perf-card__name">{{ performance?.testName }}</p>
+                      <p class="perf-card__score-preview">
+                        Score: {{ performance.scoreObtained }} /
+                        {{ performance.totalScore }}
+                      </p>
+                    </div>
+                    <span class="material-symbols-outlined perf-card__chevron"
+                      >expand_more</span
+                    >
+                  </div>
+                  @if (expandedId === performance.id) {
+                    <div class="perf-card__body">
+                      <div class="perf-card__stats">
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Date</span>
+                          <span class="perf-card__stat-value">{{
+                            performance?.testItem?.startTime | date: "dd MMM yy"
+                          }}</span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Accuracy</span>
+                          <span class="perf-card__stat-value">
+                            @if (performance.totalScore) {
+                              {{
+                                (performance.scoreObtained /
+                                  performance.totalScore) *
+                                  100 | number: ".0-2"
+                              }}%
+                            } @else {
+                              -
+                            }
+                          </span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Attempted</span>
+                          <span class="perf-card__stat-value"
+                            >{{ performance?.correct + performance?.incorrect }}
+                            /
+                            {{
+                              performance?.correct +
+                                performance?.incorrect +
+                                performance?.unattempted
+                            }}</span
+                          >
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Status</span>
+                          <span class="perf-card__stat-value">Completed</span>
+                        </div>
+                      </div>
+                      <div class="perf-card__actions">
+                        <button
+                          nz-button
+                          class="btn-primary btn-sm perf-card__view-btn"
+                          (click)="
+                            onClickPerformance(performance);
+                            $event.stopPropagation()
+                          "
+                        >
+                          View Detail
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           }
         </div>
         <ng-template #printRecordedCount>
@@ -305,16 +446,6 @@
                     <span class="cuet-table-row__name-text">{{
                       performance?.testName
                     }}</span>
-                    <span class="cuet-table-row__mobile-meta text-nowrap">
-                      {{ performance?.correct + performance?.incorrect }} /
-                      {{
-                        performance?.correct +
-                          performance?.incorrect +
-                          performance?.unattempted
-                      }}
-                      ·
-                      {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
-                    </span>
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     {{ performance?.correct + performance?.incorrect }} /
@@ -328,17 +459,17 @@
                     {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
                   </td>
                   <td
-                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                    class="text-center cuet-table-row__num text-primary font-700 text-nowrap"
                   >
                     {{ performance.scoreObtained }} /
                     {{ performance.totalScore }}
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     @if (performance.totalScore) {
-                      {{
+                      <b>{{
                         (performance.scoreObtained / performance.totalScore) *
                           100 | number: ".0-2"
-                      }}%
+                      }}%</b>
                     } @else {
                       -
                     }
@@ -346,6 +477,86 @@
                 </tr>
               </tbody>
             </nz-table>
+
+            <div class="perf-card-list">
+              @for (performance of mockPerformances; track performance.id) {
+                <div
+                  class="perf-card"
+                  [class.perf-card--expanded]="expandedId === performance.id"
+                  (click)="toggleExpand(performance.id)"
+                >
+                  <div class="perf-card__header">
+                    <div class="perf-card__icon">
+                      <span class="material-symbols-outlined">assignment</span>
+                    </div>
+                    <div class="perf-card__content">
+                      <p class="perf-card__name">{{ performance?.testName }}</p>
+                      <p class="perf-card__score-preview">
+                        Score: {{ performance.scoreObtained }} /
+                        {{ performance.totalScore }}
+                      </p>
+                    </div>
+                    <span class="material-symbols-outlined perf-card__chevron"
+                      >expand_more</span
+                    >
+                  </div>
+                  @if (expandedId === performance.id) {
+                    <div class="perf-card__body">
+                      <div class="perf-card__stats">
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Date</span>
+                          <span class="perf-card__stat-value">{{
+                            performance?.testItem?.startTime | date: "dd MMM yy"
+                          }}</span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Accuracy</span>
+                          <span class="perf-card__stat-value">
+                            @if (performance.totalScore) {
+                              {{
+                                (performance.scoreObtained /
+                                  performance.totalScore) *
+                                  100 | number: ".0-2"
+                              }}%
+                            } @else {
+                              -
+                            }
+                          </span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Attempted</span>
+                          <span class="perf-card__stat-value"
+                            >{{ performance?.correct + performance?.incorrect }}
+                            /
+                            {{
+                              performance?.correct +
+                                performance?.incorrect +
+                                performance?.unattempted
+                            }}</span
+                          >
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Status</span>
+                          <span class="perf-card__stat-value">Completed</span>
+                        </div>
+                      </div>
+                      <div class="perf-card__actions">
+                        <button
+                          nz-button
+                          class="btn-primary btn-sm perf-card__view-btn"
+                          (click)="
+                            onClickPerformance(performance);
+                            $event.stopPropagation()
+                          "
+                        >
+                          View Detail
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           }
         </div>
         <ng-template #printMockCount>
@@ -419,16 +630,6 @@
                     <span class="cuet-table-row__name-text">{{
                       performance?.testName
                     }}</span>
-                    <span class="cuet-table-row__mobile-meta text-nowrap">
-                      {{ performance?.correct + performance?.incorrect }} /
-                      {{
-                        performance?.correct +
-                          performance?.incorrect +
-                          performance?.unattempted
-                      }}
-                      ·
-                      {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
-                    </span>
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     {{ performance?.correct + performance?.incorrect }} /
@@ -442,17 +643,17 @@
                     {{ performance?.testItem?.startTime | date: "dd MMM yy" }}
                   </td>
                   <td
-                    class="text-center cuet-table-row__num text-primary font-500 text-nowrap"
+                    class="text-center cuet-table-row__num text-primary font-700 text-nowrap"
                   >
                     {{ performance.scoreObtained }} /
                     {{ performance.totalScore }}
                   </td>
                   <td class="text-center cuet-table-row__num text-nowrap">
                     @if (performance.totalScore) {
-                      {{
+                      <b>{{
                         (performance.scoreObtained / performance.totalScore) *
                           100 | number: ".0-2"
-                      }}%
+                      }}%</b>
                     } @else {
                       -
                     }
@@ -460,6 +661,88 @@
                 </tr>
               </tbody>
             </nz-table>
+
+            <div class="perf-card-list">
+              @for (performance of topicPerformances; track performance.id) {
+                <div
+                  class="perf-card"
+                  [class.perf-card--expanded]="expandedId === performance.id"
+                  (click)="toggleExpand(performance.id)"
+                >
+                  <div class="perf-card__header">
+                    <div class="perf-card__icon">
+                      <span class="material-symbols-outlined"
+                        >manage_search</span
+                      >
+                    </div>
+                    <div class="perf-card__content">
+                      <p class="perf-card__name">{{ performance?.testName }}</p>
+                      <p class="perf-card__score-preview">
+                        Score: {{ performance.scoreObtained }} /
+                        {{ performance.totalScore }}
+                      </p>
+                    </div>
+                    <span class="material-symbols-outlined perf-card__chevron"
+                      >expand_more</span
+                    >
+                  </div>
+                  @if (expandedId === performance.id) {
+                    <div class="perf-card__body">
+                      <div class="perf-card__stats">
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Date</span>
+                          <span class="perf-card__stat-value">{{
+                            performance?.testItem?.startTime | date: "dd MMM yy"
+                          }}</span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Accuracy</span>
+                          <span class="perf-card__stat-value">
+                            @if (performance.totalScore) {
+                              {{
+                                (performance.scoreObtained /
+                                  performance.totalScore) *
+                                  100 | number: ".0-2"
+                              }}%
+                            } @else {
+                              -
+                            }
+                          </span>
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Attempted</span>
+                          <span class="perf-card__stat-value"
+                            >{{ performance?.correct + performance?.incorrect }}
+                            /
+                            {{
+                              performance?.correct +
+                                performance?.incorrect +
+                                performance?.unattempted
+                            }}</span
+                          >
+                        </div>
+                        <div class="perf-card__stat-item">
+                          <span class="perf-card__stat-label">Status</span>
+                          <span class="perf-card__stat-value">Completed</span>
+                        </div>
+                      </div>
+                      <div class="perf-card__actions">
+                        <button
+                          nz-button
+                          class="btn-primary btn-sm perf-card__view-btn"
+                          (click)="
+                            onClickPerformance(performance);
+                            $event.stopPropagation()
+                          "
+                        >
+                          View Detail
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           }
         </div>
         <ng-template #printTopicCount>
@@ -484,6 +767,7 @@
       <p class="cuet-table-empty__subtitle">
         Start a live test to see your score and accuracy here.
       </p>
+      <!-- <p class="cuet-table-empty__motivation">{{ getMotivatingStatement() }}</p> -->
     </div>
   </ng-template>
 
@@ -496,6 +780,7 @@
       <p class="cuet-table-empty__subtitle">
         Your recorded test performances will appear after you complete one.
       </p>
+      <!-- <p class="cuet-table-empty__motivation">{{ getMotivatingStatement() }}</p> -->
     </div>
   </ng-template>
 
@@ -508,6 +793,7 @@
       <p class="cuet-table-empty__subtitle">
         Take a mock test to benchmark your preparation.
       </p>
+      <!-- <p class="cuet-table-empty__motivation">{{ getMotivatingStatement() }}</p> -->
     </div>
   </ng-template>
 
@@ -520,6 +806,7 @@
       <p class="cuet-table-empty__subtitle">
         Attempt a topic-wise test to track progress by topic.
       </p>
+      <!-- <p class="cuet-table-empty__motivation">{{ getMotivatingStatement() }}</p> -->
     </div>
   </ng-template>
 </section>

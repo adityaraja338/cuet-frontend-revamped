@@ -12,9 +12,10 @@ product
 CUET Corner exists to democratize elite university entrance preparation. Founded by a successful JNU aspirant, it provides the "insider track" through curated resources, participatory tests, and performance analytics. Success means a student feeling fully equipped and confident to secure their seat in a top-tier university.
 
 ## Brand Personality
-- **Supportive Mentor:** Authoritative and credible due to its JNU roots, yet warm and encouraging. It’s the voice of someone who has been there and wants you to succeed.
+- **Supportive Mentor (Student Side):** Authoritative and credible due to its JNU roots, yet warm and encouraging. It’s the voice of someone who has been there and wants you to succeed.
+- **Strategic Architect (Admin Side):** Focused on precision, stability, and organizational excellence. It provides a calm, high-performance environment for those building the path to success.
 - **Education-First:** Transparent and honest. Avoids the aggressive sales tactics and FOMO common in Indian EdTech.
-- **Aspirational & Clear:** Focuses on the goal (JNU/Central Universities) with a "warm sunrise" aesthetic. The interface acts as a high-authority standalone workspace that signals hope and organized progress, moving away from cluttered or overly-nested layouts.
+- **Aspirational & Clear:** Focuses on the goal (JNU/Central Universities) with a "warm sunrise" aesthetic for students and a "refined workspace" for admins. The interface acts as a high-authority standalone workspace that signals hope and organized progress, moving away from cluttered or overly-nested layouts.
 
 ## Anti-references
 - **The "Batch Bazaar":** Over-selling or pushing multiple paid batches at every turn.

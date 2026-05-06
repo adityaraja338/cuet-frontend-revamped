@@ -69,10 +69,9 @@ export class StudentAuthService {
   }
 
   logout() {
-    this.clearTokens();
+    localStorage.clear();
     this.message.success('Successful! Student logged out!');
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
-    // this.message.success('User logged out!');
   }
 }

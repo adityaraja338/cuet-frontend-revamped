@@ -22,7 +22,21 @@ export class GlobalService {
     private studentAuthService: StudentAuthService,
     private adminAuthService: AdminAuthService,
     private message: NzMessageService,
-  ) {}
+  ) {
+    this.studentAuthService.isAuthenticated$.subscribe((isAuth) => {
+      if (!isAuth) {
+        this.setData(null);
+        this.userDetails = null;
+      }
+    });
+
+    this.adminAuthService.isAuthenticated$.subscribe((isAuth) => {
+      if (!isAuth) {
+        this.setData(null);
+        this.userDetails = null;
+      }
+    });
+  }
 
   toggleSidenav() {
     this.isCollapsed = !this.isCollapsed;

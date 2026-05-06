@@ -10,6 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 interface FaqEntry {
@@ -35,25 +36,19 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private initScrollHandle = 0;
 
   readonly isScrolled = signal(false);
-  readonly activeChapter = signal<string>('struggle');
+  readonly activeChapter = signal<string>('hero');
   readonly mobileMenuOpen = signal(false);
-  readonly openFaqId = signal<string | null>('what-is');
   readonly currentYear = new Date().getFullYear();
 
   /** 
    * Stores progress (0 to 1) for each chapter.
-   * 0: top of section is at bottom of viewport.
-   * 1: bottom of section is at top of viewport.
-   * We use a simpler 0-1 mapping where 0.5 is roughly 'centered'.
    */
   readonly chapterProgress = signal<Record<string, number>>({
-    struggle: 1,
-    realization: 0,
-    levers: 0,
-    system: 0,
-    success: 0,
-    faq: 0,
-    epilogue: 0
+    hero: 1,
+    destination: 0,
+    mentor: 0,
+    exhibits: 0,
+    'field-guide': 0
   });
 
   readonly levers: ReadonlyArray<{ icon: string; title: string; description: string }> = [
@@ -132,7 +127,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     },
   ];
 
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private readonly platformId: object,
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -159,6 +157,14 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  navigateToExhibit(target: string): void {
+    if (this.hasAccessToken()) {
+      this.router.navigate(['/student', target]);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
   scrollToSection(sectionId: string, event: Event): void {
     event.preventDefault();
     this.mobileMenuOpen.set(false);
@@ -168,10 +174,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update((open) => !open);
-  }
-
-  toggleFaq(id: string): void {
-    this.openFaqId.update((current) => (current === id ? null : id));
   }
 
   hasAccessToken(): boolean {
@@ -206,10 +208,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isScrolled.set(scrollY > 50);
 
     const viewportHeight = window.innerHeight;
-    const chapters = ['struggle', 'realization', 'levers', 'system', 'success', 'faq', 'epilogue'];
+    const chapters = ['hero', 'destination', 'mentor', 'exhibits', 'field-guide'];
     const newProgress: Record<string, number> = {};
 
-    let dominantChapter = 'struggle';
+    let dominantChapter = 'hero';
     let minDistance = Infinity;
 
     chapters.forEach(id => {

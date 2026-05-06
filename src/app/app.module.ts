@@ -25,8 +25,15 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { AuthInterceptor } from './shared/auth/auth-interceptor.service';
 import { ImageFallbackDirective } from './shared/directive/img-fallback.directive';
 import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
+import { NZ_CONFIG, NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 
 registerLocaleData(en);
+
+const ngZorroConfig: NzConfig = {
+  theme: {
+    primaryColor: '#f59e0b',
+  },
+};
 
 @NgModule({
   declarations: [AppComponent, AuthComponent, LandingPageComponent],
@@ -46,6 +53,7 @@ registerLocaleData(en);
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
+    provideNzConfig(ngZorroConfig),
     provideZoneChangeDetection({
       eventCoalescing: false,
       runCoalescing: false,

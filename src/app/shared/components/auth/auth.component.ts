@@ -32,6 +32,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   loginTabIndex: number = 0;
   passwordVisible: boolean = false;
   authMode: AuthMode = 'student';
+  registrationStep: number = 1;
 
   adminEmail: string = '';
   adminPassword: string = '';
@@ -110,6 +111,13 @@ export class AuthComponent implements OnInit, OnDestroy {
       (receivedData: any) => {
         if (receivedData) {
           this.patchValues(receivedData);
+        } else {
+          this.registrationForm.reset({
+            countryCode: 91,
+            cuetAttempts: [],
+            planType: 'basic',
+          });
+          this.registrationStep = 1;
         }
       },
     );
@@ -201,6 +209,36 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (this.authMode === mode) return;
     this.authMode = mode;
     this.loginTabIndex = mode === 'admin' ? 1 : 0;
+  }
+
+  nextStep(): void {
+    if (this.registrationStep === 1) {
+      const name = this.registrationForm.get('name');
+      const phone = this.registrationForm.get('phone');
+      if (name?.invalid || phone?.invalid) {
+        name?.markAsDirty();
+        phone?.markAsDirty();
+        this.message.error('Please provide valid contact details.');
+        return;
+      }
+    }
+    if (this.registrationStep === 2) {
+      const age = this.registrationForm.get('age');
+      if (age?.invalid) {
+        age?.markAsDirty();
+        this.message.error('Please provide a valid age.');
+        return;
+      }
+    }
+    if (this.registrationStep < 3) {
+      this.registrationStep++;
+    }
+  }
+
+  prevStep(): void {
+    if (this.registrationStep > 1) {
+      this.registrationStep--;
+    }
   }
 
   onClickBatch(batch: any) {

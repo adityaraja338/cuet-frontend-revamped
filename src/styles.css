@@ -8,7 +8,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 
 /* This demotes Zorro so Tailwind and your styles can beat it */
-@import "ng-zorro-antd/ng-zorro-antd.min.css" layer(vendor);
+@import "ng-zorro-antd/ng-zorro-antd.variable.min.css" layer(vendor);
 @import "tailwindcss";
 
 /* -------------------------------------------------------------------------- */
@@ -54,11 +54,11 @@
   --color-correct: oklch(75% 0.15 150);
   --color-correct-container: oklch(97% 0.02 150);
   --color-correct-text: oklch(40% 0.15 150);
-  
+
   --color-incorrect: oklch(70% 0.18 30);
   --color-incorrect-container: oklch(97% 0.02 30);
   --color-incorrect-text: oklch(40% 0.15 30);
-  
+
   --color-skipped: oklch(85% 0.01 260);
   --color-skipped-container: oklch(97% 0.01 260);
   --color-skipped-text: oklch(50% 0.01 260);
@@ -163,9 +163,22 @@
 /* -------------------------------------------------------------------------- */
 @layer base_overrides {
   :root {
+    /* -------- override less variables ----------- */
+    --ant-primary-color: #f59e0b;
+    --ant-primary-color-hover: oklch(70% 0.17 56);
+    --ant-primary-color-active: oklch(62% 0.17 54);
+    --ant-primary-color-outline: oklch(68% 0.17 55 / 0.1);
+    --ant-success-color: oklch(75% 0.15 150);
+    --ant-warning-color: #faad14;
+    --ant-error-color: #ba1a1a;
+    --ant-info-color: #1890ff;
+
     --student-primary: oklch(68% 0.17 55);
     --student-dark-primary: oklch(58% 0.17 55);
-    --admin-primary: #0284c7;
+    --admin-primary: oklch(45% 0.14 295);
+    --admin-primary-container: oklch(92% 0.02 295);
+    --admin-primary-fixed: oklch(85% 0.05 295);
+    --on-admin-primary-fixed: oklch(25% 0.03 295);
     --primary: oklch(68% 0.17 55);
     --primary-container: oklch(82% 0.1 55);
     --primary-fixed: oklch(95% 0.04 75);
@@ -228,6 +241,65 @@
     color: var(--on-surface);
   }
 
+  /* Default HTML Form Elements - Use plain CSS to avoid Tailwind @apply issues */
+  button:not(.ant-btn):not(.cuet-btn--premium):not(.ant-tabs-tab-btn):not(.ant-modal-close) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-label);
+    font-size: var(--text-base);
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    border: 1px solid transparent;
+    user-select: none;
+    white-space: nowrap;
+    background-color: var(--student-primary);
+    color: #ffffff;
+    box-shadow: 0 4px 12px oklch(68% 0.17 55 / 0.15);
+  }
+
+  button:not(.ant-btn):not(.cuet-btn--premium):hover:not(:disabled) {
+    background-color: var(--student-dark-primary);
+    box-shadow: 0 8px 16px oklch(68% 0.17 55 / 0.2);
+  }
+
+  input:not(.ant-input):not([type="checkbox"]):not([type="radio"]),
+  textarea:not(.ant-input) {
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--surface-container-lowest);
+    border: 1px solid var(--outline-variant);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--on-surface);
+    transition: all 0.2s ease;
+  }
+
+  input:not(.ant-input):not([type="checkbox"]):not([type="radio"]):focus,
+  textarea:not(.ant-input):focus {
+    outline: none;
+    border-color: var(--student-primary);
+    box-shadow: 0 0 0 4px oklch(68% 0.17 55 / 0.1);
+    background-color: #ffffff;
+  }
+
+  label:not(.ant-form-item-label > label) {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    color: var(--on-surface-variant);
+    margin-bottom: 0.375rem;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+  }
+
   /* Reset ng-zorro margins - No !important needed because base > vendor */
   h1,
   h2,
@@ -240,6 +312,16 @@
     padding: 0;
     color: inherit;
     font-family: var(--font-headline), system-ui, sans-serif;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: var(--primary);
   }
 }
 
@@ -405,8 +487,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    height: 2.75rem;
-    padding: 0 1.5rem;
+    padding: 0.65rem 1.5rem;
     border-radius: 0.85rem;
     font-size: 0.92rem;
     font-weight: 600;
@@ -494,15 +575,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    height: 2.75rem !important;
-    padding: 0.5rem 1.5rem !important;
+    padding: 0.75rem 1.75rem;
     border-radius: var(--radius-xl);
     font-family: var(--font-label);
     font-size: var(--text-base);
     font-weight: 600;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
-    border: 1px solid transparent !important;
+    border: 1px solid transparent;
     user-select: none;
     white-space: nowrap;
   }
@@ -513,6 +593,17 @@
   .btn-cuet:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  /* Default Ng-Zorro Button Overrides */
+  .ant-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-xl);
+    font-family: var(--font-label);
+    font-weight: 600;
   }
 
   /* Primary: Amber solid with dark text */
@@ -548,13 +639,11 @@
 
   /* Sizes */
   .btn-cuet--sm {
-    height: 2.25rem !important;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem !important;
     font-size: var(--text-sm);
   }
   .btn-cuet--lg {
-    height: 3.5rem !important;
-    padding: 0 2.5rem !important;
+    padding: 1.1rem 2.5rem !important;
     font-size: var(--text-lg);
     border-radius: var(--radius-2xl);
   }
@@ -587,6 +676,78 @@
     border-color: var(--student-primary);
     box-shadow: 0 0 0 4px oklch(68% 0.17 55 / 0.1);
     background-color: #ffffff;
+  }
+
+  /* --- Customized Form Variants --- */
+  .input-cuet--filled {
+    background-color: var(--surface-container-low);
+    border-color: transparent;
+  }
+  .input-cuet--filled:hover {
+    background-color: var(--surface-container);
+  }
+  .input-cuet--filled:focus {
+    background-color: #ffffff;
+    border-color: var(--student-primary);
+  }
+
+  .btn-cuet--tonal {
+    background-color: oklch(68% 0.17 55 / 0.08);
+    color: var(--student-primary);
+  }
+  .btn-cuet--tonal:hover:not(:disabled) {
+    background-color: oklch(68% 0.17 55 / 0.12);
+    transform: translateY(-1px);
+  }
+
+  /* --- Checkboxes & Radios (Ng-Zorro Customization) --- */
+  .ant-checkbox-inner {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 6px !important;
+    border: 2px solid var(--outline-variant) !important;
+    background-color: var(--surface-container-lowest) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+
+  .ant-checkbox-inner::after {
+    width: 6px !important;
+    height: 11px !important;
+    left: 25% !important;
+  }
+
+  .ant-radio-inner {
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid var(--outline-variant) !important;
+    background-color: var(--surface-container-lowest) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .ant-radio-checked .ant-radio-inner {
+    border-color: var(--primary) !important;
+  }
+
+  .ant-radio-inner::after {
+    width: 10px !important;
+    height: 10px !important;
+    background-color: var(--primary) !important;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .ant-radio-checked .ant-radio-inner::after {
+    transform: scale(1);
+  }
+
+  /* --- Switch (Ng-Zorro Customization) --- */
+  .ant-switch-checked {
+    background-color: var(--primary) !important;
   }
 
   /* --- Pills / Badges --- */
@@ -1067,7 +1228,7 @@ button.ant-button.dark-btn {
   color: #fff !important;
   border-radius: 6px;
   font-size: 14px;
-  height: 36px;
+  padding: 0.5rem 1rem;
 }
 
 .ant-btn.student-diagonal-gradient:hover {
@@ -1075,20 +1236,20 @@ button.ant-button.dark-btn {
 }
 
 button.ant-btn.btn-primary {
-  background: var(--primary-gradient);
+  background: var(--primary);
   color: #ffffff;
   border: none;
   border-radius: 0.75rem;
-  font-weight: 600;
-  box-shadow: 0 6px 18px -8px oklch(68% 0.17 55 / 0.4);
+  font-weight: 700;
+  box-shadow: 0 4px 12px oklch(68% 0.17 55 / 0.25);
   transition:
     filter 0.18s ease,
     box-shadow 0.18s ease,
     transform 0.15s ease;
 }
 button.ant-btn.btn-primary:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 10px 24px -8px oklch(68% 0.17 55 / 0.45);
+  background: var(--student-dark-primary);
+  box-shadow: 0 8px 20px -4px oklch(68% 0.17 55 / 0.35);
   transform: translateY(-1px);
 }
 button.ant-btn.btn-primary:active {
@@ -1130,11 +1291,10 @@ button.ant-btn.btn-ghost:hover {
 }
 
 button.ant-btn.btn-sm {
-  height: 3rem;
-  padding: 0 1.25rem;
-  font-size: 0.875rem;
-  border-radius: 0.75rem;
-  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 0.65rem;
+  gap: 0.35rem;
 }
 
 button.ant-btn.btn-block {
@@ -1518,7 +1678,7 @@ nz-table .ant-table-thead > tr > th {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.85rem 1rem !important;
+  padding: 0.7rem 1rem !important;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -1680,8 +1840,7 @@ nz-table .ant-pagination-total-text {
 
 .cuet-table-empty__cta.ant-btn {
   margin-top: 0.5rem;
-  height: 2.25rem;
-  padding: 0 1.1rem;
+  padding: 0.5rem 1.1rem;
   border-radius: 0.65rem;
   background: var(--primary);
   color: #ffffff;
@@ -1711,27 +1870,34 @@ nz-breadcrumb {
 
 /* ───────────────────────────  Pill Tabs  ─────────────────────────── */
 
-.cuet-tabs-pill.ant-tabs-nav {
+/* The main wrapper (nz-tabs with class .cuet-tabs-pill) */
+.cuet-tabs-pill .ant-tabs-nav {
   margin-bottom: 1.5rem;
 }
-.cuet-tabs-pill.ant-tabs-nav::before {
-  display: none;
+
+.cuet-tabs-pill .ant-tabs-nav::before {
+  display: none !important;
 }
-.ant-tabs-top > .ant-tabs-nav::before {
+
+.cuet-tabs-pill.ant-tabs-top > .ant-tabs-nav::before {
   border: none !important;
 }
+
+/* The Sliding Ink Bar (Active Indicator) */
 .cuet-tabs-pill .ant-tabs-ink-bar {
   display: block;
   height: calc(100% - 8px) !important;
   top: 4px;
   bottom: 4px;
   border-radius: 999px;
-  background: var(--primary);
-  box-shadow: 0 1px 6px -1px oklch(68% 0.17 55 / 0.35);
+  background: var(--primary) !important;
+  box-shadow: 0 2px 8px -2px oklch(68% 0.17 55 / 0.4);
   transition:
-    left 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-    width 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    left 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
+
+/* The Container for Tabs */
 .cuet-tabs-pill .ant-tabs-nav-list {
   position: relative;
   display: inline-flex;
@@ -1743,7 +1909,8 @@ nz-breadcrumb {
   flex: 0 0 auto;
   transform: translate(0) !important;
 }
-/* Hide all Ng-Zorro overflow/extra UI that causes trailing space */
+
+/* Clean up extra Ng-Zorro UI */
 .cuet-tabs-pill .ant-tabs-nav-operations,
 .cuet-tabs-pill .ant-tabs-nav-more,
 .cuet-tabs-pill .ant-tabs-extra-content,
@@ -1753,6 +1920,7 @@ nz-breadcrumb {
   padding: 0 !important;
   margin: 0 !important;
 }
+
 .cuet-tabs-pill .ant-tabs-nav-wrap {
   display: flex !important;
   overflow-x: auto !important;
@@ -1767,50 +1935,59 @@ nz-breadcrumb {
   display: none !important;
   content: none !important;
 }
+
+/* Individual Tab Item */
 .cuet-tabs-pill .ant-tabs-tab {
   position: relative;
   z-index: 1;
   margin: 0 !important;
-  padding: 0.975rem 1.25rem;
+  padding: 0.75rem 1.35rem !important;
   border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: all 0.25s ease;
+  min-height: auto !important;
+}
+
+.cuet-tabs-pill .ant-tabs-tab .ant-tabs-tab-btn {
+  font-family: var(--font-headline), system-ui, sans-serif !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
   text-transform: uppercase;
-  color: oklch(50% 0.008 260);
-  background: transparent;
-  transition: color 0.2s ease;
-  line-height: 1.4;
+  color: oklch(45% 0.01 260) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  height: auto !important;
+  padding: 0 !important;
 }
+
 .cuet-tabs-pill .ant-tabs-tab + .ant-tabs-tab {
-  margin: 0 !important;
+  margin-left: 2px !important;
 }
-.cuet-tabs-pill .ant-tabs-tab-active {
-  background: transparent;
-}
-.cuet-tabs-pill .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+
+/* Active State - High specificity to beat global overrides */
+.cuet-tabs-pill .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #ffffff !important;
-  font-weight: 700;
 }
-.cuet-tabs-pill .ant-tabs-nav .ant-tabs-tab:not(.ant-tabs-tab-active):hover .ant-tabs-tab-btn {
-  color: oklch(30% 0.01 260) !important;
-}
+
+/* Hover State */
 .cuet-tabs-pill .ant-tabs-tab:not(.ant-tabs-tab-active):hover {
-  background: oklch(92% 0.015 80);
+  background: oklch(91% 0.015 80) !important;
 }
-.cuet-tabs-pill .ant-tabs-nav-wrap {
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch;
-}
-.cuet-tabs-pill .ant-tabs-nav-wrap::after,
-.cuet-tabs-pill .ant-tabs-nav-wrap::before {
-  display: none;
+
+.cuet-tabs-pill .ant-tabs-tab:not(.ant-tabs-tab-active):hover .ant-tabs-tab-btn {
+  color: oklch(20% 0.01 260) !important;
 }
 
 @media (max-width: 640px) {
   .cuet-tabs-pill .ant-tabs-tab {
-    padding: 0.75rem 1rem;
-    font-size: 0.7rem;
+    padding: 0.625rem 1rem !important;
+  }
+  .cuet-tabs-pill .ant-tabs-tab .ant-tabs-tab-btn {
+    font-size: 0.72rem !important;
   }
 }
 
@@ -1865,9 +2042,9 @@ nz-input-group.search-input .ant-input {
 }
 
 .ant-input {
-  min-height: 44px !important;
-  padding: 0.6rem 0.9rem !important;
-  border-radius: 10px !important;
+  min-height: 3rem !important;
+  padding: 0.6rem 1rem !important;
+  border-radius: var(--radius-xl) !important;
   border: 1px solid rgba(148, 163, 184, 0.42) !important;
   background: #fff !important;
   font-family:
@@ -2000,12 +2177,12 @@ nz-input-group:has(.ant-input:focus) {
 }
 
 nz-input-number {
-  height: 36px;
+  height: 3rem;
   width: 100% !important;
-  border-radius: 6px !important;
+  border-radius: var(--radius-xl) !important;
 }
 nz-input-number .ant-input-number-input {
-  height: 34px;
+  height: 2.85rem;
   font-size: 12px;
   font-weight: 300;
 }
@@ -2037,10 +2214,10 @@ nz-input-group.password-input {
 }
 
 .ant-picker {
-  min-height: 44px;
+  min-height: 3rem;
   width: 100%;
-  padding: 0.35rem 0.85rem;
-  border-radius: 10px !important;
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-xl) !important;
   border: 1px solid rgba(148, 163, 184, 0.42) !important;
   background: #fff !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
@@ -2286,13 +2463,13 @@ nz-select nz-select-top-control {
 }
 
 .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-  height: 44px !important;
+  height: 3rem !important;
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-  min-height: 44px;
-  padding: 0.35rem 0.85rem !important;
-  border-radius: 10px !important;
+  min-height: 3rem;
+  padding: 0.35rem 1rem !important;
+  border-radius: var(--radius-xl) !important;
   border: 1px solid rgba(148, 163, 184, 0.42) !important;
   background: #fff !important;
   box-shadow: none !important;
@@ -2308,11 +2485,11 @@ nz-select nz-select-top-control {
 .ant-select-single:not(.ant-select-customize-input)
   .ant-select-selector
   .ant-select-selection-placeholder {
-  line-height: 42px !important;
+  line-height: 2.85rem !important;
 }
 
 .ant-select-multiple:not(.ant-select-customize-input) .ant-select-selector {
-  min-height: 44px;
+  min-height: 3rem;
   padding: 0.3rem 0.6rem !important;
 }
 
@@ -2744,10 +2921,27 @@ nz-switch:has(.ant-switch-small) {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 44px !important;
+  height: 44px !important;
+  top: 8px !important;
+  right: 8px !important;
+  border-radius: 12px;
+  color: var(--on-surface-variant, #64748b) !important;
+  transition: all 0.2s ease !important;
+}
+
+.ant-modal-close:hover {
+  background-color: var(--surface-container-low) !important;
+  color: var(--on-surface, #0f172a) !important;
 }
 
 .ant-modal-close-x {
-  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
 }
 
 /* Modal body: opt-in padding + premium scrollbars */

@@ -70,10 +70,9 @@ export class AdminAuthService {
   }
 
   logout() {
-    this.clearTokens();
+    localStorage.clear();
     this.message.success('Successful! User logged out!');
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
-    // this.message.success('User logged out!');
   }
 }

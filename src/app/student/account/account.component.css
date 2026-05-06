@@ -148,6 +148,7 @@
   top: 1rem;
   right: 1rem;
   background: white !important;
+  color: oklch(14% 0.01 260) !important;
   width: 44px;
   height: 44px;
   border-radius: 14px;

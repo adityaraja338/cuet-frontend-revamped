@@ -118,6 +118,11 @@ Interactions are **soft and deliberate**, favoring calm confidence over hyper-ac
 - **Background:** Warm white or pure white.
 - **Hover Strategy:** `translateY(-4px)` with a slight increase in ambient shadow.
 
+### Admin: The Slim Dock (.admin-dock)
+- **Style:** 64px vertical navigation bar (icon-only by default).
+- **Background:** High-contrast Headline Slate or pure white with a Precision Border.
+- **Interaction:** Expands to 256px on hover or toggle to reveal labels, ensuring maximum horizontal space for the workspace.
+
 ### Pills (.pill-cuet)
 - **Style:** Fully rounded (999px), subtle tinted background, bold uppercase Manrope text.
 
@@ -155,5 +160,8 @@ Guardrails derived from the "Radiant Mentor" strategy and "Education-First" prin
 - **Don't** use side-stripe borders as colored accents on cards.
 - **Don't** use gradient text; maintain solid color authority.
 - **Don't** use FOMO tactics like countdown timers or "Batch Bazaar" clutter.
+- **Don't** use glassmorphism as a default; keep surfaces grounded and clear.
+- **Don't** use em dashes—prefer commas, colons, or parentheses for clarity.
+ctics like countdown timers or "Batch Bazaar" clutter.
 - **Don't** use glassmorphism as a default; keep surfaces grounded and clear.
 - **Don't** use em dashes—prefer commas, colons, or parentheses for clarity.

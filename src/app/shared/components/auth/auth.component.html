@@ -1,1051 +1,277 @@
-<div
-  id="auth-page"
-  class="auth-page relative isolate flex min-h-screen w-full flex-col overflow-x-hidden bg-surface font-body text-on-surface [&_a]:no-underline"
-  [class.is-registration]="globalService.isRegistrationPage"
->
-  <!-- Decorative background layers -->
-  <div class="auth-bg pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-    <div class="auth-bg__mesh"></div>
-    <div class="auth-bg__blob auth-bg__blob--1"></div>
-    <div class="auth-bg__blob auth-bg__blob--2"></div>
-    <div class="auth-bg__blob auth-bg__blob--3"></div>
-    <div class="auth-bg__grid"></div>
-  </div>
+<div class="min-h-screen bg-background font-body text-headline selection:bg-primary-container selection:text-primary">
+  <!-- Back Button -->
+  <nav class="absolute left-6 top-6 z-50">
+    <a (click)="goHome($event)" class="group flex items-center gap-2 cursor-pointer text-body hover:text-headline transition-colors">
+      <div class="flex h-8 w-8 items-center justify-center rounded-full border border-surface-container-low bg-surface shadow-sm group-hover:shadow-md transition-all">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      </div>
+      <span class="font-label text-xs uppercase tracking-widest">Back to home</span>
+    </a>
+  </nav>
 
-  <!-- Back to home -->
-  <a
-    class="auth-home"
-    href="/"
-    (click)="goHome($event)"
-    aria-label="Back to home"
-  >
-    <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-    <span class="auth-home__label">Back to home</span>
-  </a>
+  <main class="flex min-h-screen items-center justify-center p-6">
+    <div class="grid w-full max-w-6xl grid-cols-1 overflow-hidden rounded-4xl auth-card-radiant shadow-cuet lg:grid-cols-2">
+      
+      <!-- Left: Radiant Hero Panel -->
+      <section class="relative hidden flex-col justify-between hero-panel-radiant p-14 lg:flex xl:p-16">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
+            <span class="material-symbols-outlined text-white text-xl">school</span>
+          </div>
+          <span class="font-headline text-lg font-bold tracking-tight">CUET Corner</span>
+        </div>
 
-  <div class="auth-stage" [class.is-registration]="globalService.isRegistrationPage">
-    <!-- ================================================================ -->
-    <!-- LOGIN SECTION                                                     -->
-    <!-- ================================================================ -->
-    <section
-      class="auth-section auth-section--login"
-      [attr.aria-hidden]="globalService.isRegistrationPage ? 'true' : null"
-      [attr.inert]="globalService.isRegistrationPage ? '' : null"
-      aria-label="Sign in"
-    >
-      <div
-        class="auth-split relative mx-auto grid w-full max-w-[78rem] grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-10"
-      >
-        <!-- Left branded hero panel (visible lg+) -->
-        <aside class="auth-hero-panel auth-hero-panel--login">
-          <div
-            class="auth-hero-panel__inner relative z-10 grid h-full grid-rows-[auto_1fr_auto_auto] gap-7 p-[clamp(2rem,2.6vw,2.75rem)]"
-          >
-            <a
-              class="auth-brand inline-flex w-fit items-center gap-2.5 text-inherit no-underline"
-              [routerLink]="['/']"
-            >
-              <span
-                class="auth-brand__mark inline-flex size-8 items-center justify-center rounded-xl bg-[var(--primary-gradient)] text-white shadow-[0_8px_22px_rgba(0,74,198,0.28)] [&_.material-symbols-outlined]:text-[1.1rem] [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_600]"
-                aria-hidden="true"
-              >
-                <span class="material-symbols-outlined">hub</span>
-              </span>
-              <span
-                class="auth-brand__text font-headline text-[1.1rem] font-extrabold tracking-tight text-white"
-                >CUET Corner</span
-              >
-            </a>
+        <!-- Editorial Content -->
+        <div class="max-w-md space-y-6 py-8">
+          <h1 class="font-display text-5xl leading-[1.1] italic">
+            Your journey to <span class="text-primary">top central universities</span> begins with a single step.
+          </h1>
+          <p class="text-md leading-relaxed text-body opacity-50">
+            Elite preparation curated by those who've walked the path. No FOMO, just focused guidance.
+          </p>
+        </div>
 
-            <div
-              class="auth-hero-showcase relative flex min-h-[280px] w-full items-center justify-center"
-              aria-hidden="true"
-            >
-              <div class="auth-hero-showcase__orbit">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-
-              <div class="auth-hero-card auth-hero-card--primary">
-                <div class="auth-hero-card__row">
-                  <span class="auth-hero-card__pill">
-                    <span class="auth-hero-card__dot"></span>
-                    Live test
-                  </span>
-                  <span class="auth-hero-card__meta">Starts 12m</span>
-                </div>
-                <div class="auth-hero-card__statline">
-                  <span class="auth-hero-card__rank">#42</span>
-                  <span class="auth-hero-card__ranksub">of 1,248 aspirants</span>
-                </div>
-                <div class="auth-hero-card__progress">
-                  <span style="width: 82%"></span>
-                </div>
-                <div class="auth-hero-card__foot">
-                  <span class="material-symbols-outlined">quiz</span>
-                  Mock #18 · Quant · Time &amp; Work
-                </div>
-              </div>
-
-              <div class="auth-hero-chip auth-hero-chip--streak">
-                <span class="material-symbols-outlined">local_fire_department</span>
-                <div>
-                  <strong>7-day streak</strong>
-                  <small>Keep it going</small>
-                </div>
-              </div>
-
-              <div class="auth-hero-chip auth-hero-chip--rewatch">
-                <span class="material-symbols-outlined">play_circle</span>
-                <div>
-                  <strong>Rewatch</strong>
-                  <small>VARC · Class 42</small>
-                </div>
-              </div>
+        <!-- Curiosity Glimpse -->
+        <div class="relative rounded-3xl cuet-surface-radiant p-6 shadow-sm overflow-hidden group hover:translate-y-[-4px] transition-all duration-500">
+          <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-2xl transition-all group-hover:bg-primary/20"></div>
+          
+          <div class="flex items-center gap-4 mb-4">
+            <div class="h-10 w-10 rounded-full bg-primary-500 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-xl">analytics</span>
             </div>
-
-            <div class="auth-hero-panel__caption flex max-w-md flex-col gap-[0.85rem]">
-              <span
-                class="auth-eyebrow inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/[0.18] px-3.5 py-1.5 font-label text-[0.7rem] font-bold uppercase tracking-[0.14em] text-white"
-                >Welcome back</span
-              >
-              <h1
-                class="auth-hero-panel__title"
-              >
-                Everything <em>CUET</em>, in one sign-in.
-              </h1>
-              <p
-                class="auth-hero-panel__subtitle m-0 font-body text-[0.95rem] leading-relaxed tracking-wide text-white/80"
-              >
-                Pick up your mocks, classes, and progress right where you
-                left off.
-              </p>
-            </div>
-
-            <div
-              class="auth-hero-panel__footer inline-flex items-center gap-2 font-body text-[0.78rem] tracking-wide text-white/70 [&_.material-symbols-outlined]:text-[#cfd9ff] [&_.material-symbols-outlined]:text-lg [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_500]"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true"
-                >shield</span
-              >
-              <span>Secure sign-in · Privacy first</span>
+            <div>
+              <p class="font-label text-[10px] uppercase tracking-widest text-primary font-bold">Mentor's Glimpse</p>
+              <h3 class="font-headline font-bold">Performance Analytics</h3>
             </div>
           </div>
-        </aside>
 
-        <!-- Right content -->
-        <div
-          class="auth-content flex min-h-full w-full items-center justify-center"
-        >
-          <div class="auth-content__inner flex w-full max-w-[34rem] flex-col items-stretch">
-            <a
-              class="auth-brand auth-brand--mobile mb-4 inline-flex w-fit items-center gap-2.5 text-inherit no-underline max-lg:mx-auto lg:mb-0 lg:hidden"
-              [routerLink]="['/']"
-            >
-              <span
-                class="auth-brand__mark inline-flex size-8 items-center justify-center rounded-xl bg-[var(--primary-gradient)] text-white shadow-[0_8px_22px_rgba(0,74,198,0.28)] [&_.material-symbols-outlined]:text-[1.1rem] [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_600]"
-                aria-hidden="true"
-              >
-                <span class="material-symbols-outlined">hub</span>
-              </span>
-              <span
-                class="auth-brand__text font-headline text-[1.1rem] font-extrabold tracking-tight text-slate-900"
-                >CUET Corner</span
-              >
-            </a>
+          <div class="glimpse-quote mb-4">
+            <p class="text-sm text-body leading-relaxed">
+              Over <span class="font-display text-primary text-xl">80+ aspirants</span> secured their first-choice seats at India’s <span class="font-headline font-bold text-headline">top central universities</span> through our structured mentorship framework.
+            </p>
+          </div>
 
-            <div
-              class="auth-card relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-white/55 bg-white/85 p-[clamp(1.5rem,2vw,2rem)] shadow-[0_30px_60px_-30px_rgba(15,23,42,0.25),0_12px_32px_-16px_rgba(15,23,42,0.1)] backdrop-blur-xl backdrop-saturate-[1.2] max-lg:max-h-[calc(100vh-5.5rem)] max-lg:overflow-auto max-[639px]:rounded-[1.25rem] max-[639px]:p-5"
-            >
-              <div class="auth-card__head flex flex-col gap-2.5">
-                <span
-                  class="auth-eyebrow auth-eyebrow--card inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1.5 font-label text-[0.7rem] font-bold uppercase tracking-[0.14em] text-[#003ea8]"
-                  >Sign in</span
-                >
-                <h2
-                  class="auth-card__title font-headline text-[clamp(1.35rem,1.1vw+1rem,1.75rem)] font-extrabold leading-snug tracking-tight text-balance text-slate-900 max-[639px]:text-[1.35rem] [&_em]:font-extrabold [&_em]:italic [&_em]:text-primary"
-                >
-                  Welcome back to <em>CUET Corner</em>
-                </h2>
-                <p
-                  class="auth-card__lede font-body text-[0.92rem] leading-relaxed text-on-surface-variant"
-                >
-                  Pick your role below to continue where you left off.
-                </p>
+          <div class="flex items-center justify-between pt-4 border-t border-surface-container-low">
+            <div class="flex -space-x-2">
+              @for (item of [1,2,3,4]; track $index) {
+                <div class="h-7 w-7 rounded-full border-2 border-surface bg-surface-container-low flex items-center justify-center overflow-hidden">
+                  <img [src]="'https://i.pravatar.cc/100?img=' + ($index + 20)" alt="Avatar" class="h-full w-full object-cover" />
+                </div>
+              }
+            </div>
+            <span class="text-[10px] font-label uppercase tracking-wider text-body font-semibold">542 Students Practicing now</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Auth Workspace -->
+      <section class="flex flex-col p-8 lg:p-12">
+        
+        <!-- Action Area (Conditional) -->
+        <div class="mb-12 flex justify-end">
+          @if(globalService.isRegistrationPage) {
+            <button (click)="changeGoogleAccount()" class="text-xs font-label uppercase tracking-widest text-body hover:text-primary transition-colors flex items-center gap-2">
+              Already an Aspirant? <span class="font-bold">Sign In</span>
+            </button>
+          } @else {
+            <p class="text-xs font-label uppercase tracking-widest text-body/60">
+              New here? Join the <span class="font-display italic font-bold text-primary opacity-100">Journey</span>
+            </p>
+          }
+        </div>
+
+        <div class="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full">
+          
+          <!-- Heading -->
+          <div class="mb-10">
+            <h2 class="font-headline text-3xl font-bold mb-2">
+              {{ globalService.isRegistrationPage ? 'Join the Cohort' : 'Welcome Back' }}
+            </h2>
+            <p class="text-body">
+              {{ globalService.isRegistrationPage ? 'Tell us a bit about your journey.' : 'Continue your path to central universities.' }}
+            </p>
+          </div>
+
+          <!-- Login Mode -->
+          @if(!globalService.isRegistrationPage) {
+            <div class="space-y-6">
+              <button (click)="loginWithGoogle()" class="radiant-google-btn flex w-full items-center justify-center gap-4 rounded-xl py-4 px-6 font-headline font-bold transition-all">
+                <div class="flex h-6 w-6 items-center justify-center">
+                  <img src="assets/images/google-logo.png" alt="Google" class="h-5 w-5 object-contain" />
+                </div>
+                <span class="text-[0.95rem] tracking-tight">Continue with Google</span>
+              </button>
+              <div class="flex items-center gap-3 py-2">
+                <div class="h-px flex-1 bg-surface-container-low"></div>
+                <span class="font-label text-[10px] uppercase tracking-widest text-body/40">Secure Aspirant Entry</span>
+                <div class="h-px flex-1 bg-surface-container-low"></div>
+              </div>
+            </div>
+          } @else {
+            <!-- Registration Mode (Multi-step) -->
+            <div [formGroup]="registrationForm">
+              
+              <!-- Step Indicators -->
+              <div class="flex gap-2 mb-8">
+                @for (step of [1,2,3]; track $index) {
+                  <div 
+                    class="h-1 flex-1 rounded-full transition-all duration-500"
+                    [class.bg-primary]="registrationStep >= $index + 1"
+                    [class.bg-surface-container-low]="registrationStep < $index + 1">
+                  </div>
+                }
               </div>
 
-              <div
-                class="auth-segmented relative my-1 mb-[1.1rem]"
-                role="tablist"
-                aria-label="Select role"
-              >
-                <span
-                  class="auth-segmented__indicator"
-                  [class.is-admin]="authMode === 'admin'"
-                  aria-hidden="true"
-                ></span>
-                <button
-                  type="button"
-                  role="tab"
-                  class="auth-segmented__item"
-                  [class.is-active]="authMode === 'student'"
-                  [attr.aria-selected]="authMode === 'student'"
-                  (click)="setAuthMode('student')"
-                >
-                  <span class="material-symbols-outlined" aria-hidden="true"
-                    >school</span
-                  >
-                  <span>Student</span>
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  class="auth-segmented__item"
-                  [class.is-active]="authMode === 'admin'"
-                  [attr.aria-selected]="authMode === 'admin'"
-                  (click)="setAuthMode('admin')"
-                >
-                  <span class="material-symbols-outlined" aria-hidden="true"
-                    >shield_person</span
-                  >
-                  <span>Admin</span>
-                </button>
-              </div>
-
-              <div
-                class="auth-flip relative min-h-[300px] [perspective:1400px]"
-                [class.is-flipped]="authMode === 'admin'"
-              >
-                <div class="auth-flip__inner">
-                  <!-- FRONT · Student -->
-                  <div
-                    class="auth-flip__face auth-flip__face--front"
-                    role="tabpanel"
-                    [attr.aria-hidden]="authMode !== 'student'"
-                    [attr.inert]="authMode !== 'student' ? '' : null"
-                  >
-                    <div
-                      class="auth-flip-body flex min-h-[inherit] h-full flex-col gap-4"
-                    >
-                      <p
-                        class="auth-tab-hint m-0 font-body text-[0.88rem] leading-relaxed text-on-surface-variant"
-                      >
-                        Dive into your studies — let's get you logged in.
-                      </p>
-
-                      <div class="auth-flip-body__main flex flex-1 flex-col gap-4">
-                        <button
-                          type="button"
-                          nz-button
-                          class="auth-google-btn auth-flip-cta"
-                          (click)="loginWithGoogle()"
-                        >
-                          <img
-                            src="assets/images/google-logo.png"
-                            alt=""
-                            width="20"
-                            height="20"
-                          />
-                          <span>Continue with Google</span>
-                        </button>
-
-                        <div class="auth-divider" aria-hidden="true">
-                          <span>Fast · Secure · No extra password</span>
-                        </div>
-
-                        <ul
-                          class="auth-perks m-0 flex list-none flex-col gap-2 p-0 [&_li]:flex [&_li]:items-center [&_li]:gap-[0.55rem] [&_li]:font-body [&_li]:text-[0.85rem] [&_li]:text-slate-600 [&_li_.material-symbols-outlined]:text-lg [&_li_.material-symbols-outlined]:text-primary [&_li_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_500]"
-                          role="list"
-                        >
-                          <li>
-                            <span
-                              class="material-symbols-outlined"
-                              aria-hidden="true"
-                              >check_circle</span
-                            >
-                            <span>One-click sign-in and sign-up</span>
-                          </li>
-                          <li>
-                            <span
-                              class="material-symbols-outlined"
-                              aria-hidden="true"
-                              >check_circle</span
-                            >
-                            <span>No separate password to remember</span>
-                          </li>
-                          <li>
-                            <span
-                              class="material-symbols-outlined"
-                              aria-hidden="true"
-                              >check_circle</span
-                            >
-                            <span>Google OAuth-backed account security</span>
-                          </li>
-                        </ul>
-                      </div>
+              <!-- Step 1: Personal -->
+              @if(registrationStep === 1) {
+                <div class="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
+                  <div class="mb-6 rounded-xl bg-surface-container-low/50 p-4 border border-surface-container-low flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-primary text-xl">verified_user</span>
+                    </div>
+                    <div class="overflow-hidden">
+                      <p class="font-label text-[10px] uppercase tracking-widest text-body">Verified Email</p>
+                      <p class="text-sm font-bold truncate">{{ registrationForm.get('email')?.value }}</p>
                     </div>
                   </div>
 
-                  <!-- BACK · Admin -->
-                  <div
-                    class="auth-flip__face auth-flip__face--back"
-                    role="tabpanel"
-                    [attr.aria-hidden]="authMode !== 'admin'"
-                    [attr.inert]="authMode !== 'admin' ? '' : null"
-                  >
-                    <div
-                      class="auth-flip-body flex min-h-[inherit] h-full flex-col gap-4"
-                    >
-                      <p
-                        class="auth-tab-hint m-0 font-body text-[0.88rem] leading-relaxed text-on-surface-variant"
-                      >
-                        Empower the future — one student at a time.
-                      </p>
-
-                      <div class="auth-flip-body__main flex flex-1 flex-col gap-4">
-                        <div class="auth-fields flex flex-col gap-[0.85rem]">
-                          <div class="auth-field flex flex-col gap-1.5">
-                            <label
-                              class="auth-label"
-                              for="admin-email"
-                              >Email</label
-                            >
-                            <input
-                              id="admin-email"
-                              type="email"
-                              nz-input
-                              class="auth-input"
-                              placeholder="you@cuetcorner.in"
-                              autocomplete="email"
-                              [(ngModel)]="adminEmail"
-                            />
-                          </div>
-
-                          <div class="auth-field flex flex-col gap-1.5">
-                            <label
-                              class="auth-label"
-                              for="admin-password"
-                              >Password</label
-                            >
-                            <nz-input-group
-                              [nzSuffix]="suffixTemplate"
-                              class="auth-input-group"
-                            >
-                              <input
-                                id="admin-password"
-                                [type]="
-                                  passwordVisible ? 'text' : 'password'
-                                "
-                                nz-input
-                                class="auth-input"
-                                placeholder="••••••••"
-                                autocomplete="current-password"
-                                [(ngModel)]="adminPassword"
-                              />
-                            </nz-input-group>
-                            <ng-template #suffixTemplate>
-                              <button
-                                type="button"
-                                class="auth-pw-toggle"
-                                [class.is-on]="passwordVisible"
-                                [attr.aria-label]="
-                                  passwordVisible
-                                    ? 'Hide password'
-                                    : 'Show password'
-                                "
-                                [attr.aria-pressed]="passwordVisible"
-                                [attr.title]="
-                                  passwordVisible
-                                    ? 'Hide password'
-                                    : 'Show password'
-                                "
-                                (click)="passwordVisible = !passwordVisible"
-                              >
-                                <span
-                                  class="material-symbols-outlined"
-                                  aria-hidden="true"
-                                  >{{
-                                    passwordVisible
-                                      ? "visibility_off"
-                                      : "visibility"
-                                  }}</span
-                                >
-                              </button>
-                            </ng-template>
-                          </div>
-                        </div>
-
-                        <button
-                          type="button"
-                          nz-button
-                          class="auth-primary-btn auth-primary-btn--block auth-flip-cta"
-                          (click)="adminLogin()"
-                        >
-                          <span
-                            class="material-symbols-outlined"
-                            aria-hidden="true"
-                            >login</span
-                          >
-                          <span>Sign in as admin</span>
-                        </button>
-                      </div>
+                  <div class="space-y-1.5">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1">Full Name</label>
+                    <input type="text" formControlName="name" placeholder="Abhinav Kumar"
+                          class="w-full rounded-xl border border-surface-container-low bg-surface p-3 outline-none focus:border-primary transition-colors" />
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1">Phone Number</label>
+                    <div class="flex gap-2">
+                      <input type="number" formControlName="countryCode" class="w-20 rounded-xl border border-surface-container-low bg-surface p-3 outline-none focus:border-primary transition-colors" />
+                      <input type="number" formControlName="phone" placeholder="9876543210"
+                            class="flex-1 rounded-xl border border-surface-container-low bg-surface p-3 outline-none focus:border-primary transition-colors" />
                     </div>
+                  </div>
+                  <button (click)="nextStep()" class="w-full rounded-xl bg-primary mt-6 py-4 px-6 font-headline font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:translate-y-[-2px] transition-all">
+                    Continue
+                  </button>
+                </div>
+              } @else if(registrationStep === 2) {
+                <!-- Step 2: Experience -->
+                <div class="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
+                  <div class="space-y-1.5">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1">Your Age</label>
+                    <input type="number" formControlName="age" placeholder="18"
+                          class="w-full rounded-xl border border-surface-container-low bg-surface p-3 outline-none focus:border-primary transition-colors" />
+                  </div>
+                  <div class="space-y-1.5">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1">CUET Attempts So Far</label>
+                    <nz-select nzMode="multiple" nzPlaceHolder="Select years" formControlName="cuetAttempts" class="cuet-select w-full">
+                      @for(year of yearsOptions; track year) {
+                        <nz-option [nzLabel]="year" [nzValue]="year"></nz-option>
+                      }
+                    </nz-select>
+                  </div>
+                  <div class="flex gap-3 pt-2 mt-6">
+                    <button (click)="prevStep()" class="flex-1 rounded-xl border border-surface-container-low py-4 px-6 font-headline font-bold hover:bg-surface-container-low transition-all">
+                      Back
+                    </button>
+                    <button (click)="nextStep()" class="flex-1 rounded-xl bg-primary py-4 px-6 font-headline font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:translate-y-[-2px] transition-all">
+                      Almost Done
+                    </button>
                   </div>
                 </div>
-              </div>
+              } @else if(registrationStep === 3) {
+                <!-- Step 3: Goals & Batch -->
+                <div class="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500">
+                  <div class="space-y-1.5">
+                    <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1">Select Your Batch</label>
+                    
+                    <!-- Batch List -->
+                    @if(batches && batches.length > 0) {
+                      <div class="grid grid-cols-1 gap-3 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+                        @for(batch of batches; track batch.id) {
+                          <div 
+                              (click)="onClickBatch(batch)"
+                              [class.border-primary]="selectedBatch?.id === batch.id"
+                              [class.bg-primary-container/20]="selectedBatch?.id === batch.id"
+                              class="cursor-pointer rounded-xl cuet-surface-radiant p-4 transition-all hover:border-primary/50">
+                            <div class="flex items-center justify-between">
+                              <h4 class="font-headline font-bold">{{ batch.name }}</h4>
+                              @if(selectedBatch?.id === batch.id) {
+                                <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                              }
+                            </div>
+                            <p class="text-xs text-body mt-1">{{ batch.description | slice:0:60 }}...</p>
+                          </div>
+                        }
+                      </div>
+                    } @else { <!-- Empty State -->
+                      <div class="rounded-xl border border-dashed border-surface-container-low p-6 text-center bg-surface-container-low/20">
+                        <span class="material-symbols-outlined text-body/30 text-3xl mb-2">event_busy</span>
+                        <p class="text-lg font-display text-body/60 leading-relaxed italic">
+                          No active batches found. You can still join the platform and we'll notify you when new batches open.
+                        </p>
+                      </div>
+                    }
+                  </div>
 
-              <p
-                class="auth-card__foot mt-1 border-t border-slate-400/25 pt-3 font-body text-center text-[0.75rem] leading-relaxed text-slate-500 [&_a]:font-semibold [&_a]:text-primary hover:[&_a]:underline"
-              >
-                By continuing, you agree to our
-                <a href="#">Terms of Service</a> and
-                <a href="#">Privacy Policy</a>.
-              </p>
+                  <div class="flex gap-3 pt-2 mt-6">
+                    <button (click)="prevStep()" class="flex-1 rounded-xl border border-surface-container-low py-4 px-6 font-headline font-bold hover:bg-surface-container-low transition-all">
+                      Back
+                    </button>
+                    <button (click)="registerBatch()" class="flex-1 rounded-xl bg-primary py-4 px-6 font-headline font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:translate-y-[-2px] transition-all">
+                      Join Now
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Footer / Admin Link -->
+        <div class="mt-auto pt-8 flex items-center justify-between">
+          <p class="text-[10px] font-label uppercase tracking-widest text-body/50">© 2026 CUET Corner</p>
+          @if(!globalService.isRegistrationPage) {
+            <a (click)="setAuthMode('admin')" class="cursor-pointer text-[10px] font-label uppercase tracking-widest text-body hover:text-primary transition-colors">
+              Staff Entry
+            </a>
+          }
+        </div>
+      </section>
+
+      <!-- Admin Login Overlay (Subtle) -->
+      @if(authMode === 'admin') {
+        <div class="fixed inset-0 z-100 flex items-center justify-center bg-headline/40 backdrop-blur-md animate-in fade-in duration-300">
+          <div class="w-full max-w-sm rounded-4xl bg-surface p-8 shadow-2xl animate-in zoom-in-95 duration-300 border border-surface-container-low">
+            <div class="mb-8 flex items-center justify-between">
+              <div>
+                <p class="font-label text-[10px] uppercase tracking-widest text-primary font-bold mb-1">Internal Use Only</p>
+                <h3 class="font-headline text-2xl font-bold">Staff Access</h3>
+              </div>
+              <button (click)="setAuthMode('student')" class="h-10 w-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors border border-surface-container-low">
+                <span class="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
+            <div class="space-y-6">
+              <div class="space-y-2">
+                <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1 font-bold">Email</label>
+                <input type="email" [(ngModel)]="adminEmail" placeholder="staff@cuetcorner.in"
+                       class="staff-input w-full rounded-xl p-3.5 outline-none transition-all" />
+              </div>
+              <div class="space-y-2">
+                <label class="font-label text-[11px] uppercase tracking-widest text-body ml-1 font-bold">Password</label>
+                <input type="password" [(ngModel)]="adminPassword" placeholder="••••••••"
+                       class="staff-input w-full rounded-xl p-3.5 outline-none transition-all" />
+              </div>
+              <div class="pt-2">
+                <button (click)="adminLogin()" class="staff-btn-primary w-full rounded-xl py-4 px-6 font-headline font-bold transition-all">
+                  Sign In
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      }
 
-    <!-- ================================================================ -->
-    <!-- REGISTRATION SECTION                                              -->
-    <!-- ================================================================ -->
-    <section
-      class="auth-section auth-section--register"
-      [attr.aria-hidden]="globalService.isRegistrationPage ? null : 'true'"
-      [attr.inert]="globalService.isRegistrationPage ? null : ''"
-      aria-label="Register"
-    >
-      <div
-        class="auth-split auth-split--register relative mx-auto grid w-full max-w-[78rem] grid-cols-1 items-center gap-6 lg:gap-10"
-      >
-        <aside class="auth-hero-panel auth-hero-panel--register">
-          <div
-            class="auth-hero-panel__inner relative z-10 grid h-full grid-rows-[auto_1fr_auto_auto] gap-7 p-[clamp(2rem,2.6vw,2.75rem)]"
-          >
-            <a
-              class="auth-brand inline-flex w-fit items-center gap-2.5 text-inherit no-underline"
-              [routerLink]="['/']"
-            >
-              <span
-                class="auth-brand__mark inline-flex size-8 items-center justify-center rounded-xl bg-[var(--primary-gradient)] text-white shadow-[0_8px_22px_rgba(0,74,198,0.28)] [&_.material-symbols-outlined]:text-[1.1rem] [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_600]"
-                aria-hidden="true"
-              >
-                <span class="material-symbols-outlined">hub</span>
-              </span>
-              <span
-                class="auth-brand__text font-headline text-[1.1rem] font-extrabold tracking-tight text-white"
-                >CUET Corner</span
-              >
-            </a>
-
-            <div
-              class="auth-hero-showcase relative flex min-h-[280px] w-full items-center justify-center"
-              aria-hidden="true"
-            >
-              <div class="auth-hero-showcase__orbit">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-
-              <div class="auth-hero-card auth-hero-card--primary">
-                <div class="auth-hero-card__row">
-                  <span class="auth-hero-card__pill">
-                    <span class="auth-hero-card__dot"></span>
-                    New batch
-                  </span>
-                  <span class="auth-hero-card__meta">Starts soon</span>
-                </div>
-                <div class="auth-hero-card__statline">
-                  <span class="auth-hero-card__rank">Sankalp</span>
-                  <span class="auth-hero-card__ranksub">Mentor-curated cohort</span>
-                </div>
-                <div class="auth-hero-card__progress">
-                  <span style="width: 64%"></span>
-                </div>
-                <div class="auth-hero-card__foot">
-                  <span class="material-symbols-outlined">workspace_premium</span>
-                  Live · Practice · Recordings
-                </div>
-              </div>
-
-              <div class="auth-hero-chip auth-hero-chip--streak">
-                <span class="material-symbols-outlined">analytics</span>
-                <div>
-                  <strong>Analytics-first</strong>
-                  <small>Know what to fix</small>
-                </div>
-              </div>
-
-              <div class="auth-hero-chip auth-hero-chip--rewatch">
-                <span class="material-symbols-outlined">video_library</span>
-                <div>
-                  <strong>Revision</strong>
-                  <small>24/7 library</small>
-                </div>
-              </div>
-            </div>
-
-            <div class="auth-hero-panel__caption flex max-w-md flex-col gap-[0.85rem]">
-              <span
-                class="auth-eyebrow inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/[0.18] px-3.5 py-1.5 font-label text-[0.7rem] font-bold uppercase tracking-[0.14em] text-white"
-                >Almost there</span
-              >
-              <h1
-                class="auth-hero-panel__title"
-              >
-                One step. <em>A big leap</em> toward CUET.
-              </h1>
-              <p
-                class="auth-hero-panel__subtitle m-0 font-body text-[0.95rem] leading-relaxed tracking-wide text-white/80"
-              >
-                Join a mentor-curated cohort and start preparing with
-                structure from day one.
-              </p>
-            </div>
-
-            <div
-              class="auth-hero-panel__footer inline-flex items-center gap-2 font-body text-[0.78rem] tracking-wide text-white/70 [&_.material-symbols-outlined]:text-[#cfd9ff] [&_.material-symbols-outlined]:text-lg [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_500]"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true"
-                >verified</span
-              >
-              <span>Secure checkout · Encrypted payments</span>
-            </div>
-          </div>
-        </aside>
-
-        <div
-          class="auth-content flex min-h-full w-full items-center justify-center"
-        >
-          <div class="auth-content__inner auth-content__inner--register flex w-full max-w-full flex-col items-stretch">
-            <a
-              class="auth-brand auth-brand--mobile auth-brand--register mb-4 inline-flex w-fit items-center gap-2.5 text-inherit no-underline max-xl:mx-auto xl:mb-0 xl:hidden"
-              [routerLink]="['/']"
-            >
-              <span
-                class="auth-brand__mark inline-flex size-8 items-center justify-center rounded-xl bg-[var(--primary-gradient)] text-white shadow-[0_8px_22px_rgba(0,74,198,0.28)] [&_.material-symbols-outlined]:text-[1.1rem] [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_600]"
-                aria-hidden="true"
-              >
-                <span class="material-symbols-outlined">hub</span>
-              </span>
-              <span
-                class="auth-brand__text font-headline text-[1.1rem] font-extrabold tracking-tight text-slate-900"
-                >CUET Corner</span
-              >
-            </a>
-
-            <div class="auth-register-compact">
-              <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
-              <span>Fast onboarding: complete your profile in under 2 minutes.</span>
-            </div>
-
-            <div
-              class="auth-card auth-card--register relative flex flex-col rounded-3xl border border-white/55 bg-white/85 p-[clamp(1.5rem,2vw,2rem)] shadow-[0_30px_60px_-30px_rgba(15,23,42,0.25),0_12px_32px_-16px_rgba(15,23,42,0.1)] backdrop-blur-xl backdrop-saturate-[1.2] max-[639px]:rounded-[1.25rem] max-[639px]:p-5"
-            >
-                <div class="auth-card__head flex flex-col gap-2.5">
-                  <span
-                    class="auth-eyebrow auth-eyebrow--card inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1.5 font-label text-[0.7rem] font-bold uppercase tracking-[0.14em] text-[#003ea8]"
-                    >Register</span
-                  >
-                  <h2
-                    class="auth-card__title font-headline text-[clamp(1.35rem,1.1vw+1rem,1.75rem)] font-extrabold leading-snug tracking-tight text-balance text-slate-900 max-[639px]:text-[1.35rem] [&_em]:font-extrabold [&_em]:italic [&_em]:text-primary"
-                  >
-                    Complete your <em>registration</em>
-                  </h2>
-                  <p
-                    class="auth-card__lede font-body text-[0.92rem] leading-relaxed text-on-surface-variant"
-                  >
-                    You're one step away: tell us a little about yourself and
-                    pick the batch that fits.
-                  </p>
-                </div>
-
-                <form
-                  [formGroup]="registrationForm"
-                  class="auth-form auth-form--register flex flex-col gap-5"
-                >
-                  <div
-                    class="auth-form__grid grid grid-cols-1 gap-x-4 gap-y-3 xl:grid-cols-2"
-                  >
-                    <!-- Name -->
-                    <div class="auth-field flex flex-col gap-1.5">
-                      <label
-                        class="auth-label"
-                        for="reg-name"
-                        >Name</label
-                      >
-                      <nz-form-item class="auth-form-item">
-                        <nz-form-control [nzErrorTip]="nameError">
-                          <input
-                            id="reg-name"
-                            nz-input
-                            type="text"
-                            class="auth-input"
-                            formControlName="name"
-                            placeholder="Enter your full name"
-                          />
-                        </nz-form-control>
-                        <ng-template #nameError let-control>
-                          <span
-                            class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                            *ngIf="control?.hasError('required')"
-                            >Name is required</span
-                          >
-                        </ng-template>
-                      </nz-form-item>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="auth-field flex flex-col gap-1.5">
-                      <label
-                        class="auth-label"
-                        for="reg-email"
-                        >Email</label
-                      >
-                      <nz-form-item class="auth-form-item">
-                        <nz-form-control [nzErrorTip]="emailError">
-                          <input
-                            id="reg-email"
-                            nz-input
-                            type="email"
-                            class="auth-input"
-                            placeholder="Enter your email"
-                            formControlName="email"
-                          />
-                        </nz-form-control>
-                        <ng-template #emailError let-control>
-                          <span
-                            class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                            *ngIf="control?.hasError('required')"
-                            >Email is required</span
-                          >
-                          <span
-                            class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                            *ngIf="control?.hasError('email')"
-                            >Email is invalid</span
-                          >
-                        </ng-template>
-                      </nz-form-item>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="auth-field flex flex-col gap-1.5">
-                      <label
-                        class="auth-label"
-                        >Phone Number</label
-                      >
-                      <nz-form-item class="auth-form-item">
-                        <nz-form-control>
-                          <div
-                            class="auth-phone-row auth-phone-row--register flex min-h-10 items-stretch gap-0"
-                          >
-                            <nz-input-group
-                              [nzPrefixIcon]="'plus'"
-                              class="country-code-input"
-                            >
-                              <input
-                                nz-input
-                                maxlength="4"
-                                minlength="1"
-                                placeholder="Code"
-                                class="auth-input auth-input--bare"
-                                formControlName="countryCode"
-                              />
-                            </nz-input-group>
-                            <input
-                              nz-input
-                              minlength="10"
-                              maxlength="15"
-                              placeholder="Phone number"
-                              class="auth-input phone-input"
-                              formControlName="phone"
-                            />
-                          </div>
-                          <div
-                            class="auth-error-stack mt-1 flex flex-col gap-0.5"
-                            *ngIf="
-                              (registrationForm.get('countryCode')?.touched &&
-                                registrationForm.get('countryCode')
-                                  ?.invalid) ||
-                              (registrationForm.get('phone')?.touched &&
-                                registrationForm.get('phone')?.invalid)
-                            "
-                          >
-                            <p
-                              class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                              *ngIf="
-                                registrationForm
-                                  .get('countryCode')
-                                  ?.hasError('required')
-                              "
-                            >
-                              Country code is required
-                            </p>
-                            <p
-                              class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                              *ngIf="
-                                registrationForm
-                                  .get('countryCode')
-                                  ?.hasError('minlength') ||
-                                registrationForm
-                                  .get('countryCode')
-                                  ?.hasError('maxlength')
-                              "
-                            >
-                              Country code is invalid
-                            </p>
-                            <p
-                              class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                              *ngIf="
-                                registrationForm
-                                  .get('phone')
-                                  ?.hasError('required')
-                              "
-                            >
-                              Phone is required
-                            </p>
-                            <p
-                              class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                              *ngIf="
-                                registrationForm
-                                  .get('phone')
-                                  ?.hasError('pattern')
-                              "
-                            >
-                              Phone is invalid
-                            </p>
-                          </div>
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-
-                    <!-- Age -->
-                    <div class="auth-field flex flex-col gap-1.5">
-                      <label
-                        class="auth-label"
-                        for="reg-age"
-                        >Age</label
-                      >
-                      <nz-form-item class="auth-form-item">
-                        <nz-form-control>
-                          <input
-                            id="reg-age"
-                            nz-input
-                            class="auth-input"
-                            placeholder="Enter your age"
-                            formControlName="age"
-                          />
-                        </nz-form-control>
-                        <div
-                          class="auth-error-stack mt-1 flex flex-col gap-0.5"
-                          *ngIf="
-                            registrationForm.get('age')?.touched &&
-                            registrationForm.get('age')?.invalid
-                          "
-                        >
-                          <p
-                            class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                            *ngIf="
-                              registrationForm.get('age')?.hasError('required')
-                            "
-                          >
-                            Age is required
-                          </p>
-                          <p
-                            class="auth-error m-0 font-body text-[0.76rem] leading-snug text-red-700"
-                            *ngIf="
-                              registrationForm.get('age')?.hasError('pattern')
-                            "
-                          >
-                            Age is invalid — minimum age is 12
-                          </p>
-                        </div>
-                      </nz-form-item>
-                    </div>
-
-                    <!-- CUET Attempts -->
-                    <div
-                      class="auth-field auth-field--full col-span-full flex flex-col gap-1.5"
-                    >
-                      <label
-                        class="auth-label"
-                        >CUET Attempts</label
-                      >
-                      <nz-form-item class="auth-form-item">
-                        <nz-form-control>
-                          <nz-select
-                            class="auth-select"
-                            nzPlaceHolder="Select attempts"
-                            nzMode="multiple"
-                            formControlName="cuetAttempts"
-                            [nzShowArrow]="true"
-                          >
-                            <nz-option
-                              *ngFor="let option of yearsOptions"
-                              [nzValue]="option"
-                              [nzLabel]="option"
-                            >
-                            </nz-option>
-                          </nz-select>
-                        </nz-form-control>
-                      </nz-form-item>
-                    </div>
-                  </div>
-
-                  <!-- Batch selection -->
-                  <div
-                    class="auth-section-heading mb-3 inline-flex items-center gap-2 font-body text-[0.9rem] font-bold text-slate-900 [&_.material-symbols-outlined]:text-xl [&_.material-symbols-outlined]:text-primary [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_500]"
-                  >
-                    <span
-                      class="material-symbols-outlined"
-                      aria-hidden="true"
-                      >groups</span
-                    >
-                    <span>Select your batch</span>
-                  </div>
-
-                  <div class="auth-batch-scroll mb-2 -mx-4 -my-6 overflow-x-auto px-4 py-6">
-                    <div
-                      class="auth-batch-row flex flex-nowrap items-stretch gap-3 px-1 py-0.5"
-                      [class.auth-batch-row--empty]="!batches?.length"
-                    >
-                      <div
-                        *ngFor="let batch of batches"
-                        (click)="onClickBatch(batch)"
-                        [class.selected-batch]="
-                          registrationForm.get('batchId')?.value === batch?.id
-                        "
-                        class="batch-card cursor-pointer"
-                      >
-                        <p class="batch-card__title">
-                          {{ batch?.name }} Batch
-                        </p>
-                        <p class="batch-card__sub">
-                          {{
-                            currentDate > batch?.startDate
-                              ? "Started"
-                              : "Starts"
-                          }}
-                          <span>{{
-                            batch?.startDate
-                              ? (batch?.startDate | date: "dd MMM yyyy")
-                              : "-"
-                          }}</span>
-                        </p>
-                        <p class="batch-card__price">
-                          ₹ {{ batch?.basePrice || 999 }}
-                        </p>
-                      </div>
-
-                      <div
-                        (click)="onClickBatch(null)"
-                        [class.selected-batch]="
-                          registrationForm.get('batchId')?.value === null
-                        "
-                        [class.batch-card--empty-only]="!batches?.length"
-                        class="batch-card batch-card--empty cursor-pointer"
-                      >
-                        <span
-                          class="material-symbols-outlined batch-card__icon"
-                          aria-hidden="true"
-                          >schedule</span
-                        >
-                        <p class="batch-card__title">Not now</p>
-                        <p class="batch-card__sub">Decide later</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  @if (registrationForm.get("batchId")?.value !== null) {
-                    <div
-                      class="auth-section-heading mb-3 inline-flex items-center gap-2 font-body text-[0.9rem] font-bold text-slate-900 [&_.material-symbols-outlined]:text-xl [&_.material-symbols-outlined]:text-primary [&_.material-symbols-outlined]:[font-variation-settings:'FILL'_1,'wght'_500]"
-                    >
-                      <span
-                        class="material-symbols-outlined"
-                        aria-hidden="true"
-                        >workspace_premium</span
-                      >
-                      <span>Select your plan</span>
-                    </div>
-
-                    <div
-                      class="auth-plan-card mb-2 max-w-full rounded-2xl border border-slate-300/25 bg-white/70 p-4"
-                    >
-                      <ngx-simplebar class="auth-plan-scroll max-w-full">
-                        <nz-radio-group
-                          formControlName="planType"
-                          class="auth-plan-grid grid w-full grid-cols-1 gap-4"
-                        >
-                          <!-- Basic -->
-                          <div
-                            class="auth-plan-col flex flex-col gap-1.5 rounded-xl border border-slate-300/25 bg-white p-3"
-                          >
-                            <label nz-radio nzValue="basic" class="auth-plan-radio">
-                              <span
-                                class="auth-plan-name inline-flex items-center gap-1.5 font-headline text-[0.95rem] font-bold text-slate-900"
-                              >
-                                {{ selectedBatch?.name || "-" }}
-                                <span
-                                  class="auth-plan-tag auth-plan-tag--basic rounded-full bg-slate-400/20 px-[0.45rem] py-0.5 font-body text-[0.7rem] font-bold tracking-wide text-slate-600"
-                                  >Basic</span
-                                >
-                              </span>
-                            </label>
-                            <p
-                              class="auth-plan-price my-1 font-headline text-[1.15rem] font-bold text-primary"
-                            >
-                              ₹ {{ selectedBatch?.basePrice }}
-                            </p>
-                            @for (feature of features; track $index) {
-                              <label
-                                class="auth-feature-row flex items-start gap-2 py-0.5 font-body text-[0.82rem] leading-snug text-slate-600"
-                              >
-                                <span
-                                  class="auth-feature-row__icon inline-flex size-4 shrink-0 items-center justify-center pt-0.5"
-                                >
-                                  <svg
-                                    *ngIf="
-                                      selectedBatch?.baseFeatures?.includes(
-                                        feature?.id
-                                      )
-                                    "
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                  >
-                                    <rect
-                                      width="16"
-                                      height="16"
-                                      rx="8"
-                                      fill="#E0EAFF"
-                                    />
-                                    <path
-                                      fill-rule="evenodd"
-                                      clip-rule="evenodd"
-                                      d="M11.3977 4.92667L6.62434 9.53334L5.35767 8.18C5.12434 7.96 4.75767 7.94667 4.491 8.13334C4.231 8.32667 4.15767 8.66667 4.31767 8.94L5.81767 11.38C5.96434 11.6067 6.21767 11.7467 6.50434 11.7467C6.77767 11.7467 7.03767 11.6067 7.18434 11.38C7.42434 11.0667 12.0043 5.60667 12.0043 5.60667C12.6043 4.99334 11.8777 4.45334 11.3977 4.92V4.92667Z"
-                                      fill="#004ac6"
-                                    />
-                                  </svg>
-                                  <svg
-                                    *ngIf="
-                                      !selectedBatch?.baseFeatures?.includes(
-                                        feature?.id
-                                      )
-                                    "
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                  >
-                                    <path
-                                      d="M12 4L4 12M4 4L12 12"
-                                      stroke="#8A8A8A"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                    />
-                                  </svg>
-                                </span>
-                                <span>{{ feature?.name }}</span>
-                              </label>
-                            }
-                          </div>
-
-                          <!-- Premium -->
-                          <div
-                            class="auth-plan-col auth-plan-col--premium flex flex-col gap-1.5 rounded-xl border border-primary/20 bg-gradient-to-b from-[#f8fbff] to-white p-3"
-                          >
-                            <label nz-radio nzValue="premium" class="auth-plan-radio">
-                              <span
-                                class="auth-plan-name inline-flex items-center gap-1.5 font-headline text-[0.95rem] font-bold text-slate-900"
-                              >
-                                {{ selectedBatch?.name || "-" }}
-                                <span
-                                  class="auth-plan-tag auth-plan-tag--premium rounded-full bg-primary/15 px-[0.45rem] py-0.5 font-body text-[0.7rem] font-bold tracking-wide text-primary"
-                                  >Premium</span
-                                >
-                              </span>
-                            </label>
-                            <p
-                              class="auth-plan-price my-1 font-headline text-[1.15rem] font-bold text-primary"
-                            >
-                              ₹ {{ selectedBatch?.premiumPrice }}
-                            </p>
-                            @for (feature of features; track $index) {
-                              <label
-                                class="auth-feature-row flex items-start gap-2 py-0.5 font-body text-[0.82rem] leading-snug text-slate-600"
-                              >
-                                <span
-                                  class="auth-feature-row__icon inline-flex size-4 shrink-0 items-center justify-center pt-0.5"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                  >
-                                    <rect
-                                      width="16"
-                                      height="16"
-                                      rx="8"
-                                      fill="#E0EAFF"
-                                    />
-                                    <path
-                                      fill-rule="evenodd"
-                                      clip-rule="evenodd"
-                                      d="M11.3977 4.92667L6.62434 9.53334L5.35767 8.18C5.12434 7.96 4.75767 7.94667 4.491 8.13334C4.231 8.32667 4.15767 8.66667 4.31767 8.94L5.81767 11.38C5.96434 11.6067 6.21767 11.7467 6.50434 11.7467C6.77767 11.7467 7.03767 11.6067 7.18434 11.38C7.42434 11.0667 12.0043 5.60667 12.0043 5.60667C12.6043 4.99334 11.8777 4.45334 11.3977 4.92V4.92667Z"
-                                      fill="#004ac6"
-                                    />
-                                  </svg>
-                                </span>
-                                <span>{{ feature?.name }}</span>
-                              </label>
-                            }
-                          </div>
-                        </nz-radio-group>
-                      </ngx-simplebar>
-                    </div>
-                  }
-
-                  <button
-                    type="button"
-                    nz-button
-                    class="auth-primary-btn auth-primary-btn--block auth-submit-btn"
-                    (click)="registerBatch()"
-                  >
-                    <span
-                      class="material-symbols-outlined"
-                      aria-hidden="true"
-                      >credit_card</span
-                    >
-                    <span>Pay & complete registration</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    class="auth-change-account"
-                    (click)="changeGoogleAccount()"
-                  >
-                    <span
-                      class="material-symbols-outlined"
-                      aria-hidden="true"
-                      >sync_alt</span
-                    >
-                    <span>
-                      Wrong account? <strong>Use a different Google account</strong>
-                    </span>
-                  </button>
-                </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+    </div>
+  </main>
 </div>

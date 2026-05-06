@@ -1,311 +1,207 @@
-<div
-  #landingRoot
-  id="landing-page"
-  class="bg-[oklch(99%_0.006_80)] text-[oklch(14%_0.01_260)] min-h-screen selection:bg-[oklch(68%_0.17_55)]/20"
->
+<div class="radiant-sunrise min-h-screen selection:bg-primary/20">
 
   <!-- ========================= NAVIGATION ========================= -->
-  <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-500 relative"
-       [class.nav--scrolled]="isScrolled()">
-    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
-
-      <!-- Logo -->
-      <a href="#" (click)="scrollToSection('struggle', $event)" class="flex items-center gap-2.5 group flex-shrink-0">
-        <div class="w-9 h-9 bg-[oklch(68%_0.17_55)] rounded-xl flex items-center justify-center shadow-[0_0_16px_oklch(68%_0.17_55/0.3)] group-hover:scale-105 transition-transform duration-300">
-          <span class="material-symbols-outlined text-[oklch(99%_0.006_80)] text-xl font-bold">hub</span>
+  <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
+       [class.backdrop-blur-md]="isScrolled()"
+       [class.bg-background/80]="isScrolled()">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+      
+      <!-- Brand -->
+      <a href="#" (click)="scrollToSection('hero', $event)" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-cuet group-hover:scale-105 transition-transform duration-500">
+          <span class="material-symbols-outlined text-on-primary text-xl font-bold">wb_sunny</span>
         </div>
-        <span class="text-lg font-extrabold tracking-tight font-[Manrope] text-[oklch(14%_0.01_260)]">CUET Corner</span>
+        <span class="text-xl font-headline font-extrabold tracking-tight text-headline">CUET Corner</span>
       </a>
 
-      <!-- Desktop links -->
-      <div class="hidden md:flex items-center gap-8">
-        <a (click)="scrollToSection('realization', $event)" class="text-sm font-semibold text-[oklch(48%_0.008_260)] hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer font-[Manrope]">The Path</a>
-        <a (click)="scrollToSection('levers', $event)" class="text-sm font-semibold text-[oklch(48%_0.008_260)] hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer font-[Manrope]">Features</a>
-        <a (click)="scrollToSection('system', $event)" class="text-sm font-semibold text-[oklch(48%_0.008_260)] hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer font-[Manrope]">Platform</a>
-        <a (click)="scrollToSection('success', $event)" class="text-sm font-semibold text-[oklch(48%_0.008_260)] hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer font-[Manrope]">Success</a>
-      </div>
-
-      <!-- CTA + mobile hamburger -->
-      <div class="flex items-center gap-3">
+      <!-- Navigation Links -->
+      <div class="hidden md:flex items-center gap-10">
+        <a (click)="scrollToSection('destination', $event)" class="text-xs font-label uppercase tracking-widest text-body/60 hover:text-primary transition-colors cursor-pointer">The Destination</a>
+        <a (click)="scrollToSection('mentor', $event)" class="text-xs font-label uppercase tracking-widest text-body/60 hover:text-primary transition-colors cursor-pointer">The Mentor</a>
+        <a (click)="scrollToSection('exhibits', $event)" class="text-xs font-label uppercase tracking-widest text-body/60 hover:text-primary transition-colors cursor-pointer">Exhibits</a>
+        <a (click)="scrollToSection('field-guide', $event)" class="text-xs font-label uppercase tracking-widest text-body/60 hover:text-primary transition-colors cursor-pointer">The Path</a>
+        
         @if (!hasAccessToken()) {
           <a [routerLink]="['/login']"
-             class="px-5 py-2.5 bg-[oklch(68%_0.17_55)] text-[oklch(99%_0.006_80)] rounded-full font-bold text-sm font-[Manrope] hover:scale-105 active:scale-95 transition-all shadow-[0_4px_16px_oklch(68%_0.17_55/0.35)]">
-            Get Started
+             class="px-6 py-3 bg-headline text-surface rounded-full font-headline font-bold text-sm hover:translate-y-[-2px] transition-all shadow-lg active:scale-95">
+            Begin Journey
           </a>
         } @else {
           <a [routerLink]="['/student/home']"
-             class="px-5 py-2.5 bg-[oklch(68%_0.17_55)] text-[oklch(99%_0.006_80)] rounded-full font-bold text-sm font-[Manrope] hover:scale-105 active:scale-95 transition-all shadow-[0_4px_16px_oklch(68%_0.17_55/0.35)]">
-            Dashboard
+             class="px-6 py-3 bg-primary text-on-primary rounded-full font-headline font-bold text-sm hover:translate-y-[-2px] transition-all shadow-lg active:scale-95">
+            Go to Desk
           </a>
         }
-
-        <button (click)="toggleMobileMenu()"
-                class="md:hidden p-2 rounded-lg hover:bg-[oklch(96%_0.025_80)] transition-colors"
-                [attr.aria-expanded]="mobileMenuOpen()"
-                aria-label="Toggle navigation">
-          <span class="material-symbols-outlined text-[oklch(38%_0.01_260)]">
-            {{ mobileMenuOpen() ? 'close' : 'menu' }}
-          </span>
-        </button>
       </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button (click)="toggleMobileMenu()" class="md:hidden p-2 text-headline">
+        <span class="material-symbols-outlined">{{ mobileMenuOpen() ? 'close' : 'menu_open' }}</span>
+      </button>
     </div>
 
-    <!-- Mobile nav overlay -->
-    <div class="mobile-nav" [class.mobile-nav--open]="mobileMenuOpen()">
-      <a (click)="scrollToSection('realization', $event)" class="mobile-nav__link">The Path</a>
-      <a (click)="scrollToSection('levers', $event)" class="mobile-nav__link">Features</a>
-      <a (click)="scrollToSection('system', $event)" class="mobile-nav__link">Platform</a>
-      <a (click)="scrollToSection('success', $event)" class="mobile-nav__link">Success</a>
+    <!-- Mobile Navigation -->
+    <div *ngIf="mobileMenuOpen()" class="md:hidden bg-background border-b border-surface-container-low p-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+      <a (click)="scrollToSection('field-guide', $event)" class="block text-sm font-headline font-bold text-headline">The Path</a>
+      <a (click)="scrollToSection('exhibits', $event)" class="block text-sm font-headline font-bold text-headline">Exhibits</a>
+      <a [routerLink]="['/login']" class="block text-sm font-headline font-bold text-primary">Begin Journey</a>
     </div>
   </nav>
 
-  <main class="relative">
+  <main class="relative overflow-hidden">
 
-    <!-- ========================= CHAPTER 1: HERO ========================= -->
-    <section id="struggle"
-             class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 px-5">
-
-      <!-- Warm ambient background -->
-      <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[oklch(68%_0.17_55)]/8 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-0 -left-24 w-[400px] h-[400px] bg-[oklch(68%_0.17_55)]/5 blur-[100px] rounded-full"></div>
-      </div>
-
-      <div class="relative z-10 max-w-4xl mx-auto text-center">
-
-        <!-- Eyebrow badge -->
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[oklch(68%_0.17_55)]/10 border border-[oklch(68%_0.17_55)]/25 text-[oklch(55%_0.16_55)] text-xs font-bold tracking-[0.2em] uppercase mb-8 animate-fade-in-down">
-          <span class="material-symbols-outlined text-sm">verified</span>
-          Founded by a JNU qualifier
-        </span>
+    <!-- ========================= CHAPTER 1: THE HORIZON (HERO) ========================= -->
+    <section id="hero" class="editorial-hero flex flex-col items-center justify-center px-6">
+      
+      <div class="max-w-4xl mx-auto text-center space-y-8">
+        
+        <!-- Eyebrow -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary animate-reveal" style="animation-delay: 100ms;">
+          <span class="material-symbols-outlined text-sm">history_edu</span>
+          <span class="text-[10px] font-label uppercase tracking-[0.2em] font-bold">First Chapter: Foundation</span>
+        </div>
 
         <!-- Headline -->
-        <h1 class="landing-hero__headline text-5xl md:text-7xl lg:text-8xl mb-6">
-          <span class="block overflow-hidden">
-            <span class="animate-reveal-up" style="animation-delay: 100ms;">Your path to</span>
-          </span>
-          <span class="block overflow-hidden">
-            <span class="animate-reveal-up text-[oklch(68%_0.17_55)]" style="animation-delay: 280ms;">JNU starts here.</span>
-          </span>
+        <h1 class="text-[clamp(2.5rem,10vw,5rem)] md:text-7xl lg:text-8xl font-headline font-black text-headline leading-[1.1] md:leading-[0.95] tracking-tight animate-reveal" style="animation-delay: 300ms;">
+          Your university <br/>
+          <span class="font-display italic font-medium text-primary">story</span> starts here.
         </h1>
 
-        <p class="max-w-xl mx-auto text-lg md:text-xl text-[oklch(45%_0.01_260)] leading-relaxed mb-10 font-[Inter] animate-fade-in" style="animation-delay: 550ms;">
-          Join thousands of CUET aspirants who stopped guessing and started preparing with a system built by someone who's already been there.
+        <p class="max-w-xl mx-auto text-base md:text-xl text-body/80 leading-relaxed font-body animate-reveal" style="animation-delay: 500ms;">
+          Move beyond the chaos of entrance exams. Join an editorial preparation space designed to turn your ambition into a seat at India's top central universities.
         </p>
 
-        <!-- CTAs -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in mb-16" style="animation-delay: 750ms;">
+        <!-- CTA -->
+        <div class="pt-6 animate-reveal" style="animation-delay: 700ms;">
           <a [routerLink]="['/login']"
-             class="cta-pulse px-8 py-4 bg-[oklch(68%_0.17_55)] text-[oklch(99%_0.006_80)] rounded-full font-bold text-base font-[Manrope] hover:scale-105 active:scale-95 transition-transform duration-200 min-w-[200px] text-center">
-            Start Preparing
+             class="inline-flex items-center gap-3 px-10 py-5 bg-primary text-on-primary rounded-2xl font-headline font-black text-lg hover:translate-y-[-4px] hover:shadow-2xl transition-all active:scale-95 shadow-xl">
+            Join the Cohort
+            <span class="material-symbols-outlined">arrow_forward</span>
           </a>
-          <button (click)="scrollToSection('realization', $event)"
-                  class="flex items-center gap-2 px-6 py-4 text-[oklch(55%_0.008_260)] font-semibold text-sm font-[Manrope] hover:text-[oklch(60%_0.17_55)] transition-colors">
-            See how it works
-            <span class="material-symbols-outlined text-lg">expand_more</span>
-          </button>
         </div>
+      </div>
 
-        <!-- Stats strip -->
-        <div class="grid grid-cols-3 gap-3 max-w-lg mx-auto animate-fade-in" style="animation-delay: 900ms;">
-          @for (stat of stats; track stat.label) {
-            <div class="stat-strip__card">
-              <span class="text-2xl font-black font-[Manrope] text-[oklch(14%_0.01_260)]">{{ stat.value }}</span>
-              <span class="text-[10px] font-semibold text-[oklch(55%_0.008_260)] uppercase tracking-wide font-[Inter] text-center leading-tight">{{ stat.label }}</span>
-            </div>
-          }
-        </div>
-
+      <!-- Scroll Indicator -->
+      <div class="mt-20 animate-bounce text-body/20">
+        <span class="material-symbols-outlined text-3xl">expand_more</span>
       </div>
     </section>
 
-    <!-- ========================= CHAPTER 2: THE REALIZATION ========================= -->
-    <section id="realization"
-             class="relative py-24 md:py-32 bg-[oklch(97.5%_0.012_82)] overflow-hidden"
-             [style.--progress]="chapterProgress()['realization']">
-
-      <div class="max-w-6xl mx-auto px-5">
-
-        <header class="text-center mb-16">
-          <span class="text-[oklch(60%_0.17_55)] font-bold tracking-[0.3em] text-xs uppercase font-[Manrope] block mb-4">The Problem</span>
-          <h2 class="text-4xl md:text-6xl font-black font-[Manrope] tracking-tight text-[oklch(14%_0.01_260)] leading-tight">
-            Most students prepare.<br/>Few get in.
+    <!-- ========================= CHAPTER 2: THE DESTINATION (CAMPUS) ========================= -->
+    <section id="destination" class="py-24 md:py-40 bg-surface">
+      <div class="max-w-7xl mx-auto px-6 space-y-16">
+        <div class="max-w-3xl">
+          <span class="text-xs font-label uppercase tracking-[0.3em] text-primary font-bold block mb-4">The Destination</span>
+          <h2 class="text-5xl md:text-7xl font-headline font-black text-headline leading-tight">
+            The first chapter of your <span class="text-primary italic font-display font-medium">real life.</span>
           </h2>
-          <p class="mt-6 max-w-2xl mx-auto text-lg text-[oklch(45%_0.01_260)] font-[Inter] leading-relaxed">
-            It's not about how hard you work. It's about working on the right things. Here's what separates students who crack CUET from those who don't.
-          </p>
-        </header>
+        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-
-          <!-- Wrong column -->
-          <div class="compare-card compare-card--wrong"
-               [style.opacity]="clamp(0, (chapterProgress()['realization'] - 0.1) * 4, 1)"
-               [style.transform]="'translateX(' + (1 - clamp(0, (chapterProgress()['realization'] - 0.1) * 4, 1)) * -24 + 'px)'">
-            <div class="flex items-center gap-2 mb-6">
-              <span class="material-symbols-outlined text-red-400 text-xl">cancel</span>
-              <span class="font-bold text-sm font-[Manrope] text-[oklch(35%_0.01_260)] uppercase tracking-wide">What most students do</span>
-            </div>
-            @for (item of [
-              'Study every topic without a strategy',
-              'Take random mocks with no review',
-              'Ignore time pressure in practice',
-              'Prepare alone without any guidance'
-            ]; track $index) {
-              <div class="compare-item">
-                <span class="material-symbols-outlined text-red-400/60 text-base mt-0.5 flex-shrink-0">close</span>
-                <span>{{ item }}</span>
-              </div>
-            }
+        <div class="relative rounded-[3rem] overflow-hidden shadow-2xl group aspect-[4/5] md:aspect-[21/9] bg-surface-container-low">
+          <img src="assets/images/jnu-admin-block.jpeg" alt="JNU Campus" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]" />
+          <div class="absolute inset-0 bg-gradient-to-t from-headline/60 via-transparent to-transparent flex items-end p-8 md:p-16">
+            <p class="text-surface font-display italic text-2xl md:text-4xl max-w-2xl leading-relaxed">
+              "Imagine walking through these gates — where every conversation matters and every hour is a step toward your legacy."
+            </p>
           </div>
-
-          <!-- Right column -->
-          <div class="compare-card compare-card--right"
-               [style.opacity]="clamp(0, (chapterProgress()['realization'] - 0.2) * 4, 1)"
-               [style.transform]="'translateX(' + (1 - clamp(0, (chapterProgress()['realization'] - 0.2) * 4, 1)) * 24 + 'px)'">
-            <div class="flex items-center gap-2 mb-6">
-              <span class="material-symbols-outlined text-[oklch(60%_0.17_55)] text-xl">check_circle</span>
-              <span class="font-bold text-sm font-[Manrope] text-[oklch(35%_0.01_260)] uppercase tracking-wide">What actually works</span>
-            </div>
-            @for (item of [
-              'Focus on high-yield topics for CUET',
-              'Review every mistake, fix every gap',
-              'Build exam-speed through timed practice',
-              'Follow a structured batch with a mentor'
-            ]; track $index) {
-              <div class="compare-item">
-                <span class="material-symbols-outlined text-[oklch(60%_0.17_55)] text-base mt-0.5 flex-shrink-0">check</span>
-                <span>{{ item }}</span>
-              </div>
-            }
-          </div>
-
         </div>
       </div>
     </section>
 
-    <!-- ========================= CHAPTER 3: THE 4 LEVERS ========================= -->
-    <section id="levers"
-             class="relative py-24 md:py-32 bg-[oklch(99%_0.006_80)] overflow-hidden"
-             [style.--progress]="chapterProgress()['levers']">
-
-      <div class="max-w-7xl mx-auto px-5">
-
-        <header class="text-center mb-16">
-          <span class="text-[oklch(60%_0.17_55)] font-bold tracking-[0.3em] text-xs uppercase font-[Manrope] block mb-4">How It Works</span>
-          <h2 class="text-4xl md:text-6xl font-black font-[Manrope] tracking-tight text-[oklch(14%_0.01_260)] leading-tight">
-            Four things that move<br/>your CUET score.
-          </h2>
-          <p class="mt-6 max-w-xl mx-auto text-lg text-[oklch(45%_0.01_260)] font-[Inter] leading-relaxed">
-            Most aspirants ignore all four. CUET Corner is built around every single one.
-          </p>
-        </header>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          @for (lever of levers; track lever.title; let i = $index) {
-            <div class="lever-card"
-                 [style.opacity]="clamp(0, (chapterProgress()['levers'] - (0.08 * i)) * 3, 1)"
-                 [style.transform]="'translateY(' + (1 - clamp(0, (chapterProgress()['levers'] - (0.08 * i)) * 3, 1)) * 24 + 'px)'">
-              <div class="lever-card__number">0{{ i + 1 }}</div>
-              <div class="lever-card__icon">
-                <span class="material-symbols-outlined text-xl">{{ lever.icon }}</span>
-              </div>
-              <div class="lever-card__title">{{ lever.title }}</div>
-              <p class="lever-card__desc">{{ lever.description }}</p>
-              <div class="lever-card__progress"
-                   [style.width.%]="clamp(0, (chapterProgress()['levers'] - (0.08 * i)) * 3, 1) * 100"></div>
-            </div>
-          }
+    <!-- ========================= CHAPTER 3: YOUR LEAD MENTOR ========================= -->
+    <section id="mentor" class="py-24 md:py-40 bg-surface-container-low/20">
+      <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
+        
+        <!-- Mentor Image -->
+        <div class="relative order-2 md:order-1">
+          <div class="mentor-image-container rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl relative z-10 aspect-[4/5] bg-surface-container-low">
+            <img src="assets/images/abhinav.webp" alt="Abhinav - Your Mentor" class="w-full h-full object-cover object-top" />
+          </div>
+          <div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl z-0"></div>
         </div>
 
-      </div>
-    </section>
-
-    <!-- ========================= CHAPTER 4: THE SYSTEM ========================= -->
-    <section id="system"
-             class="relative py-24 md:py-32 bg-[oklch(97.5%_0.01_82)] overflow-hidden"
-             [style.--progress]="chapterProgress()['system']">
-
-      <div class="max-w-7xl mx-auto px-5">
-
-        <div class="flex flex-col lg:flex-row gap-16 items-center">
-
-          <!-- Feature list -->
-          <div class="lg:w-1/2 space-y-2">
-            <header class="mb-10">
-              <span class="text-[oklch(60%_0.17_55)] font-bold tracking-[0.3em] text-xs uppercase font-[Manrope] block mb-4">The Platform</span>
-              <h2 class="text-4xl md:text-6xl font-black font-[Manrope] tracking-tight text-[oklch(14%_0.01_260)] leading-tight">
-                Everything in<br/>one place.
-              </h2>
-              <p class="mt-5 text-lg text-[oklch(45%_0.01_260)] font-[Inter] leading-relaxed max-w-md">
-                One login. Six tools. All the preparation you need to walk into exam day ready.
+        <!-- Mentor Content -->
+        <div class="space-y-10 relative z-20 order-1 md:order-2">
+          <div class="curator-note">
+            <span class="text-xs font-label uppercase tracking-[0.3em] text-primary font-bold block mb-4">Your Guide</span>
+            <h2 class="text-4xl md:text-5xl font-headline font-black text-headline leading-[1.1]">
+              Mentorship <br/>
+              <span class="text-primary">from the inside.</span>
+            </h2>
+            <div class="mt-8 space-y-6 text-body text-lg leading-relaxed font-body">
+              <p>
+                I remember the silence of the library at midnight, the weight of the "gap year" label, and the burning desire to be part of something bigger. 
               </p>
-            </header>
+              <p>
+                CUET Corner is the "Field Guide" I wish I had by my side. Every resource, test, and visual map is crafted to give you the quiet confidence of an insider.
+              </p>
+            </div>
+            
+            <div class="mt-12">
+              <p class="signature-font text-4xl text-headline leading-none mb-2">Abhinav Harsh</p>
+              <p class="text-xs font-label uppercase tracking-widest text-body/60">Founder, JNU Alumnus & Your Mentor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            @for (feature of platformPillars; track feature.title; let i = $index) {
-              <div class="platform-feature"
-                   [style.opacity]="clamp(0, (chapterProgress()['system'] - (0.06 * i)) * 4, 1)"
-                   [style.transform]="'translateX(' + (1 - clamp(0, (chapterProgress()['system'] - (0.06 * i)) * 4, 1)) * -16 + 'px)'">
-                <div class="platform-feature__icon">
-                  <span class="material-symbols-outlined text-xl">{{ feature.icon }}</span>
-                </div>
-                <div>
-                  <h4 class="font-bold text-base font-[Manrope] text-[oklch(14%_0.01_260)] mb-1">{{ feature.title }}</h4>
-                  <p class="text-sm font-[Inter] text-[oklch(48%_0.008_260)] leading-relaxed">{{ feature.copy }}</p>
-                </div>
-              </div>
-            }
+    <!-- ========================= CHAPTER 3: THE EXHIBITS (FEATURES) ========================= -->
+    <section id="exhibits" class="py-24 md:py-40">
+      <div class="max-w-7xl mx-auto px-6 text-center space-y-20">
+        
+        <div class="max-w-2xl mx-auto space-y-4">
+          <span class="text-xs font-label uppercase tracking-[0.3em] text-primary font-bold">The Field Exhibits</span>
+          <h2 class="text-4xl md:text-6xl font-headline font-black text-headline tracking-tight">Everything you need to <span class="text-primary">curate</span> your success.</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <!-- Exhibit 1 -->
+          <div (click)="navigateToExhibit('resources')" class="curiosity-card p-8 md:p-10 rounded-4xl text-left flex flex-col gap-6 relative overflow-hidden">
+            <div class="absolute top-4 right-4 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 text-[9px] font-label uppercase tracking-widest text-primary font-bold">Mentor Curated</div>
+            <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary shadow-sm">
+              <span class="material-symbols-outlined text-3xl">auto_stories</span>
+            </div>
+            <div class="space-y-3">
+              <h3 class="text-2xl font-headline font-black text-headline">Curated Resources</h3>
+              <p class="text-body font-body leading-relaxed">Insider notes and high-yield study materials filtered for clarity. No clutter, just what you need to crack the top scores.</p>
+            </div>
+            <div class="mt-auto pt-6 border-t border-surface-container-low group cursor-pointer flex items-center justify-between">
+              <span class="text-xs font-label uppercase tracking-widest text-body/40 group-hover:text-primary transition-colors">Explore Exhibit</span>
+              <span class="material-symbols-outlined text-body/20 group-hover:text-primary group-hover:translate-x-1 transition-all">chevron_right</span>
+            </div>
           </div>
 
-          <!-- Phone mockup -->
-          <div class="lg:w-1/2 flex justify-center">
-            <div class="phone-mockup w-full">
-              <div class="phone-mockup__notch"></div>
-              <div class="phone-mockup__screen">
+          <!-- Exhibit 2 -->
+          <div (click)="navigateToExhibit('performances')" class="curiosity-card p-8 md:p-10 rounded-4xl text-left flex flex-col gap-6 relative overflow-hidden">
+            <div class="absolute top-4 right-4 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 text-[9px] font-label uppercase tracking-widest text-primary font-bold">Mentor Verified</div>
+            <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary shadow-sm">
+              <span class="material-symbols-outlined text-3xl">analytics</span>
+            </div>
+            <div class="space-y-3">
+              <h3 class="text-2xl font-headline font-black text-headline">Performance Maps</h3>
+              <p class="text-body font-body leading-relaxed">See your growth not as a number, but as a journey. Visualize your strengths and bridge the gaps with calm precision.</p>
+            </div>
+            <div class="mt-auto pt-6 border-t border-surface-container-low group cursor-pointer flex items-center justify-between">
+              <span class="text-xs font-label uppercase tracking-widest text-body/40 group-hover:text-primary transition-colors">Explore Exhibit</span>
+              <span class="material-symbols-outlined text-body/20 group-hover:text-primary group-hover:translate-x-1 transition-all">chevron_right</span>
+            </div>
+          </div>
 
-                <!-- Scanner line -->
-                <div class="phone-mockup__scanner"
-                     [style.top.%]="chapterProgress()['system'] * 100"></div>
-
-                <!-- Screen content skeleton -->
-                <div class="space-y-4"
-                     [style.clip-path]="'inset(0 0 ' + (1 - chapterProgress()['system']) * 100 + '% 0)'">
-
-                  <!-- Header bar -->
-                  <div class="flex items-center justify-between mb-6">
-                    <div class="h-5 w-28 bg-[oklch(88%_0.02_80)] rounded-full"></div>
-                    <div class="w-8 h-8 bg-[oklch(68%_0.17_55)]/20 rounded-full"></div>
-                  </div>
-
-                  <!-- Greeting -->
-                  <div class="h-3 w-36 bg-[oklch(91%_0.015_260)] rounded-full mb-1"></div>
-                  <div class="h-5 w-48 bg-[oklch(85%_0.015_260)] rounded-full mb-6"></div>
-
-                  <!-- Cards row -->
-                  <div class="grid grid-cols-2 gap-3">
-                    <div class="h-24 bg-[oklch(68%_0.17_55)]/10 rounded-2xl border border-[oklch(68%_0.17_55)]/20 flex items-center justify-center">
-                      <span class="material-symbols-outlined text-[oklch(68%_0.17_55)]/40 text-3xl">bolt</span>
-                    </div>
-                    <div class="h-24 bg-[oklch(96%_0.008_260)] rounded-2xl border border-[oklch(91%_0.006_260)] flex items-center justify-center">
-                      <span class="material-symbols-outlined text-[oklch(70%_0.008_260)]/40 text-3xl">monitoring</span>
-                    </div>
-                  </div>
-
-                  <!-- Wide card -->
-                  <div class="h-32 bg-[oklch(96%_0.008_260)] rounded-2xl border border-[oklch(91%_0.006_260)] flex items-center justify-center">
-                    <span class="material-symbols-outlined text-[oklch(70%_0.008_260)]/30 text-4xl">menu_book</span>
-                  </div>
-
-                  <!-- List skeleton -->
-                  <div class="space-y-2 pt-2">
-                    @for (line of [80, 65, 72]; track $index) {
-                      <div class="h-3 bg-[oklch(91%_0.01_260)] rounded-full" [style.width.%]="line"></div>
-                    }
-                  </div>
-
-                </div>
-
-              </div>
+          <!-- Exhibit 3 -->
+          <div (click)="navigateToExhibit('home')" class="curiosity-card p-8 md:p-10 rounded-4xl text-left flex flex-col gap-6 relative overflow-hidden">
+            <div class="absolute top-4 right-4 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 text-[9px] font-label uppercase tracking-widest text-primary font-bold">Lead Mentor</div>
+            <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary shadow-sm">
+              <span class="material-symbols-outlined text-3xl">group_work</span>
+            </div>
+            <div class="space-y-3">
+              <h3 class="text-2xl font-headline font-black text-headline">Mentored Cohorts</h3>
+              <p class="text-body font-body leading-relaxed">Don't prepare in isolation. Join a batch of fellow aspirants led by mentors who have already walked the path to JNU.</p>
+            </div>
+            <div class="mt-auto pt-6 border-t border-surface-container-low group cursor-pointer flex items-center justify-between">
+              <span class="text-xs font-label uppercase tracking-widest text-body/40 group-hover:text-primary transition-colors">Explore Exhibit</span>
+              <span class="material-symbols-outlined text-body/20 group-hover:text-primary group-hover:translate-x-1 transition-all">chevron_right</span>
             </div>
           </div>
 
@@ -313,173 +209,89 @@
       </div>
     </section>
 
-    <!-- ========================= CHAPTER 5: FOUNDER / SUCCESS ========================= -->
-    <section id="success"
-             class="relative py-24 md:py-32 bg-[oklch(99%_0.006_80)] overflow-hidden"
-             [style.--progress]="chapterProgress()['success']">
+    <!-- ========================= CHAPTER 4: THE CALM PATH ========================= -->
+    <section id="field-guide" class="py-24 md:py-40 bg-surface-container-low/30">
+      <div class="max-w-4xl mx-auto px-6 text-center space-y-16">
+        
+        <div class="space-y-4">
+          <h2 class="text-4xl md:text-5xl font-headline font-black text-headline">The path of <span class="font-display italic text-primary font-medium">calm confidence.</span></h2>
+          <p class="text-body text-lg">Your daily rhythm at CUET Corner is designed to reduce anxiety.</p>
+        </div>
 
-      <div class="max-w-6xl mx-auto px-5">
-
-        <div class="flex flex-col lg:flex-row gap-16 items-center">
-
-          <!-- Photo -->
-          <div class="lg:w-2/5 flex justify-center">
-            <div class="relative group w-full max-w-sm">
-              <div class="absolute -inset-6 bg-[oklch(68%_0.17_55)]/8 rounded-[4rem] blur-2xl -z-10 group-hover:bg-[oklch(68%_0.17_55)]/14 transition-colors duration-700"></div>
-              <div class="rounded-[3rem] overflow-hidden shadow-[0_24px_60px_oklch(14%_0.01_260/0.12)]">
-                <img
-                  nz-image
-                  [nzSrc]="'assets/images/abhinav.webp'"
-                  [nzFallback]="'assets/images/abhinav.jpg'"
-                  alt="Abhinav Harsh, founder of CUET Corner and JNU student"
-                  class="w-full h-auto"
-                  [style.filter]="'grayscale(' + (1 - clamp(0, chapterProgress()['success'] * 2, 1)) * 60 + '%)'"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="lg:w-3/5 space-y-8">
-
-            <header>
-              <span class="text-[oklch(60%_0.17_55)] font-bold tracking-[0.3em] text-xs uppercase font-[Manrope] block mb-4">The Story Behind It</span>
-              <h2 class="text-4xl md:text-6xl font-black font-[Manrope] tracking-tight text-[oklch(14%_0.01_260)] leading-tight">
-                Built by someone<br/>who made it.
-              </h2>
-            </header>
-
+        <div class="relative py-10">
+          <div class="path-line"></div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-10">
             <div class="space-y-4">
-              <p class="text-2xl font-black font-[Manrope] text-[oklch(60%_0.17_55)]">Abhinav Harsh, JNU</p>
-              <blockquote class="text-xl font-[Inter] text-[oklch(35%_0.01_260)] leading-relaxed italic">
-                "I cracked CUET and got into JNU. I built CUET Corner because I know what works, and I want every aspirant to have that same clarity, not just those who can afford a big coaching centre."
-              </blockquote>
+              <div class="w-12 h-12 rounded-full bg-background border border-primary/20 flex items-center justify-center mx-auto text-primary font-headline font-bold shadow-sm">01</div>
+              <h4 class="font-headline font-bold text-headline">Identify</h4>
+              <p class="text-xs text-body/60 leading-relaxed font-body">Locate your gaps with diagnostic tests that respect your current level.</p>
             </div>
-
-            <!-- Stats -->
-            <div class="flex flex-wrap gap-4">
-              @for (stat of stats; track stat.label; let i = $index) {
-                <div class="px-6 py-5 bg-[oklch(97.5%_0.01_82)] rounded-2xl border border-[oklch(91%_0.016_80)] hover:border-[oklch(68%_0.17_55)]/30 hover:bg-[oklch(99%_0.006_80)] transition-all duration-300 hover:shadow-[0_8px_24px_oklch(14%_0.01_260/0.06)]"
-                     [style.opacity]="clamp(0, (chapterProgress()['success'] - (0.1 * i)) * 3, 1)"
-                     [style.transform]="'translateY(' + (1 - clamp(0, (chapterProgress()['success'] - (0.1 * i)) * 3, 1)) * 16 + 'px)'">
-                  <p class="text-3xl font-black font-[Manrope] text-[oklch(14%_0.01_260)] mb-0.5">{{ stat.value }}</p>
-                  <p class="text-xs font-semibold font-[Inter] text-[oklch(55%_0.008_260)] uppercase tracking-wider">{{ stat.label }}</p>
-                </div>
-              }
+            <div class="space-y-4">
+              <div class="w-12 h-12 rounded-full bg-background border border-primary/20 flex items-center justify-center mx-auto text-primary font-headline font-bold shadow-sm">02</div>
+              <h4 class="font-headline font-bold text-headline">Curate</h4>
+              <p class="text-xs text-body/60 leading-relaxed font-body">Focus only on high-yield materials, curated specifically for the top central universities.</p>
             </div>
-
+            <div class="space-y-4">
+              <div class="w-12 h-12 rounded-full bg-background border border-primary/20 flex items-center justify-center mx-auto text-primary font-headline font-bold shadow-sm">03</div>
+              <h4 class="font-headline font-bold text-headline">Succeed</h4>
+              <p class="text-xs text-body/60 leading-relaxed font-body">Walk into your exam center with the quiet confidence of an insider.</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ========================= FAQ ========================= -->
-    <section id="faq"
-             class="relative py-24 md:py-32 bg-[oklch(97.5%_0.012_82)] overflow-hidden"
-             [style.--progress]="chapterProgress()['faq']">
-
-      <div class="max-w-3xl mx-auto px-5">
-
-        <header class="text-center mb-14">
-          <span class="text-[oklch(60%_0.17_55)] font-bold tracking-[0.3em] text-xs uppercase font-[Manrope] block mb-4">FAQ</span>
-          <h2 class="text-4xl md:text-5xl font-black font-[Manrope] tracking-tight text-[oklch(14%_0.01_260)] leading-tight">
-            Common questions
-          </h2>
-        </header>
-
-        <div [style.opacity]="clamp(0, chapterProgress()['faq'] * 3, 1)"
-             [style.transform]="'translateY(' + (1 - clamp(0, chapterProgress()['faq'] * 3, 1)) * 20 + 'px)'">
-          @for (faq of faqs; track faq.id) {
-            <div class="faq-item">
-              <button class="faq-question" (click)="toggleFaq(faq.id)" [attr.aria-expanded]="openFaqId() === faq.id">
-                {{ faq.question }}
-                <span class="material-symbols-outlined faq-icon"
-                      [class.faq-icon--open]="openFaqId() === faq.id">
-                  expand_more
-                </span>
-              </button>
-              <div class="faq-answer" [class.faq-answer--open]="openFaqId() === faq.id">
-                <p>{{ faq.answer }}</p>
-              </div>
-            </div>
-          }
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ========================= CHAPTER 6: EPILOGUE / CTA ========================= -->
-    <section id="epilogue"
-             class="relative py-32 bg-[oklch(68%_0.17_55)] overflow-hidden"
-             [style.--progress]="chapterProgress()['epilogue']">
-
-      <!-- Subtle texture layer -->
-      <div class="absolute inset-0 pointer-events-none" aria-hidden="true"
-           style="background-image: radial-gradient(oklch(99%_0.006_80/0.08) 1px, transparent 1px); background-size: 32px 32px;"></div>
-
-      <div class="relative z-10 max-w-3xl mx-auto px-5 text-center">
-
-        <h2 class="text-4xl md:text-6xl font-black font-[Manrope] tracking-tight text-[oklch(14%_0.01_260)] leading-tight mb-8"
-            [style.opacity]="clamp(0, chapterProgress()['epilogue'] * 3, 1)"
-            [style.transform]="'translateY(' + (1 - clamp(0, chapterProgress()['epilogue'] * 3, 1)) * 20 + 'px)'">
-          Ready to find<br/>your path?
-        </h2>
-
-        <p class="text-lg font-[Inter] text-[oklch(20%_0.01_260)]/80 mb-12 max-w-md mx-auto leading-relaxed">
-          Join students from across India who are preparing smarter, not harder.
-        </p>
-
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a [routerLink]="['/login']"
-             class="px-10 py-4 bg-[oklch(14%_0.01_260)] text-[oklch(99%_0.006_80)] rounded-full font-bold text-lg font-[Manrope] hover:scale-105 active:scale-95 transition-transform duration-200 shadow-[0_8px_32px_oklch(14%_0.01_260/0.3)] min-w-[220px] text-center">
-            Get Started Now
+        <div class="pt-10">
+          <a [routerLink]="['/login']" class="text-primary font-headline font-bold flex items-center justify-center gap-2 group">
+            Start your first chapter
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
           </a>
-          <button (click)="scrollToSection('struggle', $event)"
-                  class="px-10 py-4 bg-[oklch(99%_0.006_80)]/20 border border-[oklch(99%_0.006_80)]/30 text-[oklch(14%_0.01_260)] rounded-full font-bold text-base font-[Manrope] hover:bg-[oklch(99%_0.006_80)]/30 transition-all min-w-[180px]">
-            Back to top
-          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= FOOTER ========================= -->
+    <footer class="py-20 border-t border-surface-container-low">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+        
+        <div class="col-span-1 md:col-span-2 space-y-6">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span class="material-symbols-outlined text-on-primary text-sm font-bold">wb_sunny</span>
+            </div>
+            <span class="text-lg font-headline font-extrabold tracking-tight text-headline">CUET Corner</span>
+          </div>
+          <p class="max-w-sm text-body/60 font-body leading-relaxed">
+            Democratizing elite university entrance preparation. Built for curious minds, mentored by those who have walked the path.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <h5 class="text-xs font-label uppercase tracking-widest text-headline">Platform</h5>
+          <ul class="space-y-2 text-sm text-body/60 font-body">
+            <li><a href="#" class="hover:text-primary transition-colors">Resources</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">Test Series</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">Performance</a></li>
+          </ul>
+        </div>
+
+        <div class="space-y-4">
+          <h5 class="text-xs font-label uppercase tracking-widest text-headline">Legal</h5>
+          <ul class="space-y-2 text-sm text-body/60 font-body">
+            <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">Refund Policy</a></li>
+          </ul>
         </div>
 
       </div>
-    </section>
+      <div class="max-w-7xl mx-auto px-6 pt-12 mt-12 border-t border-surface-container-low flex flex-col md:flex-row items-center justify-between gap-6">
+        <p class="text-[10px] font-label uppercase tracking-widest text-body/40">© 2026 CUET Corner. Crafted with Heart for Aspirants.</p>
+        <div class="flex gap-6">
+          <a href="#" class="text-body/40 hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">public</span></a>
+          <a href="#" class="text-body/40 hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">alternate_email</span></a>
+        </div>
+      </div>
+    </footer>
 
   </main>
-
-  <!-- ========================= FOOTER ========================= -->
-  <footer class="py-16 bg-[oklch(97%_0.012_82)] border-t border-[oklch(91%_0.016_80)]">
-    <div class="max-w-7xl mx-auto px-5 grid grid-cols-1 md:grid-cols-3 gap-12">
-
-      <div class="md:col-span-1">
-        <a href="#" class="flex items-center gap-2.5 mb-5">
-          <div class="w-8 h-8 bg-[oklch(68%_0.17_55)] rounded-lg flex items-center justify-center">
-            <span class="material-symbols-outlined text-[oklch(99%_0.006_80)] text-lg">hub</span>
-          </div>
-          <span class="text-lg font-extrabold font-[Manrope] text-[oklch(14%_0.01_260)]">CUET Corner</span>
-        </a>
-        <p class="text-sm font-[Inter] text-[oklch(48%_0.008_260)] leading-relaxed max-w-xs">
-          A structured prep workspace for CUET aspirants. Batches, live tests, study material, and recorded lectures, all in one place.
-        </p>
-      </div>
-
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-[0.3em] mb-6 text-[oklch(55%_0.17_55)] font-[Manrope]">Platform</h4>
-        <ul class="space-y-3 text-sm font-[Inter] text-[oklch(48%_0.008_260)]">
-          <li><a (click)="scrollToSection('system', $event)" class="hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer">The Platform</a></li>
-          <li><a (click)="scrollToSection('levers', $event)" class="hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer">How It Works</a></li>
-          <li><a [routerLink]="['/login']" class="hover:text-[oklch(60%_0.17_55)] transition-colors cursor-pointer">Login / Sign up</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-[0.3em] mb-6 text-[oklch(55%_0.17_55)] font-[Manrope]">Legal</h4>
-        <ul class="space-y-3 text-sm font-[Inter] text-[oklch(48%_0.008_260)]">
-          <li>Privacy Policy</li>
-          <li>Terms of Service</li>
-          <li class="pt-3 text-[oklch(62%_0.008_260)]">© {{ currentYear }} CUET Corner. All rights reserved.</li>
-        </ul>
-      </div>
-
-    </div>
-  </footer>
-
 </div>
